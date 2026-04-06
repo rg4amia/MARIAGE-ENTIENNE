@@ -312,7 +312,7 @@ class _Viewport extends StatelessWidget {
               }
               return AnimatedBuilder(
                 animation: pulse,
-                builder: (_, __) {
+                builder: (_, _) {
                   final t = pulse.value;
                   return Container(
                     width: 100 + 30 * t,
