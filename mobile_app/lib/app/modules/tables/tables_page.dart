@@ -55,6 +55,10 @@ class TablesPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (controller.isAdminDemoMode) ...[
+                const _BackendModeNotice(),
+                const SizedBox(height: 18),
+              ],
               const EyebrowLabel('Configuration de la salle'),
               const SizedBox(height: 10),
               Text(
@@ -78,10 +82,7 @@ class TablesPage extends StatelessWidget {
                 ...controller.tables.map(
                   (table) => Padding(
                     padding: const EdgeInsets.only(bottom: 18),
-                    child: _TableArticle(
-                      table: table,
-                      controller: controller,
-                    ),
+                    child: _TableArticle(table: table, controller: controller),
                   ),
                 ),
             ],
@@ -120,6 +121,31 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
+class _BackendModeNotice extends StatelessWidget {
+  const _BackendModeNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return GlowCard(
+      color: AppColors.surfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const EyebrowLabel('Mode backend'),
+          const SizedBox(height: 8),
+          Text(
+            "Cette page utilise encore les donnees locales de demonstration pour l'espace maries. Le backend public en production couvre surtout l'acces invite par token.",
+            style: GoogleFonts.manrope(
+              color: AppColors.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _StatsRow extends StatelessWidget {
   const _StatsRow({required this.controller});
 
@@ -129,10 +155,11 @@ class _StatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalGuests = controller.guests.length;
     final tableCount = controller.tables.length;
-    final assigned =
-        controller.tables.fold<int>(0, (s, t) => s + t.occupiedSeats);
-    final capacity =
-        controller.tables.fold<int>(0, (s, t) => s + t.capacity);
+    final assigned = controller.tables.fold<int>(
+      0,
+      (s, t) => s + t.occupiedSeats,
+    );
+    final capacity = controller.tables.fold<int>(0, (s, t) => s + t.capacity);
     final percent = capacity == 0 ? 0.0 : assigned / capacity;
 
     return Column(
@@ -180,8 +207,11 @@ class _EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(36),
       child: Column(
         children: [
-          Icon(Icons.table_bar,
-              size: 48, color: AppColors.primary.withValues(alpha: 0.4)),
+          Icon(
+            Icons.table_bar,
+            size: 48,
+            color: AppColors.primary.withValues(alpha: 0.4),
+          ),
           const SizedBox(height: 12),
           Text(
             'Aucune table pour le moment',
@@ -216,8 +246,9 @@ class _TableArticle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress =
-        table.capacity == 0 ? 0.0 : table.occupiedSeats / table.capacity;
+    final progress = table.capacity == 0
+        ? 0.0
+        : table.occupiedSeats / table.capacity;
 
     return GlowCard(
       padding: const EdgeInsets.all(22),
@@ -242,8 +273,11 @@ class _TableArticle extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.location_on,
-                            size: 14, color: AppColors.outline),
+                        const Icon(
+                          Icons.location_on,
+                          size: 14,
+                          color: AppColors.outline,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           'Salle de reception',

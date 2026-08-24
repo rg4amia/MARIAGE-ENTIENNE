@@ -16,6 +16,9 @@ class HomeController extends GetxController {
   final isBusy = false.obs;
 
   WeddingEvent get event => _repository.event;
+  bool get isRemoteConfigured => _repository.isRemoteConfigured;
+  bool get hasAdminSession => _repository.hasAdminSession;
+  bool get isAdminDemoMode => _repository.isAdminDemoMode;
 
   int get freeSeats => tables.fold<int>(
     0,

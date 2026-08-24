@@ -57,6 +57,7 @@ class InvitationExportService {
     required GuestInvitation invitation,
   }) async {
     const size = Size(1200, 1800);
+    final exportSubtitle = '${event.location} - ${event.eventDateLabel}';
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder, const Rect.fromLTWH(0, 0, 1200, 1800));
 
@@ -65,6 +66,7 @@ class InvitationExportService {
         Offset.zero,
         Offset(size.width, size.height),
         const [Color(0xFFF7F0E8), Color(0xFFE3C09B), Color(0xFFD48D63)],
+        const [0, 0.56, 1],
       );
 
     canvas.drawRect(const Rect.fromLTWH(0, 0, 1200, 1800), backgroundPaint);
@@ -91,7 +93,7 @@ class InvitationExportService {
     );
     _drawText(
       canvas,
-      event.subtitle,
+      exportSubtitle,
       const Offset(100, 400),
       34,
       const Color(0xFF70442E),
@@ -182,6 +184,7 @@ class InvitationExportService {
     required WeddingEvent event,
     required GuestInvitation invitation,
   }) async {
+    final exportSubtitle = '${event.location} - ${event.eventDateLabel}';
     final document = pw.Document();
 
     document.addPage(
@@ -221,7 +224,7 @@ class InvitationExportService {
                 ),
                 pw.SizedBox(height: 12),
                 pw.Text(
-                  event.subtitle,
+                  exportSubtitle,
                   style: const pw.TextStyle(fontSize: 14),
                 ),
                 pw.Spacer(),

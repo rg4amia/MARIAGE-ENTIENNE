@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -124,6 +125,19 @@ class GuestAccessController extends GetxController {
     );
     await _exportService.shareAssets(assets);
     Get.snackbar('Carte prete', 'Les versions PNG et PDF ont ete preparees.');
+  }
+
+  Future<void> copyValue(String value, String label) async {
+    if (value.trim().isEmpty) {
+      Get.snackbar(
+        'Information indisponible',
+        'Aucune valeur backend disponible pour $label.',
+      );
+      return;
+    }
+
+    await Clipboard.setData(ClipboardData(text: value));
+    Get.snackbar('Copie effectuee', '$label a ete copie.');
   }
 
   @override

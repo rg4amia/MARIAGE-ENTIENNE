@@ -51,8 +51,10 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             tooltip: 'Scanner un QR code',
             onPressed: () => Get.toNamed(AppRoutes.qrScanner),
-            icon: const Icon(Icons.qr_code_scanner_rounded,
-                color: AppColors.primary),
+            icon: const Icon(
+              Icons.qr_code_scanner_rounded,
+              color: AppColors.primary,
+            ),
           ),
         ],
       ),
@@ -70,105 +72,108 @@ class _HomePageState extends State<HomePage> {
           }
         },
       ),
-      body: Obx(
-        () => SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const _HeroIntro(),
-              const SizedBox(height: 24),
-              _StatsBento(controller: controller),
-              const SizedBox(height: 28),
-              const _SectionTitle('Actions Rapides'),
-              const SizedBox(height: 14),
-              _QuickActions(
-                onAddGuest: _focusGuestForm,
-                onAddTable: _focusTableForm,
-                onQr: () => Get.toNamed(AppRoutes.qrScanner),
-                onTables: () => Get.toNamed(AppRoutes.tables),
-              ),
-              const SizedBox(height: 24),
-              _Quote(controller: controller),
-              const SizedBox(height: 28),
-              const _SectionTitle('Activite Recente'),
-              const SizedBox(height: 14),
-              _ActivityList(controller: controller),
-              const SizedBox(height: 28),
-              const _SectionTitle('Creation Rapide'),
-              const SizedBox(height: 14),
-              _CreationPanel(
-                tableNameController: _tableNameController,
-                tableCapacityController: _tableCapacityController,
-                guestNameController: _guestNameController,
-                guestPhoneController: _guestPhoneController,
-                guestEmailController: _guestEmailController,
-                onCreateTable: () async {
-                  final label = _tableNameController.text.trim();
-                  final capacity =
-                      int.tryParse(_tableCapacityController.text.trim());
-                  if (label.isEmpty || capacity == null || capacity <= 0) {
-                    Get.snackbar('Informations manquantes',
-                        'Entrez un nom de table et une capacite valide.');
-                    return;
-                  }
-                  await controller.createTable(
-                      label: label, capacity: capacity);
-                  _tableNameController.clear();
-                  _tableCapacityController.text = '8';
-                },
-                onCreateGuest: () async {
-                  final name = _guestNameController.text.trim();
-                  if (name.isEmpty) {
-                    Get.snackbar(
-                        'Nom requis', 'Ajoutez le nom de l\'invite.');
-                    return;
-                  }
-                  await controller.createGuest(
-                    fullName: name,
-                    phone: _guestPhoneController.text.trim(),
-                    email: _guestEmailController.text.trim(),
-                  );
-                  _guestNameController.clear();
-                  _guestPhoneController.clear();
-                  _guestEmailController.clear();
-                },
-              ),
-              const SizedBox(height: 28),
-              const _SectionTitle('Attribution des places'),
-              const SizedBox(height: 14),
-              _GuestsAssignment(
-                controller: controller,
-                selectedByGuest: _selectedChairByGuest,
-                onSelect: (id, value) =>
-                    setState(() => _selectedChairByGuest[id] = value),
-              ),
-              const SizedBox(height: 28),
-              const _SectionTitle('Invitations generees'),
-              const SizedBox(height: 14),
-              _InvitationsList(controller: controller),
-              if (kIsWeb) ...[
-                const SizedBox(height: 24),
-                GlowCard(
-                  color: AppColors.surfaceContainerLow,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const EyebrowLabel('Mode web actif'),
-                      const SizedBox(height: 8),
-                      Text(
-                        'La route /guest/:token fonctionne sur Flutter web. Les deep links mobiles restent disponibles via mariageentienne://guest/{token}.',
-                        style: GoogleFonts.manrope(
-                          color: AppColors.onSurfaceVariant,
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (controller.isAdminDemoMode) ...[
+              _BackendModeNotice(controller: controller),
+              const SizedBox(height: 18),
             ],
-          ),
+            const _HeroIntro(),
+            const SizedBox(height: 24),
+            _StatsBento(controller: controller),
+            const SizedBox(height: 28),
+            const _SectionTitle('Actions Rapides'),
+            const SizedBox(height: 14),
+            _QuickActions(
+              onAddGuest: _focusGuestForm,
+              onAddTable: _focusTableForm,
+              onQr: () => Get.toNamed(AppRoutes.qrScanner),
+              onTables: () => Get.toNamed(AppRoutes.tables),
+            ),
+            const SizedBox(height: 24),
+            _Quote(controller: controller),
+            const SizedBox(height: 28),
+            const _SectionTitle('Activite Recente'),
+            const SizedBox(height: 14),
+            _ActivityList(controller: controller),
+            const SizedBox(height: 28),
+            const _SectionTitle('Creation Rapide'),
+            const SizedBox(height: 14),
+            _CreationPanel(
+              tableNameController: _tableNameController,
+              tableCapacityController: _tableCapacityController,
+              guestNameController: _guestNameController,
+              guestPhoneController: _guestPhoneController,
+              guestEmailController: _guestEmailController,
+              onCreateTable: () async {
+                final label = _tableNameController.text.trim();
+                final capacity = int.tryParse(
+                  _tableCapacityController.text.trim(),
+                );
+                if (label.isEmpty || capacity == null || capacity <= 0) {
+                  Get.snackbar(
+                    'Informations manquantes',
+                    'Entrez un nom de table et une capacite valide.',
+                  );
+                  return;
+                }
+                await controller.createTable(label: label, capacity: capacity);
+                _tableNameController.clear();
+                _tableCapacityController.text = '8';
+              },
+              onCreateGuest: () async {
+                final name = _guestNameController.text.trim();
+                if (name.isEmpty) {
+                  Get.snackbar('Nom requis', 'Ajoutez le nom de l\'invite.');
+                  return;
+                }
+                await controller.createGuest(
+                  fullName: name,
+                  phone: _guestPhoneController.text.trim(),
+                  email: _guestEmailController.text.trim(),
+                );
+                _guestNameController.clear();
+                _guestPhoneController.clear();
+                _guestEmailController.clear();
+              },
+            ),
+            const SizedBox(height: 28),
+            const _SectionTitle('Attribution des places'),
+            const SizedBox(height: 14),
+            _GuestsAssignment(
+              controller: controller,
+              selectedByGuest: _selectedChairByGuest,
+              onSelect: (id, value) =>
+                  setState(() => _selectedChairByGuest[id] = value),
+            ),
+            const SizedBox(height: 28),
+            const _SectionTitle('Invitations generees'),
+            const SizedBox(height: 14),
+            _InvitationsList(controller: controller),
+            if (kIsWeb) ...[
+              const SizedBox(height: 24),
+              GlowCard(
+                color: AppColors.surfaceContainerLow,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const EyebrowLabel('Mode web actif'),
+                    const SizedBox(height: 8),
+                    Text(
+                      'La route /guest/:token fonctionne sur Flutter web. Les deep links mobiles restent disponibles via mariageentienne://guest/{token}.',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.onSurfaceVariant,
+                        height: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );
@@ -216,6 +221,35 @@ class _HeroIntro extends StatelessWidget {
   }
 }
 
+class _BackendModeNotice extends StatelessWidget {
+  const _BackendModeNotice({required this.controller});
+
+  final HomeController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlowCard(
+      color: AppColors.surfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const EyebrowLabel('Mode backend'),
+          const SizedBox(height: 8),
+          Text(
+            controller.isRemoteConfigured
+                ? "Le parcours invite est branche au backend Supabase. L'espace maries reste en mode demo local tant qu'aucune session admin n'est ouverte."
+                : 'Supabase n\'est pas configure. Toutes les donnees affichees ici restent locales.',
+            style: GoogleFonts.manrope(
+              color: AppColors.onSurfaceVariant,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _StatsBento extends StatelessWidget {
   const _StatsBento({required this.controller});
 
@@ -223,47 +257,54 @@ class _StatsBento extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final guestCount = controller.guests.length;
-    final assigned = controller.tables
-        .fold<int>(0, (s, t) => s + t.occupiedSeats);
-    final unlocked = controller.unlockedCards;
-    final tablesFull = controller.tables
-        .where((t) => t.capacity > 0 && t.occupiedSeats >= t.capacity)
-        .length;
+    return Obx(() {
+      final guestCount = controller.guests.length;
+      final assigned = controller.tables.fold<int>(
+        0,
+        (sum, table) => sum + table.occupiedSeats,
+      );
+      final unlocked = controller.unlockedCards;
+      final tablesFull = controller.tables
+          .where(
+            (table) =>
+                table.capacity > 0 && table.occupiedSeats >= table.capacity,
+          )
+          .length;
 
-    return Column(
-      children: [
-        StatBentoCard(
-          label: 'Invites confirmes',
-          value: '$assigned',
-          suffix: '/ $guestCount',
-          progress: guestCount == 0 ? 0 : assigned / guestCount,
-          icon: Icons.group,
-        ),
-        const SizedBox(height: 14),
-        Row(
-          children: [
-            Expanded(
-              child: StatBentoCard(
-                label: 'Medias recus',
-                value: '$unlocked',
-                suffix: '/ $guestCount',
-                icon: Icons.photo_library,
+      return Column(
+        children: [
+          StatBentoCard(
+            label: 'Invites confirmes',
+            value: '$assigned',
+            suffix: '/ $guestCount',
+            progress: guestCount == 0 ? 0 : assigned / guestCount,
+            icon: Icons.group,
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: StatBentoCard(
+                  label: 'Medias recus',
+                  value: '$unlocked',
+                  suffix: '/ $guestCount',
+                  icon: Icons.photo_library,
+                ),
               ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: StatBentoCard(
-                label: 'Tables completes',
-                value: '$tablesFull',
-                suffix: '/ ${controller.tables.length}',
-                icon: Icons.table_bar,
+              const SizedBox(width: 14),
+              Expanded(
+                child: StatBentoCard(
+                  label: 'Tables completes',
+                  value: '$tablesFull',
+                  suffix: '/ ${controller.tables.length}',
+                  icon: Icons.table_bar,
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
+            ],
+          ),
+        ],
+      );
+    });
   }
 }
 
@@ -395,8 +436,11 @@ class _Quote extends StatelessWidget {
             right: -8,
             child: Opacity(
               opacity: 0.08,
-              child: Icon(Icons.auto_awesome,
-                  size: 88, color: AppColors.primary),
+              child: Icon(
+                Icons.auto_awesome,
+                size: 88,
+                color: AppColors.primary,
+              ),
             ),
           ),
           Column(
@@ -436,97 +480,111 @@ class _ActivityList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final invitations = controller.invitations;
-    if (invitations.isEmpty) {
-      return GlowCard(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: Text(
-            'Aucune activite pour le moment.',
-            style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
+    return Obx(() {
+      final recentInvitations = controller.invitations
+          .take(5)
+          .toList(growable: false);
+
+      if (recentInvitations.isEmpty) {
+        return GlowCard(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Text(
+              'Aucune activite pour le moment.',
+              style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
+            ),
           ),
+        );
+      }
+
+      return GlowCard(
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
+            ...recentInvitations.asMap().entries.map((entry) {
+              final index = entry.key;
+              final invitation = entry.value;
+              final isLast = index == recentInvitations.length - 1;
+
+              return Container(
+                decoration: BoxDecoration(
+                  border: isLast
+                      ? null
+                      : const Border(
+                          bottom: BorderSide(color: Color(0x14E0BFBF)),
+                        ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 16,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: invitation.isUnlocked
+                            ? AppColors.secondaryContainer.withValues(
+                                alpha: 0.3,
+                              )
+                            : AppColors.surfaceContainerLow,
+                      ),
+                      child: Icon(
+                        invitation.isUnlocked
+                            ? Icons.check_circle
+                            : Icons.hourglass_top,
+                        color: invitation.isUnlocked
+                            ? AppColors.secondary
+                            : AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            invitation.guestName,
+                            style: GoogleFonts.manrope(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.onSurface,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            invitation.isUnlocked
+                                ? 'Carte deverrouillee'
+                                : 'En attente du media',
+                            style: GoogleFonts.manrope(
+                              fontSize: 10,
+                              letterSpacing: 1.0,
+                              color: AppColors.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () =>
+                          controller.openGuestAccess(invitation.token),
+                      icon: const Icon(
+                        Icons.play_circle,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
         ),
       );
-    }
-
-    return GlowCard(
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          ...invitations.take(5).map((invitation) {
-            final isLast = invitation == invitations.take(5).last;
-            return Container(
-              decoration: BoxDecoration(
-                border: isLast
-                    ? null
-                    : const Border(
-                        bottom: BorderSide(color: Color(0x14E0BFBF)),
-                      ),
-              ),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: invitation.isUnlocked
-                          ? AppColors.secondaryContainer.withValues(alpha: 0.3)
-                          : AppColors.surfaceContainerLow,
-                    ),
-                    child: Icon(
-                      invitation.isUnlocked
-                          ? Icons.check_circle
-                          : Icons.hourglass_top,
-                      color: invitation.isUnlocked
-                          ? AppColors.secondary
-                          : AppColors.primary,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          invitation.guestName,
-                          style: GoogleFonts.manrope(
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.onSurface,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          invitation.isUnlocked
-                              ? 'Carte deverrouillee'
-                              : 'En attente du media',
-                          style: GoogleFonts.manrope(
-                            fontSize: 10,
-                            letterSpacing: 1.0,
-                            color: AppColors.onSurfaceVariant,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () =>
-                        controller.openGuestAccess(invitation.token),
-                    icon: const Icon(Icons.play_circle,
-                        color: AppColors.primary),
-                  ),
-                ],
-              ),
-            );
-          }),
-        ],
-      ),
-    );
+    });
   }
 }
 
@@ -618,104 +676,111 @@ class _GuestsAssignment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.guests.isEmpty) {
-      return GlowCard(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: Text(
-            'Ajoutez un invite pour commencer.',
-            style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
-          ),
-        ),
-      );
-    }
+    return Obx(() {
+      final guests = controller.guests.toList(growable: false);
 
-    return Column(
-      children: controller.guests.map((guest) {
-        final chairs = controller.availableChairsForGuest(guest);
-        final invitation = controller.invitationForGuest(guest.id);
-        selectedByGuest.putIfAbsent(
-          guest.id,
-          () => invitation?.chairId ?? chairs.firstOrNull?.id,
-        );
-
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: GlowCard(
-            color: AppColors.surfaceContainerLow,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  guest.fullName,
-                  style: GoogleFonts.notoSerif(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${guest.phone} • ${guest.email}',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: chairs.any(
-                    (item) => item.id == selectedByGuest[guest.id],
-                  )
-                      ? selectedByGuest[guest.id]
-                      : chairs.firstOrNull?.id,
-                  items: chairs
-                      .map(
-                        (chair) => DropdownMenuItem(
-                          value: chair.id,
-                          child: Text(
-                            controller.seatLabelFromChairId(chair.id),
-                          ),
-                        ),
-                      )
-                      .toList(growable: false),
-                  onChanged: (value) => onSelect(guest.id, value),
-                  decoration: const InputDecoration(
-                    labelText: 'Selectionnez une chaise',
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    FilledButton(
-                      onPressed: chairs.isEmpty
-                          ? null
-                          : () => controller.assignGuest(
-                                guest: guest,
-                                chairId: selectedByGuest[guest.id]!,
-                              ),
-                      child: Text(
-                        invitation == null
-                            ? 'Generer la carte'
-                            : 'Reattribuer et regenerer',
-                      ),
-                    ),
-                    if (invitation != null)
-                      OutlinedButton(
-                        onPressed: () =>
-                            controller.openGuestAccess(invitation.token),
-                        child: const Text('Ouvrir le parcours'),
-                      ),
-                  ],
-                ),
-              ],
+      if (guests.isEmpty) {
+        return GlowCard(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Text(
+              'Ajoutez un invite pour commencer.',
+              style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
             ),
           ),
         );
-      }).toList(growable: false),
-    );
+      }
+
+      return Column(
+        children: guests
+            .map((guest) {
+              final chairs = controller.availableChairsForGuest(guest);
+              final invitation = controller.invitationForGuest(guest.id);
+              selectedByGuest.putIfAbsent(
+                guest.id,
+                () => invitation?.chairId ?? chairs.firstOrNull?.id,
+              );
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: GlowCard(
+                  color: AppColors.surfaceContainerLow,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        guest.fullName,
+                        style: GoogleFonts.notoSerif(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${guest.phone} • ${guest.email}',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      DropdownButtonFormField<String>(
+                        initialValue:
+                            chairs.any(
+                              (item) => item.id == selectedByGuest[guest.id],
+                            )
+                            ? selectedByGuest[guest.id]
+                            : chairs.firstOrNull?.id,
+                        items: chairs
+                            .map(
+                              (chair) => DropdownMenuItem(
+                                value: chair.id,
+                                child: Text(
+                                  controller.seatLabelFromChairId(chair.id),
+                                ),
+                              ),
+                            )
+                            .toList(growable: false),
+                        onChanged: (value) => onSelect(guest.id, value),
+                        decoration: const InputDecoration(
+                          labelText: 'Selectionnez une chaise',
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          FilledButton(
+                            onPressed: chairs.isEmpty
+                                ? null
+                                : () => controller.assignGuest(
+                                    guest: guest,
+                                    chairId: selectedByGuest[guest.id]!,
+                                  ),
+                            child: Text(
+                              invitation == null
+                                  ? 'Generer la carte'
+                                  : 'Reattribuer et regenerer',
+                            ),
+                          ),
+                          if (invitation != null)
+                            OutlinedButton(
+                              onPressed: () =>
+                                  controller.openGuestAccess(invitation.token),
+                              child: const Text('Ouvrir le parcours'),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            })
+            .toList(growable: false),
+      );
+    });
   }
 }
 
@@ -726,66 +791,73 @@ class _InvitationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.invitations.isEmpty) {
-      return GlowCard(
-        padding: const EdgeInsets.all(24),
-        child: Center(
-          child: Text(
-            'Aucune invitation generee.',
-            style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
-          ),
-        ),
-      );
-    }
-    return Column(
-      children: controller.invitations.map((invitation) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: GlowCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  invitation.guestName,
-                  style: GoogleFonts.notoSerif(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Table ${invitation.tableLabel} • Chaise ${invitation.chairNumber}',
-                  style: GoogleFonts.manrope(
-                    color: AppColors.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _InvitationStatus(invitation: invitation),
-                const SizedBox(height: 14),
-                Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  children: [
-                    FilledButton.tonal(
-                      onPressed: () =>
-                          controller.regenerateAssets(invitation.id),
-                      child: const Text('Exporter PNG + PDF'),
-                    ),
-                    OutlinedButton(
-                      onPressed: () =>
-                          controller.openGuestAccess(invitation.token),
-                      child: const Text('Tester le lien'),
-                    ),
-                  ],
-                ),
-              ],
+    return Obx(() {
+      final invitations = controller.invitations.toList(growable: false);
+
+      if (invitations.isEmpty) {
+        return GlowCard(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: Text(
+              'Aucune invitation generee.',
+              style: GoogleFonts.manrope(color: AppColors.onSurfaceVariant),
             ),
           ),
         );
-      }).toList(growable: false),
-    );
+      }
+
+      return Column(
+        children: invitations
+            .map((invitation) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: GlowCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        invitation.guestName,
+                        style: GoogleFonts.notoSerif(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Table ${invitation.tableLabel} • Chaise ${invitation.chairNumber}',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      _InvitationStatus(invitation: invitation),
+                      const SizedBox(height: 14),
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: [
+                          FilledButton.tonal(
+                            onPressed: () =>
+                                controller.regenerateAssets(invitation.id),
+                            child: const Text('Exporter PNG + PDF'),
+                          ),
+                          OutlinedButton(
+                            onPressed: () =>
+                                controller.openGuestAccess(invitation.token),
+                            child: const Text('Tester le lien'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            })
+            .toList(growable: false),
+      );
+    });
   }
 }
 
@@ -824,7 +896,9 @@ class _InvitationStatus extends StatelessWidget {
             style: GoogleFonts.manrope(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: unlocked ? AppColors.secondary : AppColors.onSurfaceVariant,
+              color: unlocked
+                  ? AppColors.secondary
+                  : AppColors.onSurfaceVariant,
               letterSpacing: 0.6,
             ),
           ),

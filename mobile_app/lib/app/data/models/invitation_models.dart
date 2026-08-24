@@ -2,6 +2,21 @@ enum GuestStatus { draft, pendingMedia, mediaUploaded, cardUnlocked }
 
 enum MediaType { audio, video }
 
+extension GuestStatusX on GuestStatus {
+  String get label {
+    switch (this) {
+      case GuestStatus.draft:
+        return 'Brouillon';
+      case GuestStatus.pendingMedia:
+        return 'En attente de media';
+      case GuestStatus.mediaUploaded:
+        return 'Media recu';
+      case GuestStatus.cardUnlocked:
+        return 'Carte debloquee';
+    }
+  }
+}
+
 class WeddingEvent {
   const WeddingEvent({
     required this.id,
@@ -149,6 +164,7 @@ class GuestInvitation {
     required this.id,
     required this.guestId,
     required this.guestName,
+    required this.guestStatus,
     required this.tableId,
     required this.tableLabel,
     required this.chairId,
@@ -160,12 +176,15 @@ class GuestInvitation {
     required this.isUnlocked,
     required this.pngStoragePath,
     required this.pdfStoragePath,
+    required this.signedPngUrl,
+    required this.signedPdfUrl,
     required this.mediaSubmissions,
   });
 
   final String id;
   final String guestId;
   final String guestName;
+  final GuestStatus guestStatus;
   final String tableId;
   final String tableLabel;
   final String chairId;
@@ -177,12 +196,19 @@ class GuestInvitation {
   final bool isUnlocked;
   final String? pngStoragePath;
   final String? pdfStoragePath;
+  final String? signedPngUrl;
+  final String? signedPdfUrl;
   final List<MediaSubmission> mediaSubmissions;
+
+  bool get hasSignedCardAssets =>
+      (signedPngUrl?.isNotEmpty ?? false) ||
+      (signedPdfUrl?.isNotEmpty ?? false);
 
   GuestInvitation copyWith({
     String? id,
     String? guestId,
     String? guestName,
+    GuestStatus? guestStatus,
     String? tableId,
     String? tableLabel,
     String? chairId,
@@ -194,12 +220,15 @@ class GuestInvitation {
     bool? isUnlocked,
     String? pngStoragePath,
     String? pdfStoragePath,
+    String? signedPngUrl,
+    String? signedPdfUrl,
     List<MediaSubmission>? mediaSubmissions,
   }) {
     return GuestInvitation(
       id: id ?? this.id,
       guestId: guestId ?? this.guestId,
       guestName: guestName ?? this.guestName,
+      guestStatus: guestStatus ?? this.guestStatus,
       tableId: tableId ?? this.tableId,
       tableLabel: tableLabel ?? this.tableLabel,
       chairId: chairId ?? this.chairId,
@@ -211,6 +240,8 @@ class GuestInvitation {
       isUnlocked: isUnlocked ?? this.isUnlocked,
       pngStoragePath: pngStoragePath ?? this.pngStoragePath,
       pdfStoragePath: pdfStoragePath ?? this.pdfStoragePath,
+      signedPngUrl: signedPngUrl ?? this.signedPngUrl,
+      signedPdfUrl: signedPdfUrl ?? this.signedPdfUrl,
       mediaSubmissions: mediaSubmissions ?? this.mediaSubmissions,
     );
   }

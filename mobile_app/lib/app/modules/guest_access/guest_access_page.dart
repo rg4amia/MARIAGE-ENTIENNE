@@ -47,6 +47,8 @@ class GuestAccessPage extends StatelessWidget {
               _IntroText(controller: controller),
               const SizedBox(height: 28),
               _SeatCard(invitation: invitation),
+              const SizedBox(height: 20),
+              _InvitationStatusCard(invitation: invitation),
               const SizedBox(height: 32),
               _PrimaryActions(controller: controller, invitation: invitation),
               const SizedBox(height: 28),
@@ -57,7 +59,8 @@ class GuestAccessPage extends StatelessWidget {
               const EditorialDivider(),
               const SizedBox(height: 24),
               Text(
-                'Mariage Entienne — 2024 — Propriete Privee'.toUpperCase(),
+                '${controller.event.title} • ${controller.event.eventDateLabel} • Acces invite'
+                    .toUpperCase(),
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
                   fontSize: 10,
@@ -85,8 +88,11 @@ class _NotFound extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.lock_outline,
-                size: 64, color: AppColors.primary.withValues(alpha: 0.4)),
+            Icon(
+              Icons.lock_outline,
+              size: 64,
+              color: AppColors.primary.withValues(alpha: 0.4),
+            ),
             const SizedBox(height: 16),
             Text(
               'Lien invalide',
@@ -185,8 +191,11 @@ class _HeroMosaic extends StatelessWidget {
                       color: AppColors.surfaceContainerHighest,
                       boxShadow: kWeddingGlow,
                     ),
-                    child: const Icon(Icons.local_florist,
-                        size: 56, color: AppColors.primary),
+                    child: const Icon(
+                      Icons.local_florist,
+                      size: 56,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -254,11 +263,7 @@ class _WelcomeHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
-        Container(
-          width: 56,
-          height: 1,
-          color: AppColors.outlineVariant,
-        ),
+        Container(width: 56, height: 1, color: AppColors.outlineVariant),
       ],
     );
   }
@@ -365,7 +370,7 @@ class _PrimaryActions extends StatelessWidget {
       children: [
         GradientButton(
           label: invitation.isUnlocked
-              ? 'Carte deja debloquee'
+              ? 'Ajouter un autre media'
               : 'Commencer mon enregistrement',
           icon: invitation.isUnlocked ? Icons.check_circle : Icons.mic_rounded,
           expand: true,
@@ -376,10 +381,13 @@ class _PrimaryActions extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         TextButton.icon(
-          onPressed: controller.exportUnlockedCard,
-          icon: const Icon(Icons.help_outline, size: 16),
+          onPressed: () => controller.copyValue(
+            invitation.webUrl,
+            'Le lien web de votre invitation',
+          ),
+          icon: const Icon(Icons.link_rounded, size: 16),
           label: Text(
-            "Besoin d'aide ?".toUpperCase(),
+            'Copier mon lien web'.toUpperCase(),
             style: GoogleFonts.manrope(
               fontSize: 10,
               letterSpacing: 1.4,
@@ -389,6 +397,82 @@ class _PrimaryActions extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _InvitationStatusCard extends StatelessWidget {
+  const _InvitationStatusCard({required this.invitation});
+
+  final GuestInvitation invitation;
+
+  @override
+  Widget build(BuildContext context) {
+    final status = invitation.guestStatus;
+    final hasMedia = invitation.mediaSubmissions.isNotEmpty;
+
+    return GlowCard(
+      color: AppColors.surfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const EyebrowLabel('Etat backend'),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _MetaChip(
+                icon: invitation.isUnlocked ? Icons.lock_open : Icons.lock,
+                label: status.label,
+              ),
+              _MetaChip(
+                icon: Icons.badge_outlined,
+                label: 'Code ${invitation.invitationCode}',
+              ),
+              _MetaChip(
+                icon: Icons.perm_media_outlined,
+                label: hasMedia
+                    ? '${invitation.mediaSubmissions.length} media(s)'
+                    : 'Aucun media',
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MetaChip extends StatelessWidget {
+  const _MetaChip({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: AppColors.primary),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: GoogleFonts.manrope(
+              color: AppColors.onSurface,
+              fontWeight: FontWeight.w700,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -487,7 +571,9 @@ class _CardSection extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             invitation.isUnlocked
-                ? 'Votre carte est debloquee. Telechargez la version PNG ou PDF.'
+                ? invitation.hasSignedCardAssets
+                      ? 'Le backend a deja prepare des liens securises pour votre carte PNG/PDF.'
+                      : 'Votre carte est debloquee. Vous pouvez generer une copie locale PNG/PDF depuis cette page.'
                 : "La carte sera disponible des qu'un media valide aura ete envoye.",
             style: GoogleFonts.manrope(
               color: AppColors.onSurfaceVariant,
@@ -495,10 +581,40 @@ class _CardSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 18),
+          if (invitation.isUnlocked && invitation.hasSignedCardAssets) ...[
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                if (invitation.signedPngUrl?.isNotEmpty ?? false)
+                  FilledButton(
+                    onPressed: () => controller.copyValue(
+                      invitation.signedPngUrl!,
+                      'Le lien securise PNG',
+                    ),
+                    child: const Text('Copier le lien PNG'),
+                  ),
+                if (invitation.signedPdfUrl?.isNotEmpty ?? false)
+                  OutlinedButton(
+                    onPressed: () => controller.copyValue(
+                      invitation.signedPdfUrl!,
+                      'Le lien securise PDF',
+                    ),
+                    child: const Text('Copier le lien PDF'),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
           FilledButton(
-            onPressed:
-                invitation.isUnlocked ? controller.exportUnlockedCard : null,
-            child: const Text('Telecharger la carte'),
+            onPressed: invitation.isUnlocked
+                ? controller.exportUnlockedCard
+                : null,
+            child: Text(
+              invitation.hasSignedCardAssets
+                  ? 'Generer une copie locale'
+                  : 'Telecharger la carte',
+            ),
           ),
         ],
       ),

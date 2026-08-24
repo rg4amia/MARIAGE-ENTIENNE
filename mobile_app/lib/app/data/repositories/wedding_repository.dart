@@ -19,6 +19,9 @@ class WeddingRepository extends GetxService {
   List<WeddingGuest> get guests => List.unmodifiable(_guests);
   List<GuestInvitation> get invitations => List.unmodifiable(_invitations);
   bool get isRemoteConfigured => _supabase.isConfigured;
+  bool get hasAdminSession =>
+      _supabase.isConfigured && _supabase.client.auth.currentUser != null;
+  bool get isAdminDemoMode => isRemoteConfigured && !hasAdminSession;
 
   Future<WeddingRepository> init() async {
     _event = const WeddingEvent(
@@ -158,6 +161,7 @@ class WeddingRepository extends GetxService {
       id: existingIndex == -1 ? _uuid.v4() : _invitations[existingIndex].id,
       guestId: guestId,
       guestName: _guests[guestIndex].fullName,
+      guestStatus: GuestStatus.pendingMedia,
       tableId: targetTable.id,
       tableLabel: targetTable.label,
       chairId: targetChair.id,
@@ -175,6 +179,12 @@ class WeddingRepository extends GetxService {
       pdfStoragePath: existingIndex == -1
           ? null
           : _invitations[existingIndex].pdfStoragePath,
+      signedPngUrl: existingIndex == -1
+          ? null
+          : _invitations[existingIndex].signedPngUrl,
+      signedPdfUrl: existingIndex == -1
+          ? null
+          : _invitations[existingIndex].signedPdfUrl,
       mediaSubmissions: existingIndex == -1
           ? []
           : _invitations[existingIndex].mediaSubmissions,
@@ -191,6 +201,20 @@ class WeddingRepository extends GetxService {
 
   Future<GuestInvitation?> findInvitationByToken(String token) async {
     if (_supabase.isConfigured) {
+      try {
+        final edgeResponse = await _supabase.client.functions.invoke(
+          'guest-access',
+          body: {'token': token},
+        );
+        if (edgeResponse.data != null) {
+          return _mapGuestAccessPayload(
+            Map<String, dynamic>.from(edgeResponse.data as Map),
+          );
+        }
+      } catch (_) {
+        // Fallback to the public RPC when the Edge Function is unavailable.
+      }
+
       final response = await _supabase.client.rpc(
         'get_invitation_by_token',
         params: {'p_token': token},
@@ -277,6 +301,9 @@ class WeddingRepository extends GetxService {
     final updatedInvitation = invitation.copyWith(
       mediaSubmissions: [...invitation.mediaSubmissions, submission],
       isUnlocked: submission.isAccepted ? true : invitation.isUnlocked,
+      guestStatus: submission.isAccepted
+          ? GuestStatus.cardUnlocked
+          : GuestStatus.mediaUploaded,
     );
     _invitations[invitationIndex] = updatedInvitation;
 
@@ -382,6 +409,7 @@ class WeddingRepository extends GetxService {
       id: payload['id'].toString(),
       guestId: payload['guest_id'].toString(),
       guestName: payload['guest_name']?.toString() ?? '',
+      guestStatus: _guestStatusFromPayload(payload['guest_status']),
       tableId: payload['table_id'].toString(),
       tableLabel: payload['table_label']?.toString() ?? '',
       chairId: payload['chair_id'].toString(),
@@ -393,6 +421,87 @@ class WeddingRepository extends GetxService {
       isUnlocked: payload['is_unlocked'] == true,
       pngStoragePath: payload['png_storage_path']?.toString(),
       pdfStoragePath: payload['pdf_storage_path']?.toString(),
+      signedPngUrl: payload['signed_png_url']?.toString(),
+      signedPdfUrl: payload['signed_pdf_url']?.toString(),
+      mediaSubmissions: mediaList,
+    );
+
+    final index = _invitations.indexWhere((item) => item.id == invitation.id);
+    if (index == -1) {
+      _invitations.add(invitation);
+    } else {
+      _invitations[index] = invitation;
+    }
+
+    return invitation;
+  }
+
+  GuestInvitation _mapGuestAccessPayload(Map<String, dynamic> payload) {
+    final invitationPayload = Map<String, dynamic>.from(
+      payload['invitation'] as Map? ?? const {},
+    );
+    final guestPayload = Map<String, dynamic>.from(
+      invitationPayload['guests'] as Map? ?? const {},
+    );
+    final tablePayload = Map<String, dynamic>.from(
+      invitationPayload['seating_tables'] as Map? ?? const {},
+    );
+    final chairPayload = Map<String, dynamic>.from(
+      invitationPayload['chairs'] as Map? ?? const {},
+    );
+
+    final mediaList =
+        (invitationPayload['guest_media_submissions'] as List? ?? [])
+            .map((item) {
+              final mediaPayload = Map<String, dynamic>.from(item as Map);
+              return MediaSubmission(
+                id: mediaPayload['id']?.toString() ?? _uuid.v4(),
+                invitationId: invitationPayload['id']?.toString() ?? '',
+                guestId: guestPayload['id']?.toString() ?? '',
+                type:
+                    (mediaPayload['media_type']?.toString() ?? 'audio') ==
+                        'video'
+                    ? MediaType.video
+                    : MediaType.audio,
+                clientDurationSeconds: _asDouble(
+                  mediaPayload['client_duration_seconds'],
+                ),
+                serverDurationSeconds: _asDouble(
+                  mediaPayload['server_duration_seconds'],
+                ),
+                clientValidated: mediaPayload['client_validated'] == true,
+                serverValidated: mediaPayload['server_validated'] == true,
+                localReference: mediaPayload['storage_path']?.toString() ?? '',
+                submittedAt:
+                    DateTime.tryParse(
+                      mediaPayload['submitted_at']?.toString() ?? '',
+                    ) ??
+                    DateTime.now(),
+              );
+            })
+            .toList(growable: false);
+
+    final invitation = GuestInvitation(
+      id: invitationPayload['id']?.toString() ?? '',
+      guestId: guestPayload['id']?.toString() ?? '',
+      guestName: guestPayload['full_name']?.toString() ?? '',
+      guestStatus: _guestStatusFromPayload(guestPayload['status']),
+      tableId: invitationPayload['table_id']?.toString() ?? '',
+      tableLabel: tablePayload['label']?.toString() ?? '',
+      chairId: invitationPayload['chair_id']?.toString() ?? '',
+      chairNumber: _asInt(chairPayload['chair_number']),
+      token: tokenFromPayload(
+        invitationPayload['web_url']?.toString(),
+        invitationPayload['deep_link']?.toString(),
+      ),
+      invitationCode: invitationPayload['invitation_code']?.toString() ?? '',
+      webUrl: invitationPayload['web_url']?.toString() ?? '',
+      deepLink: invitationPayload['deep_link']?.toString() ?? '',
+      isUnlocked: invitationPayload['is_unlocked'] == true,
+      pngStoragePath: invitationPayload['png_storage_path']?.toString(),
+      pdfStoragePath: invitationPayload['pdf_storage_path']?.toString(),
+      signedPngUrl: payload['signed_png_url']?.toString(),
+      signedPdfUrl: payload['signed_pdf_url']?.toString(),
       mediaSubmissions: mediaList,
     );
 
@@ -443,5 +552,33 @@ class WeddingRepository extends GetxService {
       return value.toDouble();
     }
     return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  GuestStatus _guestStatusFromPayload(Object? value) {
+    switch (value?.toString()) {
+      case 'draft':
+        return GuestStatus.draft;
+      case 'media_uploaded':
+        return GuestStatus.mediaUploaded;
+      case 'card_unlocked':
+        return GuestStatus.cardUnlocked;
+      case 'pending_media':
+      default:
+        return GuestStatus.pendingMedia;
+    }
+  }
+
+  String tokenFromPayload(String? webUrl, String? deepLink) {
+    final webUri = Uri.tryParse(webUrl ?? '');
+    final webToken = webUri == null ? null : AppConfig.extractToken(webUri);
+    if (webToken != null && webToken.isNotEmpty) {
+      return webToken;
+    }
+
+    final deepLinkUri = Uri.tryParse(deepLink ?? '');
+    final deepLinkToken = deepLinkUri == null
+        ? null
+        : AppConfig.extractToken(deepLinkUri);
+    return deepLinkToken ?? '';
   }
 }
