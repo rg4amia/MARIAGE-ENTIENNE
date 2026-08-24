@@ -86,10 +86,10 @@ class QrCodePage extends StatelessWidget {
                             size: 200,
                             backgroundColor: AppColors.surfaceBright,
                             eyeStyle: const QrEyeStyle(
-                              eyeColor: AppColors.onSurface,
+                              color: AppColors.onSurface,
                             ),
                             dataModuleStyle: const QrDataModuleStyle(
-                              dataModuleColor: AppColors.onSurface,
+                              color: AppColors.onSurface,
                             ),
                           ),
                         ),
