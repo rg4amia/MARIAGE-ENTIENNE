@@ -207,22 +207,9 @@ class HomePage extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
-        switch (index) {
-          case 0:
-            break; // déjà sur home
-          case 1:
-            Get.toNamed(AppRoutes.guests);
-            break;
-          case 2:
-            Get.toNamed(AppRoutes.tables);
-            break;
-          case 3:
-            Get.toNamed(AppRoutes.invitations);
-            break;
-          case 4:
-            Get.toNamed(AppRoutes.settings);
-            break;
-        }
+        if (index == 0) return; // déjà sur home
+        final routes = [AppRoutes.home, AppRoutes.guests, AppRoutes.tables, AppRoutes.invitations, AppRoutes.settings];
+        Get.offAllNamed(routes[index]);
       },
       items: const [
         BottomNavigationBarItem(

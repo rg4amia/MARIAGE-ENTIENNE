@@ -70,7 +70,7 @@ class InvitationRepository {
   }
 
   Future<int> getMediaCount() async {
-    final response = await _client.from('guest_media').select('id');
+    final response = await _client.from('guest_media_submissions').select('id');
     return (response as List).length;
   }
 }

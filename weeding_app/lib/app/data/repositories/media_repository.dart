@@ -7,7 +7,7 @@ class MediaRepository {
 
   Future<List<GuestMedia>> getMediaByGuestId(String guestId) async {
     final response = await _client
-        .from('guest_media')
+        .from('guest_media_submissions')
         .select()
         .eq('guest_id', guestId)
         .order('submitted_at', ascending: false);
@@ -19,7 +19,7 @@ class MediaRepository {
 
   Future<GuestMedia?> getValidMediaByGuestId(String guestId) async {
     final response = await _client
-        .from('guest_media')
+        .from('guest_media_submissions')
         .select()
         .eq('guest_id', guestId)
         .eq('is_valid', true)
@@ -40,7 +40,7 @@ class MediaRepository {
     final isValid = durationSeconds >= 30;
 
     final response = await _client
-        .from('guest_media')
+        .from('guest_media_submissions')
         .insert({
           'guest_id': guestId,
           'media_type': mediaType,

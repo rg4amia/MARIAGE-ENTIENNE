@@ -198,22 +198,9 @@ class TablesPage extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
-        switch (index) {
-          case 0:
-            Get.toNamed(AppRoutes.home);
-            break;
-          case 1:
-            Get.toNamed(AppRoutes.guests);
-            break;
-          case 2:
-            break;
-          case 3:
-            Get.toNamed(AppRoutes.invitations);
-            break;
-          case 4:
-            Get.toNamed(AppRoutes.settings);
-            break;
-        }
+        if (index == 2) return; // déjà sur tables
+        final routes = [AppRoutes.home, AppRoutes.guests, AppRoutes.tables, AppRoutes.invitations, AppRoutes.settings];
+        Get.offAllNamed(routes[index]);
       },
       items: const [
         BottomNavigationBarItem(

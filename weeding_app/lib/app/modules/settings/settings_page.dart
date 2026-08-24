@@ -156,22 +156,9 @@ class SettingsPage extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: (index) {
-        switch (index) {
-          case 0:
-            Get.toNamed('/home');
-            break;
-          case 1:
-            Get.toNamed('/guests');
-            break;
-          case 2:
-            Get.toNamed('/tables');
-            break;
-          case 3:
-            Get.toNamed('/invitations');
-            break;
-          case 4:
-            break;
-        }
+        if (index == 4) return; // déjà sur settings
+        final routes = ['/home', '/guests', '/tables', '/invitations', '/settings'];
+        Get.offAllNamed(routes[index]);
       },
       items: const [
         BottomNavigationBarItem(

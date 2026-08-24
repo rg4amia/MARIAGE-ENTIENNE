@@ -183,7 +183,7 @@ class GuestRepository {
         .toLowerCase()
         .replaceAll(RegExp(r'[^a-z0-9\s]'), '')
         .replaceAll(RegExp(r'\s+'), '-');
-    final shortId = _uuid.v4().substring(0, 6);
+    final shortId = _uuid.v4().substring(0, 12);
     return '$slug-$shortId';
   }
 }

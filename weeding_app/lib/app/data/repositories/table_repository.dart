@@ -7,7 +7,7 @@ class TableRepository {
 
   Future<List<WeddingTable>> getAllTables() async {
     final response = await _client
-        .from('wedding_tables')
+        .from('seating_tables')
         .select()
         .order('created_at', ascending: false);
 
@@ -18,7 +18,7 @@ class TableRepository {
 
   Future<WeddingTable?> getTableById(String id) async {
     final response = await _client
-        .from('wedding_tables')
+        .from('seating_tables')
         .select()
         .eq('id', id)
         .maybeSingle();
@@ -34,7 +34,7 @@ class TableRepository {
   }) async {
     // 1. Créer la table
     final tableResponse = await _client
-        .from('wedding_tables')
+        .from('seating_tables')
         .insert({
           'name': name,
           'description': description,
@@ -63,14 +63,14 @@ class TableRepository {
     if (capacity != null) updates['capacity'] = capacity;
 
     await _client
-        .from('wedding_tables')
+        .from('seating_tables')
         .update(updates)
         .eq('id', id);
   }
 
   Future<void> deleteTable(String id) async {
     // Les chaises sont supprimées en cascade
-    await _client.from('wedding_tables').delete().eq('id', id);
+    await _client.from('seating_tables').delete().eq('id', id);
   }
 
   Future<List<Chair>> getChairsByTableId(String tableId) async {
@@ -78,6 +78,19 @@ class TableRepository {
         .from('chairs')
         .select()
         .eq('table_id', tableId)
+        .order('chair_number');
+
+    return (response as List)
+        .map((json) => Chair.fromJson(json))
+        .toList();
+  }
+
+  Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {
+    final response = await _client
+        .from('chairs')
+        .select()
+        .eq('table_id', tableId)
+        .eq('is_assigned', false)
         .order('chair_number');
 
     return (response as List)

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,6 +14,8 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isInitialized = false.obs;
 
+  StreamSubscription<AuthState>? _authSubscription;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final fullNameController = TextEditingController();
@@ -26,6 +29,7 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
+    _authSubscription?.cancel();
     emailController.dispose();
     passwordController.dispose();
     fullNameController.dispose();
@@ -36,7 +40,7 @@ class AuthController extends GetxController {
   void _initializeAuth() {
     user.value = _authRepository.currentUser;
 
-    _authRepository.authStateChanges.listen((data) {
+    _authSubscription = _authRepository.authStateChanges.listen((data) {
       final session = data.session;
       final event = data.event;
 
@@ -116,15 +120,28 @@ class AuthController extends GetxController {
     isLoading.value = true;
 
     try {
-      await _authRepository.signUp(
+      final response = await _authRepository.signUp(
         email: emailController.text.trim(),
         password: passwordController.text,
         fullName: fullNameController.text.trim(),
         phone: phoneController.text.isNotEmpty ? phoneController.text.trim() : null,
       );
 
-      Get.offAllNamed(AppRoutes.home);
       _clearControllers();
+
+      // Si une session est retournée, l'utilisateur est connecté directement
+      if (response.session != null) {
+        Get.offAllNamed(AppRoutes.home);
+      } else {
+        // Email confirmation requise : rediriger vers login avec message
+        Get.offAllNamed(AppRoutes.login);
+        Get.snackbar(
+          'Inscription réussie',
+          'Vérifiez votre email pour confirmer votre compte.',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 5),
+        );
+      }
     } on AuthException catch (e) {
       Get.snackbar(
         'Erreur d\'inscription',

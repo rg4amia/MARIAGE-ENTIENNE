@@ -145,7 +145,7 @@ class GuestsController extends GetxController {
   }
 
   Future<List<Chair>> getAvailableChairs(String tableId) async {
-    return await _tableRepository.getChairsByTableId(tableId);
+    return await _tableRepository.getAvailableChairsByTableId(tableId);
   }
 
   int get pendingCount => guests.where((g) => g.status == 'pending').length;
