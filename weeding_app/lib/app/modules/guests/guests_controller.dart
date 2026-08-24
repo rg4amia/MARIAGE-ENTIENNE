@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/table_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
+import '../../data/repositories/guest_link_repository.dart';
 import '../../data/models/guest.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
@@ -11,6 +12,7 @@ class GuestsController extends GetxController {
   final GuestRepository _guestRepository = GuestRepository();
   final TableRepository _tableRepository = TableRepository();
   final InvitationRepository _invitationRepository = InvitationRepository();
+  final GuestLinkRepository _linkRepository = GuestLinkRepository();
 
   final RxList<Guest> guests = <Guest>[].obs;
   final RxBool isLoading = false.obs;
@@ -113,14 +115,22 @@ class GuestsController extends GetxController {
     required String chairId,
   }) async {
     try {
+      // 1. Assign the seat
       await _guestRepository.assignSeat(
         guestId: guestId,
         tableId: tableId,
         chairId: chairId,
       );
+
+      // 2. Auto-create guest link for QR code
+      await _linkRepository.createGuestLink(guestId);
+
       await loadGuests();
       Get.back();
-      Get.snackbar('Succès', 'Place assignée avec succès');
+      Get.snackbar(
+        'Succès',
+        'Place assignée ! Lien d\'invitation généré automatiquement.',
+      );
     } catch (e) {
       Get.snackbar('Erreur', e.toString());
     }

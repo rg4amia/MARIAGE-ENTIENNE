@@ -4,6 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
+  file_selector_windows
+  permission_handler_windows
+  record_windows
+  share_plus
   url_launcher_windows
 )
 

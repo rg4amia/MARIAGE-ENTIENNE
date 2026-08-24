@@ -9,4 +9,7 @@ class AppRoutes {
   static const invitations = '/invitations';
   static const qrCode = '/invitations/:guestId/qr';
   static const settings = '/settings';
+
+  // Public routes (no auth required)
+  static const guestAccess = '/guest/:token';
 }

@@ -1,15 +1,59 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/guest.dart';
+import '../../data/models/guest_link.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
+import '../../data/repositories/guest_link_repository.dart';
 import 'guests_controller.dart';
 
-class GuestDetailPage extends StatelessWidget {
+class GuestDetailPage extends StatefulWidget {
   const GuestDetailPage({super.key});
+
+  @override
+  State<GuestDetailPage> createState() => _GuestDetailPageState();
+}
+
+class _GuestDetailPageState extends State<GuestDetailPage> {
+  GuestLink? _guestLink;
+  bool _isLoadingLink = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadOrCreateLink();
+  }
+
+  Future<void> _loadOrCreateLink() async {
+    final guest = Get.arguments as Guest;
+    final linkRepo = GuestLinkRepository();
+    
+    // Try to get existing link
+    var link = await linkRepo.getLinkByGuestId(guest.id);
+    
+    // Create new link if none exists
+    link ??= await linkRepo.createGuestLink(guest.id);
+    
+    if (mounted) {
+      setState(() {
+        _guestLink = link;
+        _isLoadingLink = false;
+      });
+    }
+  }
+
+  String _getInviteUrl() {
+    if (_guestLink == null) return '';
+    final supabaseUrl = Supabase.instance.client.rest.url;
+    // Convert REST URL to base: https://xxx.supabase.co/rest/v1/ → https://xxx.supabase.co
+    final baseUrl = supabaseUrl.replaceAll(RegExp(r'/rest/v1.*'), '');
+    return _guestLink!.getInviteUrl(baseUrl);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,21 +175,77 @@ class GuestDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // QR Code Preview
+            // QR Code & Invite Link
             if (guest.qrToken.isNotEmpty)
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      Text('QR Code', style: AppTextStyles.titleLg),
-                      const SizedBox(height: 8),
-                      Text(
-                        guest.qrToken,
-                        style: AppTextStyles.labelMd,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text('Lien d\'invitation', style: AppTextStyles.titleLg),
+                      const SizedBox(height: 12),
+                      
+                      // Short link display
+                      if (_isLoadingLink)
+                        const CircularProgressIndicator()
+                      else if (_guestLink != null) ...[
+                        // Short link URL
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.link, size: 16, color: AppColors.primary),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _getInviteUrl(),
+                                  style: AppTextStyles.labelMd.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.copy, size: 16),
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: _getInviteUrl()),
+                                  );
+                                  Get.snackbar(
+                                    'Copié !',
+                                    'Lien copié dans le presse-papier',
+                                    snackPosition: SnackPosition.BOTTOM,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        
+                        // Stats
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.remove_red_eye, size: 14, color: AppColors.onSurfaceVariant),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${_guestLink!.scanCount} scan(s)',
+                              style: AppTextStyles.labelMd.copyWith(
+                                color: AppColors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      
                       const SizedBox(height: 16),
+                      
+                      // QR Code placeholder
                       Container(
                         width: 180,
                         height: 180,
@@ -161,6 +261,13 @@ class GuestDetailPage extends StatelessWidget {
                             color: AppColors.outlineVariant,
                           ),
                         ),
+                      ),
+                      
+                      const SizedBox(height: 8),
+                      Text(
+                        'Code: ${_guestLink?.shortCode ?? "..."}',
+                        style: AppTextStyles.labelMd,
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),

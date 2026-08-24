@@ -14,8 +14,11 @@ import '../modules/guests/guests_page.dart';
 import '../modules/guests/guests_binding.dart';
 import '../modules/guests/guest_detail_page.dart';
 import '../modules/invitations/qr_code_page.dart';
+import '../modules/invitations/invitations_page.dart';
 import '../modules/invitations/invitations_binding.dart';
 import '../modules/settings/settings_page.dart';
+import '../modules/guest_access/guest_access_page.dart';
+import '../modules/guest_access/guest_access_binding.dart';
 
 class AppPages {
   static const initial = AppRoutes.login;
@@ -62,6 +65,11 @@ class AppPages {
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
+      name: AppRoutes.invitations,
+      page: () => const InvitationsPage(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
       name: AppRoutes.qrCode,
       page: () => const QrCodePage(),
       binding: InvitationsBinding(),
@@ -71,6 +79,13 @@ class AppPages {
       name: AppRoutes.settings,
       page: () => const SettingsPage(),
       middlewares: [AuthMiddleware()],
+    ),
+
+    // Public routes (no auth required)
+    GetPage(
+      name: AppRoutes.guestAccess,
+      page: () => const GuestAccessPage(),
+      binding: GuestAccessBinding(),
     ),
   ];
 }
@@ -83,7 +98,10 @@ class AuthMiddleware extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     final authController = Get.find<AuthController>();
 
-    if (!authController.isLoggedIn && route != AppRoutes.login && route != AppRoutes.register) {
+    if (!authController.isLoggedIn &&
+        route != AppRoutes.login &&
+        route != AppRoutes.register &&
+        route != AppRoutes.guestAccess) {
       return const RouteSettings(name: AppRoutes.login);
     }
 
