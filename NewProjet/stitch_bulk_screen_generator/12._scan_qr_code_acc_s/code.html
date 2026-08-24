@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scan QR Code</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF7A3D",
+                        salmon: "#FF8F7E",
+                        peach: "#FFD6B3",
+                        ivory: "#FFF7ED",
+                        gold: "#D4AF37",
+                        "background-light": "#FFF7ED",
+                        "background-dark": "#1A1A1A",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#2D2D2D",
+                        "text-light": "#333333",
+                        "text-dark": "#F5F5F5",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'lg': "1.5rem",
+                        'xl': "2rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body antialiased min-h-screen flex flex-col max-w-md mx-auto relative overflow-hidden">
+<header class="absolute top-0 left-0 right-0 z-10 px-4 py-6 flex items-center justify-between">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white hover:bg-black/50 transition-colors focus:outline-none">
+<span class="material-icons">arrow_back</span>
+</button>
+<h1 class="text-white font-medium text-lg tracking-wide drop-shadow-md">Scan QR Code</h1>
+<div class="w-10"></div> 
+</header>
+<main class="flex-grow relative flex flex-col bg-gray-900 overflow-hidden">
+<img alt="Abstract dark blurred background simulating camera view" class="absolute inset-0 w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVgyYkNyZPt88Gf3FCn5zH9iXsffwgnTyuO9Ys9Q3HnguKRdthkOCdEzuNe4aWZlszEs8CI2JRW3ZCbjXexiUYL7t6N5SxcrJYius_mMD4Qvj-Upq0W181WF4O57XODbHZF6h65ZNlVRodw833QUAT3K8Sr4fpILocIRVZPMLfLVQnSBC7buM1nutciawg7LAofZJRsQIncUG_fNb6-OO8_lxnjbSYW0lfNFY8csIEJdQ1MkmE0ajKKg"/>
+<div class="absolute inset-0 flex flex-col">
+<div class="bg-black/60 flex-grow"></div>
+<div class="flex h-64 sm:h-80 w-full">
+<div class="bg-black/60 flex-grow"></div>
+<div class="relative w-64 sm:w-80 h-full border-2 border-primary/50 shadow-[0_0_0_9999px_rgba(0,0,0,0.6)] rounded-xl overflow-hidden">
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-lg"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-lg"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-lg"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-lg"></div>
+<div class="absolute top-0 left-0 right-0 h-1 bg-primary/80 shadow-[0_0_8px_2px_rgba(255,122,61,0.5)] animate-[scan_2s_ease-in-out_infinite_alternate]"></div>
+<div class="absolute inset-0 flex items-center justify-center p-8 opacity-40 mix-blend-screen">
+<img alt="QR Code example" class="w-full h-full object-contain filter invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvO6PoXpAraeE5769Kb6r2Z00wrI-Cl7bunPcAps-HexDrPM_jRFur7nJ5se5oHQEMzp10t87XhhJ5UT4fV80HLCXMsWhhg8CXGfdAHaNtiUTtUdF-shHFkKQF6-me-LhiiwzZPeyQKjql6qItPCX8DFcUzjtK01XEAia9i0h1fKgey8mIL7fOuUs8QBm5h3XcZwHozwUeAVlWzmwIFdcm2ebWxXmkSLUA_0ffxwWc_3nRr8m3jLT5Bw"/>
+</div>
+</div>
+<div class="bg-black/60 flex-grow"></div>
+</div>
+<div class="bg-black/60 flex-grow flex flex-col items-center justify-start pt-12 pb-24 px-6 text-center z-10">
+<div class="bg-black/50 backdrop-blur-sm px-6 py-3 rounded-full mb-8 border border-white/10">
+<p class="text-white font-medium flex items-center gap-2">
+<span class="material-icons text-primary text-xl">qr_code_scanner</span>
+                        Placez le QR code dans le cadre
+                    </p>
+</div>
+<div class="flex gap-6 mt-4">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 transition-colors focus:outline-none">
+<span class="material-icons">image</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 transition-colors focus:outline-none">
+<span class="material-icons">flashlight_on</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<div class="bg-card-light dark:bg-card-dark rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.2)] px-6 py-6 absolute bottom-0 w-full z-20">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 dark:bg-gray-700 -z-10"></div>
+<div class="flex flex-col items-center gap-2 bg-card-light dark:bg-card-dark px-2">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center border-4 border-white dark:border-card-dark">
+<div class="w-2 h-2 rounded-full bg-white"></div>
+</div>
+<span class="text-[10px] font-semibold text-primary uppercase tracking-wider">Vérification</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-card-light dark:bg-card-dark px-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center border-4 border-white dark:border-card-dark">
+</div>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Enregistrement</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-card-light dark:bg-card-dark px-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center border-4 border-white dark:border-card-dark">
+</div>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Validation</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-card-light dark:bg-card-dark px-2">
+<div class="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center border-4 border-white dark:border-card-dark">
+</div>
+<span class="text-[10px] font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wider">Carte</span>
+</div>
+</div>
+</div>
+<style>
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }.animate-\[scan_2s_ease-in-out_infinite_alternate\] {
+            animation-name: scan;
+            animation-duration: 2s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            height: 2px;--tw-translate-y: 250px; 
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        }
+        @media (min-width: 640px) {
+             .animate-\[scan_2s_ease-in-out_infinite_alternate\] {
+                --tw-translate-y: 310px;
+             }
+        }
+    </style>
+
+</body></html>

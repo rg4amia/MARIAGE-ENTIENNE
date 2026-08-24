@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Détails Invité - Mariage Étienne</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#ffdcbf",
+                        "primary-container": "#ff7a3d",
+                        "inverse-on-surface": "#f8efe9",
+                        "on-secondary-fixed-variant": "#7d2b21",
+                        "secondary-fixed": "#ffdad4",
+                        "surface-container-high": "#efe6e1",
+                        "surface-container-highest": "#eae1db",
+                        "surface-container-low": "#fbf2ec",
+                        "tertiary-container": "#be9a7a",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#76583d",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-bright": "#fff8f4",
+                        "on-tertiary-fixed-variant": "#5c4127",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f4",
+                        "on-background": "#1f1b18",
+                        "primary-fixed-dim": "#ffb598",
+                        "secondary-container": "#ff8f7e",
+                        "on-primary-fixed": "#360f00",
+                        "surface-variant": "#eae1db",
+                        "surface-dim": "#e1d8d3",
+                        "primary-fixed": "#ffdbcd",
+                        "on-tertiary-fixed": "#2b1703",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#a53c00",
+                        "on-surface": "#1f1b18",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed-dim": "#e6bf9d",
+                        "surface-container": "#f5ece6",
+                        "outline-variant": "#dfc0b4",
+                        "outline": "#8c7167",
+                        "on-error-container": "#93000a",
+                        "secondary": "#9c4236",
+                        "on-primary-fixed-variant": "#7e2c00",
+                        "inverse-primary": "#ffb598",
+                        "primary": "#a53c00",
+                        "background": "#fff8f4",
+                        "on-tertiary-container": "#4b321a",
+                        "on-secondary-container": "#76261c",
+                        "on-surface-variant": "#584239",
+                        "on-secondary-fixed": "#410100",
+                        "inverse-surface": "#34302c",
+                        "on-primary-container": "#652200"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "40px",
+                        "base": "8px",
+                        "gutter": "16px",
+                        "container-margin": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Libre Caslon Text"],
+                        "title-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-md": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-md": ["36px", { "lineHeight": "44px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f4; /* background color */
+            background-image: radial-gradient(circle at top right, rgba(255,122,61,0.05), transparent 400px), 
+                              radial-gradient(circle at bottom left, rgba(255,214,179,0.2), transparent 400px);
+            background-attachment: fixed;
+        }
+        
+        /* Utility for Material Symbols */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background font-body-md min-h-screen flex flex-col md:flex-row relative pb-24 md:pb-0">
+<!-- Top App Bar (Mobile) -->
+<header class="md:hidden flex items-center justify-between px-gutter py-base w-full z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 docked full-width top-0 sticky">
+<button class="p-2 text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Détails invité</h1>
+<button class="p-2 text-on-surface-variant hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Side Navigation (Desktop) -->
+<aside class="hidden md:flex flex-col h-full py-6 bg-surface dark:bg-surface-container h-screen w-80 rounded-r-2xl divide-y divide-outline-variant/20 shadow-xl fixed left-0 top-0 z-40">
+<div class="px-6 pb-6">
+<h1 class="font-headline-lg text-primary mb-2">Mariage Étienne</h1>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold">
+                    ES
+                </div>
+<div>
+<p class="font-body-md text-on-surface">Étienne &amp; Sophie</p>
+<p class="font-label-md text-on-surface-variant">24 Août 2025 • Admin</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-4 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md">Accueil</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md">Invités</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-body-md">Tables</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-semibold mx-2 transition-transform translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-body-md">Invitations</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-container-high mx-2 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-body-md">Plus</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-container-margin py-6 md:ml-80 md:py-12">
+<!-- Desktop Header (Hidden on Mobile) -->
+<div class="hidden md:flex items-center justify-between mb-section-gap">
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Détails invité</h2>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Profile Card -->
+<div class="md:col-span-5 flex flex-col gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 flex flex-col items-center text-center relative overflow-hidden">
+<!-- Subtle floral accent -->
+<div class="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none" data-alt="Soft watercolor floral illustration in peach and salmon tones, used as a subtle corner accent on a digital card." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAupQkDKozLsnB8yGIyKq1yxV2y9tkmni9Qnr2Uhmqdbiy2yXU-UWOybfIShVJQbhunV439tTWOSjgbkVDYr4PCDywzm8xkGLTeRd0QsSWSLyE5_B2p2J3HE83T04vz1ayWkz5DDEcECccdjGfa1zJRCWC09FOf5CkmDxIVojuAU744UXyJIC2txz7BfKt0jXNoXa1WRl73OBwuxm5RtYKGDF7pO-L77-A5Cs8ZBWCO7s3_bFG1q_jgbA'); background-size: cover;"></div>
+<img class="w-24 h-24 rounded-full object-cover mb-4 border-2 border-outline-variant/50" data-alt="Professional portrait photograph of a smiling woman with dark curly hair, wearing a warm terracotta blouse, well-lit against a soft neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEiJPCc_Ikh8rqZDRM41okw1rbV-o5OBR6FG_c8yGFVs3xt2x5KRmA4GBg5oNwo4WALMeg8l3-iL7ksp-EsHDzbfymvQuFBR12FdEpjx679EqAo1pUgYFQjV_-zV_rDzzGVD8Xj35iz3pzPQCOGyVGO9RZyApMOJxg5w47nMJ9V1kdWM8zDF6SQTiOlN6YxV4ZBNQ2dUMU2i1Frh-6nZXZ0Mxyhg1AqsKxmwm6zhn3zEQVU_4XFi_ALQ"/>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-1">Marie KOUAME</h3>
+<p class="font-body-md text-on-surface-variant mb-4">+225 07 11 22 33 44</p>
+<p class="font-body-md text-on-surface-variant flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-[16px]" data-icon="mail">mail</span>
+                        marie@mail.com
+                    </p>
+<div class="w-full bg-surface-container p-4 rounded-lg flex items-center justify-between mb-4">
+<span class="font-body-md text-on-surface">Statut</span>
+<span class="font-label-md bg-secondary-fixed/50 text-on-secondary-fixed-variant px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="pending">pending</span>
+                            En attente
+                        </span>
+</div>
+<div class="w-full text-left space-y-3">
+<div class="flex justify-between items-center border-b border-outline-variant/20 pb-2">
+<span class="font-body-md text-on-surface-variant">Table:</span>
+<span class="font-body-md text-on-surface">Non assignée</span>
+</div>
+<div class="flex justify-between items-center pb-2">
+<span class="font-body-md text-on-surface-variant">Chaise:</span>
+<span class="font-body-md text-on-surface">Non assignée</span>
+</div>
+</div>
+</div>
+<!-- Assign Action -->
+<button class="w-full bg-primary-container text-on-primary-container font-title-lg py-3 rounded-lg shadow-sm hover:opacity-90 transition-opacity flex justify-center items-center gap-2">
+<span class="material-symbols-outlined" data-icon="chair">chair</span>
+                    Assigner une place
+                </button>
+</div>
+<!-- History Card -->
+<div class="md:col-span-7 flex flex-col gap-6">
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/30 h-full">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-6 flex items-center gap-2 border-b border-outline-variant/30 pb-4">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+                        Historique des envois
+                    </h3>
+<div class="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline-variant/50 before:to-transparent">
+<!-- Timeline Item 1 -->
+<div class="relative flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface-container-lowest flex items-center justify-center z-10 shrink-0 text-secondary">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+</div>
+<div class="bg-surface p-4 rounded-lg border border-outline-variant/20 flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-title-lg text-[16px] text-on-surface">WhatsApp</h4>
+<span class="font-label-md text-on-surface-variant text-[10px]">24/08/2025 15:00</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-[13px]">Envoyé à +225 07 11 22 33 44</p>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface-container-lowest flex items-center justify-center z-10 shrink-0 text-primary">
+<span class="material-symbols-outlined" data-icon="sms">sms</span>
+</div>
+<div class="bg-surface p-4 rounded-lg border border-outline-variant/20 flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-title-lg text-[16px] text-on-surface">SMS</h4>
+<span class="font-label-md text-on-surface-variant text-[10px]">24/08/2025 15:02</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-[13px]">Envoyé à +225 07 11 22 33 44</p>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-surface-container-lowest flex items-center justify-center z-10 shrink-0 text-tertiary">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</div>
+<div class="bg-surface p-4 rounded-lg border border-outline-variant/20 flex-1">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-title-lg text-[16px] text-on-surface">Email</h4>
+<span class="font-label-md text-on-surface-variant text-[10px]">24/08/2025 15:03</span>
+</div>
+<p class="font-body-md text-on-surface-variant text-[13px]">Envoyé à marie@mail.com</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-surface/90 dark:bg-surface-container-low/90 backdrop-blur-lg border-t border-outline-variant/20 shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md mt-1">Accueil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md mt-1">Invités</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-label-md text-label-md mt-1">Tables</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-transform tap-highlight-none" href="#">
+<span class="material-symbols-outlined fill" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-label-md text-label-md mt-1">Invitations</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-md text-label-md mt-1">Plus</span>
+</a>
+</nav>
+</body></html>

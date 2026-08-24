@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Liste des Invités - Mariage Étienne</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#ffdcbf",
+                      "primary-container": "#ff7a3d",
+                      "inverse-on-surface": "#f8efe9",
+                      "on-secondary-fixed-variant": "#7d2b21",
+                      "secondary-fixed": "#ffdad4",
+                      "surface-container-high": "#efe6e1",
+                      "surface-container-highest": "#eae1db",
+                      "surface-container-low": "#fbf2ec",
+                      "tertiary-container": "#be9a7a",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#76583d",
+                      "secondary-fixed-dim": "#ffb4a8",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#fff8f4",
+                      "on-tertiary-fixed-variant": "#5c4127",
+                      "on-primary": "#ffffff",
+                      "surface": "#fff8f4",
+                      "on-background": "#1f1b18",
+                      "primary-fixed-dim": "#ffb598",
+                      "secondary-container": "#ff8f7e",
+                      "on-primary-fixed": "#360f00",
+                      "surface-variant": "#eae1db",
+                      "surface-dim": "#e1d8d3",
+                      "primary-fixed": "#ffdbcd",
+                      "on-tertiary-fixed": "#2b1703",
+                      "on-tertiary": "#ffffff",
+                      "surface-tint": "#a53c00",
+                      "on-surface": "#1f1b18",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#e6bf9d",
+                      "surface-container": "#f5ece6",
+                      "outline-variant": "#dfc0b4",
+                      "outline": "#8c7167",
+                      "on-error-container": "#93000a",
+                      "secondary": "#9c4236",
+                      "on-primary-fixed-variant": "#7e2c00",
+                      "inverse-primary": "#ffb598",
+                      "primary": "#a53c00",
+                      "background": "#fff8f4",
+                      "on-tertiary-container": "#4b321a",
+                      "on-secondary-container": "#76261c",
+                      "on-surface-variant": "#584239",
+                      "on-secondary-fixed": "#410100",
+                      "inverse-surface": "#34302c",
+                      "on-primary-container": "#652200"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "section-gap": "40px",
+                      "base": "8px",
+                      "gutter": "16px",
+                      "container-margin": "24px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "title-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-md": [
+                              "Libre Caslon Text"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "title-lg": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-md": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>body {
+    background-color: theme("colors.background");
+    color: theme("colors.on-background");
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuA989kd3U1r2PUFnryvODl-IFJo2ctbb13goNwrPrgSTOZFcisP8bYNBXCtoWn_YQRqU1dwGdfTY5nV8UyD9ccZyEE-09HdsErIpDjZMBAN-SyhdzlQySnRdo3wdjnP3qX4GWWlH0vDVm8_f0ATbtnDVhQBkYcHP_QZSAdP_R6BQkvdRjyl6U1Txig8Tk5DReLiMJCYw0ammcXWf1s7rJUpNThcBC9CffRFi7hvLpGACNIiZ8VHTYjiUA);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center
+    }
+/* Hide scrollbar for a cleaner look, especially on mobile */
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col md:flex-row relative" data-alt="A subtle, elegant floral background pattern in warm ivory and pale peach tones, suitable for a sophisticated digital wedding planner app. Soft, out-of-focus bokeh elements add depth without distracting from foreground content.">
+<!-- Top App Bar (Mobile & Desktop Header) -->
+<header class="docked full-width top-0 sticky backdrop-blur-md border-b border-outline-variant/30 flex items-center justify-between px-gutter py-base w-full z-50 bg-surface/80 dark:bg-surface-dim/80 flat no shadows">
+<button class="text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 duration-150 p-2">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-md md:text-headline-md text-primary tracking-tight">Mariage Étienne</h1>
+<button class="text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity active:scale-95 duration-150 p-2">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Side Navigation (Desktop only) -->
+<nav class="hidden md:flex NavigationDrawer h-full w-80 rounded-r-2xl divide-y divide-outline-variant/20 shadow-xl bg-surface dark:bg-surface-container flex-col py-6 sticky top-0 h-screen">
+<div class="px-6 pb-6 flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="A small, elegant avatar illustration of a wedding couple, styled in warm minimal vector art with peach and gold tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4ZDlqJs0jef-vlkItUtu7tVn_PYzJyCyeQQ_jIUk-ps4cgSbiPrjay0qHPnG-pAyZdZ39Hibom1lNcQZhRaQnc1UTZ3WCppaIxutbWunks847PfAJyZeDbq0vXSYp1NWdoDuCraFLZqYBvypejcjrx8D9HJIJ6STu00lpNp03NEQEFGJJQWiYEz7jCMcbmkoB-NNn3oqJooCxPH4teEXVRjp4GQCAv37q1ft_K59u5l6q8Spl2sMmQg"/>
+<div>
+<h2 class="font-headline-md text-primary">Étienne &amp; Sophie</h2>
+<p class="font-body-md text-on-surface-variant">24 Août 2025</p>
+<span class="font-label-md text-label-md text-secondary mt-1 inline-block">Admin</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-4">
+<ul class="space-y-2">
+<li>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-tertiary-fixed/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md">Accueil</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 bg-primary-container text-on-primary-container font-semibold rounded-lg hover:bg-tertiary-fixed/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-body-md">Invités</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-tertiary-fixed/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-body-md">Tables</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-4 py-3 mx-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-tertiary-fixed/30 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-body-md">Invitations</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-container-margin py-6 pb-32 md:pb-8 flex flex-col gap-6">
+<!-- Header Section -->
+<div class="flex flex-col gap-4">
+<h2 class="font-display-md text-primary">Invités</h2>
+<!-- Search Bar -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-full bg-surface-container-highest border-none focus:ring-2 focus:ring-primary-container text-on-surface font-body-md placeholder:text-on-surface-variant/70 shadow-sm transition-shadow" placeholder="Rechercher un invité..." type="text"/>
+</div>
+</div>
+<!-- Filter Chips (Optional enhancement for high-end feel) -->
+<div class="flex gap-2 overflow-x-auto pb-2 -mx-container-margin px-container-margin md:mx-0 md:px-0">
+<button class="px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-md whitespace-nowrap">Tous (128)</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors">En attente (32)</button>
+<button class="px-4 py-1.5 rounded-full border border-outline-variant text-on-surface-variant font-label-md whitespace-nowrap hover:bg-surface-container-high transition-colors">Confirmés (96)</button>
+</div>
+<!-- Guest List Container -->
+<div class="flex flex-col gap-3">
+<!-- Guest Card 1 -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(165,60,0,0.05)] border border-outline-variant/10 hover:shadow-[0_4px_25px_rgba(165,60,0,0.1)] transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-high" data-alt="A bright, cheerful portrait photo of a smiling woman, cropped to a circle, warm lighting, natural look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCewM3h_f-eQzSbajAerRqmBs_Fuu_baEO3jBIBvThZAtlu24VYaOrmXguv0AEmmg1o_byPnTU7_xvg2aCmB2FxY2suf9rBU8450pBaycq81cgVygBL-cyIy-PT8dedjNg-ytGaUGMVGXSG0s4bPgAFTASkouGZ9tijgHFJrQDHHFiMJSSALr6aqf3KBnp2ip8DK8Tmu1VKj0NzC7aOjGoo8PysUXCUueb0jZaqlSfj7E48nDB0wobQw"/>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Marie KOUAME</span>
+<span class="font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[16px]">call</span> +225 07 11 22 33 44</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-md text-[10px] uppercase tracking-wider">En attente</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+<!-- Guest Card 2 -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(165,60,0,0.05)] border border-outline-variant/10 hover:shadow-[0_4px_25px_rgba(165,60,0,0.1)] transition-all cursor-pointer group relative overflow-hidden">
+<!-- Zebra stripe effect using very faint Salmon -->
+<div class="absolute inset-0 bg-secondary-fixed/30 pointer-events-none"></div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-surface-container-highest text-on-surface-variant font-title-lg">JB</div>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Jean BAKAYOKO</span>
+<span class="font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[16px]">call</span> +225 05 55 06 77 88</span>
+</div>
+</div>
+<div class="flex items-center gap-3 relative z-10">
+<span class="px-2.5 py-1 rounded-md bg-secondary-container/20 text-secondary font-label-md text-[10px] uppercase tracking-wider">Média reçu</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+<!-- Guest Card 3 -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(165,60,0,0.05)] border border-outline-variant/10 hover:shadow-[0_4px_25px_rgba(165,60,0,0.1)] transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-high" data-alt="A portrait photo of a man looking confident, slightly formal attire, soft lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDicTz1IYHWyHXWpcdufjft1ZbPqoyDsuNUPfbH4selrL6bzGSqcAJzO5J6Ko8-_zIZDdVIqLFdU4FjQUNbRbZUPOM5TckzYoYbMquK26kdLr5KVma3DpI2cICTB8kJNkzP0FuJT76D1kEiUfk3zg99CntXMGC8P-61KlS3HH996OWKv5Pu6zVvxP1dPUXpmD8PviNAC5tpWw03H-qORr1_ljLrgPqVUjWawyHDljGAPAbRfxUrWQmQwQ"/>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Aïssa TRAORÉ</span>
+<span class="font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[16px]">call</span> +225 07 99 00 11 22</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-green-100 text-green-800 font-label-md text-[10px] uppercase tracking-wider">Carte débloquée</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+<!-- Guest Card 4 -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(165,60,0,0.05)] border border-outline-variant/10 hover:shadow-[0_4px_25px_rgba(165,60,0,0.1)] transition-all cursor-pointer group relative overflow-hidden">
+<div class="absolute inset-0 bg-secondary-fixed/30 pointer-events-none"></div>
+<div class="flex items-center gap-4 relative z-10">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center border-2 border-surface-container-highest text-on-surface-variant font-title-lg">PL</div>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Paul LOKO</span>
+<span class="font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[16px]">call</span> +225 07 33 44 55 66</span>
+</div>
+</div>
+<div class="flex items-center gap-3 relative z-10">
+<span class="px-2.5 py-1 rounded-md bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-md text-[10px] uppercase tracking-wider">En attente</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+<!-- Guest Card 5 -->
+<div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest shadow-[0_4px_20px_rgba(165,60,0,0.05)] border border-outline-variant/10 hover:shadow-[0_4px_25px_rgba(165,60,0,0.1)] transition-all cursor-pointer group">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-high" data-alt="A portrait of a smiling woman with glasses, casual elegant style, natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0m_KFEHIq0xn4ETjHQfCjWLv-4NmvnY9ZpGTNBh8bjGZ6n3-_KrU4upa01z82cVyJjMJUSAFR5hjQUH9D9b2vLzlGvAF933ngfm7gWtSr_mdag9sCkKDcDKOb7-8A3yKsa7rxmrzKLkmMEaQ_09BLzbgDcTybel2WKxHdS9QTTANmB-wNo4D0fdiFHj2btPRBbzqQTu_lXfu6rNSbe1wbCIpBK8YBaYmQtFx3IxJ4quOMMjSP8ALlgw"/>
+<div class="flex flex-col">
+<span class="font-title-lg text-title-lg text-on-surface group-hover:text-primary transition-colors">Fatou DIALLO</span>
+<span class="font-body-md text-on-surface-variant flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[16px]">call</span> +225 07 66 77 88 99</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-md bg-green-100 text-green-800 font-label-md text-[10px] uppercase tracking-wider">Carte débloquée</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Add Guest) -->
+<button class="fixed bottom-24 right-6 md:bottom-10 md:right-10 w-14 h-14 bg-primary-container text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden docked full-width bottom-0 fixed rounded-t-xl backdrop-blur-lg border-t border-outline-variant/20 shadow-lg fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-surface/90 dark:bg-surface-container-low/90">
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md mt-1">Accueil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold scale-110 transition-transform active:tap-highlight-none" href="#">
+<span class="material-symbols-outlined" data-icon="group" data-weight="fill">group</span>
+<span class="font-label-md text-label-md mt-1">Invités</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="table_restaurant">table_restaurant</span>
+<span class="font-label-md text-label-md mt-1">Tables</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="qr_code_2">qr_code_2</span>
+<span class="font-label-md text-label-md mt-1">Invitations</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant opacity-70 hover:text-primary-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-label-md text-label-md mt-1">Plus</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Enregistrement vidéo</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF7A3D",
+                        salmon: "#FF8F7E",
+                        peach: "#FFD6B3",
+                        "background-light": "#FFF7ED",
+                        "background-dark": "#1C1917",
+                        "text-light": "#292524",
+                        "text-dark": "#F5F5F4",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Lato", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 122, 61, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(255, 122, 61, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(255, 122, 61, 0);
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body min-h-screen flex flex-col items-center">
+<div class="w-full max-w-md h-screen flex flex-col relative overflow-hidden bg-white dark:bg-stone-900 shadow-2xl">
+<header class="flex items-center justify-between p-4 z-10 relative bg-white/80 dark:bg-stone-900/80 backdrop-blur-md">
+<button class="p-2 text-text-light dark:text-text-dark hover:bg-black/5 rounded-full transition-colors">
+<span class="material-icons">arrow_back</span>
+</button>
+<h1 class="font-display font-semibold text-lg">Enregistrement vidéo</h1>
+<div class="w-10"></div> 
+</header>
+<main class="flex-1 relative flex flex-col justify-end bg-black">
+<img alt="Vue de la caméra montrant une personne" class="absolute inset-0 w-full h-full object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcduTwFPsRNh5vqQjRPYTmVebUOZS3mJ4mzZUiq2Ee80zAn9K9vzp9N_7Ygifm0vlYZiKNomr5avga3be0dlzvgOUwoq-D4r8s5goP0dcqu4sL6zWlvOAWP0_PiBTjvdJjFYivS3OVbQMP3_QrCUEzF2bIWdKyFpG4yQrlpt05Uf67RtRK4qwdxe7lgZerTa64HY6Of642w3BMDu37grcyBjgSeo7RCmRmZjpQnrR0ee7vT0q4LZRhOQ"/>
+<div class="absolute inset-x-0 top-12 flex flex-col items-center z-10 drop-shadow-md">
+<p class="text-white text-sm font-medium tracking-wide mb-1 opacity-90">Enregistrement en cours...</p>
+<div class="text-white text-5xl font-display font-bold tabular-nums">00:18</div>
+</div>
+<div class="relative z-10 w-full p-6 pb-8 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+<div class="mb-8 px-4 flex flex-col items-center">
+<p class="text-white/80 text-xs mb-3 font-medium tracking-wider uppercase">Minimum 30 secondes</p>
+<div class="w-full h-1.5 bg-white/30 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000 ease-linear" style="width: 60%;"></div>
+</div>
+</div>
+<div class="flex items-center justify-center gap-8">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/20 hover:bg-black/60 transition">
+<span class="material-icons text-xl">flip_camera_ios</span>
+</button>
+<button class="w-20 h-20 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-md p-1 border-2 border-white/50 pulse">
+<div class="w-full h-full bg-primary rounded-full flex items-center justify-center">
+<div class="w-6 h-6 bg-white rounded-sm"></div> 
+</div>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm border border-white/20 hover:bg-black/60 transition">
+<span class="material-icons text-xl">close</span>
+</button>
+</div>
+</div>
+</main>
+<nav class="bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 p-4 pb-8 z-10">
+<div class="flex items-center justify-between max-w-xs mx-auto">
+<div class="flex flex-col items-center gap-1 opacity-50">
+<div class="w-6 h-6 rounded-full border border-current flex items-center justify-center">
+<span class="material-icons text-[14px]">check</span>
+</div>
+<span class="text-[10px] font-medium uppercase tracking-wider">Vérification</span>
+</div>
+<div class="flex-1 h-px bg-stone-300 dark:bg-stone-700 mx-2"></div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<div class="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-current"></span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider">Enregistrement</span>
+</div>
+<div class="flex-1 h-px bg-stone-300 dark:bg-stone-700 mx-2"></div>
+<div class="flex flex-col items-center gap-1 opacity-30">
+<div class="w-6 h-6 rounded-full border border-current flex items-center justify-center">
+</div>
+<span class="text-[10px] font-medium uppercase tracking-wider">Validation</span>
+</div>
+<div class="flex-1 h-px bg-stone-300 dark:bg-stone-700 mx-2"></div>
+<div class="flex flex-col items-center gap-1 opacity-30">
+<div class="w-6 h-6 rounded-full border border-current flex items-center justify-center">
+</div>
+<span class="text-[10px] font-medium uppercase tracking-wider">Carte</span>
+</div>
+</div>
+</nav>
+</div>
+
+</body></html>

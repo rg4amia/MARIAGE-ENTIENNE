@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Choix du média</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&amp;family=Lato:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF7A3D",
+                        salmon: "#FF8F7E",
+                        peach: "#FFD6B3",
+                        "background-light": "#FFF7ED",
+                        "background-dark": "#1a1614",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d2420",
+                        "text-light": "#333333",
+                        "text-dark": "#f5f5f5",
+                        "text-muted-light": "#777777",
+                        "text-muted-dark": "#a0a0a0",
+                        "gold": "#D4AF37",
+                    },
+                    fontFamily: {
+                        display: ["Playfair Display", "serif"],
+                        body: ["Lato", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        'lg': "1.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+<style>
+        body { font-family: 'Lato', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Playfair Display', serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark min-h-screen flex flex-col items-center justify-center p-4">
+<div class="w-full max-w-md h-[812px] bg-surface-light dark:bg-surface-dark rounded-[2.5rem] shadow-2xl overflow-hidden relative flex flex-col border-4 border-white dark:border-gray-800">
+<div class="h-12 flex justify-between items-center px-6 pt-2 text-sm font-semibold">
+<span>9:41</span>
+<div class="flex space-x-2 items-center">
+<span class="material-icons text-sm">signal_cellular_4_bar</span>
+<span class="material-icons text-sm">wifi</span>
+<span class="material-icons text-sm">battery_full</span>
+</div>
+</div>
+<div class="px-6 py-4 flex items-center justify-between">
+<button class="text-text-light dark:text-text-dark hover:text-primary transition-colors">
+<span class="material-icons">arrow_back</span>
+</button>
+<h1 class="font-display text-xl font-semibold">Choix du média</h1>
+<div class="w-6"></div> 
+</div>
+<div class="flex-1 overflow-y-auto px-6 pt-6 pb-24 flex flex-col items-center">
+<p class="text-center text-text-muted-light dark:text-text-muted-dark mb-10 text-base">
+                Choisissez le type de média
+            </p>
+<button class="w-full bg-white dark:bg-[#3a2e29] border border-peach dark:border-gray-700 rounded-lg p-5 flex items-center mb-6 shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 group">
+<div class="w-14 h-14 rounded-full bg-peach dark:bg-[#523d33] flex items-center justify-center mr-5 text-primary group-hover:scale-110 transition-transform">
+<span class="material-icons text-2xl">videocam</span>
+</div>
+<div class="text-left">
+<h3 class="font-semibold text-lg text-text-light dark:text-text-dark mb-1">Enregistrer une vidéo</h3>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">(30 secondes minimum)</p>
+</div>
+</button>
+<button class="w-full bg-white dark:bg-[#3a2e29] border border-peach dark:border-gray-700 rounded-lg p-5 flex items-center shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 group">
+<div class="w-14 h-14 rounded-full bg-peach dark:bg-[#523d33] flex items-center justify-center mr-5 text-primary group-hover:scale-110 transition-transform">
+<span class="material-icons text-2xl">mic</span>
+</div>
+<div class="text-left">
+<h3 class="font-semibold text-lg text-text-light dark:text-text-dark mb-1">Enregistrer un audio</h3>
+<p class="text-sm text-text-muted-light dark:text-text-muted-dark">(30 secondes minimum)</p>
+</div>
+</button>
+</div>
+<div class="absolute top-0 right-0 -mt-10 -mr-10 opacity-20 pointer-events-none">
+<img alt="Floral decoration" class="w-48 h-48 rounded-full blur-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeagWJvTS6p-ImgWchQ056j2VtXsm0GzQszQl0M7KvFFJYQrRb2Bq4mpJeF0QkBtPFrzxvx_JOcs1_NvmeNQaEOXsTu3pwlY8ps2zpI0qLVhBkw7eTe-KYK3FB6Q9j7Z2JOFArXgkHXRTh9OqzhjZh0DDakvtiCVQNfroa6gTH74wnDuiCApseON4mh-kBW0Nkfihy12xnZzYIN15sN35A_vHjremK95sOxVqJMalvQ4V1CohArcTbpQ"/>
+</div>
+<div class="absolute bottom-0 left-0 -mb-10 -ml-10 opacity-20 pointer-events-none">
+<img alt="Floral decoration" class="w-48 h-48 rounded-full blur-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSCaIxPoYdDiLSIbxDwrIweq2-OUYEADLBVhxZU_Jk0qjiReQkmC_hycgQiqFdr-BCH-IB411b9PF4h3ZE49wGT-SEF8nl9PoNuDRUSTDsAhwbFeqHGq5GZwLm7Ve1XJuD3GgCEyvCM_ROq-utSwuMJQ8tk-ZqFv8g84Z96KanY5Ega_x0pvrMD6reK8E-qRX6urIS4Z94-FWDpWsKgCLHwlhF4gVwCg_UDZq0HC6w5noMjKq5TWbG1Q"/>
+</div>
+<div class="absolute bottom-0 left-0 w-full bg-surface-light dark:bg-surface-dark border-t border-peach dark:border-gray-800 px-6 py-5">
+<div class="flex items-center justify-between relative">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-0.5 bg-gray-200 dark:bg-gray-700 z-0"></div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/2 h-0.5 bg-primary z-0"></div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mb-1">
+<span class="material-icons text-[12px]">check</span>
+</div>
+<span class="text-[10px] text-primary font-medium">Vérification</span>
+</div>
+<div class="relative z-10 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-white dark:bg-surface-dark border-2 border-primary text-primary flex items-center justify-center mb-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<span class="text-[10px] text-primary font-medium">Enregistrement</span>
+</div>
+<div class="relative z-10 flex flex-col items-center opacity-50">
+<div class="w-6 h-6 rounded-full bg-white dark:bg-surface-dark border-2 border-gray-300 dark:border-gray-600 mb-1"></div>
+<span class="text-[10px] text-text-muted-light dark:text-text-muted-dark">Validation</span>
+</div>
+<div class="relative z-10 flex flex-col items-center opacity-50">
+<div class="w-6 h-6 rounded-full bg-white dark:bg-surface-dark border-2 border-gray-300 dark:border-gray-600 mb-1 flex items-center justify-center text-gray-400">
+<span class="material-icons text-[12px]">drafts</span>
+</div>
+<span class="text-[10px] text-text-muted-light dark:text-text-muted-dark">Carte</span>
+</div>
+</div>
+</div>
+<div class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1/3 h-1 bg-black dark:bg-white rounded-full opacity-20"></div>
+</div>
+
+</body></html>
