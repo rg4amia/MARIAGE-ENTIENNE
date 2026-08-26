@@ -7,5 +7,6 @@ class AppRoutes {
   static const guestDetail = '/guests/:id';
   static const invitations = '/invitations';
   static const qrCode = '/invitations/:guestId/qr';
+  static const entranceQr = '/invitations/entrance';
   static const settings = '/settings';
 }

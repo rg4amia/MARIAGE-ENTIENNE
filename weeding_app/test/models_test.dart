@@ -6,6 +6,7 @@ import 'package:weeding_app/app/data/models/chair.dart';
 import 'package:weeding_app/app/data/models/guest_seat.dart';
 import 'package:weeding_app/app/data/models/guest_media.dart';
 import 'package:weeding_app/app/data/models/profile.dart';
+import 'package:weeding_app/app/data/models/entrance_qr.dart';
 
 void main() {
   group('Guest Model', () {
@@ -253,6 +254,27 @@ void main() {
       expect(restored.id, profile.id);
       expect(restored.fullName, profile.fullName);
       expect(restored.role, profile.role);
+    });
+  });
+
+  group('EntranceQr Model', () {
+    test('fromJson exposes scan and check-in counters', () {
+      final qr = EntranceQr.fromJson({
+        'id': 'entrance-1',
+        'event_id': 'event-1',
+        'code': 'entrance-code',
+        'url': 'https://example.com/guest-portal?entrance=entrance-code',
+        'is_active': true,
+        'scan_count': 12,
+        'check_in_count': 8,
+        'last_scanned_at': '2026-08-26T12:00:00Z',
+        'created_at': '2026-08-26T10:00:00Z',
+      });
+
+      expect(qr.code, 'entrance-code');
+      expect(qr.scanCount, 12);
+      expect(qr.checkInCount, 8);
+      expect(qr.isActive, true);
     });
   });
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/guest_repository.dart';
@@ -70,6 +71,7 @@ class GuestsController extends GetxController {
     try {
       guests.value = await _guestRepository.getAllGuests();
     } catch (e) {
+      debugPrint('Erreur chargement invités: $e');
       Get.snackbar('Erreur', 'Impossible de charger les invités');
     } finally {
       isLoading.value = false;

@@ -15,6 +15,7 @@ import '../modules/guests/guest_detail_page.dart';
 import '../modules/invitations/qr_code_page.dart';
 import '../modules/invitations/invitations_page.dart';
 import '../modules/invitations/invitations_binding.dart';
+import '../modules/invitations/entrance_qr_page.dart';
 import '../modules/settings/settings_page.dart';
 
 class AppPages {
@@ -65,6 +66,11 @@ class AppPages {
       name: AppRoutes.qrCode,
       page: () => const QrCodePage(),
       binding: InvitationsBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: AppRoutes.entranceQr,
+      page: () => const EntranceQrPage(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

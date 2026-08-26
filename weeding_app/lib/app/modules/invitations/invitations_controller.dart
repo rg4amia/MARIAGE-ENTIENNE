@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../../data/repositories/invitation_repository.dart';
 import '../../data/repositories/guest_repository.dart';
@@ -22,6 +23,7 @@ class InvitationsController extends GetxController {
     try {
       invitations.value = await _invitationRepository.getAllInvitations();
     } catch (e) {
+      debugPrint('Erreur chargement invitations: $e');
       Get.snackbar('Erreur', 'Impossible de charger les invitations');
     } finally {
       isLoading.value = false;

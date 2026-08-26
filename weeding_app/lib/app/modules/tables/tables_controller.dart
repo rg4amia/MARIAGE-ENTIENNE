@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../../data/repositories/table_repository.dart';
 import '../../data/models/wedding_table.dart';
@@ -31,6 +32,7 @@ class TablesController extends GetxController {
     try {
       tables.value = await _tableRepository.getAllTables();
     } catch (e) {
+      debugPrint('Erreur chargement tables: $e');
       Get.snackbar('Erreur', 'Impossible de charger les tables');
     } finally {
       isLoading.value = false;

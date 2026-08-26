@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/guest_repository.dart';
@@ -67,6 +68,7 @@ class HomeController extends GetxController {
 
       totalMedia.value = mediaCount;
     } catch (e) {
+      debugPrint('Erreur chargement statistiques: $e');
       Get.snackbar(
         'Erreur',
         'Impossible de charger les statistiques',

@@ -57,6 +57,10 @@ class _InvitationsPageState extends State<InvitationsPage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Get.back(),
+        ),
         title: Text(
           'Suivi des invitations',
           style: AppTextStyles.headlineMdPrimary,

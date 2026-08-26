@@ -147,10 +147,41 @@ Deno.serve(async (req) => {
     return apiJson({ ...inv, signed_png_url: urls.png, signed_pdf_url: urls.pdf });
   }
 
+  // GET /guest-portal/api/entrance?code=xxx
+  if (req.method === 'GET' && path.endsWith('/api/entrance')) {
+    const code = url.searchParams.get('code');
+    if (!code) return apiError('Code d’entrée manquant', 400);
+    const { data, error } = await admin.rpc('resolve_entrance_code', { p_code: code });
+    if (error || !data) return apiError('QR d’entrée invalide ou désactivé', 404);
+    return apiJson(data);
+  }
+
+  // POST /guest-portal/api/check-in { entrance_code, invitation_identifier }
+  if (req.method === 'POST' && path.endsWith('/api/check-in')) {
+    const body = await req.json();
+    const entranceCode = String(body.entrance_code ?? '').trim();
+    const invitationIdentifier = String(body.invitation_identifier ?? '').trim();
+    if (!entranceCode || !invitationIdentifier) return apiError('Informations manquantes', 400);
+    const { data, error } = await admin.rpc('check_in_guest', {
+      p_entrance_code: entranceCode,
+      p_invitation_identifier: invitationIdentifier,
+    });
+    if (error) {
+      const message = error.message.includes('must be unlocked')
+        ? 'Votre carte doit être débloquée avant l’entrée.'
+        : error.message.includes('not found')
+        ? 'Invitation introuvable.'
+        : 'Impossible de valider votre entrée.';
+      return apiError(message, 422);
+    }
+    return apiJson(data);
+  }
+
   // ── SPA HTML ─────────────────────────────────────────────────────────────────
   // Toute autre route → on sert la SPA
   const token = url.searchParams.get('token') ?? '';
-  return new Response(renderSPA(token, supabaseUrl), {
+  const entranceCode = url.searchParams.get('entrance') ?? '';
+  return new Response(renderSPA(token, entranceCode, supabaseUrl), {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
   });
 });
@@ -173,7 +204,7 @@ function apiError(msg: string, status = 400) {
 
 // ── SPA HTML/CSS/JS inline ───────────────────────────────────────────────────
 
-function renderSPA(initialToken: string, supabaseUrl: string): string {
+function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUrl: string): string {
   return /* html */`<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -383,6 +414,19 @@ function renderSPA(initialToken: string, supabaseUrl: string): string {
     .btn-outline { background: #fff; border: 2px solid var(--gold); color: var(--gold); }
     .btn-outline:hover { background: #fffbf0; }
 
+    .text-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font: inherit;
+      font-size: 16px;
+      text-transform: uppercase;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .text-input:focus { border-color: var(--gold); }
+
     /* ── Card invitation ── */
     .invitation-card {
       background: linear-gradient(135deg, #1a1a2e, #0f3460);
@@ -454,6 +498,51 @@ function renderSPA(initialToken: string, supabaseUrl: string): string {
       <h2 style="color:#fff;margin-bottom:8px;">Invitation introuvable</h2>
       <p style="color:rgba(255,255,255,.6);font-size:14px;" id="error-msg">
         Ce lien d'invitation n'est pas valide ou a expiré.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN: ENTRANCE CHECK-IN ══════ -->
+  <div id="screen-entrance" class="screen">
+    <div class="header">
+      <div class="rings">🎟️</div>
+      <h1 id="entrance-event-title">Bienvenue au mariage</h1>
+      <p id="entrance-event-location"></p>
+    </div>
+
+    <div class="card" id="entrance-form-card">
+      <div class="section-title">Confirmez votre arrivée</div>
+      <div class="section-sub" id="entrance-hint">
+        Saisissez le code affiché sur votre carte d’invitation.
+      </div>
+      <input
+        class="text-input"
+        id="entrance-invitation-code"
+        type="text"
+        autocomplete="one-time-code"
+        placeholder="INV-..."
+      />
+      <div id="alert-entrance" class="alert error"></div>
+      <button class="btn btn-primary" id="btn-check-in" onclick="App.submitCheckIn()">
+        ✅ Valider mon entrée
+      </button>
+      <button
+        class="btn btn-outline"
+        id="btn-another-invitation"
+        style="display:none;margin-top:10px;"
+        onclick="App.useAnotherInvitation()"
+      >
+        Utiliser une autre invitation
+      </button>
+    </div>
+
+    <div class="card" id="entrance-success" style="display:none;text-align:center;">
+      <div style="font-size:60px;margin-bottom:12px;">✅</div>
+      <div class="unlock-badge" id="entrance-success-label">Entrée validée</div>
+      <div class="guest-name" id="entrance-guest-name" style="margin-top:16px;"></div>
+      <div class="guest-meta" id="entrance-guest-meta"></div>
+      <p style="color:var(--muted);font-size:13px;margin-top:16px;">
+        Présentez cet écran à l’équipe d’accueil si nécessaire.
       </p>
     </div>
   </div>
@@ -645,6 +734,9 @@ const FUNCTION_BASE = '${supabaseUrl}/functions/v1/guest-portal';
 // ═══════════════════════════════════════════════════════
 const State = {
   token:       ${JSON.stringify(initialToken)},
+  entranceCode:${JSON.stringify(initialEntranceCode)},
+  entrance:    null,
+  savedToken:  null,
   invitation:  null,
   mediaType:   'audio',   // 'audio' | 'video'
   stream:      null,
@@ -686,6 +778,20 @@ async function apiFetch(path, opts = {}) {
 // INIT
 // ═══════════════════════════════════════════════════════
 async function init() {
+  State.savedToken = localStorage.getItem('wedding_invitation_token');
+
+  if (State.entranceCode) {
+    try {
+      State.entrance = await apiFetch('/api/entrance?code=' + encodeURIComponent(State.entranceCode));
+      renderEntrance();
+      showScreen('entrance');
+    } catch (e) {
+      document.getElementById('error-msg').textContent = e.message;
+      showScreen('error');
+    }
+    return;
+  }
+
   // Token from URL param if not injected
   if (!State.token) {
     const p = new URLSearchParams(location.search);
@@ -699,11 +805,81 @@ async function init() {
 
   try {
     State.invitation = await apiFetch('/api/invitation?token=' + encodeURIComponent(State.token));
+    localStorage.setItem('wedding_invitation_token', State.token);
     renderWelcome();
     showScreen('welcome');
   } catch (e) {
     document.getElementById('error-msg').textContent = e.message;
     showScreen('error');
+  }
+}
+
+function renderEntrance() {
+  const entrance = State.entrance ?? {};
+  document.getElementById('entrance-event-title').textContent = entrance.title ?? 'Bienvenue au mariage';
+  const details = [entrance.event_date_label, entrance.location].filter(Boolean).join(' • ');
+  document.getElementById('entrance-event-location').textContent = details;
+  if (State.savedToken) {
+    document.getElementById('entrance-hint').textContent =
+      'Votre invitation a été retrouvée sur ce téléphone. Confirmez simplement votre arrivée.';
+    document.getElementById('entrance-invitation-code').style.display = 'none';
+    document.getElementById('btn-another-invitation').style.display = 'block';
+  }
+}
+
+function useAnotherInvitation() {
+  State.savedToken = null;
+  localStorage.removeItem('wedding_invitation_token');
+  document.getElementById('entrance-invitation-code').style.display = 'block';
+  document.getElementById('entrance-invitation-code').focus();
+  document.getElementById('btn-another-invitation').style.display = 'none';
+  document.getElementById('entrance-hint').textContent =
+    'Saisissez le code affiché sur votre carte d’invitation.';
+}
+
+async function submitCheckIn() {
+  clearAlert('entrance');
+  const input = document.getElementById('entrance-invitation-code').value.trim();
+  const identifier = State.savedToken || input;
+  if (!identifier) {
+    showAlert('entrance', 'Saisissez le code de votre invitation.');
+    return;
+  }
+
+  const button = document.getElementById('btn-check-in');
+  button.disabled = true;
+  button.textContent = 'Validation en cours…';
+  try {
+    const result = await apiFetch('/api/check-in', {
+      method: 'POST',
+      body: JSON.stringify({
+        entrance_code: State.entranceCode,
+        invitation_identifier: identifier,
+      }),
+    });
+    document.getElementById('entrance-form-card').style.display = 'none';
+    document.getElementById('entrance-success').style.display = 'block';
+    document.getElementById('entrance-success-label').textContent =
+      result.already_checked_in ? 'Arrivée déjà enregistrée' : 'Entrée validée';
+    document.getElementById('entrance-guest-name').textContent = result.guest_name ?? '';
+    const meta = document.getElementById('entrance-guest-meta');
+    meta.replaceChildren();
+    for (const label of [
+      result.table_label ? '🪑 Table ' + result.table_label : null,
+      result.chair_number ? '💺 Chaise ' + result.chair_number : null,
+    ].filter(Boolean)) {
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = label;
+      meta.appendChild(badge);
+    }
+  } catch (e) {
+    if (State.savedToken && String(e.message).includes('introuvable')) {
+      useAnotherInvitation();
+    }
+    showAlert('entrance', e.message);
+    button.disabled = false;
+    button.textContent = '✅ Valider mon entrée';
   }
 }
 
@@ -1080,6 +1256,8 @@ const App = {
   selectMediaType,
   toggleRecord,
   submitMedia,
+  submitCheckIn,
+  useAnotherInvitation,
   downloadCard,
   shareCard,
 };

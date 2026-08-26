@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../auth/auth_controller.dart';
+import '../../routes/app_routes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -94,8 +95,9 @@ class SettingsPage extends StatelessWidget {
                 ),
                 _SettingsTile(
                   icon: Icons.qr_code_2,
-                  title: 'Format des QR codes',
-                  onTap: () {},
+                  title: 'QR d’entrée de la salle',
+                  subtitle: 'Générer et suivre les arrivées',
+                  onTap: () => Get.toNamed(AppRoutes.entranceQr),
                 ),
                 _SettingsTile(
                   icon: Icons.storage,

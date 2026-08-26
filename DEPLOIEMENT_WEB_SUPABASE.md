@@ -16,6 +16,24 @@ https://sckvfrsjmbwkuqdfsgki.supabase.co/functions/v1/guest-portal?token=TOKEN
 Les codes QR courts passent par `invite/{shortCode}`. Cette fonction compte le
 scan de manière atomique puis redirige vers `guest-portal`.
 
+## QR commun à l’entrée de la salle
+
+L’administrateur ouvre **Plus → QR d’entrée de la salle** ou l’action rapide du
+tableau de bord. L’application génère un QR commun à afficher à l’entrée.
+
+Après le scan :
+
+1. le portail reconnaît l’événement ;
+2. il réutilise automatiquement l’invitation mémorisée sur le téléphone ;
+3. sinon, l’invité saisit le code `INV-...` visible sur sa carte ;
+4. la carte doit déjà être débloquée ;
+5. l’arrivée est enregistrée une seule fois dans `guest_check_ins` ;
+6. le nom, la table et la chaise sont confirmés à l’écran.
+
+Le renouvellement du QR invalide seulement l’ancien code d’entrée. Les arrivées
+déjà enregistrées sont conservées. Les compteurs de scans et d’entrées sont
+actualisés dans Flutter avec Supabase Realtime.
+
 ## Ordre de déploiement
 
 Depuis la racine du dépôt :
