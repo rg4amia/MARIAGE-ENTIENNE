@@ -7,8 +7,7 @@ import '../../core/utils/invitation_card_generator.dart';
 import 'guest_access_controller.dart';
 import 'audio_recorder_page.dart';
 import 'video_recorder_page.dart';
-import 'web_audio_recorder.dart';
-import 'web_video_recorder.dart';
+import 'recorder_factory.dart' if (dart.library.html) 'recorder_factory_web.dart';
 
 /// Main guest access page — handles the full public journey via QR token.
 /// Route: /guest/:token
@@ -331,10 +330,10 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
     Widget recorderPage;
 
     if (kIsWeb) {
-      // Use web-specific recorders with MediaRecorder API
+      // Use web-specific recorders with MediaRecorder API (loaded via conditional import)
       recorderPage = isAudio
-          ? const WebAudioRecorderPage(minDurationSeconds: 30)
-          : const WebVideoRecorderPage(minDurationSeconds: 30);
+          ? buildWebAudioRecorderPage(minDurationSeconds: 30)
+          : buildWebVideoRecorderPage(minDurationSeconds: 30);
     } else {
       // Use native mobile recorders
       recorderPage = isAudio

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:record/record.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 
-/// Real audio recording page using the record package.
+/// Real audio recording page using flutter_sound package.
 /// Records audio from microphone with minimum 30s duration.
 class AudioRecorderPage extends StatefulWidget {
   final int minDurationSeconds;
@@ -22,8 +22,8 @@ class AudioRecorderPage extends StatefulWidget {
 
 class _AudioRecorderPageState extends State<AudioRecorderPage>
     with SingleTickerProviderStateMixin {
-  final AudioRecorder _recorder = AudioRecorder();
-
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  bool _isRecorderInitialized = false;
   bool _isRecording = false;
   bool _isPaused = false;
   int _elapsedSeconds = 0;
@@ -42,15 +42,14 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
   }
 
   Future<void> _initRecorder() async {
-    if (await _recorder.hasPermission()) {
-      // Ready to record
-    }
+    await _recorder.openRecorder();
+    setState(() => _isRecorderInitialized = true);
   }
 
   @override
   void dispose() {
     _timer?.cancel();
-    _recorder.dispose();
+    _recorder.closeRecorder();
     _pulseController?.dispose();
     super.dispose();
   }
@@ -66,10 +65,10 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
   }
 
   Future<void> _startRecording() async {
-    if (!await _recorder.hasPermission()) {
+    if (!_isRecorderInitialized) {
       Get.snackbar(
-        'Permission requise',
-        'L\'accès au microphone est nécessaire pour enregistrer.',
+        'Erreur',
+        'Enregistreur non initialisé',
         snackPosition: SnackPosition.BOTTOM,
       );
       return;
@@ -78,15 +77,13 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
     try {
       final dir = await getTemporaryDirectory();
       final filePath =
-          '${dir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
+          '${dir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.aac';
 
-      await _recorder.start(
-        RecordConfig(
-          encoder: AudioEncoder.aacLc,
-          bitRate: 128000,
-          sampleRate: 44100,
-        ),
-        path: filePath,
+      await _recorder.startRecorder(
+        toFile: filePath,
+        codec: Codec.aacADTS,
+        bitRate: 128000,
+        sampleRate: 44100,
       );
 
       setState(() {
@@ -116,7 +113,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
     _timer?.cancel();
     _pulseController?.stop();
 
-    final path = await _recorder.stop();
+    final path = await _recorder.stopRecorder();
 
     setState(() {
       _isRecording = false;
@@ -124,18 +121,17 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
     });
 
     if (path != null && path.isNotEmpty && mounted) {
-      // Return the file path to the previous page
       Navigator.of(context).pop(path);
     }
   }
 
   void _togglePause() {
     if (_isPaused) {
-      _recorder.resume();
+      _recorder.resumeRecorder();
       setState(() => _isPaused = false);
       _pulseController?.repeat(reverse: true);
     } else {
-      _recorder.pause();
+      _recorder.pauseRecorder();
       setState(() => _isPaused = true);
       _pulseController?.stop();
     }
@@ -165,7 +161,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
           child: Column(
             children: [
               const Spacer(flex: 1),
-              // Title
               Text(
                 'Enregistrement Audio',
                 style: AppTextStyles.headlineMd.copyWith(
@@ -181,7 +176,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 ),
               ),
               const Spacer(flex: 1),
-              // Waveform / Pulse indicator
               AnimatedBuilder(
                 animation: _pulseController!,
                 builder: (context, child) {
@@ -215,7 +209,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 },
               ),
               const SizedBox(height: 32),
-              // Timer
               Text(
                 _formatDuration(_elapsedSeconds),
                 style: AppTextStyles.displayMd.copyWith(
@@ -226,7 +219,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 ),
               ),
               const SizedBox(height: 8),
-              // Status text
               if (_isRecording)
                 Text(
                   _isPaused ? 'En pause' : 'Enregistrement...',
@@ -244,7 +236,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                   ),
                 ),
               const SizedBox(height: 16),
-              // Progress bar
               ClipRRect(
                 borderRadius: BorderRadius.circular(4),
                 child: LinearProgressIndicator(
@@ -259,7 +250,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 ),
               ),
               const SizedBox(height: 8),
-              // Duration indicator
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -287,18 +277,16 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 ],
               ),
               const Spacer(flex: 2),
-              // Control buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Pause/Resume button
                   if (_isRecording)
                     GestureDetector(
                       onTap: _togglePause,
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.surfaceContainer,
                         ),
@@ -310,7 +298,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                       ),
                     ),
                   if (_isRecording) const SizedBox(width: 24),
-                  // Main record/stop button
                   GestureDetector(
                     onTap: _toggleRecording,
                     child: Container(
@@ -338,7 +325,6 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                 ],
               ),
               const SizedBox(height: 24),
-              // Done button (only show if recording is done and meets minimum)
               if (!_isRecording && _outputPath != null && _hasMinimumDuration)
                 SizedBox(
                   width: double.infinity,
