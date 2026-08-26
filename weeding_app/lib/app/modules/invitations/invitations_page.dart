@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/guest_link_repository.dart';
 import '../../data/models/guest.dart';
@@ -57,10 +58,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Get.back(),
-        ),
         title: Text(
           'Suivi des invitations',
           style: AppTextStyles.headlineMdPrimary,
@@ -175,6 +172,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 ),
               ),
             ),
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 3),
     );
   }
 
