@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
+import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
 import '../auth/auth_controller.dart';
 import '../../routes/app_routes.dart';

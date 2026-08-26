@@ -61,7 +61,7 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
               title: Text(title, style: AppTextStyles.headlineMd),
               actions: actions,
             ),
-            if (bottom != null) bottom!,
+            bottom ?? const SizedBox.shrink(),
           ],
         ),
       ),

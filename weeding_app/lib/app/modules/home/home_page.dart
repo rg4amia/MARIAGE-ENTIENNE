@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
+import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
 import '../../routes/app_routes.dart';
 import 'home_controller.dart';
@@ -355,7 +356,7 @@ class _KpiCard extends StatelessWidget {
     return FadeInSlide(
       delay: Duration(milliseconds: 100 + delay),
       duration: const Duration(milliseconds: 500),
-      child: GradientCard(
+      child: HoverCard(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -466,7 +467,7 @@ class _QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),

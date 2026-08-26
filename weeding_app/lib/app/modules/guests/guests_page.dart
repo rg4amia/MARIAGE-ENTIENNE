@@ -4,6 +4,8 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
+import '../../core/widgets/animated_widgets.dart';
+import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
 import '../../routes/app_routes.dart';
 import 'guests_controller.dart';
@@ -203,12 +205,13 @@ class _FilterChips extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
         itemBuilder: (context, i) {
           final (label, key, count) = filters[i];
           final isSelected = controller.filterStatus.value == key;
-          return GestureDetector(
+          return TapScale(
             onTap: () => controller.onFilterChanged(key),
+            pressedScale: 0.93,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -254,7 +257,7 @@ class _GuestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: GestureDetector(
+      child: TapScale(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(14),

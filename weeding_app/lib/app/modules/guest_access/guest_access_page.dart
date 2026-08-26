@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/invitation_card_generator.dart';
+import '../../core/widgets/animated_widgets.dart';
+import '../../core/widgets/micro_interactions.dart';
 import 'guest_access_controller.dart';
 import 'audio_recorder_page.dart';
 import 'video_recorder_page.dart';
@@ -11,8 +13,6 @@ import 'recorder_factory.dart'
     if (dart.library.html) 'recorder_factory_web.dart';
 
 /// Main guest access page — handles the full public journey via QR token.
-/// Route: /guest/:token
-/// No auth required.
 class GuestAccessPage extends StatefulWidget {
   const GuestAccessPage({super.key});
 
@@ -20,14 +20,25 @@ class GuestAccessPage extends StatefulWidget {
   State<GuestAccessPage> createState() => _GuestAccessPageState();
 }
 
-class _GuestAccessPageState extends State<GuestAccessPage> {
+class _GuestAccessPageState extends State<GuestAccessPage>
+    with TickerProviderStateMixin {
   late final GuestAccessController controller;
+  late final AnimationController _stepCtrl;
+  late final AnimationController _pulseCtrl;
 
   @override
   void initState() {
     super.initState();
     controller = Get.find<GuestAccessController>();
-    // Extract token from route parameter
+    _stepCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..forward();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+
     final token = Get.parameters['token'] ?? '';
     if (token.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,132 +50,213 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
   }
 
   @override
+  void dispose() {
+    _stepCtrl.dispose();
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: Obx(() {
-        switch (controller.currentStep.value) {
-          case GuestAccessStep.loading:
-            return _buildLoading();
-          case GuestAccessStep.notFound:
-            return _buildNotFound();
-          case GuestAccessStep.error:
-            return _buildError();
-          case GuestAccessStep.verified:
-            return _buildVerified();
-          case GuestAccessStep.mediaChoice:
-            return _buildMediaChoice();
-          case GuestAccessStep.recordingAudio:
-            return _buildRecordingPage(isAudio: true);
-          case GuestAccessStep.recordingVideo:
-            return _buildRecordingPage(isAudio: false);
-          case GuestAccessStep.processing:
-            return _buildProcessing();
-          case GuestAccessStep.cardUnlocked:
-            return _buildCardUnlocked();
-        }
+        // Animate on step change
+        _stepCtrl.reset();
+        _stepCtrl.forward();
+
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 400),
+          transitionBuilder: (child, anim) => FadeTransition(
+            opacity: anim,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.05, 0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
+              child: child,
+            ),
+          ),
+          child: _buildStep(controller.currentStep.value),
+        );
       }),
     );
   }
 
+  Widget _buildStep(GuestAccessStep step) {
+    switch (step) {
+      case GuestAccessStep.loading:
+        return _buildLoading();
+      case GuestAccessStep.notFound:
+        return _buildNotFound();
+      case GuestAccessStep.error:
+        return _buildError();
+      case GuestAccessStep.verified:
+        return _buildVerified();
+      case GuestAccessStep.mediaChoice:
+        return _buildMediaChoice();
+      case GuestAccessStep.recordingAudio:
+        return _buildRecordingPage(isAudio: true);
+      case GuestAccessStep.recordingVideo:
+        return _buildRecordingPage(isAudio: false);
+      case GuestAccessStep.processing:
+        return _buildProcessing();
+      case GuestAccessStep.cardUnlocked:
+        return _buildCardUnlocked();
+    }
+  }
+
+  // ── Loading ──
   Widget _buildLoading() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(color: AppColors.primary),
-          SizedBox(height: 16),
-          Text('Vérification en cours...'),
-        ],
+    return Container(
+      key: const ValueKey('loading'),
+      color: AppColors.background,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ScaleIn(
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryContainer],
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      blurRadius: 20,
+                    ),
+                  ],
+                ),
+                child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 36),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Vérification en cours...',
+              style: AppTextStyles.headlineMd.copyWith(color: AppColors.onSurface),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: 160,
+              child: LinearProgressIndicator(
+                backgroundColor: AppColors.surfaceContainerHigh,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
+  // ── Not Found ──
   Widget _buildNotFound() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, size: 80, color: AppColors.error),
-            const SizedBox(height: 24),
-            Text(
-              'Invitation introuvable',
-              style: AppTextStyles.headlineMd.copyWith(
-                color: AppColors.onSurface,
-                fontWeight: FontWeight.bold,
+    return Container(
+      key: const ValueKey('notFound'),
+      color: AppColors.background,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ScaleIn(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.link_off_rounded,
+                    size: 48,
+                    color: AppColors.error.withValues(alpha: 0.6),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Ce lien d\'invitation n\'est pas valide ou a expiré.',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyMd.copyWith(
-                color: AppColors.onSurfaceVariant,
+              const SizedBox(height: 28),
+              Text(
+                'Invitation introuvable',
+                style: AppTextStyles.headlineMd.copyWith(fontWeight: FontWeight.bold),
               ),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                'Ce lien d\'invitation n\'est pas valide\nou a expiré.',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.bodyMdOnVariant,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  // ── Error ──
   Widget _buildError() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.wifi_off, size: 80, color: AppColors.error),
-            const SizedBox(height: 24),
-            Text(
-              'Une erreur est survenue',
-              style: AppTextStyles.headlineMd.copyWith(
-                color: AppColors.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              controller.errorMessage.value,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyMd.copyWith(
-                color: AppColors.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: controller.retry,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 14,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+    return Container(
+      key: const ValueKey('error'),
+      color: AppColors.background,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ScaleIn(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.wifi_off_rounded,
+                    size: 48,
+                    color: AppColors.error.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
-              child: const Text('Réessayer'),
-            ),
-          ],
+              const SizedBox(height: 28),
+              Text(
+                'Une erreur est survenue',
+                style: AppTextStyles.headlineMd.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                controller.errorMessage.value,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.bodyMdOnVariant,
+              ),
+              const SizedBox(height: 28),
+              GradientButton(
+                label: 'Réessayer',
+                onPressed: controller.retry,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  // ── Verified / Welcome ──
   Widget _buildVerified() {
     final g = controller.guest.value;
     return Container(
+      key: const ValueKey('verified'),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.primary, AppColors.background],
-          stops: [0.0, 0.4],
+          colors: [AppColors.primary, Color(0xFFE85D2A), AppColors.background],
+          stops: [0.0, 0.3, 0.6],
         ),
       ),
       child: SafeArea(
@@ -172,25 +264,29 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
-              const Spacer(flex: 1),
-              // Welcome icon
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryFixed.withValues(alpha: 0.4),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.person_add,
-                  size: 48,
-                  color: Colors.white,
+              const Spacer(flex: 2),
+              // Welcome circle
+              ScaleIn(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                      width: 2,
+                    ),
+                  ),
+                  child: const Icon(Icons.waving_hand_rounded, size: 48, color: Colors.white),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 28),
               Text(
                 'Bienvenue,',
-                style: AppTextStyles.headlineMd.copyWith(color: Colors.white),
+                style: AppTextStyles.headlineMd.copyWith(
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -200,66 +296,58 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(flex: 1),
+              const Spacer(flex: 2),
               // Info card
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Enregistrez votre message',
-                      style: AppTextStyles.titleLg.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.onSurface,
+              SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.3),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 30,
+                        offset: const Offset(0, 12),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Pour débloquer votre carte d\'invitation, '
-                      'enregistrez un message audio ou vidéo d\'au moins 30 secondes.',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.bodyMd.copyWith(
-                        color: AppColors.onSurfaceVariant,
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        '📸',
+                        style: const TextStyle(fontSize: 36),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
+                      const SizedBox(height: 16),
+                      Text(
+                        'Enregistrez votre message',
+                        style: AppTextStyles.titleLg.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Pour débloquer votre carte d\'invitation, enregistrez un message audio ou vidéo d\'au moins 30 secondes pour le couple.',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyMd.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          height: 1.5,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      GradientButton(
+                        label: 'Commencer',
                         onPressed: controller.goToMediaChoice,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          'Commencer',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              const Spacer(flex: 1),
+              const Spacer(flex: 2),
             ],
           ),
         ),
@@ -267,14 +355,16 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
     );
   }
 
+  // ── Media Choice ──
   Widget _buildMediaChoice() {
     return Container(
+      key: const ValueKey('mediaChoice'),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.primary, AppColors.background],
-          stops: [0.0, 0.4],
+          colors: [AppColors.primary, Color(0xFFE85D2A), AppColors.background],
+          stops: [0.0, 0.3, 0.6],
         ),
       ),
       child: SafeArea(
@@ -283,6 +373,14 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
           child: Column(
             children: [
               const Spacer(flex: 1),
+              ScaleIn(
+                child: const Icon(
+                  Icons.mic_rounded,
+                  size: 48,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(
                 'Choisissez votre format',
                 style: AppTextStyles.headlineMd.copyWith(
@@ -294,26 +392,42 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
               Text(
                 'Enregistrez un message pour le couple',
                 style: AppTextStyles.bodyLg.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
               ),
               const Spacer(flex: 1),
               // Audio option
-              _MediaOptionCard(
-                icon: Icons.mic,
-                title: 'Message Audio',
-                subtitle: 'Enregistrez un message vocal',
-                color: AppColors.secondary,
-                onTap: controller.startAudioRecording,
+              SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.2),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                child: _MediaOptionCard(
+                  icon: Icons.mic_rounded,
+                  title: 'Message Audio',
+                  subtitle: 'Enregistrez un message vocal',
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFFF7A3D), Color(0xFFE85D2A)],
+                  ),
+                  onTap: controller.startAudioRecording,
+                ),
               ),
               const SizedBox(height: 16),
               // Video option
-              _MediaOptionCard(
-                icon: Icons.videocam,
-                title: 'Message Vidéo',
-                subtitle: 'Enregistrez une vidéo',
-                color: AppColors.tertiary,
-                onTap: controller.startVideoRecording,
+              SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.3),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                child: _MediaOptionCard(
+                  icon: Icons.videocam_rounded,
+                  title: 'Message Vidéo',
+                  subtitle: 'Enregistrez une courte vidéo',
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF9C4236), Color(0xFFB85A4E)],
+                  ),
+                  onTap: controller.startVideoRecording,
+                ),
               ),
               const Spacer(flex: 2),
             ],
@@ -323,105 +437,119 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
     );
   }
 
+  // ── Recording (navigates to real recorder) ──
   Widget _buildRecordingPage({required bool isAudio}) {
-    // Navigate to real recorder and handle result
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _openRecorder(isAudio);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openRecorder(isAudio));
     return _buildProcessing();
   }
 
   Future<void> _openRecorder(bool isAudio) async {
     Widget recorderPage;
-
     if (kIsWeb) {
-      // Use web-specific recorders with MediaRecorder API (loaded via conditional import)
       recorderPage = isAudio
           ? buildWebAudioRecorderPage(minDurationSeconds: 30)
           : buildWebVideoRecorderPage(minDurationSeconds: 30);
     } else {
-      // Use native mobile recorders
       recorderPage = isAudio
           ? const AudioRecorderPage(minDurationSeconds: 30)
           : const VideoRecorderPage(minDurationSeconds: 30);
     }
 
-    final result = await Navigator.of(
-      context,
-    ).push<String>(MaterialPageRoute(builder: (_) => recorderPage));
+    final result = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => recorderPage),
+    );
 
     if (result != null && result.isNotEmpty) {
-      // File recorded successfully — get duration and submit
-      controller.setRecordedFile(
-        result,
-        durationSeconds: controller.recordingDuration.value,
-      );
-      controller.submitMedia(
-        isAudio: isAudio,
-        durationSeconds: controller.recordingDuration.value,
-      );
+      controller.setRecordedFile(result, durationSeconds: controller.recordingDuration.value);
+      controller.submitMedia(isAudio: isAudio, durationSeconds: controller.recordingDuration.value);
     } else {
-      // User cancelled — go back to media choice
       controller.currentStep.value = GuestAccessStep.mediaChoice;
     }
   }
 
+  // ── Processing ──
   Widget _buildProcessing() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const CircularProgressIndicator(color: AppColors.primary),
-          const SizedBox(height: 24),
-          Text(
-            'Traitement en cours...',
-            style: AppTextStyles.headlineMd.copyWith(
-              color: AppColors.onSurface,
+    return Container(
+      key: const ValueKey('processing'),
+      color: AppColors.background,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ScaleIn(
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryContainer],
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: const Center(
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Nous traitons votre enregistrement',
-            style: AppTextStyles.bodyMd.copyWith(
-              color: AppColors.onSurfaceVariant,
+            const SizedBox(height: 28),
+            Text(
+              'Traitement en cours...',
+              style: AppTextStyles.headlineMd,
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              'Nous traitons votre enregistrement',
+              style: AppTextStyles.bodyMdOnVariant,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  // GlobalKey for capturing the card as PNG
+  // ── Card Unlocked ──
   final GlobalKey _cardKey = GlobalKey();
 
   Widget _buildCardUnlocked() {
     final g = controller.guest.value;
     return Container(
+      key: const ValueKey('unlocked'),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.primary, AppColors.background],
-          stops: [0.0, 0.3],
+          colors: [Color(0xFF4CAF50), Color(0xFF388E3C), AppColors.background],
+          stops: [0.0, 0.2, 0.5],
         ),
       ),
       child: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(24),
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Success icon
-              Container(
-                width: 80,
-                height: 80,
-                decoration: const BoxDecoration(
-                  color: AppColors.statusCardUnlocked,
-                  shape: BoxShape.circle,
+              // Success animation
+              ScaleIn(
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 2),
+                  ),
+                  child: const Icon(Icons.check_rounded, size: 44, color: Colors.white),
                 ),
-                child: const Icon(Icons.check, size: 48, color: Colors.white),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Text(
                 'Carte débloquée !',
                 style: AppTextStyles.headlineMd.copyWith(
@@ -431,22 +559,28 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Merci pour votre message, ${g?.fullName ?? ''} !',
+                'Merci pour votre message, ${g?.fullName ?? ''} ! 🎉',
                 style: AppTextStyles.bodyLg.copyWith(
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
-              const SizedBox(height: 24),
-              // Invitation card (capturable)
-              InvitationCardWidget(
-                key: _cardKey,
-                guestName: g?.fullName ?? 'Invité',
-                tableName: controller.guestSeat.value?.tableId ?? 'Non assigné',
-                seatNumber: controller.guestSeat.value?.chairId ?? '-',
-                qrToken: g?.qrToken,
+              const SizedBox(height: 28),
+              // Invitation card
+              SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.2),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                child: InvitationCardWidget(
+                  key: _cardKey,
+                  guestName: g?.fullName ?? 'Invité',
+                  tableName: controller.guestSeat.value?.tableId ?? 'Non assigné',
+                  seatNumber: controller.guestSeat.value?.chairId ?? '-',
+                  qrToken: g?.qrToken,
+                ),
               ),
-              const SizedBox(height: 20),
-              // Download & Share buttons
+              const SizedBox(height: 24),
+              // Action buttons
               Row(
                 children: [
                   Expanded(
@@ -454,14 +588,14 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
                       onPressed: () => _downloadCard(g?.fullName ?? 'invite'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        side: const BorderSide(color: Colors.white, width: 2),
+                        side: BorderSide(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      icon: const Icon(Icons.download),
-                      label: const Text('Télécharger'),
+                      icon: const Icon(Icons.download_rounded, size: 20),
+                      label: const Text('Télécharger', style: TextStyle(fontWeight: FontWeight.w600)),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -470,15 +604,15 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
                       onPressed: () => _shareCard(g?.fullName ?? 'invite'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        foregroundColor: AppColors.primary,
+                        foregroundColor: const Color(0xFF388E3C),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         elevation: 0,
                       ),
-                      icon: const Icon(Icons.share),
-                      label: const Text('Partager'),
+                      icon: const Icon(Icons.share_rounded, size: 20),
+                      label: const Text('Partager', style: TextStyle(fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],
@@ -494,11 +628,7 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
   Future<void> _downloadCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar(
-        'Erreur',
-        'Impossible de capturer la carte',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
       return;
     }
     final path = await InvitationCardGenerator.saveToFile(
@@ -506,47 +636,39 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
       'invitation_${guestName.replaceAll(' ', '_')}.png',
     );
     if (path != null) {
-      Get.snackbar(
-        'Succès',
-        'Carte sauvegardée dans $path',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('Succès', 'Carte sauvegardée', snackPosition: SnackPosition.BOTTOM);
     }
   }
 
   Future<void> _shareCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar(
-        'Erreur',
-        'Impossible de capturer la carte',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
       return;
     }
     await InvitationCardGenerator.shareCard(imageBytes, guestName);
   }
 }
 
-/// Media option card widget
+// ── Media Option Card ──
 class _MediaOptionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final Color color;
+  final Gradient gradient;
   final VoidCallback onTap;
 
   const _MediaOptionCard({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.color,
+    required this.gradient,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -555,9 +677,9 @@ class _MediaOptionCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
-              offset: const Offset(0, 10),
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -567,10 +689,17 @@ class _MediaOptionCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
+                gradient: gradient,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: gradient.colors.first.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: Icon(icon, color: color, size: 28),
+              child: Icon(icon, color: Colors.white, size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -581,23 +710,30 @@ class _MediaOptionCard extends StatelessWidget {
                     title,
                     style: AppTextStyles.titleLg.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: AppTextStyles.labelMd.copyWith(
+                    style: AppTextStyles.bodyMd.copyWith(
                       color: AppColors.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
-              color: AppColors.onSurfaceVariant,
-              size: 16,
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLow,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: AppColors.onSurfaceVariant,
+                size: 14,
+              ),
             ),
           ],
         ),

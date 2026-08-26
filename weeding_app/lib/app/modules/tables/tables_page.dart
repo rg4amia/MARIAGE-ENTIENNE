@@ -4,7 +4,9 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
-import '../../core/widgets/shared_components.dart';
+import '../../core/widgets/animated_widgets.dart';
+import '../../core/widgets/micro_interactions.dart';
+
 import '../../routes/app_routes.dart';
 import 'tables_controller.dart';
 
@@ -196,7 +198,7 @@ class _TableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: GestureDetector(
+      child: TapScale(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(18),
