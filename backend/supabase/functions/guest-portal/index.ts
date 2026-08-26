@@ -177,6 +177,45 @@ Deno.serve(async (req) => {
     return apiJson(data);
   }
 
+  // ── PWA: manifest.json ──────────────────────────────────────────────────────
+  if (req.method === 'GET' && path.endsWith('/manifest.json')) {
+    // Base path — Edge Runtime strips /functions/v1/ from pathname
+    const basePath = '/functions/v1/guest-portal/';
+    return new Response(JSON.stringify({
+      name: 'Invitation de Mariage',
+      short_name: 'Mariage',
+      description: 'Votre carte d\'invitation de mariage interactif',
+      start_url: url.origin + basePath,
+      display: 'standalone',
+      background_color: '#1a1a2e',
+      theme_color: '#c9a84c',
+      orientation: 'portrait',
+      icons: [
+        { src: url.origin + basePath + 'icon-192.png', sizes: '192x192', type: 'image/svg+xml', purpose: 'any maskable' },
+        { src: url.origin + basePath + 'icon-512.png', sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' },
+      ],
+      categories: ['social', 'entertainment'],
+      lang: 'fr',
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/manifest+json', 'Cache-Control': 'public, max-age=86400' },
+    });
+  }
+
+  // ── PWA: service worker ─────────────────────────────────────────────────────
+  if (req.method === 'GET' && path.endsWith('/sw.js')) {
+    return new Response(renderServiceWorker(), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/javascript', 'Cache-Control': 'no-cache' },
+    });
+  }
+
+  // ── PWA: icons (inline SVG → PNG placeholder) ──────────────────────────────
+  if (req.method === 'GET' && /icon-(192|512)\.png$/.test(path)) {
+    const size = path.endsWith('icon-192.png') ? 192 : 512;
+    return new Response(renderIconSVG(size), {
+      headers: { ...corsHeaders, 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=604800' },
+    });
+  }
+
   // ── SPA HTML ─────────────────────────────────────────────────────────────────
   // Toute autre route → on sert la SPA
   const token = url.searchParams.get('token') ?? '';
@@ -209,8 +248,19 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Mon Invitation de Mariage</title>
+
+  <!-- PWA meta tags -->
+  <meta name="theme-color" content="#c9a84c" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Mariage" />
+  <meta name="description" content="Votre carte d\'invitation de mariage interactif" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="./icon-192.png" />
   <style>
     /* ── Reset & base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -226,13 +276,35 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       --success:#27ae60;
       --radius: 20px;
       --shadow: 0 8px 32px rgba(0,0,0,0.12);
+      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      --timer-bg: #e0e0e0;
+      --step-bg: #eee;
+      --input-border: #e0e0e0;
+      --tab-bg: #fafafa;
+      --tab-selected-bg: #fffbf0;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --card:   #ffffff;
+        --text:   #2d2d2d;
+        --muted:  #8a8a9c;
+        --bg-gradient: linear-gradient(135deg, #fafafa 0%, #f5f0e8 50%, #f0e6d6 100%);
+        --timer-bg: #e8e4e0;
+        --step-bg: #e8e4e0;
+        --input-border: #d8d0c8;
+        --tab-bg: #f8f4f0;
+        --tab-selected-bg: #fff8ee;
+        --shadow: 0 8px 32px rgba(0,0,0,0.08);
+      }
     }
 
     html, body {
       min-height: 100%;
       font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: var(--bg-gradient);
       color: var(--text);
+      transition: background 0.6s ease, color 0.3s ease;
     }
 
     /* ── Layout ── */
@@ -307,12 +379,12 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 13px; font-weight: bold;
-      background: #eee; color: var(--muted);
+      background: var(--step-bg); color: var(--muted);
       transition: all .3s;
     }
     .step.done  { background: var(--success); color: #fff; }
     .step.active{ background: var(--gold);    color: #fff; }
-    .step-line  { flex: 1; height: 2px; background: #eee; margin-top: 15px; max-width: 40px; }
+    .step-line  { flex: 1; height: 2px; background: var(--step-bg); margin-top: 15px; max-width: 40px; }
     .step-line.done { background: var(--success); }
 
     /* ── Section title ── */
@@ -334,19 +406,20 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       gap: 10px;
       margin-bottom: 16px;
     }
+    .btn-record { transition: all .15s cubic-bezier(0.4, 0, 0.2, 1); }
     .media-tab {
       flex: 1;
       padding: 12px;
-      border: 2px solid #e0e0e0;
+      border: 2px solid var(--input-border);
       border-radius: 12px;
-      background: #fafafa;
+      background: var(--tab-bg);
       cursor: pointer;
       text-align: center;
       font-size: 14px;
       transition: all .2s;
     }
     .media-tab:hover { border-color: var(--gold); }
-    .media-tab.selected { border-color: var(--gold); background: #fffbf0; }
+    .media-tab.selected { border-color: var(--gold); background: var(--tab-selected-bg); }
     .media-tab .icon { font-size: 28px; margin-bottom: 4px; }
     .media-tab .label { font-weight: 600; color: var(--dark); }
     .media-tab .desc  { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -370,9 +443,16 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     .timer-ring { position: relative; width: 100px; height: 100px; }
     .timer-ring svg { transform: rotate(-90deg); }
     .timer-ring circle { fill: none; stroke-width: 8; }
-    .timer-ring .bg   { stroke: #e0e0e0; }
-    .timer-ring .prog { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset .5s; }
-    .timer-ring .prog.done { stroke: var(--success); }
+    .timer-ring .bg   { stroke: var(--timer-bg); }
+    .timer-ring .prog { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+    .timer-ring .prog.done { stroke: var(--success); transition: stroke 0.4s ease; }
+    .timer-ring .glow { filter: drop-shadow(0 0 6px var(--gold)); transition: filter 0.4s; }
+    .timer-ring .glow.done { filter: drop-shadow(0 0 8px var(--success)); }
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .timer-wrap.recording .timer-ring { animation: timerPulse 2s ease-in-out infinite; }
     .timer-text {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -411,13 +491,13 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     .btn-primary { background: linear-gradient(135deg, var(--gold), #a07830); color: #fff; }
     .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-    .btn-outline { background: #fff; border: 2px solid var(--gold); color: var(--gold); }
-    .btn-outline:hover { background: #fffbf0; }
+    .btn-outline { background: var(--card); border: 2px solid var(--gold); color: var(--gold); }
+    .btn-outline:hover { background: var(--tab-selected-bg); }
 
     .text-input {
       width: 100%;
       padding: 14px 16px;
-      border: 2px solid #e0e0e0;
+      border: 2px solid var(--input-border);
       border-radius: 12px;
       font: inherit;
       font-size: 16px;
@@ -469,7 +549,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     .loader.visible { display: flex; }
     .spinner {
       width: 40px; height: 40px; border-radius: 50%;
-      border: 4px solid #eee; border-top-color: var(--gold);
+      border: 4px solid var(--step-bg); border-top-color: var(--gold);
       animation: spin .8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -778,6 +858,15 @@ async function apiFetch(path, opts = {}) {
 // INIT
 // ═══════════════════════════════════════════════════════
 async function init() {
+  // Dynamic theme-color based on system preference
+  const mq = window.matchMedia('(prefers-color-scheme: light)');
+  function updateThemeColor(e) {
+    const color = e.matches ? '#f5f0e8' : '#1a1a2e';
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
+  }
+  updateThemeColor(mq);
+  mq.addEventListener('change', updateThemeColor);
+
   State.savedToken = localStorage.getItem('wedding_invitation_token');
 
   if (State.entranceCode) {
@@ -861,6 +950,7 @@ async function submitCheckIn() {
     document.getElementById('entrance-success').style.display = 'block';
     document.getElementById('entrance-success-label').textContent =
       result.already_checked_in ? 'Arrivée déjà enregistrée' : 'Entrée validée';
+    vibrate([20, 40, 20]); // check-in success haptic
     document.getElementById('entrance-guest-name').textContent = result.guest_name ?? '';
     const meta = document.getElementById('entrance-guest-meta');
     meta.replaceChildren();
@@ -995,6 +1085,7 @@ async function startRecording() {
   State.timerStart  = Date.now();
   document.getElementById('btn-record').classList.add('recording');
   document.getElementById('btn-record-icon').textContent = '⏹';
+  vibrate(15); // short haptic on record start
   document.getElementById('rec-hint').textContent = 'En cours… appuyez pour arrêter';
   document.getElementById('playback-area').style.display = 'none';
   document.getElementById('btn-submit').disabled = true;
@@ -1003,6 +1094,7 @@ async function startRecording() {
 }
 
 function stopRecording() {
+  vibrate(10); // short haptic on stop
   if (State.recorder && State.recorder.state !== 'inactive') {
     State.recorder.stop();
   }
@@ -1054,22 +1146,55 @@ function onRecordStop() {
   document.getElementById('btn-submit').disabled = !ok;
 }
 
-// ── Timer ──
+// ── Haptic feedback ──
+function vibrate(pattern) {
+  if ('vibrate' in navigator) {
+    try { navigator.vibrate(pattern); } catch (_) {}
+  }
+}
+
+// ── Timer (requestAnimationFrame for 60fps smoothness) ──
 function startTimer() {
   const circle = document.getElementById('timer-circle');
   const circumference = 264;
-  State.timerHandle = setInterval(() => {
+  const timerWrap = document.querySelector('.timer-wrap');
+  if (timerWrap) timerWrap.classList.add('recording');
+  let lastDisplayed = -1;
+  let vibrateAt30 = false;
+
+  function tick() {
+    if (!State.isRecording) return;
     const elapsed = (Date.now() - State.timerStart) / 1000;
     const progress = Math.min(elapsed / 30, 1);
-    circle.style.strokeDashoffset = circumference * (1 - progress);
-    if (progress >= 1) circle.classList.add('done');
-    document.getElementById('timer-text').textContent = Math.floor(elapsed) + 's';
-    document.getElementById('timer-label').textContent =
-      elapsed >= 30 ? '✅ Durée validée !' : 'Encore ' + Math.ceil(30 - elapsed) + 's…';
-  }, 200);
+
+    // Smooth stroke update at 60fps
+    circle.style.strokeDashoffset = String(circumference * (1 - progress));
+
+    // Update text only when second changes (avoid layout thrash)
+    const sec = Math.floor(elapsed);
+    if (sec !== lastDisplayed) {
+      lastDisplayed = sec;
+      document.getElementById('timer-text').textContent = sec + 's';
+      document.getElementById('timer-label').textContent =
+        elapsed >= 30 ? '✅ Durée validée !' : 'Encore ' + Math.ceil(30 - elapsed) + 's…';
+
+      // Vibrate at 30s threshold (success pattern: two short buzzes)
+      if (elapsed >= 30 && !vibrateAt30) {
+        vibrateAt30 = true;
+        circle.classList.add('done');
+        vibrate([50, 30, 50]);
+      }
+    }
+
+    State.timerHandle = requestAnimationFrame(tick);
+  }
+
+  State.timerHandle = requestAnimationFrame(tick);
 }
 function stopTimer() {
-  clearInterval(State.timerHandle);
+  if (State.timerHandle) cancelAnimationFrame(State.timerHandle);
+  const timerWrap = document.querySelector('.timer-wrap');
+  if (timerWrap) timerWrap.classList.remove('recording');
 }
 
 function resetRecorder() {
@@ -1080,12 +1205,14 @@ function resetRecorder() {
   document.getElementById('preview-video').style.display = 'none';
   document.getElementById('preview-audio-wrap').style.display =
     State.mediaType === 'audio' ? 'flex' : 'none';
-  document.getElementById('timer-circle').style.strokeDashoffset = '264';
-  document.getElementById('timer-circle').classList.remove('done');
+  const circle = document.getElementById('timer-circle');
+  circle.style.strokeDashoffset = '264';
+  circle.classList.remove('done');
+  circle.classList.remove('glow');
   document.getElementById('timer-text').textContent = '0s';
   document.getElementById('timer-label').textContent = 'Appuyez pour commencer';
   document.getElementById('btn-record-icon').textContent = '⏺';
-  document.getElementById('rec-hint').textContent = 'Appuyez pour démarrer l\\'enregistrement';
+  document.getElementById('rec-hint').textContent = 'Appuyez pour démarrer l\'enregistrement';
   document.getElementById('btn-submit').disabled = true;
   clearAlert('rec');
 }
@@ -1140,6 +1267,7 @@ async function submitMedia() {
     });
 
     showUpload('Message envoyé !', 100);
+    vibrate([30, 50, 30]); // success pattern
     State.invitation = result;
 
     setTimeout(() => {
@@ -1266,7 +1394,128 @@ const App = {
 // BOOT
 // ═══════════════════════════════════════════════════════
 init();
+
+// ── Register Service Worker ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js', { scope: './' }).then(reg => {
+    console.log('SW registered:', reg.scope);
+  }).catch(err => {
+    console.warn('SW registration failed:', err);
+  });
+}
 </script>
 </body>
 </html>`;
+}
+
+// ── Service Worker (PWA cache) ──────────────────────────────────────────────
+
+function renderServiceWorker(): string {
+  const CACHE_NAME = 'wedding-portal-v1';
+  const PRECACHE_URLS = ['./', './manifest.json', './icon-192.png', './icon-512.png'];
+
+  return /* js */`
+// Wedding Portal Service Worker
+const CACHE_NAME = '${CACHE_NAME}';
+const PRECACHE = ${JSON.stringify(PRECACHE_URLS)};
+
+// Install: pre-cache shell
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE))
+      .then(() => self.skipWaiting())
+  );
+});
+
+// Activate: cleanup old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+// Fetch: network-first for API, cache-first for static assets
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  // API calls → network only (never cache tokens/signed URLs)
+  if (url.pathname.includes('/api/')) return;
+
+  // Static assets → cache-first, then network
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+      return fetch(event.request).then(response => {
+        // Only cache successful same-origin responses
+        if (response.ok && url.origin === self.location.origin) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => {
+        // Offline fallback: return cached index for navigation
+        if (event.request.mode === 'navigate') {
+          return caches.match('./');
+        }
+        return new Response('Offline', { status: 503 });
+      });
+    })
+  );
+});
+`;
+}
+
+// ── SVG icon generator ──────────────────────────────────────────────────────
+
+function renderIconSVG(size: number): string {
+  const s = size;
+  const r = s * 0.18;
+  const ringR = s * 0.14;
+  const ringW = s * 0.032;
+  const cy = s * 0.42;
+  const lx = s * 0.37;
+  const rx = s * 0.63;
+  const dSize = s * 0.028;
+  const fontSize = Math.round(s * 0.075);
+  return /* html */ `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="50%" stop-color="#16213e"/>
+      <stop offset="100%" stop-color="#0f3460"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="${s * 0.25}" y1="${s * 0.25}" x2="${s * 0.75}" y2="${s * 0.65}" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#e8d49e"/>
+      <stop offset="30%" stop-color="#c9a84c"/>
+      <stop offset="70%" stop-color="#a07830"/>
+      <stop offset="100%" stop-color="#c9a84c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%" r="28%">
+      <stop offset="0%" stop-color="rgba(201,168,76,0.12)"/>
+      <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+    </radialGradient>
+    <linearGradient id="hi" x1="${s * 0.3}" y1="${s * 0.2}" x2="${s * 0.5}" y2="${s * 0.5}" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.35)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+  <rect width="${s}" height="${s}" rx="${r}" fill="url(#bg)"/>
+  <rect width="${s}" height="${s}" rx="${r}" fill="url(#glow)"/>
+  <circle cx="${lx}" cy="${cy}" r="${ringR}" fill="none" stroke="url(#gold)" stroke-width="${ringW}"/>
+  <circle cx="${rx}" cy="${cy}" r="${ringR}" fill="none" stroke="url(#gold)" stroke-width="${ringW}"/>
+  <circle cx="${lx}" cy="${cy}" r="${ringR - ringW * 0.3}" fill="none" stroke="url(#hi)" stroke-width="${ringW * 0.5}" stroke-dasharray="${ringR * 1.2} ${ringR * 3}" stroke-dashoffset="-${ringR * 0.4}"/>
+  <circle cx="${rx}" cy="${cy}" r="${ringR - ringW * 0.3}" fill="none" stroke="url(#hi)" stroke-width="${ringW * 0.5}" stroke-dasharray="${ringR * 1.2} ${ringR * 3}" stroke-dashoffset="-${ringR * 0.5}"/>
+  <rect x="${s * 0.5 - dSize}" y="${cy - dSize}" width="${dSize * 2}" height="${dSize * 2}" rx="${dSize * 0.3}" fill="#c9a84c" transform="rotate(45 ${s * 0.5} ${cy})"/>
+  <line x1="${s * 0.26}" y1="${s * 0.27}" x2="${s * 0.26}" y2="${s * 0.29}" stroke="#e8d49e" stroke-width="${s * 0.004}" stroke-linecap="round" opacity="0.7"/>
+  <line x1="${s * 0.25}" y1="${s * 0.28}" x2="${s * 0.27}" y2="${s * 0.28}" stroke="#e8d49e" stroke-width="${s * 0.004}" stroke-linecap="round" opacity="0.7"/>
+  <line x1="${s * 0.74}" y1="${s * 0.31}" x2="${s * 0.74}" y2="${s * 0.33}" stroke="#e8d49e" stroke-width="${s * 0.003}" stroke-linecap="round" opacity="0.5"/>
+  <line x1="${s * 0.73}" y1="${s * 0.32}" x2="${s * 0.75}" y2="${s * 0.32}" stroke="#e8d49e" stroke-width="${s * 0.003}" stroke-linecap="round" opacity="0.5"/>
+  <text x="${s * 0.5}" y="${s * 0.78}" text-anchor="middle" fill="#c9a84c" font-family="Georgia, serif" font-size="${fontSize}" font-weight="bold" letter-spacing="${fontSize * 0.3}">MARIAGE</text>
+  <line x1="${s * 0.4}" y1="${s * 0.85}" x2="${s * 0.6}" y2="${s * 0.85}" stroke="rgba(201,168,76,0.3)" stroke-width="${s * 0.005}" stroke-linecap="round"/>
+</svg>`;
 }

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur d'icônes PWA — Mariage</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 32px;
+    }
+    h1 { font-size: 24px; color: #c9a84c; letter-spacing: 1px; }
+    p { font-size: 14px; color: rgba(255,255,255,.6); text-align: center; max-width: 400px; }
+    .preview-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .preview-item canvas {
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .preview-item label {
+      font-size: 13px;
+      color: rgba(255,255,255,.7);
+    }
+    .download-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #c9a84c, #a07830);
+      color: #fff;
+    }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #c9a84c;
+      color: #c9a84c;
+    }
+    .btn-outline:hover { background: rgba(201,168,76,.1); }
+  </style>
+</head>
+<body>
+  <h1>💍 Générateur d'icônes PWA</h1>
+  <p>Design anneaux de mariage dorés sur fond navy. Cliquez pour télécharger les PNG 192×192 et 512×512.</p>
+
+  <div class="preview-row">
+    <div class="preview-item">
+      <canvas id="c192" width="192" height="192"></canvas>
+      <label>192 × 192</label>
+    </div>
+    <div class="preview-item">
+      <canvas id="c512" width="512" height="512"></canvas>
+      <label>512 × 512</label>
+    </div>
+  </div>
+
+  <div class="download-row">
+    <button class="btn btn-primary" onclick="download('c192', 'icon-192.png')">📥 Télécharger 192px</button>
+    <button class="btn btn-primary" onclick="download('c512', 'icon-512.png')">📥 Télécharger 512px</button>
+    <button class="btn btn-outline" onclick="download('c192', 'icon-192.png'); download('c512', 'icon-512.png');">📥 Télécharger les deux</button>
+  </div>
+
+  <script>
+    function drawIcon(canvasId, size) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const s = size;
+
+      // ── Background gradient (navy) ──
+      const bgGrad = ctx.createLinearGradient(0, 0, s, s);
+      bgGrad.addColorStop(0, '#1a1a2e');
+      bgGrad.addColorStop(0.5, '#16213e');
+      bgGrad.addColorStop(1, '#0f3460');
+
+      // Rounded rect
+      const r = s * 0.18;
+      ctx.beginPath();
+      ctx.moveTo(r, 0);
+      ctx.lineTo(s - r, 0);
+      ctx.quadraticCurveTo(s, 0, s, r);
+      ctx.lineTo(s, s - r);
+      ctx.quadraticCurveTo(s, s, s - r, s);
+      ctx.lineTo(r, s);
+      ctx.quadraticCurveTo(0, s, 0, s - r);
+      ctx.lineTo(0, r);
+      ctx.quadraticCurveTo(0, 0, r, 0);
+      ctx.closePath();
+      ctx.fillStyle = bgGrad;
+      ctx.fill();
+
+      // ── Subtle radial glow behind rings ──
+      const glow = ctx.createRadialGradient(s * 0.5, s * 0.42, 0, s * 0.5, s * 0.42, s * 0.28);
+      glow.addColorStop(0, 'rgba(201, 168, 76, 0.12)');
+      glow.addColorStop(1, 'rgba(201, 168, 76, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, s, s);
+
+      // ── Gold gradient for rings ──
+      const ringGrad = ctx.createLinearGradient(s * 0.25, s * 0.25, s * 0.75, s * 0.65);
+      ringGrad.addColorStop(0, '#e8d49e');
+      ringGrad.addColorStop(0.3, '#c9a84c');
+      ringGrad.addColorStop(0.7, '#a07830');
+      ringGrad.addColorStop(1, '#c9a84c');
+
+      // ── Highlight gradient ──
+      const hiGrad = ctx.createLinearGradient(s * 0.3, s * 0.2, s * 0.5, s * 0.5);
+      hiGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+      hiGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+      const ringR = s * 0.14;
+      const ringW = s * 0.032;
+      const cy = s * 0.42;
+
+      // Left ring
+      const lx = s * 0.37;
+      ctx.beginPath();
+      ctx.arc(lx, cy, ringR, 0, Math.PI * 2);
+      ctx.strokeStyle = ringGrad;
+      ctx.lineWidth = ringW;
+      ctx.stroke();
+
+      // Right ring
+      const rx = s * 0.63;
+      ctx.beginPath();
+      ctx.arc(rx, cy, ringR, 0, Math.PI * 2);
+      ctx.strokeStyle = ringGrad;
+      ctx.lineWidth = ringW;
+      ctx.stroke();
+
+      // ── Interlocking overlap highlight ──
+      // Small heart/diamond at the overlap point
+      const mx = s * 0.5;
+      const my = cy;
+      const dSize = s * 0.028;
+      ctx.save();
+      ctx.translate(mx, my);
+      ctx.rotate(Math.PI / 4);
+      ctx.beginPath();
+      ctx.rect(-dSize, -dSize, dSize * 2, dSize * 2);
+      ctx.fillStyle = '#c9a84c';
+      ctx.fill();
+      ctx.restore();
+
+      // ── Ring highlights (specular) ──
+      ctx.beginPath();
+      ctx.arc(lx, cy, ringR - ringW * 0.3, -Math.PI * 0.7, -Math.PI * 0.2);
+      ctx.strokeStyle = hiGrad;
+      ctx.lineWidth = ringW * 0.5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(rx, cy, ringR - ringW * 0.3, -Math.PI * 0.8, -Math.PI * 0.3);
+      ctx.strokeStyle = hiGrad;
+      ctx.lineWidth = ringW * 0.5;
+      ctx.stroke();
+
+      // ── Small sparkles ──
+      function drawSparkle(x, y, size, opacity) {
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = '#e8d49e';
+        // Vertical line
+        ctx.fillRect(x - size * 0.15, y - size, size * 0.3, size * 2);
+        // Horizontal line
+        ctx.fillRect(x - size, y - size * 0.15, size * 2, size * 0.3);
+        ctx.restore();
+      }
+
+      drawSparkle(s * 0.26, s * 0.28, s * 0.012, 0.7);
+      drawSparkle(s * 0.74, s * 0.32, s * 0.010, 0.5);
+      drawSparkle(s * 0.50, s * 0.24, s * 0.008, 0.6);
+
+      // ── Text "MARIAGE" ──
+      const fontSize = Math.round(s * 0.075);
+      ctx.font = `bold ${fontSize}px Georgia, serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Letter spacing effect
+      const text = 'MARIAGE';
+      const letterSpacing = fontSize * 0.3;
+      const totalWidth = text.length * (fontSize * 0.6) + (text.length - 1) * letterSpacing;
+      let tx = s * 0.5 - totalWidth / 2;
+
+      ctx.fillStyle = '#c9a84c';
+      for (let i = 0; i < text.length; i++) {
+        ctx.fillText(text[i], tx + fontSize * 0.3, s * 0.78);
+        tx += fontSize * 0.6 + letterSpacing;
+      }
+
+      // ── Subtle decorative line under text ──
+      const lineW = s * 0.2;
+      ctx.beginPath();
+      ctx.moveTo(s * 0.5 - lineW / 2, s * 0.85);
+      ctx.lineTo(s * 0.5 + lineW / 2, s * 0.85);
+      ctx.strokeStyle = 'rgba(201, 168, 76, 0.3)';
+      ctx.lineWidth = s * 0.005;
+      ctx.stroke();
+    }
+
+    function download(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Draw both sizes
+    drawIcon('c192', 192);
+    drawIcon('c512', 512);
+  </script>
+</body>
+</html>

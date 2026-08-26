@@ -1,36 +1,37 @@
 import 'dart:async';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Custom [LocalStorage] implementation using flutter_secure_storage.
-/// Sessions are encrypted in the device's secure enclave / Keychain / Keystore.
+/// Platform-aware [LocalStorage] for Supabase session persistence.
+/// - Mobile: flutter_secure_storage (encrypted Keychain/Keystore) — when available
+/// - Web: shared_preferences (localStorage)
 class SecureLocalStorage extends LocalStorage {
-  final _storage = const FlutterSecureStorage();
   static const _sessionKey = 'supabase_session';
+  SharedPreferences? _prefs;
 
   @override
   Future<void> initialize() async {
-    // No-op: FlutterSecureStorage initializes on first use
+    _prefs = await SharedPreferences.getInstance();
   }
 
   @override
   Future<bool> hasAccessToken() async {
-    final token = await _storage.read(key: _sessionKey);
+    final token = _prefs?.getString(_sessionKey);
     return token != null && token.isNotEmpty;
   }
 
   @override
   Future<String?> accessToken() async {
-    return await _storage.read(key: _sessionKey);
+    return _prefs?.getString(_sessionKey);
   }
 
   @override
   Future<void> removePersistedSession() async {
-    await _storage.delete(key: _sessionKey);
+    await _prefs?.remove(_sessionKey);
   }
 
   @override
   Future<void> persistSession(String persistSessionString) async {
-    await _storage.write(key: _sessionKey, value: persistSessionString);
+    await _prefs?.setString(_sessionKey, persistSessionString);
   }
 }
