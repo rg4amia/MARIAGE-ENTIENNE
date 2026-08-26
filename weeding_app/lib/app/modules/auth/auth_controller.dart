@@ -55,6 +55,12 @@ class AuthController extends GetxController {
 
     if (user.value != null) {
       _loadProfile();
+      // Rediriger vers home si déjà connecté (session persistée)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (Get.currentRoute == AppRoutes.login) {
+          Get.offAllNamed(AppRoutes.home);
+        }
+      });
     }
 
     isInitialized.value = true;

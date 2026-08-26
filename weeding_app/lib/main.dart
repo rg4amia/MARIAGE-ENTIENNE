@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/core/theme/app_theme.dart';
 import 'app/core/constants/supabase_config.dart';
+import 'app/core/storage/secure_local_storage.dart';
 import 'app/routes/app_pages.dart';
 import 'app/bindings/app_binding.dart';
 
@@ -11,8 +12,12 @@ void main() async {
 
   await Supabase.initialize(
     url: SupabaseConfig.url,
-    // ignore: deprecated_member_use
-    anonKey: SupabaseConfig.anonKey,
+    publishableKey: SupabaseConfig.anonKey,
+    authOptions: FlutterAuthClientOptions(
+      localStorage: SecureLocalStorage(),
+      persistSession: true,
+      autoRefreshToken: true,
+    ),
   );
 
   runApp(const WeddingApp());
