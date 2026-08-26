@@ -17,7 +17,7 @@ class TableDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(table.name, style: AppTextStyles.headlineMdPrimary),
+        title: Text(table.label, style: AppTextStyles.headlineMdPrimary),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -41,11 +41,7 @@ class TableDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(table.name, style: AppTextStyles.headlineMdPrimary),
-                    if (table.description != null) ...[
-                      const SizedBox(height: 4),
-                      Text(table.description!, style: AppTextStyles.bodyMdOnVariant),
-                    ],
+                    Text(table.label, style: AppTextStyles.headlineMdPrimary),
                     const SizedBox(height: 8),
                     Text(
                       'Capacité : ${table.capacity} chaises',
@@ -69,9 +65,7 @@ class TableDetailPage extends StatelessWidget {
                 final chairs = snapshot.data ?? [];
 
                 if (chairs.isEmpty) {
-                  return const Center(
-                    child: Text('Aucune chaise'),
-                  );
+                  return const Center(child: Text('Aucune chaise'));
                 }
 
                 return GridView.builder(
@@ -101,8 +95,7 @@ class TableDetailPage extends StatelessWidget {
     TablesController controller,
     WeddingTable table,
   ) {
-    final nameController = TextEditingController(text: table.name);
-    final descController = TextEditingController(text: table.description ?? '');
+    final labelController = TextEditingController(text: table.label);
     final formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
@@ -113,7 +106,10 @@ class TableDetailPage extends StatelessWidget {
       ),
       builder: (ctx) => Padding(
         padding: EdgeInsets.fromLTRB(
-          24, 24, 24, MediaQuery.of(ctx).viewInsets.bottom + 24,
+          24,
+          24,
+          24,
+          MediaQuery.of(ctx).viewInsets.bottom + 24,
         ),
         child: Form(
           key: formKey,
@@ -124,13 +120,8 @@ class TableDetailPage extends StatelessWidget {
               Text('Modifier la table', style: AppTextStyles.headlineMdPrimary),
               const SizedBox(height: 20),
               TextFormField(
-                controller: nameController,
+                controller: labelController,
                 decoration: const InputDecoration(labelText: 'Nom'),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: descController,
-                decoration: const InputDecoration(labelText: 'Description'),
               ),
               const SizedBox(height: 24),
               SizedBox(
@@ -139,10 +130,7 @@ class TableDetailPage extends StatelessWidget {
                   onPressed: () {
                     controller.updateTable(
                       id: table.id,
-                      name: nameController.text.trim(),
-                      description: descController.text.trim().isEmpty
-                          ? null
-                          : descController.text.trim(),
+                      label: labelController.text.trim(),
                     );
                     Navigator.pop(ctx);
                   },
@@ -165,7 +153,7 @@ class TableDetailPage extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Supprimer la table ?'),
-        content: Text('Voulez-vous vraiment supprimer "${table.name}" ?'),
+        content: Text('Voulez-vous vraiment supprimer "${table.label}" ?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -173,7 +161,10 @@ class TableDetailPage extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => controller.deleteTable(table.id),
-            child: const Text('Supprimer', style: TextStyle(color: AppColors.error)),
+            child: const Text(
+              'Supprimer',
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),

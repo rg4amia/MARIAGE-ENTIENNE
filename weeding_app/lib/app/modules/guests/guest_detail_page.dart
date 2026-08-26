@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/guest.dart';
@@ -32,13 +33,17 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   Future<void> _loadOrCreateLink() async {
     final guest = Get.arguments as Guest;
     final linkRepo = GuestLinkRepository();
-    
+
     // Try to get existing link
     var link = await linkRepo.getLinkByGuestId(guest.id);
-    
+
     // Create new link if none exists
-    link ??= await linkRepo.createGuestLink(guest.id);
-    
+    try {
+      link ??= await linkRepo.createGuestLink(guest.id);
+    } catch (_) {
+      // Le lien ne peut être créé qu'après l'attribution d'une chaise.
+    }
+
     if (mounted) {
       setState(() {
         _guestLink = link;
@@ -98,10 +103,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
 
                     // Phone
                     if (guest.phone != null)
-                      Text(
-                        guest.phone!,
-                        style: AppTextStyles.bodyMdOnVariant,
-                      ),
+                      Text(guest.phone!, style: AppTextStyles.bodyMdOnVariant),
 
                     // Email
                     if (guest.email != null) ...[
@@ -109,9 +111,16 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.mail, size: 16, color: AppColors.onSurfaceVariant),
+                          const Icon(
+                            Icons.mail,
+                            size: 16,
+                            color: AppColors.onSurfaceVariant,
+                          ),
                           const SizedBox(width: 4),
-                          Text(guest.email!, style: AppTextStyles.bodyMdOnVariant),
+                          Text(
+                            guest.email!,
+                            style: AppTextStyles.bodyMdOnVariant,
+                          ),
                         ],
                       ),
                     ],
@@ -131,7 +140,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                         children: [
                           Text('Statut', style: AppTextStyles.bodyMd),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: _statusColor(guest.status).withAlpha(51),
                               borderRadius: BorderRadius.circular(12),
@@ -148,15 +160,26 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Table & Chair
-                    _InfoRow(
-                      label: 'Table:',
-                      value: 'Non assignée', // TODO: join with guest_seats
-                    ),
-                    const SizedBox(height: 8),
-                    _InfoRow(
-                      label: 'Chaise:',
-                      value: 'Non assignée',
+                    FutureBuilder(
+                      future: controller.getGuestSeat(guest.id),
+                      builder: (context, snapshot) {
+                        final seat = snapshot.data;
+                        return Column(
+                          children: [
+                            _InfoRow(
+                              label: 'Table:',
+                              value: seat?.tableLabel ?? 'Non assignée',
+                            ),
+                            const SizedBox(height: 8),
+                            _InfoRow(
+                              label: 'Chaise:',
+                              value: seat == null
+                                  ? 'Non assignée'
+                                  : '${seat.chairNumber}',
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -184,7 +207,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                     children: [
                       Text('Lien d\'invitation', style: AppTextStyles.titleLg),
                       const SizedBox(height: 12),
-                      
+
                       // Short link display
                       if (_isLoadingLink)
                         const CircularProgressIndicator()
@@ -198,7 +221,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.link, size: 16, color: AppColors.primary),
+                              const Icon(
+                                Icons.link,
+                                size: 16,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
@@ -226,12 +253,16 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        
+
                         // Stats
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.remove_red_eye, size: 14, color: AppColors.onSurfaceVariant),
+                            Icon(
+                              Icons.remove_red_eye,
+                              size: 14,
+                              color: AppColors.onSurfaceVariant,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               '${_guestLink!.scanCount} scan(s)',
@@ -242,10 +273,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           ],
                         ),
                       ],
-                      
+
                       const SizedBox(height: 16),
-                      
-                      // QR Code placeholder
+
+                      // QR Code du lien court public
                       Container(
                         width: 180,
                         height: 180,
@@ -254,15 +285,14 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: AppColors.outlineVariant),
                         ),
-                        child: const Center(
-                          child: Icon(
-                            Icons.qr_code_2,
-                            size: 80,
-                            color: AppColors.outlineVariant,
-                          ),
+                        padding: const EdgeInsets.all(12),
+                        child: Center(
+                          child: _guestLink == null
+                              ? const Icon(Icons.lock_outline, size: 60)
+                              : QrImageView(data: _getInviteUrl()),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 8),
                       Text(
                         'Code: ${_guestLink?.shortCode ?? "..."}',
@@ -297,6 +327,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
         tables: tables,
         controller: controller,
         guest: guest,
+        onAssigned: _loadOrCreateLink,
       ),
     );
   }
@@ -318,7 +349,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
           ),
           TextButton(
             onPressed: () => controller.deleteGuest(guest.id),
-            child: const Text('Supprimer', style: TextStyle(color: AppColors.error)),
+            child: const Text(
+              'Supprimer',
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -359,11 +393,13 @@ class _AssignSheet extends StatefulWidget {
   final List<WeddingTable> tables;
   final GuestsController controller;
   final Guest guest;
+  final Future<void> Function() onAssigned;
 
   const _AssignSheet({
     required this.tables,
     required this.controller,
     required this.guest,
+    required this.onAssigned,
   });
 
   @override
@@ -391,7 +427,7 @@ class _AssignSheetState extends State<_AssignSheet> {
             value: selectedTable,
             decoration: const InputDecoration(labelText: 'Table'),
             items: widget.tables.map((t) {
-              return DropdownMenuItem(value: t, child: Text(t.name));
+              return DropdownMenuItem(value: t, child: Text(t.label));
             }).toList(),
             onChanged: (table) async {
               setState(() {
@@ -400,7 +436,9 @@ class _AssignSheetState extends State<_AssignSheet> {
                 availableChairs = [];
               });
               if (table != null) {
-                final chairs = await widget.controller.getAvailableChairs(table.id);
+                final chairs = await widget.controller.getAvailableChairs(
+                  table.id,
+                );
                 setState(() => availableChairs = chairs);
               }
             },
@@ -427,12 +465,12 @@ class _AssignSheetState extends State<_AssignSheet> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: (selectedTable != null && selectedChair != null)
-                  ? () {
-                      widget.controller.assignSeatToGuest(
+                  ? () async {
+                      await widget.controller.assignSeatToGuest(
                         guestId: widget.guest.id,
-                        tableId: selectedTable!.id,
                         chairId: selectedChair!.id,
                       );
+                      await widget.onAssigned();
                     }
                   : null,
               child: const Text('Assigner'),

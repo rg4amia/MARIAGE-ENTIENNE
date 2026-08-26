@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/guest.dart';
+import '../../data/repositories/guest_link_repository.dart';
+import '../../core/constants/supabase_config.dart';
 import 'invitations_controller.dart';
 
 class QrCodePage extends StatelessWidget {
   const QrCodePage({super.key});
+
+  Future<String?> _getPublicUrl(
+    Guest guest,
+    InvitationsController controller,
+  ) async {
+    final links = GuestLinkRepository();
+    final link =
+        await links.getLinkByGuestId(guest.id) ??
+        await links.createGuestLink(guest.id);
+    if (link != null) return link.getInviteUrl(SupabaseConfig.url);
+    return (await controller.getInvitationForGuest(guest.id))?.webUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<InvitationsController>();
     final guest = Get.arguments as Guest;
 
-    // Generate web URL for QR code
-    final qrData = 'https://votre-domaine/#/guest/${guest.qrToken}';
-
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text('QR Code', style: AppTextStyles.headlineMdPrimary),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),
       body: Center(
@@ -45,9 +55,14 @@ class QrCodePage extends StatelessWidget {
                   Container(
                     height: 4,
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(16),
+                      ),
                       gradient: LinearGradient(
-                        colors: [AppColors.tertiaryFixed, AppColors.secondaryFixed],
+                        colors: [
+                          AppColors.tertiaryFixed,
+                          AppColors.secondaryFixed,
+                        ],
                       ),
                     ),
                   ),
@@ -80,17 +95,26 @@ class QrCodePage extends StatelessWidget {
                               width: 2,
                             ),
                           ),
-                          child: QrImageView(
-                            data: qrData,
-                            version: QrVersions.auto,
-                            size: 200,
-                            backgroundColor: AppColors.surfaceBright,
-                            eyeStyle: const QrEyeStyle(
-                              color: AppColors.onSurface,
-                            ),
-                            dataModuleStyle: const QrDataModuleStyle(
-                              color: AppColors.onSurface,
-                            ),
+                          child: FutureBuilder(
+                            future: _getPublicUrl(guest, controller),
+                            builder: (context, snapshot) {
+                              final payload = snapshot.data;
+                              if (payload == null) {
+                                return const CircularProgressIndicator();
+                              }
+                              return QrImageView(
+                                data: payload,
+                                version: QrVersions.auto,
+                                size: 200,
+                                backgroundColor: AppColors.surfaceBright,
+                                eyeStyle: const QrEyeStyle(
+                                  color: AppColors.onSurface,
+                                ),
+                                dataModuleStyle: const QrDataModuleStyle(
+                                  color: AppColors.onSurface,
+                                ),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -115,8 +139,14 @@ class QrCodePage extends StatelessWidget {
                           children: [
                             Expanded(
                               child: OutlinedButton.icon(
-                                onPressed: () {
-                                  Get.snackbar('Info', 'Fonctionnalité de partage à venir');
+                                onPressed: () async {
+                                  final url = await _getPublicUrl(
+                                    guest,
+                                    controller,
+                                  );
+                                  if (url != null) {
+                                    await Share.share(url);
+                                  }
                                 },
                                 icon: const Icon(Icons.share),
                                 label: const Text('Partager'),
@@ -126,20 +156,36 @@ class QrCodePage extends StatelessWidget {
                                     color: AppColors.secondaryContainer,
                                     width: 2,
                                   ),
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: () {
-                                  Get.snackbar('Info', 'Fonctionnalité de téléchargement à venir');
+                                onPressed: () async {
+                                  final url = await _getPublicUrl(
+                                    guest,
+                                    controller,
+                                  );
+                                  if (url != null) {
+                                    await Clipboard.setData(
+                                      ClipboardData(text: url),
+                                    );
+                                    Get.snackbar(
+                                      'Copié',
+                                      'Lien d’invitation copié',
+                                    );
+                                  }
                                 },
-                                icon: const Icon(Icons.download),
-                                label: const Text('Télécharger'),
+                                icon: const Icon(Icons.copy),
+                                label: const Text('Copier'),
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
                                 ),
                               ),
                             ),

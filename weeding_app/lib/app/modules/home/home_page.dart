@@ -216,7 +216,13 @@ class HomePage extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         if (index == 0) return; // déjà sur home
-        final routes = [AppRoutes.home, AppRoutes.guests, AppRoutes.tables, AppRoutes.invitations, AppRoutes.settings];
+        final routes = [
+          AppRoutes.home,
+          AppRoutes.guests,
+          AppRoutes.tables,
+          AppRoutes.invitations,
+          AppRoutes.settings,
+        ];
         Get.offAllNamed(routes[index]);
       },
       items: const [
@@ -251,8 +257,19 @@ class HomePage extends StatelessWidget {
 
   String _monthName(int month) {
     const months = [
-      '', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+      '',
+      'Janvier',
+      'Février',
+      'Mars',
+      'Avril',
+      'Mai',
+      'Juin',
+      'Juillet',
+      'Août',
+      'Septembre',
+      'Octobre',
+      'Novembre',
+      'Décembre',
     ];
     return months[month];
   }
@@ -293,10 +310,7 @@ class _KpiCard extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              value,
-              style: AppTextStyles.displayMdPrimary,
-            ),
+            Text(value, style: AppTextStyles.displayMdPrimary),
           ],
         ),
       ),
@@ -325,10 +339,7 @@ class _StatusLegend extends StatelessWidget {
             Container(
               width: 12,
               height: 12,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
             const SizedBox(width: 8),
             Text(label, style: AppTextStyles.bodyMdOnVariant),

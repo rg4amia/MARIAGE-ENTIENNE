@@ -11,10 +11,7 @@ import '../../core/theme/app_text_styles.dart';
 class VideoRecorderPage extends StatefulWidget {
   final int minDurationSeconds;
 
-  const VideoRecorderPage({
-    super.key,
-    this.minDurationSeconds = 30,
-  });
+  const VideoRecorderPage({super.key, this.minDurationSeconds = 30});
 
   @override
   State<VideoRecorderPage> createState() => _VideoRecorderPageState();
@@ -272,7 +269,10 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     ),
                     child: const Text(
                       'Envoyer la vidéo',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -310,7 +310,10 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     ),
                     child: const Text(
                       'Ouvrir la caméra',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

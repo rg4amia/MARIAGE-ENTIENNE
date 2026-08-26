@@ -4,7 +4,6 @@ import 'app_routes.dart';
 import '../modules/auth/auth_controller.dart';
 import '../modules/auth/auth_binding.dart';
 import '../modules/auth/login_page.dart';
-import '../modules/auth/register_page.dart';
 import '../modules/home/home_page.dart';
 import '../modules/home/home_binding.dart';
 import '../modules/tables/tables_page.dart';
@@ -17,8 +16,6 @@ import '../modules/invitations/qr_code_page.dart';
 import '../modules/invitations/invitations_page.dart';
 import '../modules/invitations/invitations_binding.dart';
 import '../modules/settings/settings_page.dart';
-import '../modules/guest_access/guest_access_page.dart';
-import '../modules/guest_access/guest_access_binding.dart';
 
 class AppPages {
   static const initial = AppRoutes.login;
@@ -27,11 +24,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginPage(),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.register,
-      page: () => const RegisterPage(),
       binding: AuthBinding(),
     ),
     GetPage(
@@ -80,13 +72,6 @@ class AppPages {
       page: () => const SettingsPage(),
       middlewares: [AuthMiddleware()],
     ),
-
-    // Public routes (no auth required)
-    GetPage(
-      name: AppRoutes.guestAccess,
-      page: () => const GuestAccessPage(),
-      binding: GuestAccessBinding(),
-    ),
   ];
 }
 
@@ -98,10 +83,7 @@ class AuthMiddleware extends GetMiddleware {
   RouteSettings? redirect(String? route) {
     final authController = Get.find<AuthController>();
 
-    if (!authController.isLoggedIn &&
-        route != AppRoutes.login &&
-        route != AppRoutes.register &&
-        route != AppRoutes.guestAccess) {
+    if (!authController.isLoggedIn && route != AppRoutes.login) {
       return const RouteSettings(name: AppRoutes.login);
     }
 

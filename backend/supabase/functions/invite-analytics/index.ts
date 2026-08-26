@@ -22,8 +22,17 @@ Deno.serve(async (request) => {
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await admin.auth.getUser(token);
 
-    if (authError || !user) {
+    if (authError || !user || user.app_metadata?.role !== 'admin') {
       return json({ error: 'Unauthorized' }, 401);
+    }
+
+    const { data: profile, error: profileError } = await admin
+      .from('profiles')
+      .select('event_id')
+      .eq('id', user.id)
+      .single();
+    if (profileError || !profile?.event_id) {
+      return json({ error: 'Administrator event not found' }, 403);
     }
 
     // Récupérer tous les liens avec stats
@@ -37,8 +46,9 @@ Deno.serve(async (request) => {
         scan_count,
         last_scanned_at,
         created_at,
-        guests!inner (full_name, status)
+        guests!inner (full_name, status, event_id)
       `)
+      .eq('guests.event_id', profile.event_id)
       .order('created_at', { ascending: false });
 
     if (error) throw error;

@@ -1,8 +1,8 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { detectMediaDuration } from '../_shared/media-duration.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
-const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 
 const admin = createClient(supabaseUrl, serviceRoleKey);
 
@@ -38,6 +38,12 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { token, media_type, file_name, mime_type } = body;
     if (!token || !media_type || !file_name) return apiError('Paramètres manquants', 400);
+    if (!['audio', 'video'].includes(media_type)) return apiError('Type de média invalide', 400);
+
+    const extension = file_name.split('.').pop()?.toLowerCase() ?? '';
+    if (!['webm', 'mp4', 'm4a', 'wav'].includes(extension)) {
+      return apiError('Format de média non autorisé', 400);
+    }
 
     // Retrouver le guest
     const { data: guest } = await admin
@@ -47,8 +53,7 @@ Deno.serve(async (req) => {
       .single();
     if (!guest) return apiError('Invité introuvable', 404);
 
-    const ext = file_name.split('.').pop() ?? (media_type === 'video' ? 'webm' : 'webm');
-    const storagePath = `${guest.event_id}/${guest.id}/${Date.now()}.${ext}`;
+    const storagePath = `${guest.event_id}/${guest.id}/${crypto.randomUUID()}.${extension}`;
 
     const { data: signed, error } = await admin.storage
       .from('guest-media')
@@ -66,13 +71,49 @@ Deno.serve(async (req) => {
     if (!token || !media_type || !storage_path || duration == null) {
       return apiError('Paramètres manquants', 400);
     }
+    if (!['audio', 'video'].includes(media_type)) return apiError('Type de média invalide', 400);
+
+    const { data: guest, error: guestError } = await admin
+      .from('guests')
+      .select('id, event_id')
+      .eq('qr_token', token)
+      .single();
+    if (guestError || !guest) return apiError('Invité introuvable', 404);
+    const expectedPrefix = `${guest.event_id}/${guest.id}/`;
+    if (!storage_path.startsWith(expectedPrefix)) {
+      return apiError('Chemin de média invalide pour cette invitation', 403);
+    }
+
+    const { data: mediaBlob, error: downloadError } = await admin.storage
+      .from('guest-media')
+      .download(storage_path);
+    if (downloadError || !mediaBlob) return apiError('Média uploadé introuvable', 422);
+    if (mediaBlob.size > 50 * 1024 * 1024) {
+      await admin.storage.from('guest-media').remove([storage_path]);
+      return apiError('Le média dépasse la taille maximale de 50 Mo', 413);
+    }
+
+    const mediaBytes = new Uint8Array(await mediaBlob.arrayBuffer());
+    const serverDuration = detectMediaDuration(mediaBytes, mime_type ?? mediaBlob.type);
+    if (serverDuration == null) {
+      await admin.storage.from('guest-media').remove([storage_path]);
+      return apiError('La durée réelle du média ne peut pas être vérifiée', 422);
+    }
+    if (serverDuration < 30) {
+      await admin.storage.from('guest-media').remove([storage_path]);
+      return apiError(`Le média dure ${Math.floor(serverDuration)} secondes; 30 secondes sont requises`, 422);
+    }
+    if (Math.abs(serverDuration - Number(duration)) > 5) {
+      await admin.storage.from('guest-media').remove([storage_path]);
+      return apiError('La durée déclarée ne correspond pas au fichier envoyé', 422);
+    }
 
     const { data, error } = await admin.rpc('submit_guest_media_by_token', {
       p_token: token,
       p_media_type: media_type,
       p_storage_path: storage_path,
       p_client_duration_seconds: duration,
-      p_server_duration_seconds: duration,
+      p_server_duration_seconds: serverDuration,
       p_mime_type: mime_type ?? null,
     });
 
@@ -109,7 +150,7 @@ Deno.serve(async (req) => {
   // ── SPA HTML ─────────────────────────────────────────────────────────────────
   // Toute autre route → on sert la SPA
   const token = url.searchParams.get('token') ?? '';
-  return new Response(renderSPA(token, supabaseUrl, anonKey), {
+  return new Response(renderSPA(token, supabaseUrl), {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
   });
 });
@@ -132,7 +173,7 @@ function apiError(msg: string, status = 400) {
 
 // ── SPA HTML/CSS/JS inline ───────────────────────────────────────────────────
 
-function renderSPA(initialToken: string, supabaseUrl: string, anonKey: string): string {
+function renderSPA(initialToken: string, supabaseUrl: string): string {
   return /* html */`<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -598,14 +639,12 @@ function renderSPA(initialToken: string, supabaseUrl: string, anonKey: string): 
 // CONFIG — injectée côté serveur
 // ═══════════════════════════════════════════════════════
 const FUNCTION_BASE = '${supabaseUrl}/functions/v1/guest-portal';
-const SUPABASE_URL  = '${supabaseUrl}';
-const ANON_KEY      = '${anonKey}';
 
 // ═══════════════════════════════════════════════════════
 // APP STATE
 // ═══════════════════════════════════════════════════════
 const State = {
-  token:       '${initialToken}',
+  token:       ${JSON.stringify(initialToken)},
   invitation:  null,
   mediaType:   'audio',   // 'audio' | 'video'
   stream:      null,
@@ -680,9 +719,15 @@ function renderWelcome() {
   document.getElementById('welcome-name').textContent        = inv.guest_name ?? '';
 
   const meta = document.getElementById('welcome-meta');
-  meta.innerHTML = '';
-  if (inv.table_label)  meta.innerHTML += '<span class="badge">🪑 Table ' + inv.table_label + '</span>';
-  if (inv.chair_number) meta.innerHTML += '<span class="badge">💺 Chaise ' + inv.chair_number + '</span>';
+  meta.replaceChildren();
+  const addBadge = label => {
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = label;
+    meta.appendChild(badge);
+  };
+  if (inv.table_label) addBadge('🪑 Table ' + inv.table_label);
+  if (inv.chair_number) addBadge('💺 Chaise ' + inv.chair_number);
 
   updateSteps(inv.is_unlocked ? 3 : 1);
 

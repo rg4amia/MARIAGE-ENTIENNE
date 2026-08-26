@@ -2,6 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../models/guest.dart';
 import '../models/guest_seat.dart';
+import '../../core/constants/supabase_config.dart';
 
 class GuestRepository {
   final SupabaseClient _client = Supabase.instance.client;
@@ -13,9 +14,7 @@ class GuestRepository {
         .select()
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((json) => Guest.fromJson(json))
-        .toList();
+    return (response as List).map((json) => Guest.fromJson(json)).toList();
   }
 
   Future<Guest?> getGuestById(String id) async {
@@ -46,15 +45,20 @@ class GuestRepository {
     String? email,
   }) async {
     final qrToken = _generateQrToken(fullName);
+    final eventId = await _client.rpc('current_event_id');
+    if (eventId == null) {
+      throw StateError('Aucun événement associé à cet administrateur');
+    }
 
     final response = await _client
         .from('guests')
         .insert({
+          'event_id': eventId,
           'full_name': fullName,
           'phone': phone,
           'email': email,
           'qr_token': qrToken,
-          'status': 'pending',
+          'status': 'draft',
         })
         .select()
         .single();
@@ -79,7 +83,7 @@ class GuestRepository {
   }
 
   Future<void> deleteGuest(String id) async {
-    await _client.from('guests').delete().eq('id', id);
+    await _client.rpc('delete_guest', params: {'p_guest_id': id});
   }
 
   Future<int> getGuestCount() async {
@@ -97,7 +101,8 @@ class GuestRepository {
 
     for (final item in list) {
       switch (item['status']) {
-        case 'pending':
+        case 'draft':
+        case 'pending_media':
           pending++;
           break;
         case 'media_uploaded':
@@ -121,8 +126,10 @@ class GuestRepository {
 
   Future<GuestSeat?> getGuestSeat(String guestId) async {
     final response = await _client
-        .from('guest_seats')
-        .select()
+        .from('chairs')
+        .select(
+          'id, guest_id, table_id, chair_number, created_at, seating_tables(label)',
+        )
         .eq('guest_id', guestId)
         .maybeSingle();
 
@@ -132,50 +139,23 @@ class GuestRepository {
 
   Future<void> assignSeat({
     required String guestId,
-    required String tableId,
     required String chairId,
   }) async {
-    // 1. Vérifier que la chaise n'est pas déjà assignée
-    final chairResponse = await _client
-        .from('chairs')
-        .select('is_assigned')
-        .eq('id', chairId)
-        .single();
-
-    if (chairResponse['is_assigned'] == true) {
-      throw Exception('Cette chaise est déjà assignée');
-    }
-
-    // 2. Si le guest avait déjà une place, libérer l'ancienne
-    await unassignSeat(guestId);
-
-    // 3. Insérer la nouvelle attribution
-    await _client.from('guest_seats').insert({
-      'guest_id': guestId,
-      'table_id': tableId,
-      'chair_id': chairId,
-    });
-
-    // 4. Marquer la chaise comme assignée
-    await _client
-        .from('chairs')
-        .update({'is_assigned': true})
-        .eq('id', chairId);
+    await _client.rpc(
+      'assign_guest_to_chair',
+      params: {
+        'p_guest_id': guestId,
+        'p_chair_id': chairId,
+        'p_guest_portal_url': SupabaseConfig.guestPortalUrl,
+      },
+    );
   }
 
   Future<void> unassignSeat(String guestId) async {
-    // 1. Trouver l'ancienne attribution
-    final oldSeat = await getGuestSeat(guestId);
-    if (oldSeat == null) return;
-
-    // 2. Libérer la chaise
-    await _client
-        .from('chairs')
-        .update({'is_assigned': false})
-        .eq('id', oldSeat.chairId);
-
-    // 3. Supprimer l'attribution
-    await _client.from('guest_seats').delete().eq('guest_id', guestId);
+    await _client.rpc(
+      'unassign_guest_from_chair',
+      params: {'p_guest_id': guestId},
+    );
   }
 
   String _generateQrToken(String fullName) {

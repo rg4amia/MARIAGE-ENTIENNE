@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/table_repository.dart';
-import '../../data/repositories/invitation_repository.dart';
 import '../../data/repositories/guest_link_repository.dart';
 import '../../data/models/guest.dart';
 import '../../data/models/wedding_table.dart';
@@ -11,13 +11,13 @@ import '../../data/models/guest_seat.dart';
 class GuestsController extends GetxController {
   final GuestRepository _guestRepository = GuestRepository();
   final TableRepository _tableRepository = TableRepository();
-  final InvitationRepository _invitationRepository = InvitationRepository();
   final GuestLinkRepository _linkRepository = GuestLinkRepository();
 
   final RxList<Guest> guests = <Guest>[].obs;
   final RxBool isLoading = false.obs;
   final RxString searchQuery = ''.obs;
   final RxString filterStatus = 'all'.obs;
+  RealtimeChannel? _guestChanges;
 
   List<Guest> get filteredGuests {
     var result = guests.toList();
@@ -25,10 +25,12 @@ class GuestsController extends GetxController {
     if (searchQuery.value.isNotEmpty) {
       final q = searchQuery.value.toLowerCase();
       result = result
-          .where((g) =>
-              g.fullName.toLowerCase().contains(q) ||
-              (g.phone?.toLowerCase().contains(q) ?? false) ||
-              (g.email?.toLowerCase().contains(q) ?? false))
+          .where(
+            (g) =>
+                g.fullName.toLowerCase().contains(q) ||
+                (g.phone?.toLowerCase().contains(q) ?? false) ||
+                (g.email?.toLowerCase().contains(q) ?? false),
+          )
           .toList();
     }
 
@@ -43,6 +45,24 @@ class GuestsController extends GetxController {
   void onInit() {
     super.onInit();
     loadGuests();
+    _guestChanges = Supabase.instance.client
+        .channel('admin-guests')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'guests',
+          callback: (_) => loadGuests(),
+        )
+        .subscribe();
+  }
+
+  @override
+  void onClose() {
+    final channel = _guestChanges;
+    if (channel != null) {
+      Supabase.instance.client.removeChannel(channel);
+    }
+    super.onClose();
   }
 
   Future<void> loadGuests() async {
@@ -62,14 +82,11 @@ class GuestsController extends GetxController {
     String? email,
   }) async {
     try {
-      final guest = await _guestRepository.createGuest(
+      await _guestRepository.createGuest(
         fullName: fullName,
         phone: phone,
         email: email,
       );
-
-      // Créer automatiquement une invitation
-      await _invitationRepository.createInvitation(guestId: guest.id);
 
       await loadGuests();
       Get.back();
@@ -111,16 +128,11 @@ class GuestsController extends GetxController {
 
   Future<void> assignSeatToGuest({
     required String guestId,
-    required String tableId,
     required String chairId,
   }) async {
     try {
       // 1. Assign the seat
-      await _guestRepository.assignSeat(
-        guestId: guestId,
-        tableId: tableId,
-        chairId: chairId,
-      );
+      await _guestRepository.assignSeat(guestId: guestId, chairId: chairId);
 
       // 2. Auto-create guest link for QR code
       await _linkRepository.createGuestLink(guestId);

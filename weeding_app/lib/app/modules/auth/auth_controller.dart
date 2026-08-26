@@ -124,7 +124,9 @@ class AuthController extends GetxController {
         email: emailController.text.trim(),
         password: passwordController.text,
         fullName: fullNameController.text.trim(),
-        phone: phoneController.text.isNotEmpty ? phoneController.text.trim() : null,
+        phone: phoneController.text.isNotEmpty
+            ? phoneController.text.trim()
+            : null,
       );
 
       _clearControllers();

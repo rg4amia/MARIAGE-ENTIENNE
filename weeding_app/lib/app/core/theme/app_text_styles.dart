@@ -74,11 +74,23 @@ class AppTextStyles {
   );
 
   // Convenience methods with color override
-  static TextStyle displayMdPrimary = displayMd.copyWith(color: AppColors.primary);
-  static TextStyle headlineMdPrimary = headlineMd.copyWith(color: AppColors.primary);
-  static TextStyle headlineLgPrimary = headlineLg.copyWith(color: AppColors.primary);
-  static TextStyle headlineLgMobilePrimary = headlineLgMobile.copyWith(color: AppColors.primary);
+  static TextStyle displayMdPrimary = displayMd.copyWith(
+    color: AppColors.primary,
+  );
+  static TextStyle headlineMdPrimary = headlineMd.copyWith(
+    color: AppColors.primary,
+  );
+  static TextStyle headlineLgPrimary = headlineLg.copyWith(
+    color: AppColors.primary,
+  );
+  static TextStyle headlineLgMobilePrimary = headlineLgMobile.copyWith(
+    color: AppColors.primary,
+  );
   static TextStyle titleLgPrimary = titleLg.copyWith(color: AppColors.primary);
-  static TextStyle bodyMdOnVariant = bodyMd.copyWith(color: AppColors.onSurfaceVariant);
-  static TextStyle labelMdOnVariant = labelMd.copyWith(color: AppColors.onSurfaceVariant);
+  static TextStyle bodyMdOnVariant = bodyMd.copyWith(
+    color: AppColors.onSurfaceVariant,
+  );
+  static TextStyle labelMdOnVariant = labelMd.copyWith(
+    color: AppColors.onSurfaceVariant,
+  );
 }

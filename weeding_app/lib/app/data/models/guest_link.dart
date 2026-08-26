@@ -57,10 +57,7 @@ class GuestLink {
     return 'https://$host/functions/v1/invite/$shortCode';
   }
 
-  GuestLink copyWith({
-    bool? isActive,
-    int? scanCount,
-  }) {
+  GuestLink copyWith({bool? isActive, int? scanCount}) {
     return GuestLink(
       id: id,
       shortCode: shortCode,

@@ -3,8 +3,10 @@ class GuestMedia {
   final String guestId;
   final String mediaType; // 'audio' ou 'video'
   final String storagePath;
-  final int durationSeconds;
-  final bool isValid;
+  final double clientDurationSeconds;
+  final double? serverDurationSeconds;
+  final bool clientValidated;
+  final bool serverValidated;
   final DateTime submittedAt;
 
   GuestMedia({
@@ -12,8 +14,10 @@ class GuestMedia {
     required this.guestId,
     required this.mediaType,
     required this.storagePath,
-    required this.durationSeconds,
-    this.isValid = false,
+    required this.clientDurationSeconds,
+    this.serverDurationSeconds,
+    this.clientValidated = false,
+    this.serverValidated = false,
     DateTime? submittedAt,
   }) : submittedAt = submittedAt ?? DateTime.now();
 
@@ -23,8 +27,12 @@ class GuestMedia {
       guestId: json['guest_id'] as String,
       mediaType: json['media_type'] as String,
       storagePath: json['storage_path'] as String,
-      durationSeconds: json['duration_seconds'] as int,
-      isValid: json['is_valid'] as bool? ?? false,
+      clientDurationSeconds: (json['client_duration_seconds'] as num)
+          .toDouble(),
+      serverDurationSeconds: (json['server_duration_seconds'] as num?)
+          ?.toDouble(),
+      clientValidated: json['client_validated'] as bool? ?? false,
+      serverValidated: json['server_validated'] as bool? ?? false,
       submittedAt: json['submitted_at'] != null
           ? DateTime.parse(json['submitted_at'] as String)
           : DateTime.now(),
@@ -37,15 +45,21 @@ class GuestMedia {
       'guest_id': guestId,
       'media_type': mediaType,
       'storage_path': storagePath,
-      'duration_seconds': durationSeconds,
-      'is_valid': isValid,
+      'client_duration_seconds': clientDurationSeconds,
+      'server_duration_seconds': serverDurationSeconds,
+      'client_validated': clientValidated,
+      'server_validated': serverValidated,
       'submitted_at': submittedAt.toIso8601String(),
     };
   }
 
   String get durationFormatted {
+    final durationSeconds = (serverDurationSeconds ?? clientDurationSeconds)
+        .round();
     final minutes = (durationSeconds ~/ 60).toString().padLeft(2, '0');
     final seconds = (durationSeconds % 60).toString().padLeft(2, '0');
     return '$minutes:$seconds';
   }
+
+  bool get isValid => clientValidated && serverValidated;
 }

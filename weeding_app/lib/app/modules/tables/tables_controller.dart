@@ -13,7 +13,10 @@ class TablesController extends GetxController {
   List<WeddingTable> get filteredTables {
     if (searchQuery.value.isEmpty) return tables;
     return tables
-        .where((t) => t.name.toLowerCase().contains(searchQuery.value.toLowerCase()))
+        .where(
+          (t) =>
+              t.label.toLowerCase().contains(searchQuery.value.toLowerCase()),
+        )
         .toList();
   }
 
@@ -35,16 +38,11 @@ class TablesController extends GetxController {
   }
 
   Future<void> createTable({
-    required String name,
-    String? description,
+    required String label,
     required int capacity,
   }) async {
     try {
-      await _tableRepository.createTable(
-        name: name,
-        description: description,
-        capacity: capacity,
-      );
+      await _tableRepository.createTable(label: label, capacity: capacity);
       await loadTables();
       Get.back();
       Get.snackbar('Succès', 'Table créée avec succès');
@@ -53,19 +51,9 @@ class TablesController extends GetxController {
     }
   }
 
-  Future<void> updateTable({
-    required String id,
-    String? name,
-    String? description,
-    int? capacity,
-  }) async {
+  Future<void> updateTable({required String id, String? label}) async {
     try {
-      await _tableRepository.updateTable(
-        id: id,
-        name: name,
-        description: description,
-        capacity: capacity,
-      );
+      await _tableRepository.updateTable(id: id, label: label);
       await loadTables();
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible de modifier la table');

@@ -18,10 +18,7 @@ class GuestsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Invités', style: AppTextStyles.headlineMdPrimary),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),
       body: Column(
@@ -33,7 +30,10 @@ class GuestsPage extends StatelessWidget {
               onChanged: controller.onSearchChanged,
               decoration: InputDecoration(
                 hintText: 'Rechercher un invité...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.onSurfaceVariant),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: AppColors.onSurfaceVariant,
+                ),
                 filled: true,
                 fillColor: AppColors.surfaceContainerHighest,
                 border: OutlineInputBorder(
@@ -45,30 +45,32 @@ class GuestsPage extends StatelessWidget {
           ),
 
           // Filter Chips
-          Obx(() => Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-            child: Row(
-              children: [
-                _FilterChip(
-                  label: 'Tous (${controller.guests.length})',
-                  isSelected: controller.filterStatus.value == 'all',
-                  onTap: () => controller.onFilterChanged('all'),
-                ),
-                const SizedBox(width: 8),
-                _FilterChip(
-                  label: 'En attente (${controller.pendingCount})',
-                  isSelected: controller.filterStatus.value == 'pending',
-                  onTap: () => controller.onFilterChanged('pending'),
-                ),
-                const SizedBox(width: 8),
-                _FilterChip(
-                  label: 'Confirmés (${controller.confirmedCount})',
-                  isSelected: controller.filterStatus.value == 'confirmed',
-                  onTap: () => controller.onFilterChanged('confirmed'),
-                ),
-              ],
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+              child: Row(
+                children: [
+                  _FilterChip(
+                    label: 'Tous (${controller.guests.length})',
+                    isSelected: controller.filterStatus.value == 'all',
+                    onTap: () => controller.onFilterChanged('all'),
+                  ),
+                  const SizedBox(width: 8),
+                  _FilterChip(
+                    label: 'En attente (${controller.pendingCount})',
+                    isSelected: controller.filterStatus.value == 'pending',
+                    onTap: () => controller.onFilterChanged('pending'),
+                  ),
+                  const SizedBox(width: 8),
+                  _FilterChip(
+                    label: 'Confirmés (${controller.confirmedCount})',
+                    isSelected: controller.filterStatus.value == 'confirmed',
+                    onTap: () => controller.onFilterChanged('confirmed'),
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
 
           // Guest List
           Expanded(
@@ -84,9 +86,16 @@ class GuestsPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.group, size: 64, color: AppColors.outlineVariant),
+                      const Icon(
+                        Icons.group,
+                        size: 64,
+                        color: AppColors.outlineVariant,
+                      ),
                       const SizedBox(height: 16),
-                      Text('Aucun invité', style: AppTextStyles.headlineMdPrimary),
+                      Text(
+                        'Aucun invité',
+                        style: AppTextStyles.headlineMdPrimary,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Appuyez sur + pour ajouter un invité',
@@ -117,7 +126,10 @@ class GuestsPage extends StatelessWidget {
                             style: AppTextStyles.titleLg.copyWith(fontSize: 14),
                           ),
                         ),
-                        title: Text(guest.fullName, style: AppTextStyles.titleLg),
+                        title: Text(
+                          guest.fullName,
+                          style: AppTextStyles.titleLg,
+                        ),
                         subtitle: Text(
                           guest.phone ?? guest.email ?? '',
                           style: AppTextStyles.bodyMdOnVariant,
@@ -127,7 +139,10 @@ class GuestsPage extends StatelessWidget {
                           children: [
                             _StatusBadge(status: guest.status),
                             const SizedBox(width: 4),
-                            const Icon(Icons.chevron_right, color: AppColors.outlineVariant),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: AppColors.outlineVariant,
+                            ),
                           ],
                         ),
                       ),
@@ -161,7 +176,10 @@ class GuestsPage extends StatelessWidget {
       ),
       builder: (ctx) => Padding(
         padding: EdgeInsets.fromLTRB(
-          24, 24, 24, MediaQuery.of(ctx).viewInsets.bottom + 24,
+          24,
+          24,
+          24,
+          MediaQuery.of(ctx).viewInsets.bottom + 24,
         ),
         child: Form(
           key: formKey,
@@ -185,7 +203,9 @@ class GuestsPage extends StatelessWidget {
                 controller: phoneController,
                 keyboardType: TextInputType.phone,
                 validator: Validators.phone,
-                decoration: const InputDecoration(hintText: '+225 07 00 00 00 00'),
+                decoration: const InputDecoration(
+                  hintText: '+225 07 00 00 00 00',
+                ),
               ),
               const SizedBox(height: 12),
               Text('Email', style: AppTextStyles.labelMd),
@@ -228,7 +248,13 @@ class GuestsPage extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         if (index == 1) return; // déjà sur guests
-        final routes = [AppRoutes.home, AppRoutes.guests, AppRoutes.tables, AppRoutes.invitations, AppRoutes.settings];
+        final routes = [
+          AppRoutes.home,
+          AppRoutes.guests,
+          AppRoutes.tables,
+          AppRoutes.invitations,
+          AppRoutes.settings,
+        ];
         Get.offAllNamed(routes[index]);
       },
       items: const [
@@ -336,10 +362,7 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.labelMd.copyWith(
-          color: textColor,
-          fontSize: 10,
-        ),
+        style: AppTextStyles.labelMd.copyWith(color: textColor, fontSize: 10),
       ),
     );
   }

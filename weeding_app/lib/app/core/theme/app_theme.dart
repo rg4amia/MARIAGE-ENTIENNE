@@ -89,8 +89,13 @@ class AppTheme {
           borderSide: BorderSide(color: AppColors.primaryContainer, width: 2),
         ),
         labelStyle: AppTextStyles.labelMd,
-        hintStyle: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant.withAlpha(128)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        hintStyle: AppTextStyles.bodyMd.copyWith(
+          color: AppColors.onSurfaceVariant.withAlpha(128),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,

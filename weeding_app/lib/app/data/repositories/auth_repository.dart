@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
+import '../../core/constants/supabase_config.dart';
 
 class AuthRepository {
   final SupabaseClient _client = Supabase.instance.client;
@@ -31,17 +32,9 @@ class AuthRepository {
       data: {
         'full_name': fullName,
         'phone': phone,
+        'event_id': SupabaseConfig.eventId,
       },
     );
-
-    if (response.user != null) {
-      await _client.from('profiles').insert({
-        'id': response.user!.id,
-        'full_name': fullName,
-        'phone': phone,
-        'role': 'admin',
-      });
-    }
 
     return response;
   }
@@ -73,10 +66,7 @@ class AuthRepository {
 
     final response = await _client
         .from('profiles')
-        .update({
-          'full_name': fullName,
-          'phone': phone,
-        })
+        .update({'full_name': fullName, 'phone': phone})
         .eq('id', user.id)
         .select()
         .maybeSingle();

@@ -14,7 +14,8 @@ class InvitationCardGenerator {
   /// Generate invitation card PNG from a GlobalKey
   static Future<Uint8List?> captureCard(GlobalKey key) async {
     try {
-      final boundary = key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      final boundary =
+          key.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary == null) return null;
 
       final image = await boundary.toImage(pixelRatio: 3.0);
@@ -27,7 +28,10 @@ class InvitationCardGenerator {
   }
 
   /// Save captured image to temporary directory and return file path
-  static Future<String?> saveToFile(Uint8List imageBytes, String fileName) async {
+  static Future<String?> saveToFile(
+    Uint8List imageBytes,
+    String fileName,
+  ) async {
     try {
       final tempDir = await getTemporaryDirectory();
       final file = File('${tempDir.path}/$fileName');
@@ -46,10 +50,9 @@ class InvitationCardGenerator {
       final file = File('${tempDir.path}/invitation_$guestName.png');
       await file.writeAsBytes(imageBytes);
 
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        text: 'Voici votre carte d\'invitation, $guestName ! 💍',
-      );
+      await Share.shareXFiles([
+        XFile(file.path),
+      ], text: 'Voici votre carte d\'invitation, $guestName ! 💍');
     } catch (e) {
       debugPrint('Error sharing card: $e');
     }
@@ -135,10 +138,7 @@ class InvitationCardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             // Divider
-            Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.3),
-            ),
+            Container(height: 1, color: Colors.white.withValues(alpha: 0.3)),
             const SizedBox(height: 20),
             // Table & Seat info
             Row(
@@ -163,10 +163,7 @@ class InvitationCardWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Divider
-            Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.3),
-            ),
+            Container(height: 1, color: Colors.white.withValues(alpha: 0.3)),
             const SizedBox(height: 20),
             // QR Code
             if (showQrCode && qrToken != null && qrToken!.isNotEmpty)

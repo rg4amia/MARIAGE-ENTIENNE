@@ -10,10 +10,7 @@ class ChairRepository {
         .select()
         .eq('table_id', tableId)
         .order('chair_number');
-
-    return (response as List)
-        .map((json) => Chair.fromJson(json))
-        .toList();
+    return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 
   Future<Chair?> getChairById(String id) async {
@@ -22,16 +19,7 @@ class ChairRepository {
         .select()
         .eq('id', id)
         .maybeSingle();
-
-    if (response == null) return null;
-    return Chair.fromJson(response);
-  }
-
-  Future<void> updateChairAssignment(String chairId, bool isAssigned) async {
-    await _client
-        .from('chairs')
-        .update({'is_assigned': isAssigned})
-        .eq('id', chairId);
+    return response == null ? null : Chair.fromJson(response);
   }
 
   Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {
@@ -39,15 +27,8 @@ class ChairRepository {
         .from('chairs')
         .select()
         .eq('table_id', tableId)
-        .eq('is_assigned', false)
+        .isFilter('guest_id', null)
         .order('chair_number');
-
-    return (response as List)
-        .map((json) => Chair.fromJson(json))
-        .toList();
-  }
-
-  Future<void> deleteChairsByTableId(String tableId) async {
-    await _client.from('chairs').delete().eq('table_id', tableId);
+    return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 }

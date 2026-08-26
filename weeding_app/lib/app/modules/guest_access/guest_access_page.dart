@@ -7,7 +7,8 @@ import '../../core/utils/invitation_card_generator.dart';
 import 'guest_access_controller.dart';
 import 'audio_recorder_page.dart';
 import 'video_recorder_page.dart';
-import 'recorder_factory.dart' if (dart.library.html) 'recorder_factory_web.dart';
+import 'recorder_factory.dart'
+    if (dart.library.html) 'recorder_factory_web.dart';
 
 /// Main guest access page — handles the full public journey via QR token.
 /// Route: /guest/:token
@@ -139,7 +140,10 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 14,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -186,9 +190,7 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
               const SizedBox(height: 24),
               Text(
                 'Bienvenue,',
-                style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.headlineMd.copyWith(color: Colors.white),
               ),
               const SizedBox(height: 8),
               Text(
@@ -247,7 +249,10 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
                         ),
                         child: const Text(
                           'Commencer',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -341,13 +346,16 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
           : const VideoRecorderPage(minDurationSeconds: 30);
     }
 
-    final result = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => recorderPage),
-    );
+    final result = await Navigator.of(
+      context,
+    ).push<String>(MaterialPageRoute(builder: (_) => recorderPage));
 
     if (result != null && result.isNotEmpty) {
       // File recorded successfully — get duration and submit
-      controller.setRecordedFile(result, durationSeconds: controller.recordingDuration.value);
+      controller.setRecordedFile(
+        result,
+        durationSeconds: controller.recordingDuration.value,
+      );
       controller.submitMedia(
         isAudio: isAudio,
         durationSeconds: controller.recordingDuration.value,
@@ -411,11 +419,7 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
                   color: AppColors.statusCardUnlocked,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.check,
-                  size: 48,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.check, size: 48, color: Colors.white),
               ),
               const SizedBox(height: 16),
               Text(
@@ -490,7 +494,11 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
   Future<void> _downloadCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Impossible de capturer la carte',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     final path = await InvitationCardGenerator.saveToFile(
@@ -498,14 +506,22 @@ class _GuestAccessPageState extends State<GuestAccessPage> {
       'invitation_${guestName.replaceAll(' ', '_')}.png',
     );
     if (path != null) {
-      Get.snackbar('Succès', 'Carte sauvegardée dans $path', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Succès',
+        'Carte sauvegardée dans $path',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
   Future<void> _shareCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Impossible de capturer la carte',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     await InvitationCardGenerator.shareCard(imageBytes, guestName);
@@ -578,13 +594,14 @@ class _MediaOptionCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, color: AppColors.onSurfaceVariant, size: 16),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: AppColors.onSurfaceVariant,
+              size: 16,
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-

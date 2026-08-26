@@ -16,7 +16,7 @@ void main() {
         'phone': '+33612345678',
         'email': 'jean@test.com',
         'qr_token': 'token-abc-123',
-        'status': 'pending',
+        'status': 'draft',
         'created_at': '2025-01-15T10:00:00Z',
       };
 
@@ -27,7 +27,7 @@ void main() {
       expect(guest.phone, '+33612345678');
       expect(guest.email, 'jean@test.com');
       expect(guest.qrToken, 'token-abc-123');
-      expect(guest.status, 'pending');
+      expect(guest.status, 'draft');
     });
 
     test('toJson serializes correctly', () {
@@ -37,7 +37,7 @@ void main() {
         phone: '+33612345678',
         email: 'jean@test.com',
         qrToken: 'token-abc',
-        status: 'pending',
+        status: 'draft',
       );
 
       final json = guest.toJson();
@@ -53,7 +53,7 @@ void main() {
         id: 'test-id',
         fullName: 'Jean Dupont',
         qrToken: 'token',
-        status: 'pending',
+        status: 'draft',
       );
 
       final updated = guest.copyWith(fullName: 'Marie Dupont');
@@ -61,7 +61,7 @@ void main() {
       expect(updated.fullName, 'Marie Dupont');
       expect(updated.id, 'test-id');
       expect(updated.qrToken, 'token');
-      expect(updated.status, 'pending');
+      expect(updated.status, 'draft');
     });
   });
 
@@ -70,9 +70,12 @@ void main() {
       final json = {
         'id': 'inv-1',
         'guest_id': 'guest-1',
+        'table_id': 'table-1',
+        'chair_id': 'chair-1',
         'invitation_code': 'INV-2025-ABC123',
-        'qr_code_url': 'https://example.com/qr.png',
-        'card_url': null,
+        'web_url': 'https://example.com/guest?token=abc',
+        'deep_link': 'mariageentienne://guest/abc',
+        'qr_payload': 'https://example.com/guest?token=abc',
         'is_unlocked': false,
         'created_at': '2025-01-15T10:00:00Z',
       };
@@ -89,7 +92,12 @@ void main() {
       final invitation = Invitation(
         id: 'inv-1',
         guestId: 'guest-1',
+        tableId: 'table-1',
+        chairId: 'chair-1',
         invitationCode: 'INV-2025-ABC123',
+        webUrl: 'https://example.com/guest?token=abc',
+        deepLink: 'mariageentienne://guest/abc',
+        qrPayload: 'https://example.com/guest?token=abc',
         isUnlocked: false,
       );
 
@@ -104,8 +112,7 @@ void main() {
     test('fromJson creates WeddingTable correctly', () {
       final json = {
         'id': 'table-1',
-        'name': 'Table Famille',
-        'description': 'Table principale',
+        'label': 'Table Famille',
         'capacity': 8,
         'created_at': '2025-01-15T10:00:00Z',
       };
@@ -113,15 +120,14 @@ void main() {
       final table = WeddingTable.fromJson(json);
 
       expect(table.id, 'table-1');
-      expect(table.name, 'Table Famille');
-      expect(table.description, 'Table principale');
+      expect(table.label, 'Table Famille');
       expect(table.capacity, 8);
     });
 
     test('toJson roundtrip preserves data', () {
       final table = WeddingTable(
         id: 'table-1',
-        name: 'Table Amis',
+        label: 'Table Amis',
         capacity: 6,
       );
 
@@ -129,7 +135,7 @@ void main() {
       final restored = WeddingTable.fromJson(json);
 
       expect(restored.id, table.id);
-      expect(restored.name, table.name);
+      expect(restored.label, table.label);
       expect(restored.capacity, table.capacity);
     });
   });
@@ -140,7 +146,7 @@ void main() {
         'id': 'chair-1',
         'table_id': 'table-1',
         'chair_number': 3,
-        'is_assigned': false,
+        'guest_id': null,
         'created_at': '2025-01-15T10:00:00Z',
       };
 
@@ -160,7 +166,9 @@ void main() {
         'guest_id': 'guest-1',
         'table_id': 'table-1',
         'chair_id': 'chair-1',
-        'assigned_at': '2025-01-15T10:00:00Z',
+        'chair_number': 3,
+        'table_label': 'Table Famille',
+        'created_at': '2025-01-15T10:00:00Z',
       };
 
       final seat = GuestSeat.fromJson(json);
@@ -179,8 +187,10 @@ void main() {
         'guest_id': 'guest-1',
         'media_type': 'audio',
         'storage_path': 'guest-1/recording.m4a',
-        'duration_seconds': 45,
-        'is_valid': true,
+        'client_duration_seconds': 45,
+        'server_duration_seconds': 44.8,
+        'client_validated': true,
+        'server_validated': true,
         'submitted_at': '2025-01-15T10:00:00Z',
       };
 
@@ -189,7 +199,7 @@ void main() {
       expect(media.id, 'media-1');
       expect(media.guestId, 'guest-1');
       expect(media.mediaType, 'audio');
-      expect(media.durationSeconds, 45);
+      expect(media.clientDurationSeconds, 45);
       expect(media.isValid, true);
     });
 
@@ -199,12 +209,14 @@ void main() {
         guestId: 'guest-1',
         mediaType: 'audio',
         storagePath: 'path',
-        durationSeconds: 30,
-        isValid: true,
+        clientDurationSeconds: 30,
+        serverDurationSeconds: 30,
+        clientValidated: true,
+        serverValidated: true,
       );
 
       expect(media.isValid, true);
-      expect(media.durationSeconds >= 30, true);
+      expect(media.clientDurationSeconds >= 30, true);
     });
   });
 
@@ -212,6 +224,7 @@ void main() {
     test('fromJson creates Profile correctly', () {
       final json = {
         'id': 'profile-1',
+        'event_id': 'event-1',
         'full_name': 'Admin User',
         'phone': '+33612345678',
         'role': 'admin',
@@ -229,6 +242,7 @@ void main() {
     test('toJson roundtrip preserves data', () {
       final profile = Profile(
         id: 'profile-1',
+        eventId: 'event-1',
         fullName: 'Admin User',
         role: 'admin',
       );

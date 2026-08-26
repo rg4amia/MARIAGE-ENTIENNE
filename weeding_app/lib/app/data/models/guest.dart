@@ -4,7 +4,7 @@ class Guest {
   final String? phone;
   final String? email;
   final String qrToken;
-  final String status; // 'pending', 'media_uploaded', 'card_unlocked'
+  final String status;
   final DateTime createdAt;
 
   Guest({
@@ -13,7 +13,7 @@ class Guest {
     this.phone,
     this.email,
     required this.qrToken,
-    this.status = 'pending',
+    this.status = 'draft',
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -24,7 +24,7 @@ class Guest {
       phone: json['phone'] as String?,
       email: json['email'] as String?,
       qrToken: json['qr_token'] as String,
-      status: json['status'] as String? ?? 'pending',
+      status: json['status'] as String? ?? 'draft',
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -66,12 +66,16 @@ class Guest {
     if (parts.length >= 2) {
       return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
-    return fullName.length >= 2 ? fullName.substring(0, 2).toUpperCase() : fullName.toUpperCase();
+    return fullName.length >= 2
+        ? fullName.substring(0, 2).toUpperCase()
+        : fullName.toUpperCase();
   }
 
   String get statusLabel {
     switch (status) {
-      case 'pending':
+      case 'draft':
+        return 'Brouillon';
+      case 'pending_media':
         return 'En attente';
       case 'media_uploaded':
         return 'Média reçu';

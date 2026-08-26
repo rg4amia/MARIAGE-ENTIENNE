@@ -13,10 +13,7 @@ import '../../core/theme/app_text_styles.dart';
 class WebAudioRecorderPage extends StatefulWidget {
   final int minDurationSeconds;
 
-  const WebAudioRecorderPage({
-    super.key,
-    this.minDurationSeconds = 30,
-  });
+  const WebAudioRecorderPage({super.key, this.minDurationSeconds = 30});
 
   @override
   State<WebAudioRecorderPage> createState() => _WebAudioRecorderPageState();
@@ -58,8 +55,10 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
       _chunks.clear();
 
       // Request microphone access
-      _stream = await html.window.navigator.mediaDevices!
-          .getUserMedia({'audio': true, 'video': false});
+      _stream = await html.window.navigator.mediaDevices!.getUserMedia({
+        'audio': true,
+        'video': false,
+      });
 
       _recorder = html.MediaRecorder(_stream!, {'mimeType': 'audio/webm'});
       _recorder!.addEventListener('dataavailable', (event) {
@@ -113,7 +112,11 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
     });
 
     if (_chunks.isEmpty) {
-      Get.snackbar('Erreur', 'Aucune donnée enregistrée', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Aucune donnée enregistrée',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
 
@@ -134,8 +137,11 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
         throw Exception('Guest ID not found');
       }
 
-      final path = '$guestId/audio_${DateTime.now().millisecondsSinceEpoch}.webm';
-      await client.storage.from('guest-audios').uploadBinary(
+      final path =
+          '$guestId/audio_${DateTime.now().millisecondsSinceEpoch}.webm';
+      await client.storage
+          .from('guest-audios')
+          .uploadBinary(
             path,
             bytes,
             fileOptions: const FileOptions(upsert: true),
@@ -146,7 +152,11 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
         Navigator.of(context).pop(path);
       }
     } catch (e) {
-      Get.snackbar('Erreur', 'Erreur upload: $e', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Erreur upload: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -217,7 +227,9 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
                             ? AppColors.error.withValues(alpha: 0.15)
                             : AppColors.primary.withValues(alpha: 0.1),
                         border: Border.all(
-                          color: _isRecording ? AppColors.error : AppColors.primary,
+                          color: _isRecording
+                              ? AppColors.error
+                              : AppColors.primary,
                           width: 4,
                         ),
                       ),
@@ -226,7 +238,9 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
                             ? (_isPaused ? Icons.pause : Icons.mic)
                             : Icons.mic_none,
                         size: 56,
-                        color: _isRecording ? AppColors.error : AppColors.primary,
+                        color: _isRecording
+                            ? AppColors.error
+                            : AppColors.primary,
                       ),
                     ),
                   );
@@ -247,7 +261,9 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
                 Text(
                   _isPaused ? 'En pause' : 'Enregistrement...',
                   style: AppTextStyles.bodyMd.copyWith(
-                    color: _isPaused ? AppColors.onSurfaceVariant : AppColors.error,
+                    color: _isPaused
+                        ? AppColors.onSurfaceVariant
+                        : AppColors.error,
                   ),
                 )
               else
@@ -264,7 +280,9 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
                   value: (_elapsedSeconds / 60).clamp(0.0, 1.0),
                   backgroundColor: AppColors.surfaceContainerHigh,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    _hasMinimumDuration ? AppColors.statusCardUnlocked : AppColors.primary,
+                    _hasMinimumDuration
+                        ? AppColors.statusCardUnlocked
+                        : AppColors.primary,
                   ),
                   minHeight: 6,
                 ),
@@ -298,11 +316,16 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
                       height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _isRecording ? AppColors.error : AppColors.primary,
+                        color: _isRecording
+                            ? AppColors.error
+                            : AppColors.primary,
                         boxShadow: [
                           BoxShadow(
-                            color: (_isRecording ? AppColors.error : AppColors.primary)
-                                .withValues(alpha: 0.3),
+                            color:
+                                (_isRecording
+                                        ? AppColors.error
+                                        : AppColors.primary)
+                                    .withValues(alpha: 0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -319,7 +342,9 @@ class _WebAudioRecorderPageState extends State<WebAudioRecorderPage>
               ),
               const SizedBox(height: 24),
               Text(
-                _isRecording ? 'Appuyez pour arrêter' : 'Appuyez pour commencer',
+                _isRecording
+                    ? 'Appuyez pour arrêter'
+                    : 'Appuyez pour commencer',
                 style: AppTextStyles.bodyMd.copyWith(
                   color: Colors.white.withValues(alpha: 0.9),
                 ),

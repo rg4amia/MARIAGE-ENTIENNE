@@ -18,10 +18,7 @@ class TablesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Tables', style: AppTextStyles.headlineMdPrimary),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),
       body: Column(
@@ -33,7 +30,10 @@ class TablesPage extends StatelessWidget {
               onChanged: controller.onSearchChanged,
               decoration: const InputDecoration(
                 hintText: 'Rechercher une table...',
-                prefixIcon: Icon(Icons.search, color: AppColors.onSurfaceVariant),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: AppColors.onSurfaceVariant,
+                ),
               ),
             ),
           ),
@@ -52,9 +52,16 @@ class TablesPage extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.table_restaurant, size: 64, color: AppColors.outlineVariant),
+                      Icon(
+                        Icons.table_restaurant,
+                        size: 64,
+                        color: AppColors.outlineVariant,
+                      ),
                       const SizedBox(height: 16),
-                      Text('Aucune table', style: AppTextStyles.headlineMdPrimary),
+                      Text(
+                        'Aucune table',
+                        style: AppTextStyles.headlineMdPrimary,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Appuyez sur + pour créer une table',
@@ -90,12 +97,9 @@ class TablesPage extends StatelessWidget {
                             color: AppColors.secondaryContainer,
                           ),
                         ),
-                        title: Text(
-                          table.name,
-                          style: AppTextStyles.titleLg,
-                        ),
+                        title: Text(table.label, style: AppTextStyles.titleLg),
                         subtitle: Text(
-                          'Capacité : ${table.capacity}${table.description != null ? ' • ${table.description}' : ''}',
+                          'Capacité : ${table.capacity}',
                           style: AppTextStyles.bodyMdOnVariant,
                         ),
                         trailing: const Icon(
@@ -119,9 +123,11 @@ class TablesPage extends StatelessWidget {
     );
   }
 
-  void _showCreateTableDialog(BuildContext context, TablesController controller) {
-    final nameController = TextEditingController();
-    final descriptionController = TextEditingController();
+  void _showCreateTableDialog(
+    BuildContext context,
+    TablesController controller,
+  ) {
+    final labelController = TextEditingController();
     final capacityController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
@@ -149,19 +155,15 @@ class TablesPage extends StatelessWidget {
               Text('Nom de la table', style: AppTextStyles.labelMd),
               const SizedBox(height: 4),
               TextFormField(
-                controller: nameController,
+                controller: labelController,
                 validator: (v) => Validators.required(v, 'Le nom'),
                 decoration: const InputDecoration(hintText: 'Table 1'),
               ),
               const SizedBox(height: 12),
-              Text('Description (optionnel)', style: AppTextStyles.labelMd),
-              const SizedBox(height: 4),
-              TextFormField(
-                controller: descriptionController,
-                decoration: const InputDecoration(hintText: 'Famille proche'),
+              Text(
+                'Capacité (nombre de chaises)',
+                style: AppTextStyles.labelMd,
               ),
-              const SizedBox(height: 12),
-              Text('Capacité (nombre de chaises)', style: AppTextStyles.labelMd),
               const SizedBox(height: 4),
               TextFormField(
                 controller: capacityController,
@@ -176,10 +178,7 @@ class TablesPage extends StatelessWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       controller.createTable(
-                        name: nameController.text.trim(),
-                        description: descriptionController.text.trim().isEmpty
-                            ? null
-                            : descriptionController.text.trim(),
+                        label: labelController.text.trim(),
                         capacity: int.parse(capacityController.text),
                       );
                     }
@@ -199,7 +198,13 @@ class TablesPage extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         if (index == 2) return; // déjà sur tables
-        final routes = [AppRoutes.home, AppRoutes.guests, AppRoutes.tables, AppRoutes.invitations, AppRoutes.settings];
+        final routes = [
+          AppRoutes.home,
+          AppRoutes.guests,
+          AppRoutes.tables,
+          AppRoutes.invitations,
+          AppRoutes.settings,
+        ];
         Get.offAllNamed(routes[index]);
       },
       items: const [

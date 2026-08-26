@@ -11,10 +11,7 @@ import '../../core/theme/app_text_styles.dart';
 class AudioRecorderPage extends StatefulWidget {
   final int minDurationSeconds;
 
-  const AudioRecorderPage({
-    super.key,
-    this.minDurationSeconds = 30,
-  });
+  const AudioRecorderPage({super.key, this.minDurationSeconds = 30});
 
   @override
   State<AudioRecorderPage> createState() => _AudioRecorderPageState();
@@ -202,7 +199,9 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                             ? (_isPaused ? Icons.pause : Icons.mic)
                             : Icons.mic_none,
                         size: 56,
-                        color: _isRecording ? AppColors.error : AppColors.primary,
+                        color: _isRecording
+                            ? AppColors.error
+                            : AppColors.primary,
                       ),
                     ),
                   );
@@ -260,12 +259,16 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                     ),
                   ),
                   Text(
-                    _hasMinimumDuration ? '✓ Minimum atteint' : 'Minimum: ${widget.minDurationSeconds}s',
+                    _hasMinimumDuration
+                        ? '✓ Minimum atteint'
+                        : 'Minimum: ${widget.minDurationSeconds}s',
                     style: AppTextStyles.labelMd.copyWith(
                       color: _hasMinimumDuration
                           ? AppColors.statusCardUnlocked
                           : AppColors.onSurfaceVariant,
-                      fontWeight: _hasMinimumDuration ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: _hasMinimumDuration
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                   Text(
@@ -305,11 +308,16 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                       height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _isRecording ? AppColors.error : AppColors.primary,
+                        color: _isRecording
+                            ? AppColors.error
+                            : AppColors.primary,
                         boxShadow: [
                           BoxShadow(
-                            color: (_isRecording ? AppColors.error : AppColors.primary)
-                                .withValues(alpha: 0.3),
+                            color:
+                                (_isRecording
+                                        ? AppColors.error
+                                        : AppColors.primary)
+                                    .withValues(alpha: 0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -340,7 +348,10 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                     ),
                     child: const Text(
                       'Envoyer l\'enregistrement',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),

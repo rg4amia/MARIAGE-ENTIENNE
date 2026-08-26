@@ -2,6 +2,8 @@ import 'dart:typed_data';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/guest_media.dart';
 
+/// Admin-side access to guest submissions. Guest uploads are intentionally
+/// handled only by the public Supabase guest portal.
 class MediaRepository {
   final SupabaseClient _client = Supabase.instance.client;
 
@@ -11,10 +13,7 @@ class MediaRepository {
         .select()
         .eq('guest_id', guestId)
         .order('submitted_at', ascending: false);
-
-    return (response as List)
-        .map((json) => GuestMedia.fromJson(json))
-        .toList();
+    return (response as List).map((json) => GuestMedia.fromJson(json)).toList();
   }
 
   Future<GuestMedia?> getValidMediaByGuestId(String guestId) async {
@@ -22,80 +21,37 @@ class MediaRepository {
         .from('guest_media_submissions')
         .select()
         .eq('guest_id', guestId)
-        .eq('is_valid', true)
+        .eq('client_validated', true)
+        .eq('server_validated', true)
         .order('submitted_at', ascending: false)
         .limit(1)
         .maybeSingle();
-
-    if (response == null) return null;
-    return GuestMedia.fromJson(response);
+    return response == null ? null : GuestMedia.fromJson(response);
   }
 
+  Future<String> getMediaDownloadUrl(String storagePath, String mediaType) {
+    return _client.storage
+        .from('guest-media')
+        .createSignedUrl(storagePath, 3600);
+  }
+
+  @Deprecated('Guest media submission is available only in guest-portal.')
   Future<GuestMedia> submitMedia({
     required String guestId,
     required String mediaType,
     required String storagePath,
     required int durationSeconds,
-  }) async {
-    final isValid = durationSeconds >= 30;
-
-    final response = await _client
-        .from('guest_media_submissions')
-        .insert({
-          'guest_id': guestId,
-          'media_type': mediaType,
-          'storage_path': storagePath,
-          'duration_seconds': durationSeconds,
-          'is_valid': isValid,
-        })
-        .select()
-        .single();
-
-    // Si le média est valide, débloquer la carte
-    if (isValid) {
-      await _client
-          .from('guests')
-          .update({'status': 'card_unlocked'})
-          .eq('id', guestId);
-
-      // Déverrouiller l'invitation
-      await _client
-          .from('invitations')
-          .update({'is_unlocked': true})
-          .eq('guest_id', guestId);
-    } else {
-      await _client
-          .from('guests')
-          .update({'status': 'media_uploaded'})
-          .eq('id', guestId);
-    }
-
-    return GuestMedia.fromJson(response);
+  }) {
+    throw UnsupportedError('Utilisez le portail invité Supabase.');
   }
 
+  @Deprecated('Guest media upload is available only in guest-portal.')
   Future<String> uploadMediaToStorage({
     required String guestId,
     required String mediaType,
     required String filePath,
     required Uint8List fileBytes,
-  }) async {
-    final bucket = mediaType == 'audio' ? 'guest-audios' : 'guest-videos';
-    final extension = mediaType == 'audio' ? 'm4a' : 'mp4';
-    final storagePath = '$guestId/${DateTime.now().millisecondsSinceEpoch}.$extension';
-
-    await _client.storage.from(bucket).uploadBinary(
-          storagePath,
-          fileBytes,
-          fileOptions: const FileOptions(
-            upsert: true,
-          ),
-        );
-
-    return storagePath;
-  }
-
-  Future<String> getMediaDownloadUrl(String storagePath, String mediaType) async {
-    final bucket = mediaType == 'audio' ? 'guest-audios' : 'guest-videos';
-    return await _client.storage.from(bucket).createSignedUrl(storagePath, 3600);
+  }) {
+    throw UnsupportedError('Utilisez le portail invité Supabase.');
   }
 }

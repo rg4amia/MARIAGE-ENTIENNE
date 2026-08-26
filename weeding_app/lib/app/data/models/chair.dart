@@ -2,14 +2,14 @@ class Chair {
   final String id;
   final String tableId;
   final int chairNumber;
-  final bool isAssigned;
+  final String? guestId;
   final DateTime createdAt;
 
   Chair({
     required this.id,
     required this.tableId,
     required this.chairNumber,
-    this.isAssigned = false,
+    this.guestId,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -18,7 +18,7 @@ class Chair {
       id: json['id'] as String,
       tableId: json['table_id'] as String,
       chairNumber: json['chair_number'] as int,
-      isAssigned: json['is_assigned'] as bool? ?? false,
+      guestId: json['guest_id'] as String?,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -30,17 +30,19 @@ class Chair {
       'id': id,
       'table_id': tableId,
       'chair_number': chairNumber,
-      'is_assigned': isAssigned,
+      'guest_id': guestId,
       'created_at': createdAt.toIso8601String(),
     };
   }
 
-  Chair copyWith({bool? isAssigned}) {
+  bool get isAssigned => guestId != null;
+
+  Chair copyWith({String? guestId}) {
     return Chair(
       id: id,
       tableId: tableId,
       chairNumber: chairNumber,
-      isAssigned: isAssigned ?? this.isAssigned,
+      guestId: guestId ?? this.guestId,
       createdAt: createdAt,
     );
   }

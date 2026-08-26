@@ -11,10 +11,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class WebVideoRecorderPage extends StatefulWidget {
   final int minDurationSeconds;
 
-  const WebVideoRecorderPage({
-    super.key,
-    this.minDurationSeconds = 30,
-  });
+  const WebVideoRecorderPage({super.key, this.minDurationSeconds = 30});
 
   @override
   State<WebVideoRecorderPage> createState() => _WebVideoRecorderPageState();
@@ -51,8 +48,10 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
 
   Future<void> _initCamera() async {
     try {
-      _stream = await html.window.navigator.mediaDevices!
-          .getUserMedia({'audio': true, 'video': true});
+      _stream = await html.window.navigator.mediaDevices!.getUserMedia({
+        'audio': true,
+        'video': true,
+      });
 
       _videoElement = html.VideoElement()
         ..srcObject = _stream
@@ -105,7 +104,11 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
         }
       });
     } catch (e) {
-      Get.snackbar('Erreur', 'Impossible de démarrer: $e', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Impossible de démarrer: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -124,7 +127,11 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
     });
 
     if (_chunks.isEmpty) {
-      Get.snackbar('Erreur', 'Aucune donnée enregistrée', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Aucune donnée enregistrée',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
 
@@ -142,8 +149,11 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
       final guestId = Get.parameters['guestId'] ?? '';
       if (guestId.isEmpty) throw Exception('Guest ID not found');
 
-      final path = '$guestId/video_${DateTime.now().millisecondsSinceEpoch}.webm';
-      await client.storage.from('guest-videos').uploadBinary(
+      final path =
+          '$guestId/video_${DateTime.now().millisecondsSinceEpoch}.webm';
+      await client.storage
+          .from('guest-videos')
+          .uploadBinary(
             path,
             bytes,
             fileOptions: const FileOptions(upsert: true),
@@ -153,7 +163,11 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
         Navigator.of(context).pop(path);
       }
     } catch (e) {
-      Get.snackbar('Erreur', 'Erreur upload: $e', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Erreur upload: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -204,11 +218,18 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
                       _stream?.getTracks().forEach((t) => t.stop());
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(Icons.close, color: Colors.white, size: 28),
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 28,
+                    ),
                   ),
                   // Timer
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black54,
                       borderRadius: BorderRadius.circular(20),
@@ -239,7 +260,10 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
                   ),
                   // Minimum duration indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: _hasMinimumDuration
                           ? Colors.green.withValues(alpha: 0.8)
@@ -247,7 +271,9 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      _hasMinimumDuration ? '✓ Min ${widget.minDurationSeconds}s' : 'Min: ${widget.minDurationSeconds}s',
+                      _hasMinimumDuration
+                          ? '✓ Min ${widget.minDurationSeconds}s'
+                          : 'Min: ${widget.minDurationSeconds}s',
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
@@ -301,17 +327,16 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
                       if (_isRecording) const SizedBox(width: 32),
                       // Record/Stop button
                       GestureDetector(
-                        onTap: _isRecording ? _stopRecording : (_cameraReady ? _startRecording : null),
+                        onTap: _isRecording
+                            ? _stopRecording
+                            : (_cameraReady ? _startRecording : null),
                         child: Container(
                           width: 72,
                           height: 72,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.transparent,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4,
-                            ),
+                            border: Border.all(color: Colors.white, width: 4),
                           ),
                           child: Container(
                             margin: const EdgeInsets.all(4),
@@ -329,12 +354,9 @@ class _WebVideoRecorderPageState extends State<WebVideoRecorderPage> {
                     _isRecording
                         ? 'Appuyez pour arrêter'
                         : _cameraReady
-                            ? 'Appuyez pour filmer'
-                            : 'Chargement de la caméra...',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 14,
-                    ),
+                        ? 'Appuyez pour filmer'
+                        : 'Chargement de la caméra...',
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
                   ),
                 ],
               ),

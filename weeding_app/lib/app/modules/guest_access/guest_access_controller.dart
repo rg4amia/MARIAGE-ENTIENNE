@@ -55,10 +55,12 @@ class GuestAccessController extends GetxController {
     try {
       // First try to find by short code in guest_links table
       Guest? foundGuest;
-      
+
       // Check if it looks like a short code (8 chars, alphanumeric)
-      final isShortCode = identifier.length <= 8 && RegExp(r'^[a-zA-Z0-9]+$').hasMatch(identifier);
-      
+      final isShortCode =
+          identifier.length <= 8 &&
+          RegExp(r'^[a-zA-Z0-9]+$').hasMatch(identifier);
+
       if (isShortCode) {
         // Try to find via guest_links table
         final linkResponse = await _client
@@ -66,13 +68,13 @@ class GuestAccessController extends GetxController {
             .select('guest_token, is_active')
             .eq('short_code', identifier)
             .maybeSingle();
-        
+
         if (linkResponse != null && linkResponse['is_active'] == true) {
           final guestToken = linkResponse['guest_token'] as String;
           foundGuest = await _guestRepo.getGuestByToken(guestToken);
         }
       }
-      
+
       // Fallback: direct token lookup
       foundGuest ??= await _guestRepo.getGuestByToken(identifier);
 
@@ -101,7 +103,8 @@ class GuestAccessController extends GetxController {
       currentStep.value = GuestAccessStep.verified;
     } catch (e) {
       debugPrint('Error verifying guest: $e');
-      errorMessage.value = 'Erreur lors de la vérification. Veuillez réessayer.';
+      errorMessage.value =
+          'Erreur lors de la vérification. Veuillez réessayer.';
       currentStep.value = GuestAccessStep.error;
     }
   }
@@ -153,10 +156,14 @@ class GuestAccessController extends GetxController {
   }
 
   /// Check if minimum recording duration is met
-  bool get hasMinimumDuration => recordingDuration.value >= minRecordingDuration;
+  bool get hasMinimumDuration =>
+      recordingDuration.value >= minRecordingDuration;
 
   /// Upload the recorded media and process
-  Future<void> submitMedia({required bool isAudio, int? durationSeconds}) async {
+  Future<void> submitMedia({
+    required bool isAudio,
+    int? durationSeconds,
+  }) async {
     if (_recordedFilePath == null || guest.value == null) return;
 
     final effectiveDuration = durationSeconds ?? recordingDuration.value;

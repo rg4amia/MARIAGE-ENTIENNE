@@ -19,10 +19,7 @@ class RegisterPage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.surface,
-              AppColors.tertiaryFixed,
-            ],
+            colors: [AppColors.surface, AppColors.tertiaryFixed],
             stops: [0.3, 1.0],
           ),
         ),
@@ -127,25 +124,27 @@ class RegisterPage extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Bouton Inscription
-                        Obx(() => ElevatedButton(
-                              onPressed: controller.isLoading.value
-                                  ? null
-                                  : () {
-                                      if (formKey.currentState!.validate()) {
-                                        controller.register();
-                                      }
-                                    },
-                              child: controller.isLoading.value
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: AppColors.onPrimaryContainer,
-                                      ),
-                                    )
-                                  : const Text('Créer mon compte'),
-                            )),
+                        Obx(
+                          () => ElevatedButton(
+                            onPressed: controller.isLoading.value
+                                ? null
+                                : () {
+                                    if (formKey.currentState!.validate()) {
+                                      controller.register();
+                                    }
+                                  },
+                            child: controller.isLoading.value
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.onPrimaryContainer,
+                                    ),
+                                  )
+                                : const Text('Créer mon compte'),
+                          ),
+                        ),
                         const SizedBox(height: 16),
 
                         Row(

@@ -47,22 +47,28 @@ class _InvitationsPageState extends State<InvitationsPage> {
   @override
   Widget build(BuildContext context) {
     final pending = _guests.where((g) => g.status == 'pending').length;
-    final mediaUploaded = _guests.where((g) => g.status == 'media_uploaded').length;
-    final cardUnlocked = _guests.where((g) => g.status == 'card_unlocked').length;
+    final mediaUploaded = _guests
+        .where((g) => g.status == 'media_uploaded')
+        .length;
+    final cardUnlocked = _guests
+        .where((g) => g.status == 'card_unlocked')
+        .length;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text('Suivi des invitations', style: AppTextStyles.headlineMdPrimary),
+        title: Text(
+          'Suivi des invitations',
+          style: AppTextStyles.headlineMdPrimary,
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _loadData,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            )
           : RefreshIndicator(
               onRefresh: _loadData,
               child: SingleChildScrollView(
@@ -125,7 +131,8 @@ class _InvitationsPageState extends State<InvitationsPage> {
                             ),
                             _MiniStat(
                               label: 'Taux scan',
-                              value: '${_linkStats['scannedAtLeastOnce'] ?? 0}/${_linkStats['totalLinks'] ?? 0}',
+                              value:
+                                  '${_linkStats['scannedAtLeastOnce'] ?? 0}/${_linkStats['totalLinks'] ?? 0}',
                             ),
                           ],
                         ),
@@ -204,7 +211,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
                     backgroundColor: AppColors.primaryFixed,
                     child: Text(
                       guest.initials,
-                      style: AppTextStyles.titleLg.copyWith(color: AppColors.primary),
+                      style: AppTextStyles.titleLg.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -214,9 +223,15 @@ class _InvitationsPageState extends State<InvitationsPage> {
                       children: [
                         Text(guest.fullName, style: AppTextStyles.titleLg),
                         if (guest.email != null)
-                          Text(guest.email!, style: AppTextStyles.bodyMdOnVariant),
+                          Text(
+                            guest.email!,
+                            style: AppTextStyles.bodyMdOnVariant,
+                          ),
                         if (guest.phone != null)
-                          Text(guest.phone!, style: AppTextStyles.bodyMdOnVariant),
+                          Text(
+                            guest.phone!,
+                            style: AppTextStyles.bodyMdOnVariant,
+                          ),
                       ],
                     ),
                   ),
@@ -395,7 +410,9 @@ class _MiniStat extends StatelessWidget {
         ),
         Text(
           label,
-          style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurfaceVariant),
+          style: AppTextStyles.labelMd.copyWith(
+            color: AppColors.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -421,7 +438,9 @@ class _GuestStatusCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundColor: _statusColor(guest.status).withValues(alpha: 0.15),
+                backgroundColor: _statusColor(
+                  guest.status,
+                ).withValues(alpha: 0.15),
                 child: Text(
                   guest.initials,
                   style: AppTextStyles.bodyMd.copyWith(
@@ -452,7 +471,10 @@ class _GuestStatusCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: _statusColor(guest.status).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -476,7 +498,10 @@ class _GuestStatusCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(Icons.chevron_right, color: AppColors.onSurfaceVariant),
+              const Icon(
+                Icons.chevron_right,
+                color: AppColors.onSurfaceVariant,
+              ),
             ],
           ),
         ),
@@ -535,33 +560,35 @@ class _StatusStep extends StatelessWidget {
                 color: isCompleted
                     ? AppColors.statusCardUnlocked
                     : isCurrent
-                        ? AppColors.primary
-                        : AppColors.surfaceContainerHigh,
+                    ? AppColors.primary
+                    : AppColors.surfaceContainerHigh,
                 border: Border.all(
                   color: isCompleted
                       ? AppColors.statusCardUnlocked
                       : isCurrent
-                          ? AppColors.primary
-                          : AppColors.outlineVariant,
+                      ? AppColors.primary
+                      : AppColors.outlineVariant,
                 ),
               ),
               child: isCompleted
                   ? const Icon(Icons.check, size: 14, color: Colors.white)
                   : isCurrent
-                      ? Container(
-                          margin: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                        )
-                      : null,
+                  ? Container(
+                      margin: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                    )
+                  : null,
             ),
             if (!isLast)
               Container(
                 width: 2,
                 height: 24,
-                color: isCompleted ? AppColors.statusCardUnlocked : AppColors.outlineVariant,
+                color: isCompleted
+                    ? AppColors.statusCardUnlocked
+                    : AppColors.outlineVariant,
               ),
           ],
         ),
@@ -574,8 +601,8 @@ class _StatusStep extends StatelessWidget {
               color: isCompleted
                   ? AppColors.onSurface
                   : isCurrent
-                      ? AppColors.primary
-                      : AppColors.onSurfaceVariant,
+                  ? AppColors.primary
+                  : AppColors.onSurfaceVariant,
               fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
             ),
           ),

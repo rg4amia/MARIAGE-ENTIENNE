@@ -15,6 +15,9 @@ class AppBinding extends Bindings {
     Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
     Get.lazyPut<TablesController>(() => TablesController(), fenix: true);
     Get.lazyPut<GuestsController>(() => GuestsController(), fenix: true);
-    Get.lazyPut<InvitationsController>(() => InvitationsController(), fenix: true);
+    Get.lazyPut<InvitationsController>(
+      () => InvitationsController(),
+      fenix: true,
+    );
   }
 }

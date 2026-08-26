@@ -33,7 +33,8 @@ class SettingsPage extends StatelessWidget {
                         radius: 28,
                         backgroundColor: AppColors.primaryFixed,
                         child: Text(
-                          profile?.fullName.substring(0, 2).toUpperCase() ?? 'AD',
+                          profile?.fullName.substring(0, 2).toUpperCase() ??
+                              'AD',
                           style: AppTextStyles.titleLgPrimary,
                         ),
                       ),
@@ -46,14 +47,14 @@ class SettingsPage extends StatelessWidget {
                               profile?.fullName ?? 'Admin',
                               style: AppTextStyles.titleLg,
                             ),
-                            Text(
-                              'Admin',
-                              style: AppTextStyles.bodyMdOnVariant,
-                            ),
+                            Text('Admin', style: AppTextStyles.bodyMdOnVariant),
                           ],
                         ),
                       ),
-                      const Icon(Icons.chevron_right, color: AppColors.outlineVariant),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.outlineVariant,
+                      ),
                     ],
                   ),
                 ),
@@ -145,7 +146,10 @@ class SettingsPage extends StatelessWidget {
               Navigator.pop(ctx);
               controller.logout();
             },
-            child: const Text('Déconnexion', style: TextStyle(color: AppColors.error)),
+            child: const Text(
+              'Déconnexion',
+              style: TextStyle(color: AppColors.error),
+            ),
           ),
         ],
       ),
@@ -157,7 +161,13 @@ class SettingsPage extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         if (index == 4) return; // déjà sur settings
-        final routes = ['/home', '/guests', '/tables', '/invitations', '/settings'];
+        final routes = [
+          '/home',
+          '/guests',
+          '/tables',
+          '/invitations',
+          '/settings',
+        ];
         Get.offAllNamed(routes[index]);
       },
       items: const [
@@ -214,9 +224,7 @@ class _SettingsSection extends StatelessWidget {
         ),
         Card(
           margin: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: items,
-          ),
+          child: Column(children: items),
         ),
       ],
     );
@@ -246,8 +254,13 @@ class _SettingsTile extends StatelessWidget {
         title,
         style: AppTextStyles.bodyLg.copyWith(color: textColor),
       ),
-      subtitle: subtitle != null ? Text(subtitle!, style: AppTextStyles.bodyMdOnVariant) : null,
-      trailing: const Icon(Icons.chevron_right, color: AppColors.outlineVariant),
+      subtitle: subtitle != null
+          ? Text(subtitle!, style: AppTextStyles.bodyMdOnVariant)
+          : null,
+      trailing: const Icon(
+        Icons.chevron_right,
+        color: AppColors.outlineVariant,
+      ),
       onTap: onTap,
     );
   }

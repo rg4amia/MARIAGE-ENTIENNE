@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/table_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
@@ -18,6 +19,7 @@ class HomeController extends GetxController {
   final RxInt mediaUploaded = 0.obs;
   final RxInt cardUnlocked = 0.obs;
   final RxBool isLoading = false.obs;
+  final List<RealtimeChannel> _channels = [];
 
   Profile? get currentProfile => Get.find<AuthController>().profile.value;
 
@@ -25,6 +27,26 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     loadStats();
+    for (final table in ['guests', 'chairs', 'guest_media_submissions']) {
+      final channel = Supabase.instance.client
+          .channel('dashboard-$table')
+          .onPostgresChanges(
+            event: PostgresChangeEvent.all,
+            schema: 'public',
+            table: table,
+            callback: (_) => loadStats(),
+          )
+          .subscribe();
+      _channels.add(channel);
+    }
+  }
+
+  @override
+  void onClose() {
+    for (final channel in _channels) {
+      Supabase.instance.client.removeChannel(channel);
+    }
+    super.onClose();
   }
 
   Future<void> loadStats() async {

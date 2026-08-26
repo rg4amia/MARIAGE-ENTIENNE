@@ -10,7 +10,6 @@ class TableRepository {
         .from('seating_tables')
         .select()
         .order('created_at', ascending: false);
-
     return (response as List)
         .map((json) => WeddingTable.fromJson(json))
         .toList();
@@ -22,55 +21,31 @@ class TableRepository {
         .select()
         .eq('id', id)
         .maybeSingle();
-
-    if (response == null) return null;
-    return WeddingTable.fromJson(response);
+    return response == null ? null : WeddingTable.fromJson(response);
   }
 
   Future<WeddingTable> createTable({
-    required String name,
-    String? description,
+    required String label,
     required int capacity,
   }) async {
-    // 1. Créer la table
-    final tableResponse = await _client
-        .from('seating_tables')
-        .insert({
-          'name': name,
-          'description': description,
-          'capacity': capacity,
-        })
-        .select()
-        .single();
-
-    final table = WeddingTable.fromJson(tableResponse);
-
-    // 2. Générer automatiquement les chaises
-    await _generateChairs(table.id, capacity);
-
-    return table;
+    final response = await _client.rpc(
+      'create_seating_table',
+      params: {'p_label': label, 'p_capacity': capacity},
+    );
+    return WeddingTable.fromJson(response as Map<String, dynamic>);
   }
 
-  Future<void> updateTable({
-    required String id,
-    String? name,
-    String? description,
-    int? capacity,
-  }) async {
-    final updates = <String, dynamic>{};
-    if (name != null) updates['name'] = name;
-    if (description != null) updates['description'] = description;
-    if (capacity != null) updates['capacity'] = capacity;
-
-    await _client
-        .from('seating_tables')
-        .update(updates)
-        .eq('id', id);
+  Future<void> updateTable({required String id, String? label}) async {
+    if (label != null) {
+      await _client
+          .from('seating_tables')
+          .update({'label': label})
+          .eq('id', id);
+    }
   }
 
   Future<void> deleteTable(String id) async {
-    // Les chaises sont supprimées en cascade
-    await _client.from('seating_tables').delete().eq('id', id);
+    await _client.rpc('delete_seating_table', params: {'p_table_id': id});
   }
 
   Future<List<Chair>> getChairsByTableId(String tableId) async {
@@ -79,10 +54,7 @@ class TableRepository {
         .select()
         .eq('table_id', tableId)
         .order('chair_number');
-
-    return (response as List)
-        .map((json) => Chair.fromJson(json))
-        .toList();
+    return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 
   Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {
@@ -90,41 +62,26 @@ class TableRepository {
         .from('chairs')
         .select()
         .eq('table_id', tableId)
-        .eq('is_assigned', false)
+        .isFilter('guest_id', null)
         .order('chair_number');
-
-    return (response as List)
-        .map((json) => Chair.fromJson(json))
-        .toList();
-  }
-
-  Future<void> _generateChairs(String tableId, int count) async {
-    final chairs = List.generate(
-      count,
-      (index) => {
-        'table_id': tableId,
-        'chair_number': index + 1,
-        'is_assigned': false,
-      },
-    );
-
-    await _client.from('chairs').insert(chairs);
+    return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 
   Future<Map<String, int>> getTableStats() async {
     final tables = await getAllTables();
-    final totalChairs = tables.fold<int>(0, (sum, t) => sum + t.capacity);
-
-    final chairsResponse = await _client.from('chairs').select('is_assigned');
-    final assignedCount = (chairsResponse as List)
-        .where((c) => c['is_assigned'] == true)
+    final totalChairs = tables.fold<int>(
+      0,
+      (sum, table) => sum + table.capacity,
+    );
+    final chairs = await _client.from('chairs').select('guest_id') as List;
+    final assignedChairs = chairs
+        .where((chair) => chair['guest_id'] != null)
         .length;
-
     return {
       'totalTables': tables.length,
       'totalChairs': totalChairs,
-      'assignedChairs': assignedCount,
-      'freeChairs': totalChairs - assignedCount,
+      'assignedChairs': assignedChairs,
+      'freeChairs': totalChairs - assignedChairs,
     };
   }
 }

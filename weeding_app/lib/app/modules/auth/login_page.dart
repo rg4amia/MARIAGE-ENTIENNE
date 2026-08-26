@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
 import 'auth_controller.dart';
-import '../../routes/app_routes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -19,10 +18,7 @@ class LoginPage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              AppColors.surface,
-              AppColors.tertiaryFixed,
-            ],
+            colors: [AppColors.surface, AppColors.tertiaryFixed],
             stops: [0.3, 1.0],
           ),
         ),
@@ -53,10 +49,7 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Titre
-                      Text(
-                        'Bienvenue',
-                        style: AppTextStyles.displayMdPrimary,
-                      ),
+                      Text('Bienvenue', style: AppTextStyles.displayMdPrimary),
                       const SizedBox(height: 8),
                       Text(
                         'Connectez-vous pour accéder\nà votre espace mariage',
@@ -94,7 +87,10 @@ class LoginPage extends StatelessWidget {
                               alignment: Alignment.centerRight,
                               child: TextButton(
                                 onPressed: () {
-                                  Get.snackbar('Info', 'Fonctionnalité à venir');
+                                  Get.snackbar(
+                                    'Info',
+                                    'Fonctionnalité à venir',
+                                  );
                                 },
                                 child: Text(
                                   'Mot de passe oublié ?',
@@ -107,45 +103,25 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(height: 16),
 
                             // Bouton Connexion
-                            Obx(() => ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : controller.login,
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: AppColors.onPrimaryContainer,
-                                          ),
-                                        )
-                                      : const Text('Se connecter'),
-                                )),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Lien inscription
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Pas encore de compte ? ',
-                            style: AppTextStyles.bodyMdOnVariant,
-                          ),
-                          GestureDetector(
-                            onTap: () => Get.toNamed(AppRoutes.register),
-                            child: Text(
-                              'Créer un compte',
-                              style: AppTextStyles.bodyMd.copyWith(
-                                color: AppColors.primaryContainer,
-                                fontWeight: FontWeight.w600,
+                            Obx(
+                              () => ElevatedButton(
+                                onPressed: controller.isLoading.value
+                                    ? null
+                                    : controller.login,
+                                child: controller.isLoading.value
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: AppColors.onPrimaryContainer,
+                                        ),
+                                      )
+                                    : const Text('Se connecter'),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
