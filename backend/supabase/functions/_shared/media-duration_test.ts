@@ -68,6 +68,37 @@ Deno.test('falls back to Cluster/SimpleBlock timecodes when Duration is absent, 
   assertNear(detectMediaDuration(segment, 'video/webm'), 30);
 });
 
+Deno.test('reads duration across multiple unknown-size Clusters in a streamed/timesliced WebM', () => {
+  // Mimics MediaRecorder.start(timeslice): the Segment and every Cluster are
+  // written with EBML "unknown size" since the muxer doesn't know final
+  // sizes while still recording. An unknown-size element is only implicitly
+  // terminated by the next element that can't be its child (here: the next
+  // Cluster ID, or end of buffer for the last one).
+  const unknownSize1 = [0x01, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]; // 8-byte unknown-size marker
+
+  const buildCluster = (timecodeTicks: number, relativeTicks: number) => {
+    const timecode = concat([0xe7], size(1, 2), [(timecodeTicks >> 8) & 0xff, timecodeTicks & 0xff]);
+    const trackVint = [0x81];
+    const relBytes = [(relativeTicks >> 8) & 0xff, relativeTicks & 0xff];
+    const flags = [0x80];
+    const simpleBlockContent = [...trackVint, ...relBytes, ...flags, 0xde, 0xad, 0xbe, 0xef];
+    const simpleBlock = concat([0xa3], size(1, simpleBlockContent.length), simpleBlockContent);
+    // Cluster itself has unknown size (only ends when the next Cluster ID appears).
+    return concat([0x1f, 0x43, 0xb6, 0x75], unknownSize1, timecode, simpleBlock);
+  };
+
+  const cluster1 = buildCluster(0, 0); // timecode 0
+  const cluster2 = buildCluster(10_000, 0); // timecode 10_000 ticks -> 10s
+  const cluster3 = buildCluster(29_000, 500); // timecode 29_000 + 500 relative -> 29.5s
+
+  const segmentContent = concat(cluster1, cluster2, cluster3);
+  // Segment also has unknown size, as written by a live/streaming muxer.
+  const segment = concat([0x18, 0x53, 0x80, 0x67], unknownSize1, segmentContent);
+
+  // Default TimecodeScale is 1_000_000 ns/tick -> 29_500 * 1_000_000 / 1e9 = 29.5s
+  assertNear(detectMediaDuration(segment, 'audio/webm;codecs=opus'), 29.5);
+});
+
 Deno.test('reads duration from a WAV data chunk', () => {
   const bytes = new Uint8Array(44);
   bytes.set(new TextEncoder().encode('RIFF'), 0);

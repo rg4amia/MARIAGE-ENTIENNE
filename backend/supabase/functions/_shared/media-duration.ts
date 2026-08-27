@@ -97,46 +97,104 @@ function walkChildren(
   }
 }
 
+/**
+ * Locates a top-level (Level 0) element by ID, skipping siblings using their
+ * declared size. Used to find the Segment element after the EBML header.
+ */
+function findTopLevel(bytes: Uint8Array, targetId: number): ElementHeader | null {
+  let offset = 0;
+  while (offset < bytes.length) {
+    const header = readElementHeader(bytes, offset);
+    if (!header) return null;
+    if (header.id === targetId) return header;
+    if (header.contentLength === -1) return null;
+    offset = header.contentStart + header.contentLength;
+  }
+  return null;
+}
+
+/**
+ * Walks the Segment content as a flat stream rather than nested [start, end)
+ * ranges. This is required because MediaRecorder's chunked/timesliced output
+ * (recorder.start(timeslice)) writes the Segment — and every Cluster inside
+ * it — with EBML "unknown size", since the muxer can't know final sizes while
+ * still recording. Per the EBML spec, an unknown-size element implicitly ends
+ * as soon as an element that couldn't be its child is encountered; here that
+ * means a new Cluster ID always closes any previously open Cluster, which a
+ * naive [start, end)-bounded recursive walk can't detect.
+ */
 function webmDuration(bytes: Uint8Array): number | null {
   let timecodeScale = 1_000_000;
   let declaredDuration: number | null = null;
   let maxTimecode = 0;
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 
-  walkChildren(bytes, 0, bytes.length, (topId, segStart, segEnd) => {
-    if (topId !== SEGMENT_ID) return;
+  const segment = findTopLevel(bytes, SEGMENT_ID);
+  if (!segment) return null;
+  const segEnd = segment.contentLength === -1 ? bytes.length : segment.contentStart + segment.contentLength;
 
-    walkChildren(bytes, segStart, segEnd, (id, contentStart, contentEnd) => {
-      if (id === INFO_ID) {
-        walkChildren(bytes, contentStart, contentEnd, (infoId, iStart, iEnd) => {
-          if (infoId === TIMECODE_SCALE_ID) {
-            const value = readUnsigned(bytes, iStart, iEnd - iStart);
-            if (value) timecodeScale = value;
-          } else if (infoId === DURATION_ID) {
-            const len = iEnd - iStart;
-            if (len === 4) declaredDuration = view.getFloat32(iStart, false);
-            else if (len === 8) declaredDuration = view.getFloat64(iStart, false);
-          }
-        });
-      } else if (id === CLUSTER_ID) {
-        let clusterTimecode = 0;
-        walkChildren(bytes, contentStart, contentEnd, (clId, clStart, clEnd) => {
-          if (clId === TIMECODE_ID) {
-            const value = readUnsigned(bytes, clStart, clEnd - clStart);
-            if (value != null) {
-              clusterTimecode = value;
-              maxTimecode = Math.max(maxTimecode, value);
-            }
-          } else if (clId === SIMPLE_BLOCK_ID) {
-            const track = readVint(bytes, clStart);
-            if (!track || clStart + track.length + 2 > clEnd) return;
-            const relative = view.getInt16(clStart + track.length, false);
-            maxTimecode = Math.max(maxTimecode, clusterTimecode + relative);
-          }
-        });
+  let offset = segment.contentStart;
+  let inCluster = false;
+  let clusterEnd = -1; // -1 while the open cluster's size is unknown
+  let clusterTimecode = 0;
+
+  while (offset < segEnd) {
+    if (inCluster && clusterEnd !== -1 && offset >= clusterEnd) inCluster = false;
+
+    const header = readElementHeader(bytes, offset);
+    if (!header) break;
+
+    if (header.id === CLUSTER_ID) {
+      inCluster = true;
+      clusterTimecode = 0;
+      clusterEnd = header.contentLength === -1 ? -1 : header.contentStart + header.contentLength;
+      offset = header.contentStart;
+      continue;
+    }
+
+    if (header.id === INFO_ID && !inCluster) {
+      const infoEnd = header.contentLength === -1 ? segEnd : header.contentStart + header.contentLength;
+      walkChildren(bytes, header.contentStart, infoEnd, (infoId, iStart, iEnd) => {
+        if (infoId === TIMECODE_SCALE_ID) {
+          const value = readUnsigned(bytes, iStart, iEnd - iStart);
+          if (value) timecodeScale = value;
+        } else if (infoId === DURATION_ID) {
+          const len = iEnd - iStart;
+          if (len === 4) declaredDuration = view.getFloat32(iStart, false);
+          else if (len === 8) declaredDuration = view.getFloat64(iStart, false);
+        }
+      });
+      offset = infoEnd;
+      continue;
+    }
+
+    if (inCluster && header.id === TIMECODE_ID && header.contentLength !== -1) {
+      const value = readUnsigned(bytes, header.contentStart, header.contentLength);
+      if (value != null) {
+        clusterTimecode = value;
+        maxTimecode = Math.max(maxTimecode, value);
       }
-    });
-  });
+      offset = header.contentStart + header.contentLength;
+      continue;
+    }
+
+    if (inCluster && header.id === SIMPLE_BLOCK_ID && header.contentLength !== -1) {
+      const clStart = header.contentStart;
+      const clEnd = header.contentStart + header.contentLength;
+      const track = readVint(bytes, clStart);
+      if (track && clStart + track.length + 2 <= clEnd) {
+        const relative = view.getInt16(clStart + track.length, false);
+        maxTimecode = Math.max(maxTimecode, clusterTimecode + relative);
+      }
+      offset = clEnd;
+      continue;
+    }
+
+    // Unrecognized element: skip it using its declared size. An unknown-size
+    // element we don't understand can't be safely skipped, so stop here.
+    if (header.contentLength === -1) break;
+    offset = header.contentStart + header.contentLength;
+  }
 
   const ticks = declaredDuration && declaredDuration > 0 ? declaredDuration : maxTimecode;
   return ticks > 0 ? ticks * timecodeScale / 1_000_000_000 : null;
