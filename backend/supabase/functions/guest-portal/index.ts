@@ -288,37 +288,31 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold:   #c9a84c;
-      --gold2:  #e8d49e;
-      --dark:   #1a1a2e;
+      --gold:   #D4AF37;
+      --gold2:  #e0bf52;
+      --orange: #FF7A3D;
+      --salmon: #FF8F7E;
+      --peach:  #FFD6B3;
+      --ivory:  #FFF7ED;
+
+      --dark:   #4A3B32;
       --card:   #ffffff;
-      --text:   #2d2d2d;
-      --muted:  #7a7a8c;
+      --text:   #5C4D44;
+      --muted:  #9C8A80;
       --danger: #e74c3c;
       --success:#27ae60;
-      --radius: 20px;
-      --shadow: 0 8px 32px rgba(0,0,0,0.12);
-      --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-      --timer-bg: #e0e0e0;
-      --step-bg: #eee;
-      --input-border: #e0e0e0;
-      --tab-bg: #fafafa;
-      --tab-selected-bg: #fffbf0;
+      --radius: 24px;
+      --shadow: 0 12px 36px rgba(255, 122, 61, 0.15);
+      --bg-gradient: linear-gradient(135deg, #FFF7ED 0%, #FFD6B3 100%);
+      --timer-bg: #FFEAD9;
+      --step-bg: #FFEAD9;
+      --input-border: #FFD6B3;
+      --tab-bg: #FFF7ED;
+      --tab-selected-bg: #FFE5CE;
     }
 
     @media (prefers-color-scheme: light) {
-      :root {
-        --card:   #ffffff;
-        --text:   #2d2d2d;
-        --muted:  #8a8a9c;
-        --bg-gradient: linear-gradient(135deg, #fafafa 0%, #f5f0e8 50%, #f0e6d6 100%);
-        --timer-bg: #e8e4e0;
-        --step-bg: #e8e4e0;
-        --input-border: #d8d0c8;
-        --tab-bg: #f8f4f0;
-        --tab-selected-bg: #fff8ee;
-        --shadow: 0 8px 32px rgba(0,0,0,0.08);
-      }
+      /* Theme is forced to light/floral for both modes to keep the wedding vibe */
     }
 
     html, body {
@@ -359,8 +353,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     }
     .header .rings { font-size: 40px; margin-bottom: 8px; }
     .header h1 {
-      font-size: 22px;
-      color: var(--gold);
+      font-size: 26px;
+      color: var(--orange);
+      font-weight: normal;
       letter-spacing: 1px;
     }
     .header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
@@ -380,7 +375,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       flex-wrap: wrap;
     }
     .badge {
-      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      background: linear-gradient(135deg, var(--orange), #E6662E);
       color: #fff;
       border-radius: 50px;
       padding: 6px 16px;
@@ -405,7 +400,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       transition: all .3s;
     }
     .step.done  { background: var(--success); color: #fff; }
-    .step.active{ background: var(--gold);    color: #fff; }
+    .step.active{ background: var(--orange);    color: #fff; }
     .step-line  { flex: 1; height: 2px; background: var(--step-bg); margin-top: 15px; max-width: 40px; }
     .step-line.done { background: var(--success); }
 
@@ -433,15 +428,15 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       flex: 1;
       padding: 12px;
       border: 2px solid var(--input-border);
-      border-radius: 12px;
+      border-radius: 16px;
       background: var(--tab-bg);
       cursor: pointer;
       text-align: center;
       font-size: 14px;
       transition: all .2s;
     }
-    .media-tab:hover { border-color: var(--gold); }
-    .media-tab.selected { border-color: var(--gold); background: var(--tab-selected-bg); }
+    .media-tab:hover { border-color: var(--orange); }
+    .media-tab.selected { border-color: var(--orange); background: var(--tab-selected-bg); }
     .media-tab .icon { font-size: 28px; margin-bottom: 4px; }
     .media-tab .label { font-weight: 600; color: var(--dark); }
     .media-tab .desc  { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -466,9 +461,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     .timer-ring svg { transform: rotate(-90deg); }
     .timer-ring circle { fill: none; stroke-width: 8; }
     .timer-ring .bg   { stroke: var(--timer-bg); }
-    .timer-ring .prog { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
+    .timer-ring .prog { stroke: var(--orange); stroke-linecap: round; transition: stroke-dashoffset 0.1s cubic-bezier(0.4, 0, 0.2, 1); }
     .timer-ring .prog.done { stroke: var(--success); transition: stroke 0.4s ease; }
-    .timer-ring .glow { filter: drop-shadow(0 0 6px var(--gold)); transition: filter 0.4s; }
+    .timer-ring .glow { filter: drop-shadow(0 0 6px var(--orange)); transition: filter 0.4s; }
     .timer-ring .glow.done { filter: drop-shadow(0 0 8px var(--success)); }
     @keyframes timerPulse {
       0%, 100% { transform: scale(1); }
@@ -485,7 +480,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     /* Record button */
     .btn-record {
       width: 72px; height: 72px; border-radius: 50%;
-      border: 4px solid var(--gold);
+      border: 4px solid var(--orange);
       background: #fff;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
@@ -501,19 +496,19 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
 
     /* ── Progress bar ── */
     .progress-wrap { background: #eee; border-radius: 50px; height: 6px; overflow: hidden; }
-    .progress-bar  { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold2)); border-radius: 50px; transition: width .3s; }
+    .progress-bar  { height: 100%; background: linear-gradient(90deg, var(--orange), var(--salmon)); border-radius: 50px; transition: width .3s; }
 
     /* ── Buttons ── */
     .btn {
-      width: 100%; padding: 14px;
-      border: none; border-radius: 12px;
-      font-size: 15px; font-weight: 600; cursor: pointer;
-      transition: all .2s; letter-spacing: .3px;
+      width: 100%; padding: 16px 24px;
+      border: none; border-radius: 50px;
+      font-size: 16px; font-weight: bold; cursor: pointer;
+      transition: all .2s; letter-spacing: 0.5px;
     }
-    .btn-primary { background: linear-gradient(135deg, var(--gold), #a07830); color: #fff; }
-    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-    .btn-outline { background: var(--card); border: 2px solid var(--gold); color: var(--gold); }
+    .btn-primary { background: linear-gradient(135deg, var(--orange), #E6662E); color: #fff; box-shadow: 0 4px 15px rgba(255,122,61,0.25); }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,122,61,0.3); }
+    .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-outline { background: var(--card); border: 2px solid var(--orange); color: var(--orange); }
     .btn-outline:hover { background: var(--tab-selected-bg); }
 
     .text-input {
