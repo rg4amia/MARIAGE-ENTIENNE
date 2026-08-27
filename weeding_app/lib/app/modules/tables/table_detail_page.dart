@@ -6,6 +6,8 @@ import '../../core/widgets/wedding_header.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
+import '../../data/models/guest.dart';
+import '../../data/repositories/guest_repository.dart';
 import 'tables_controller.dart';
 
 class TableDetailPage extends StatelessWidget {
@@ -392,6 +394,18 @@ class _ChairTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapScale(
+      onTap: () {
+        if (chair.isAssigned) {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (ctx) => _GuestDetailSheet(chair: chair),
+          );
+        }
+      },
       child: Container(
         width: 64,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -460,6 +474,139 @@ class _ChairTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _GuestDetailSheet extends StatefulWidget {
+  final Chair chair;
+
+  const _GuestDetailSheet({required this.chair});
+
+  @override
+  State<_GuestDetailSheet> createState() => _GuestDetailSheetState();
+}
+
+class _GuestDetailSheetState extends State<_GuestDetailSheet> {
+  final GuestRepository _guestRepository = GuestRepository();
+  Guest? _guest;
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGuest();
+  }
+
+  Future<void> _loadGuest() async {
+    try {
+      if (widget.chair.guestId == null) {
+        if (mounted) {
+          setState(() {
+            _error = 'Aucun invité assigné';
+            _isLoading = false;
+          });
+        }
+        return;
+      }
+      final guest = await _guestRepository.getGuestById(widget.chair.guestId!);
+      if (mounted) {
+        setState(() {
+          _guest = guest;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = 'Impossible de charger les détails';
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        24,
+        24,
+        24,
+        MediaQuery.of(context).viewInsets.bottom + 24,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryContainer.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: const Icon(Icons.person_rounded, color: AppColors.primaryContainer),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.chair.guestName ?? 'Invité',
+                      style: AppTextStyles.headlineMdPrimary,
+                    ),
+                    Text(
+                      'Chaise N°${widget.chair.chairNumber}',
+                      style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (_error != null)
+            Text(_error!, style: const TextStyle(color: AppColors.error))
+          else if (_guest != null) ...[
+            _buildDetailRow(Icons.phone_outlined, 'Téléphone', _guest!.phone ?? 'Non renseigné'),
+            const SizedBox(height: 12),
+            _buildDetailRow(Icons.email_outlined, 'Email', _guest!.email ?? 'Non renseigné'),
+            const SizedBox(height: 12),
+            _buildDetailRow(Icons.info_outline_rounded, 'Statut', _guest!.statusLabel),
+          ],
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.tonal(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Fermer'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.onSurfaceVariant),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurfaceVariant)),
+            Text(value, style: AppTextStyles.bodyMd),
+          ],
+        ),
+      ],
     );
   }
 }
