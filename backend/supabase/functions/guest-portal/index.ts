@@ -177,6 +177,16 @@ Deno.serve(async (req) => {
     return apiJson(data);
   }
 
+  // GET /guest-portal/api/shell?token=xxx&entrance=xxx
+  // Supabase's *.supabase.co gateway deliberately serves HTML responses as
+  // text/plain. The public static host loads the shell through this JSON route,
+  // while all sensitive operations remain handled by this Edge Function.
+  if (req.method === 'GET' && path.endsWith('/api/shell')) {
+    const token = url.searchParams.get('token') ?? '';
+    const entranceCode = url.searchParams.get('entrance') ?? '';
+    return apiJson({ html: renderSPA(token, entranceCode, supabaseUrl) });
+  }
+
   // ── PWA: manifest.json ──────────────────────────────────────────────────────
   if (req.method === 'GET' && path.endsWith('/manifest.json')) {
     // Base path — Edge Runtime strips /functions/v1/ from pathname
@@ -239,6 +249,15 @@ function apiError(msg: string, status = 400) {
     status,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
+}
+
+function inlineScriptValue(value: string): string {
+  return JSON.stringify(value)
+    .replaceAll('<', '\\u003c')
+    .replaceAll('>', '\\u003e')
+    .replaceAll('&', '\\u0026')
+    .replaceAll('\u2028', '\\u2028')
+    .replaceAll('\u2029', '\\u2029');
 }
 
 // ── SPA HTML/CSS/JS inline ───────────────────────────────────────────────────
@@ -813,8 +832,8 @@ const FUNCTION_BASE = '${supabaseUrl}/functions/v1/guest-portal';
 // APP STATE
 // ═══════════════════════════════════════════════════════
 const State = {
-  token:       ${JSON.stringify(initialToken)},
-  entranceCode:${JSON.stringify(initialEntranceCode)},
+  token:        ${inlineScriptValue(initialToken)},
+  entranceCode: ${inlineScriptValue(initialEntranceCode)},
   entrance:    null,
   savedToken:  null,
   invitation:  null,
@@ -1212,7 +1231,7 @@ function resetRecorder() {
   document.getElementById('timer-text').textContent = '0s';
   document.getElementById('timer-label').textContent = 'Appuyez pour commencer';
   document.getElementById('btn-record-icon').textContent = '⏺';
-  document.getElementById('rec-hint').textContent = 'Appuyez pour démarrer l\'enregistrement';
+  document.getElementById('rec-hint').textContent = "Appuyez pour démarrer l'enregistrement";
   document.getElementById('btn-submit').disabled = true;
   clearAlert('rec');
 }

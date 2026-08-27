@@ -3,15 +3,20 @@
 ## Architecture retenue
 
 - `weeding_app` est le back-office Flutter des mariés (mobile et Web admin).
-- `guest-portal` est l'unique interface publique des invités.
+- `guest-portal-web` est l'unique interface publique des invités, publiée sur GitHub Pages.
 - Supabase fournit Auth, PostgreSQL, Storage et les Edge Functions.
 - Un invité ne crée pas de compte : son token QR opaque autorise uniquement son parcours.
 
-Le portail public est servi directement par l'Edge Function :
+Le portail public est servi depuis :
 
 ```text
-https://sckvfrsjmbwkuqdfsgki.supabase.co/functions/v1/guest-portal?token=TOKEN
+https://rg4amia.github.io/MARIAGE-ENTIENNE/?token=TOKEN
 ```
+
+La passerelle `*.supabase.co` transforme volontairement les réponses HTML des Edge
+Functions en `text/plain`. La page GitHub Pages charge donc le shell via
+`guest-portal/api/shell`, puis utilise les routes API Supabase pour les données et
+les médias.
 
 Les codes QR courts passent par `invite/{shortCode}`. Cette fonction compte le
 scan de manière atomique puis redirige vers `guest-portal`.
@@ -47,6 +52,10 @@ supabase functions deploy invite-analytics --workdir backend
 supabase functions deploy validate-media --workdir backend
 ```
 
+Le workflow `.github/workflows/deploy-guest-portal.yml` publie automatiquement
+`backend/guest-portal-web` sur GitHub Pages après un push sur `main`. Dans les
+paramètres GitHub du dépôt, la source Pages doit être réglée sur **GitHub Actions**.
+
 Les inscriptions publiques sont désactivées. Le premier administrateur doit
 être créé depuis Supabase Dashboard avec les métadonnées utilisateur suivantes :
 
@@ -58,8 +67,8 @@ Les inscriptions publiques sont désactivées. Le premier administrateur doit
 ```
 
 `SUPABASE_URL`, `SUPABASE_ANON_KEY` et `SUPABASE_SERVICE_ROLE_KEY` sont fournis
-par Supabase aux fonctions. Si le portail est exposé sous une URL personnalisée,
-configurer également :
+par Supabase aux fonctions. Pour remplacer l'URL GitHub Pages par un domaine
+personnalisé, configurer également :
 
 ```bash
 supabase secrets set GUEST_PORTAL_URL=https://votre-portail.example --workdir backend
@@ -99,4 +108,4 @@ supabase db push --dry-run --workdir backend
 ```
 
 Le build Flutter Web admin est généré dans `weeding_app/build/web`. Le portail
-invité n'a pas besoin d'un hébergement statique externe.
+invité doit être publié sur un hébergement statique externe à `supabase.co`.

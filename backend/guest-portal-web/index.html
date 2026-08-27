@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="theme-color" content="#c9a84c" />
+    <title>Mon Invitation de Mariage</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { min-height: 100%; margin: 0; }
+      body {
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: #2d2d2d;
+        font-family: Georgia, serif;
+        text-align: center;
+        background: linear-gradient(135deg, #fafafa, #f5f0e8 50%, #f0e6d6);
+      }
+      .loader {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 18px;
+        border: 4px solid #e8e4e0;
+        border-top-color: #c9a84c;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .error {
+        max-width: 420px;
+        padding: 24px;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 8px 32px rgb(0 0 0 / 8%);
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+  <body>
+    <main id="status" aria-live="polite">
+      <div class="loader" aria-hidden="true"></div>
+      <p>Chargement de votre invitation…</p>
+    </main>
+
+    <script>
+      const edgeFunctionUrl =
+        'https://sckvfrsjmbwkuqdfsgki.supabase.co/functions/v1/guest-portal';
+
+      async function loadPortal() {
+        try {
+          const shellUrl = new URL(edgeFunctionUrl + '/api/shell');
+          const query = new URLSearchParams(window.location.search);
+
+          for (const key of ['token', 'entrance']) {
+            const value = query.get(key);
+            if (value) shellUrl.searchParams.set(key, value);
+          }
+
+          const response = await fetch(shellUrl, {
+            headers: { Accept: 'application/json' },
+          });
+          if (!response.ok) {
+            throw new Error(`Le portail est indisponible (${response.status}).`);
+          }
+
+          const payload = await response.json();
+          if (typeof payload.html !== 'string' || !payload.html.startsWith('<!DOCTYPE html>')) {
+            throw new Error('La réponse du portail est invalide.');
+          }
+
+          document.open();
+          document.write(payload.html);
+          document.close();
+        } catch (error) {
+          const status = document.getElementById('status');
+          status.className = 'error';
+          status.replaceChildren();
+
+          const icon = document.createElement('div');
+          icon.textContent = '💌';
+          icon.style.fontSize = '52px';
+          const title = document.createElement('h1');
+          title.textContent = 'Invitation temporairement indisponible';
+          const message = document.createElement('p');
+          message.textContent = error instanceof Error
+            ? error.message
+            : 'Veuillez réessayer dans quelques instants.';
+          status.append(icon, title, message);
+        }
+      }
+
+      loadPortal();
+    </script>
+  </body>
+</html>

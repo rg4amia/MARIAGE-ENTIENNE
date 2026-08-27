@@ -1,0 +1,20 @@
+{
+  "name": "Invitation de Mariage",
+  "short_name": "Mariage",
+  "description": "Votre carte d'invitation de mariage interactive",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#c9a84c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "fr"
+}

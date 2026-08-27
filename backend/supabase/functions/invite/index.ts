@@ -5,7 +5,7 @@ import { corsHeaders } from '../_shared/cors.ts';
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 const guestPortalUrl = Deno.env.get('GUEST_PORTAL_URL') ??
-  `${supabaseUrl}/functions/v1/guest-portal`;
+  'https://rg4amia.github.io/MARIAGE-ENTIENNE/';
 
 const admin = createClient(supabaseUrl, serviceRoleKey);
 
