@@ -18,6 +18,10 @@ Functions en `text/plain`. La page GitHub Pages charge donc le shell via
 `guest-portal/api/shell`, puis utilise les routes API Supabase pour les données et
 les médias.
 
+Les anciens QR qui ciblent encore directement l'Edge Function sont conservés :
+la route publique les redirige vers GitHub Pages en gardant leur paramètre
+`token` ou `entrance`.
+
 Les codes QR courts passent par `invite/{shortCode}`. Cette fonction compte le
 scan de manière atomique puis redirige vers `guest-portal`.
 

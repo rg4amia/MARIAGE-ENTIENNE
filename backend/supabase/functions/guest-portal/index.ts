@@ -3,6 +3,8 @@ import { detectMediaDuration } from '../_shared/media-duration.ts';
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
+const publicPortalUrl = Deno.env.get('GUEST_PORTAL_URL') ??
+  'https://rg4amia.github.io/MARIAGE-ENTIENNE/';
 
 const admin = createClient(supabaseUrl, serviceRoleKey);
 
@@ -226,13 +228,14 @@ Deno.serve(async (req) => {
     });
   }
 
-  // ── SPA HTML ─────────────────────────────────────────────────────────────────
-  // Toute autre route → on sert la SPA
-  const token = url.searchParams.get('token') ?? '';
-  const entranceCode = url.searchParams.get('entrance') ?? '';
-  return new Response(renderSPA(token, entranceCode, supabaseUrl), {
-    headers: { 'Content-Type': 'text/html; charset=utf-8' },
-  });
+  // ── Public portal compatibility redirect ───────────────────────────────────
+  // Existing QR codes still target this Edge Function. Keep them valid while
+  // serving the browser UI from a host that is allowed to return text/html.
+  const redirectUrl = new URL(publicPortalUrl);
+  for (const [key, value] of url.searchParams) {
+    redirectUrl.searchParams.set(key, value);
+  }
+  return Response.redirect(redirectUrl, 302);
 });
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
