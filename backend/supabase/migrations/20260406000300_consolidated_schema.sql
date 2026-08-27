@@ -353,7 +353,7 @@ BEGIN
     invitation_code, web_url, deep_link, qr_payload
   ) VALUES (
     v_guest.event_id, p_guest_id, v_table.id, p_chair_id,
-    upper(left(v_token, 8)),
+    upper(left(v_token, 4)),
     p_public_base_url || '/guest/' || v_token,
     p_deep_link_base  || '/'      || v_token,
     p_public_base_url || '/guest/' || v_token

@@ -11,6 +11,7 @@ import '../../data/models/guest_link.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
 import '../../data/repositories/guest_link_repository.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/widgets/wedding_header.dart';
 import 'guests_controller.dart';
 
@@ -217,14 +218,30 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             ),
             const SizedBox(height: 16),
 
-            // Assign Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () => _showAssignDialog(context, controller, guest),
-                icon: const Icon(Icons.chair),
-                label: const Text('Assigner une place'),
-              ),
+            // Assign + Share Buttons
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showAssignDialog(context, controller, guest),
+                    icon: const Icon(Icons.chair),
+                    label: const Text('Assigner'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                if (guest.qrToken.isNotEmpty)
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _shareViaWhatsApp(guest),
+                      icon: const Icon(Icons.share_rounded),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF25D366),
+                        foregroundColor: Colors.white,
+                      ),
+                      label: const Text('WhatsApp'),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(height: 24),
 
@@ -236,6 +253,37 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                   child: Column(
                     children: [
                       Text('Lien d\'invitation', style: AppTextStyles.titleLg),
+
+                      // WhatsApp share shortcut
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () => _shareViaWhatsApp(guest),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF25D366).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFF25D366).withValues(alpha: 0.3),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.share_rounded, size: 14, color: Color(0xFF25D366)),
+                              SizedBox(width: 4),
+                              Text(
+                                'Partager via WhatsApp',
+                                style: TextStyle(
+                                  color: Color(0xFF25D366),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 12),
 
                       // Short link display
@@ -401,6 +449,20 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       default:
         return AppColors.onTertiaryContainer;
     }
+  }
+
+  void _shareViaWhatsApp(Guest guest) {
+    final url = _getInviteUrl();
+    if (url.isEmpty) {
+      Get.snackbar('Erreur', 'Aucun lien d\'invitation disponible');
+      return;
+    }
+    final name = guest.fullName.split(' ').first;
+    final message = 'Bonjour $name ! 🎉\n\n'
+        'Tu es invité(e) au mariage ! 🥂\n'
+        'Clique sur le lien ci-dessous pour accéder à ton invitation :\n\n'
+        '$url';
+    Share.share(message);
   }
 }
 

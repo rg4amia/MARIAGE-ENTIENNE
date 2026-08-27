@@ -100,7 +100,7 @@ BEGIN
     web_url, deep_link, qr_payload
   ) VALUES (
     v_event_id, p_guest_id, v_chair.table_id, p_chair_id,
-    'INV-' || upper(left(encode(digest(v_token, 'sha256'), 'hex'), 16)),
+    'INV-' || upper(left(encode(digest(v_token, 'sha256'), 'hex'), 4)),
     v_web_url, 'mariageentienne://guest/' || v_token, v_web_url
   )
   ON CONFLICT (guest_id) DO UPDATE SET

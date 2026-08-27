@@ -1,13 +1,6 @@
--- Fix: enable pgcrypto (gen_random_bytes) on remote database
--- and recreate assign_guest_to_chair with proper error handling
+-- Shorten invitation code from 16 to 8 characters
+-- Update assign_guest_to_chair function
 
--- 1. Ensure pgcrypto is available
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
--- 2. Also ensure uuid-ossp is available (used elsewhere)
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- 3. Recreate assign_guest_to_chair with proper gen_random_bytes
 CREATE OR REPLACE FUNCTION public.assign_guest_to_chair(
   p_guest_id uuid,
   p_chair_id uuid,
@@ -45,20 +38,21 @@ BEGIN
     RAISE EXCEPTION 'Chair already assigned';
   END IF;
 
-  -- Unassign previous chair if any
+  -- Unassign guest from any other chair first
   UPDATE public.chairs SET guest_id = NULL
   WHERE event_id = v_event_id AND guest_id = p_guest_id;
-  -- Assign new chair
+
+  -- Assign to new chair
   UPDATE public.chairs SET guest_id = p_guest_id WHERE id = p_chair_id;
 
-  -- Generate token (reuse existing or create new)
+  -- Generate token and short code
   v_token := coalesce(
     nullif(v_guest.qr_token, ''),
     encode(gen_random_bytes(16), 'hex')
   );
   v_web_url := rtrim(p_guest_portal_url, '/') || '?token=' || v_token;
 
-  -- Update guest status
+  -- Update guest
   UPDATE public.guests
   SET qr_token = v_token,
       status = CASE
@@ -67,7 +61,7 @@ BEGIN
       END
   WHERE id = p_guest_id;
 
-  -- Create or update invitation
+  -- Create or update invitation with SHORT code (8 chars)
   INSERT INTO public.invitations(
     event_id, guest_id, table_id, chair_id, invitation_code,
     web_url, deep_link, qr_payload
@@ -90,55 +84,4 @@ BEGIN
 END;
 $$;
 
--- 4. Re-grant permissions
 GRANT EXECUTE ON FUNCTION public.assign_guest_to_chair(uuid, uuid, text) TO authenticated;
-
--- 5. Also recreate manage_entrance_qr if it uses gen_random_bytes
-CREATE OR REPLACE FUNCTION public.manage_entrance_qr(p_action text DEFAULT 'get')
-RETURNS json
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public
-AS $$
-DECLARE
-  v_event_id uuid;
-  v_code record;
-BEGIN
-  IF NOT public.is_admin() THEN
-    RAISE EXCEPTION 'Unauthorized: admin role required';
-  END IF;
-
-  v_event_id := public.current_event_id();
-  IF v_event_id IS NULL THEN
-    RAISE EXCEPTION 'No wedding event attached to this administrator';
-  END IF;
-
-  SELECT * INTO v_code
-  FROM public.event_entrance_codes
-  WHERE event_id = v_event_id
-  LIMIT 1;
-
-  IF p_action = 'refresh' THEN
-    UPDATE public.event_entrance_codes
-    SET code = replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', ''),
-        updated_at = timezone('utc', now())
-    WHERE event_id = v_event_id
-    RETURNING * INTO v_code;
-  END IF;
-
-  IF v_code IS NULL THEN
-    INSERT INTO public.event_entrance_codes(event_id, code)
-    VALUES (v_event_id, replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', ''))
-    RETURNING * INTO v_code;
-  END IF;
-
-  RETURN json_build_object(
-    'id', v_code.id,
-    'code', v_code.code,
-    'scan_count', v_code.scan_count,
-    'total_checkins', v_code.total_checkins
-  );
-END;
-$$;
-
-GRANT EXECUTE ON FUNCTION public.manage_entrance_qr(text) TO authenticated;
