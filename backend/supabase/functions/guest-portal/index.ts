@@ -263,6 +263,14 @@ function inlineScriptValue(value: string): string {
     .replaceAll('\u2029', '\\u2029');
 }
 
+// ── Heroicons (inlined SVG, outline unless noted) ──────────────────────────────
+const ARROW_LEFT_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>';
+const PAPER_AIRPLANE_ICON =
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.126A59.768 59.768 0 0 1 21.485 12 59.77 59.77 0 0 1 3.27 20.876L5.999 12Zm0 0h7.5" /></svg>';
+// Solid record dot / stop square — no direct Heroicons equivalent, drawn to match their 24x24 solid style.
+const RECORD_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" /></svg>';
+
 // ── SPA HTML/CSS/JS inline ───────────────────────────────────────────────────
 
 function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUrl: string): string {
@@ -437,7 +445,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     }
     .media-tab:hover { border-color: var(--orange); }
     .media-tab.selected { border-color: var(--orange); background: var(--tab-selected-bg); }
-    .media-tab .icon { font-size: 28px; margin-bottom: 4px; }
+    .media-tab .icon { width: 28px; height: 28px; margin: 0 auto 4px; color: var(--muted); transition: color .2s; }
+    .media-tab .icon svg { width: 100%; height: 100%; display: block; }
+    .media-tab.selected .icon { color: var(--orange); }
     .media-tab .label { font-weight: 600; color: var(--dark); }
     .media-tab .desc  { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
@@ -484,12 +494,14 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       background: #fff;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
+      color: var(--orange);
       transition: all .2s;
       box-shadow: 0 4px 12px rgba(0,0,0,.1);
     }
+    #btn-record-icon { width: 28px; height: 28px; display: block; }
+    #btn-record-icon svg { width: 100%; height: 100%; display: block; }
     .btn-record:hover { transform: scale(1.05); }
-    .btn-record.recording { background: var(--danger); border-color: var(--danger); animation: pulse 1.2s infinite; }
+    .btn-record.recording { background: var(--danger); border-color: var(--danger); color: #fff; animation: pulse 1.2s infinite; }
     @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);} 50%{box-shadow:0 0 0 12px rgba(231,76,60,0);} }
 
     .rec-hint { font-size: 12px; color: var(--muted); text-align: center; }
@@ -504,7 +516,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       border: none; border-radius: 50px;
       font-size: 16px; font-weight: bold; cursor: pointer;
       transition: all .2s; letter-spacing: 0.5px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
+    .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
     .btn-primary { background: linear-gradient(135deg, var(--orange), #E6662E); color: #fff; box-shadow: 0 4px 15px rgba(255,122,61,0.25); }
     .btn-primary:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,122,61,0.3); }
     .btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -554,11 +568,21 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     /* ── Alert ── */
     .alert {
       padding: 12px 16px; border-radius: 10px; font-size: 13px;
-      display: none;
+      display: none; align-items: flex-start; gap: 10px;
     }
     .alert.error   { background: #fdf0f0; color: var(--danger); border: 1px solid #f5c6c6; }
     .alert.success { background: #f0fdf4; color: var(--success); border: 1px solid #c6e9d0; }
-    .alert.visible { display: block; }
+    .alert.visible { display: flex; }
+    .alert::before {
+      content: ''; flex-shrink: 0; width: 18px; height: 18px; margin-top: 1px;
+      background-repeat: no-repeat; background-size: contain;
+    }
+    .alert.error::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e74c3c'%3E%3Cpath fill-rule='evenodd' d='M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    .alert.success::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2327ae60'%3E%3Cpath fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    }
 
     /* ── Loader ── */
     .loader {
@@ -702,12 +726,20 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       <!-- Media type tabs -->
       <div class="media-tabs">
         <div class="media-tab selected" id="tab-audio" onclick="App.selectMediaType('audio')">
-          <div class="icon">🎵</div>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5a.75.75 0 0 1 .955-.721l9 2.571a.75.75 0 0 1 .545.721V15a3 3 0 1 1-1.5-2.598V6.878l-7.5-2.143v9.365a3 3 0 1 1-1.5-2.598V9Z" />
+            </svg>
+          </div>
           <div class="label">Audio</div>
           <div class="desc">Message vocal</div>
         </div>
         <div class="media-tab" id="tab-video" onclick="App.selectMediaType('video')">
-          <div class="icon">🎬</div>
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </div>
           <div class="label">Vidéo</div>
           <div class="desc">Message filmé</div>
         </div>
@@ -720,7 +752,11 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
         <!-- Audio visual (audio mode) -->
         <div id="preview-audio-wrap" style="display:flex;">
           <div style="text-align:center;width:100%;">
-            <div style="font-size:48px;" id="audio-idle-icon">🎤</div>
+            <div style="width:48px;height:48px;margin:0 auto;color:var(--orange);" id="audio-idle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+              </svg>
+            </div>
           </div>
         </div>
 
@@ -740,7 +776,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
 
         <!-- Record button -->
         <button class="btn-record" id="btn-record" onclick="App.toggleRecord()">
-          <span id="btn-record-icon">⏺</span>
+          <span id="btn-record-icon">${RECORD_ICON}</span>
         </button>
         <div class="rec-hint" id="rec-hint">Appuyez pour démarrer l'enregistrement</div>
 
@@ -749,10 +785,10 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
           <video id="playback-video" controls style="width:100%;border-radius:12px;display:none;"></video>
           <audio id="playback-audio" controls style="width:100%;display:none;"></audio>
           <div class="alert success visible" id="duration-ok" style="display:none;">
-            ✅ Durée validée ! Votre message dure <strong id="final-duration"></strong>.
+            <div>Durée validée ! Votre message dure <strong id="final-duration"></strong>.</div>
           </div>
           <div class="alert error visible" id="duration-ko" style="display:none;">
-            ⚠️ Message trop court. Minimum 30 secondes requis.
+            <div>Message trop court. Minimum 30 secondes requis.</div>
           </div>
         </div>
       </div>
@@ -768,9 +804,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     </div>
 
     <div style="display:flex;gap:10px;">
-      <button class="btn btn-outline" style="flex:1;" onclick="App.goToWelcome()">← Retour</button>
+      <button class="btn btn-outline" style="flex:1;" onclick="App.goToWelcome()">${ARROW_LEFT_ICON} Retour</button>
       <button class="btn btn-primary" style="flex:2;" id="btn-submit" onclick="App.submitMedia()" disabled>
-        Envoyer mon message →
+        Envoyer mon message ${PAPER_AIRPLANE_ICON}
       </button>
     </div>
   </div>
@@ -816,7 +852,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       </button>
     </div>
 
-    <button class="btn btn-outline" onclick="App.goToWelcome()">← Retour à l'accueil</button>
+    <button class="btn btn-outline" onclick="App.goToWelcome()">${ARROW_LEFT_ICON} Retour à l'accueil</button>
   </div>
 
 </div><!-- #app -->
@@ -826,6 +862,9 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
 // CONFIG — injectée côté serveur
 // ═══════════════════════════════════════════════════════
 const FUNCTION_BASE = '${supabaseUrl}/functions/v1/guest-portal';
+
+const RECORD_ICON_HTML = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9" /></svg>';
+const STOP_ICON_HTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="2" /></svg>';
 
 // ═══════════════════════════════════════════════════════
 // APP STATE
@@ -1102,7 +1141,7 @@ async function startRecording() {
   State.isRecording = true;
   State.timerStart  = Date.now();
   document.getElementById('btn-record').classList.add('recording');
-  document.getElementById('btn-record-icon').textContent = '⏹';
+  document.getElementById('btn-record-icon').innerHTML = STOP_ICON_HTML;
   vibrate(15); // short haptic on record start
   document.getElementById('rec-hint').textContent = 'En cours… appuyez pour arrêter';
   document.getElementById('playback-area').style.display = 'none';
@@ -1120,7 +1159,7 @@ function stopRecording() {
   stopTimer();
   State.isRecording = false;
   document.getElementById('btn-record').classList.remove('recording');
-  document.getElementById('btn-record-icon').textContent = '⏺';
+  document.getElementById('btn-record-icon').innerHTML = RECORD_ICON_HTML;
   document.getElementById('rec-hint').textContent = 'Appuyez pour ré-enregistrer';
 }
 
@@ -1157,8 +1196,8 @@ function onRecordStop() {
   const ok = State.duration >= 30;
   const durOk = document.getElementById('duration-ok');
   const durKo = document.getElementById('duration-ko');
-  durOk.style.display = ok ? 'block' : 'none';
-  durKo.style.display = ok ? 'none'  : 'block';
+  durOk.style.display = ok ? 'flex' : 'none';
+  durKo.style.display = ok ? 'none' : 'flex';
   if (ok) document.getElementById('final-duration').textContent = label;
 
   document.getElementById('btn-submit').disabled = !ok;
@@ -1194,7 +1233,7 @@ function startTimer() {
       lastDisplayed = sec;
       document.getElementById('timer-text').textContent = sec + 's';
       document.getElementById('timer-label').textContent =
-        elapsed >= 30 ? '✅ Durée validée !' : 'Encore ' + Math.ceil(30 - elapsed) + 's…';
+        elapsed >= 30 ? 'Durée validée !' : 'Encore ' + Math.ceil(30 - elapsed) + 's…';
 
       // Vibrate at 30s threshold (success pattern: two short buzzes)
       if (elapsed >= 30 && !vibrateAt30) {
@@ -1229,7 +1268,7 @@ function resetRecorder() {
   circle.classList.remove('glow');
   document.getElementById('timer-text').textContent = '0s';
   document.getElementById('timer-label').textContent = 'Appuyez pour commencer';
-  document.getElementById('btn-record-icon').textContent = '⏺';
+  document.getElementById('btn-record-icon').innerHTML = RECORD_ICON_HTML;
   document.getElementById('rec-hint').textContent = "Appuyez pour démarrer l'enregistrement";
   document.getElementById('btn-submit').disabled = true;
   clearAlert('rec');

@@ -44,54 +44,99 @@ function readUnsigned(bytes: Uint8Array, offset: number, length: number) {
   return value;
 }
 
+// EBML element IDs (canonical byte-encoded form, marker bit included).
+const SEGMENT_ID = 0x18538067;
+const INFO_ID = 0x1549a966;
+const CLUSTER_ID = 0x1f43b675;
+const TIMECODE_SCALE_ID = 0x2ad7b1;
+const DURATION_ID = 0x4489;
+const TIMECODE_ID = 0xe7;
+const SIMPLE_BLOCK_ID = 0xa3;
+
+interface ElementHeader {
+  id: number;
+  contentStart: number;
+  /** -1 means "unknown size" (extends to the end of the parent range). */
+  contentLength: number;
+}
+
+function readElementHeader(bytes: Uint8Array, offset: number): ElementHeader | null {
+  const idInfo = readVint(bytes, offset, true);
+  if (!idInfo) return null;
+  const sizeInfo = readVint(bytes, offset + idInfo.length, false);
+  if (!sizeInfo) return null;
+  const unknown = sizeInfo.value === Math.pow(2, 7 * sizeInfo.length) - 1;
+  return {
+    id: idInfo.value,
+    contentStart: offset + idInfo.length + sizeInfo.length,
+    contentLength: unknown ? -1 : sizeInfo.value,
+  };
+}
+
+/**
+ * Walks direct children of the EBML element occupying [start, end), respecting
+ * each child's declared size so binary payloads (e.g. SimpleBlock frame data)
+ * are skipped rather than scanned — avoiding false-positive ID matches inside
+ * compressed media data.
+ */
+function walkChildren(
+  bytes: Uint8Array,
+  start: number,
+  end: number,
+  visitor: (id: number, contentStart: number, contentEnd: number) => void,
+) {
+  let offset = start;
+  while (offset < end) {
+    const header = readElementHeader(bytes, offset);
+    if (!header) return;
+    const contentEnd = header.contentLength === -1 ? end : header.contentStart + header.contentLength;
+    if (contentEnd > end || header.contentStart > bytes.length) return;
+    visitor(header.id, header.contentStart, Math.min(contentEnd, bytes.length));
+    if (header.contentLength === -1) return; // unknown-size element consumes the rest of the range
+    offset = contentEnd;
+  }
+}
+
 function webmDuration(bytes: Uint8Array): number | null {
   let timecodeScale = 1_000_000;
   let declaredDuration: number | null = null;
-  let clusterTimecode = 0;
   let maxTimecode = 0;
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 
-  for (let i = 0; i + 4 < bytes.length; i++) {
-    // TimecodeScale (0x2AD7B1)
-    if (bytes[i] === 0x2a && bytes[i + 1] === 0xd7 && bytes[i + 2] === 0xb1) {
-      const size = readVint(bytes, i + 3);
-      if (size) {
-        const value = readUnsigned(bytes, i + 3 + size.length, size.value);
-        if (value) timecodeScale = value;
+  walkChildren(bytes, 0, bytes.length, (topId, segStart, segEnd) => {
+    if (topId !== SEGMENT_ID) return;
+
+    walkChildren(bytes, segStart, segEnd, (id, contentStart, contentEnd) => {
+      if (id === INFO_ID) {
+        walkChildren(bytes, contentStart, contentEnd, (infoId, iStart, iEnd) => {
+          if (infoId === TIMECODE_SCALE_ID) {
+            const value = readUnsigned(bytes, iStart, iEnd - iStart);
+            if (value) timecodeScale = value;
+          } else if (infoId === DURATION_ID) {
+            const len = iEnd - iStart;
+            if (len === 4) declaredDuration = view.getFloat32(iStart, false);
+            else if (len === 8) declaredDuration = view.getFloat64(iStart, false);
+          }
+        });
+      } else if (id === CLUSTER_ID) {
+        let clusterTimecode = 0;
+        walkChildren(bytes, contentStart, contentEnd, (clId, clStart, clEnd) => {
+          if (clId === TIMECODE_ID) {
+            const value = readUnsigned(bytes, clStart, clEnd - clStart);
+            if (value != null) {
+              clusterTimecode = value;
+              maxTimecode = Math.max(maxTimecode, value);
+            }
+          } else if (clId === SIMPLE_BLOCK_ID) {
+            const track = readVint(bytes, clStart);
+            if (!track || clStart + track.length + 2 > clEnd) return;
+            const relative = view.getInt16(clStart + track.length, false);
+            maxTimecode = Math.max(maxTimecode, clusterTimecode + relative);
+          }
+        });
       }
-    }
-    // Duration (0x4489), an EBML float.
-    if (bytes[i] === 0x44 && bytes[i + 1] === 0x89) {
-      const size = readVint(bytes, i + 2);
-      if (size) {
-        const at = i + 2 + size.length;
-        if (size.value === 4 && at + 4 <= bytes.length) declaredDuration = view.getFloat32(at, false);
-        if (size.value === 8 && at + 8 <= bytes.length) declaredDuration = view.getFloat64(at, false);
-      }
-    }
-    // Cluster Timecode (0xE7). This also covers MediaRecorder WebM files
-    // that omit the Duration element.
-    if (bytes[i] === 0xe7) {
-      const size = readVint(bytes, i + 1);
-      if (size && size.value <= 8) {
-        const value = readUnsigned(bytes, i + 1 + size.length, size.value);
-        if (value != null) {
-          clusterTimecode = value;
-          maxTimecode = Math.max(maxTimecode, value);
-        }
-      }
-    }
-    // SimpleBlock (0xA3): track vint, then signed 16-bit relative timecode.
-    if (bytes[i] === 0xa3) {
-      const size = readVint(bytes, i + 1);
-      if (!size || size.value < 4) continue;
-      const dataAt = i + 1 + size.length;
-      const track = readVint(bytes, dataAt);
-      if (!track || dataAt + track.length + 2 > bytes.length) continue;
-      const relative = view.getInt16(dataAt + track.length, false);
-      maxTimecode = Math.max(maxTimecode, clusterTimecode + relative);
-    }
-  }
+    });
+  });
 
   const ticks = declaredDuration && declaredDuration > 0 ? declaredDuration : maxTimecode;
   return ticks > 0 ? ticks * timecodeScale / 1_000_000_000 : null;
