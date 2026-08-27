@@ -46,7 +46,6 @@ class TablesController extends GetxController {
     try {
       await _tableRepository.createTable(label: label, capacity: capacity);
       await loadTables();
-      Get.back();
       Get.snackbar('Succès', 'Table créée avec succès');
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible de créer la table');

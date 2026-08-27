@@ -91,7 +91,6 @@ class GuestsController extends GetxController {
       );
 
       await loadGuests();
-      Get.back();
       Get.snackbar('Succès', 'Invité ajouté avec succès');
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible d\'ajouter l\'invité');

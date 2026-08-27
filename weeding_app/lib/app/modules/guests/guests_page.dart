@@ -34,7 +34,7 @@ class GuestsPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     _SearchBar(controller: controller),
                     const SizedBox(height: 12),
-                    Obx(() => _FilterChips(controller: controller)),
+                    Obx(() => _buildFilterChips(controller)),
                   ],
                 ),
               ),
@@ -187,63 +187,57 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-// ── Filter Chips ──
-class _FilterChips extends StatelessWidget {
-  final GuestsController controller;
-  const _FilterChips({required this.controller});
+// ── Filter Chips (plain function — reactive reads must be inside Obx) ──
+Widget _buildFilterChips(GuestsController controller) {
+  final filters = [
+    ('Tous', 'all', controller.guests.length),
+    ('En attente', 'pending', controller.pendingCount),
+    ('Confirmés', 'confirmed', controller.confirmedCount),
+  ];
 
-  @override
-  Widget build(BuildContext context) {
-    final filters = [
-      ('Tous', 'all', controller.guests.length),
-      ('En attente', 'pending', controller.pendingCount),
-      ('Confirmés', 'confirmed', controller.confirmedCount),
-    ];
-
-    return SizedBox(
-      height: 36,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: filters.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 8),
-        itemBuilder: (context, i) {
-          final (label, key, count) = filters[i];
-          final isSelected = controller.filterStatus.value == key;
-          return TapScale(
-            onTap: () => controller.onFilterChanged(key),
-            pressedScale: 0.93,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.outlineVariant,
-                ),
-                boxShadow: isSelected
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : null,
+  return SizedBox(
+    height: 36,
+    child: ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: filters.length,
+      separatorBuilder: (context, index) => const SizedBox(width: 8),
+      itemBuilder: (context, i) {
+        final (label, key, count) = filters[i];
+        final isSelected = controller.filterStatus.value == key;
+        return TapScale(
+          onTap: () => controller.onFilterChanged(key),
+          pressedScale: 0.93,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.primary : Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: isSelected ? AppColors.primary : AppColors.outlineVariant,
               ),
-              child: Text(
-                '$label ($count)',
-                style: AppTextStyles.labelMd.copyWith(
-                  color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                ),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : null,
+            ),
+            child: Text(
+              '$label ($count)',
+              style: AppTextStyles.labelMd.copyWith(
+                color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        );
+      },
+    ),
+  );
 }
 
 // ── Guest Card ──
@@ -431,9 +425,10 @@ class _AddGuestSheet extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      controller.createGuest(
+                      Navigator.pop(context);
+                      await controller.createGuest(
                         fullName: nameController.text.trim(),
                         phone: phoneController.text.trim().isEmpty
                             ? null
@@ -442,7 +437,6 @@ class _AddGuestSheet extends StatelessWidget {
                             ? null
                             : emailController.text.trim(),
                       );
-                      Navigator.pop(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(

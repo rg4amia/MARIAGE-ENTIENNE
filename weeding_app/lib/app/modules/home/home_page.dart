@@ -102,13 +102,13 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Obx(() {
-            final initials = authController.profile.value?.fullName
-                    .split(' ')
-                    .map((e) => e.isNotEmpty ? e[0] : '')
-                    .join()
-                    .toUpperCase()
-                    .substring(0, 2) ??
-                'AD';
+            final name = authController.profile.value?.fullName ?? 'Admin';
+            final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
+            final initials = parts.length >= 2
+                ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
+                : name.length >= 2
+                    ? name.substring(0, 2).toUpperCase()
+                    : name.toUpperCase();
             return UserAvatar(
               initials: initials,
               radius: 24,

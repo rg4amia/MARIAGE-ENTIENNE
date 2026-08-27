@@ -8,11 +8,19 @@ class TableRepository {
   Future<List<WeddingTable>> getAllTables() async {
     final response = await _client
         .from('seating_tables')
-        .select()
+        .select('*, chairs(count)')
         .order('created_at', ascending: false);
-    return (response as List)
-        .map((json) => WeddingTable.fromJson(json))
-        .toList();
+
+    return (response as List).map((json) {
+      final chairs = json['chairs'] as List?;
+      final assignedCount = chairs?.isNotEmpty == true
+          ? (chairs!.first['count'] as int?) ?? 0
+          : 0;
+      return WeddingTable.fromJson({
+        ...json,
+        'assigned_seats': assignedCount,
+      });
+    }).toList();
   }
 
   Future<WeddingTable?> getTableById(String id) async {

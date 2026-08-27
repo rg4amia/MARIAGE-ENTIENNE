@@ -286,10 +286,12 @@ class _TableCard extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
-                        value: 0.0, // Will be dynamic when guest_seats data available
+                        value: table.occupancy.clamp(0.0, 1.0),
                         backgroundColor: AppColors.surfaceContainerHigh,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.secondaryContainer,
+                          table.occupancy >= 1.0
+                              ? const Color(0xFF4CAF50)
+                              : AppColors.secondaryContainer,
                         ),
                         minHeight: 6,
                       ),
@@ -297,7 +299,7 @@ class _TableCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    '0 / ${table.capacity}',
+                    '${table.assignedSeats} / ${table.capacity}',
                     style: AppTextStyles.labelMd.copyWith(
                       color: AppColors.onSurfaceVariant,
                       fontWeight: FontWeight.w600,
@@ -377,13 +379,13 @@ class _CreateTableSheet extends StatelessWidget {
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState!.validate()) {
-                      controller.createTable(
+                      Navigator.pop(context);
+                      await controller.createTable(
                         label: labelController.text.trim(),
                         capacity: int.parse(capacityController.text),
                       );
-                      Navigator.pop(context);
                     }
                   },
                   style: ElevatedButton.styleFrom(
