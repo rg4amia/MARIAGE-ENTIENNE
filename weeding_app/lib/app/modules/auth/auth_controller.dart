@@ -55,6 +55,8 @@ class AuthController extends GetxController {
 
     if (user.value != null) {
       _loadProfile();
+      // Refresh JWT to ensure app_metadata (admin role) is up-to-date
+      Supabase.instance.client.auth.refreshSession();
       // Rediriger vers home si déjà connecté (session persistée)
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (Get.currentRoute == AppRoutes.login) {
@@ -91,6 +93,9 @@ class AuthController extends GetxController {
         email: emailController.text.trim(),
         password: passwordController.text,
       );
+
+      // Refresh session to get latest app_metadata (admin role etc.)
+      await Supabase.instance.client.auth.refreshSession();
 
       Get.offAllNamed(AppRoutes.home);
       _clearControllers();
@@ -139,6 +144,8 @@ class AuthController extends GetxController {
 
       // Si une session est retournée, l'utilisateur est connecté directement
       if (response.session != null) {
+        // Refresh session to get latest app_metadata (admin role etc.)
+        await Supabase.instance.client.auth.refreshSession();
         Get.offAllNamed(AppRoutes.home);
       } else {
         // Email confirmation requise : rediriger vers login avec message
