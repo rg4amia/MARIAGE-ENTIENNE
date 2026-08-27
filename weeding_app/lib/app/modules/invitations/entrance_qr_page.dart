@@ -8,6 +8,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../../data/models/entrance_qr.dart';
 import '../../data/repositories/entrance_repository.dart';
 
@@ -107,7 +108,25 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                   slivers: [
                     // ── Gradient Header ──
                     SliverToBoxAdapter(
-                      child: _buildGradientHeader(qr),
+                      child: WeddingHeader(
+                        title: "QR d'entrée",
+                        trailing: TapScale(
+                          onTap: _load,
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.refresh_rounded, color: Colors.white, size: 22),
+                          ),
+                        ),
+                        child: HeaderInfoBanner(
+                          icon: Icons.info_outline_rounded,
+                          text: "Affichez ce QR à l'entrée — les invités le scannent pour confirmer leur arrivée.",
+                        ),
+                      ),
                     ),
                     // ── QR Code Card ──
                     SliverToBoxAdapter(
@@ -197,105 +216,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Gradient Header with Back Button ──
-  Widget _buildGradientHeader(EntranceQr qr) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        MediaQuery.of(context).padding.top + 8,
-        16,
-        24,
-      ),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFA53C00),
-            Color(0xFFD4690A),
-            Color(0xFFFF7A3D),
-          ],
-        ),
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x30A53C00),
-            blurRadius: 20,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          // Top bar
-          Row(
-            children: [
-              TapScale(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.arrow_back_rounded,
-                      color: Colors.white, size: 22),
-                ),
-              ),
-              const Spacer(),
-              Text(
-                'QR d\'entrée',
-                style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
-                ),
-              ),
-              const Spacer(),
-              TapScale(
-                onTap: _load,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Icon(Icons.refresh_rounded,
-                      color: Colors.white, size: 22),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          // Info text
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.info_outline_rounded,
-                    color: Colors.white.withValues(alpha: 0.9), size: 18),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Affichez ce QR à l\'entrée — les invités le scannent pour confirmer leur arrivée.',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontSize: 13,
-                      height: 1.3,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   // ── QR Code Card with Decorative Frame ──
   Widget _buildQrCard(EntranceQr qr) {

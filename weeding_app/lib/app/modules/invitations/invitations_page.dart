@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/guest_link_repository.dart';
 import '../../data/models/guest.dart';
@@ -57,20 +58,36 @@ class _InvitationsPageState extends State<InvitationsPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(
-          'Suivi des invitations',
-          style: AppTextStyles.headlineMdPrimary,
-        ),
-        actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadData),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            )
-          : RefreshIndicator(
+      body: Column(
+        children: [
+          // ── Gradient Header ──
+          WeddingHeader(
+            title: 'Invitations',
+            showBack: false,
+            trailing: GestureDetector(
+              onTap: _loadData,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.refresh_rounded,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
+            ),
+          ),
+          // ── Body ──
+          Expanded(
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  )
+                : RefreshIndicator(
               onRefresh: _loadData,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -172,6 +189,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 ),
               ),
             ),
+          ),
+        ],
+      ),
       bottomNavigationBar: const AppBottomNavBar(currentIndex: 3),
     );
   }

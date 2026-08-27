@@ -7,6 +7,7 @@ import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../../routes/app_routes.dart';
 import 'guests_controller.dart';
 
@@ -19,89 +20,99 @@ class GuestsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Search + Filters ──
-            FadeInSlide(
-              duration: const Duration(milliseconds: 400),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Invités', style: AppTextStyles.headlineLgMobile),
-                    const SizedBox(height: 16),
-                    _SearchBar(controller: controller),
-                    const SizedBox(height: 12),
-                    Obx(() => _buildFilterChips(controller)),
-                  ],
-                ),
+      body: Column(
+        children: [
+          // ── Gradient Header ──
+          WeddingHeader(
+            title: 'Invités',
+            showBack: false,
+            trailing: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.filter_list_rounded,
+                color: Colors.white,
+                size: 22,
               ),
             ),
+          ),
+          // ── Search + Filters ──
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _SearchBar(controller: controller),
+                const SizedBox(height: 12),
+                Obx(() => _buildFilterChips(controller)),
+              ],
+            ),
+          ),
+          // ── Guest List ──
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-            // ── Guest List ──
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              final guests = controller.filteredGuests;
 
-                final guests = controller.filteredGuests;
-
-                if (guests.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryContainer.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.group_rounded,
-                            size: 40,
-                            color: AppColors.primaryContainer.withValues(alpha: 0.5),
-                          ),
+              if (guests.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryContainer.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
                         ),
-                        const SizedBox(height: 16),
-                        Text('Aucun invité', style: AppTextStyles.headlineMd),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Appuyez sur + pour ajouter\nvotre premier invité',
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.bodyMdOnVariant,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
-                  itemCount: guests.length,
-                  itemBuilder: (context, index) {
-                    final guest = guests[index];
-                    return FadeInSlide(
-                      delay: Duration(milliseconds: index * 50),
-                      duration: const Duration(milliseconds: 400),
-                      child: _GuestCard(
-                        guest: guest,
-                        onTap: () => Get.toNamed(
-                          AppRoutes.guestDetail,
-                          arguments: guest,
+                        child: Icon(
+                          Icons.group_rounded,
+                          size: 40,
+                          color: AppColors.primaryContainer.withValues(alpha: 0.5),
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(height: 16),
+                      Text('Aucun invité', style: AppTextStyles.headlineMd),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Appuyez sur + pour ajouter\nvotre premier invité',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyMdOnVariant,
+                      ),
+                    ],
+                  ),
                 );
-              }),
-            ),
-          ],
-        ),
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
+                itemCount: guests.length,
+                itemBuilder: (context, index) {
+                  final guest = guests[index];
+                  return FadeInSlide(
+                    delay: Duration(milliseconds: index * 50),
+                    duration: const Duration(milliseconds: 400),
+                    child: _GuestCard(
+                      guest: guest,
+                      onTap: () => Get.toNamed(
+                        AppRoutes.guestDetail,
+                        arguments: guest,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+        ],
       ),
       floatingActionButton: Container(
         width: 56,

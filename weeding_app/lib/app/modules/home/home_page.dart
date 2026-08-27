@@ -7,6 +7,7 @@ import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../../routes/app_routes.dart';
 import 'home_controller.dart';
 import '../auth/auth_controller.dart';
@@ -21,100 +22,88 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: controller.loadStats,
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              // ── Header ──
-              SliverToBoxAdapter(
-                child: FadeInSlide(
-                  duration: const Duration(milliseconds: 600),
-                  child: _buildHeader(authController),
+      body: Column(
+        children: [
+          // ── Gradient Header with greeting ──
+          _buildWeddingHeader(authController),
+          // ── Scrollable Content ──
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: controller.loadStats,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    // ── KPI Grid ──
+                    Obx(() => _buildKpiGrid(controller)),
+
+                    const SizedBox(height: 20),
+                    // ── Invitation Status ──
+                    Obx(() => FadeInSlide(
+                      delay: const Duration(milliseconds: 300),
+                      child: _buildInvitationStatus(controller),
+                    )),
+
+                    const SizedBox(height: 20),
+                    // ── Quick Actions ──
+                    FadeInSlide(
+                      delay: const Duration(milliseconds: 450),
+                      child: _buildQuickActions(),
+                    ),
+
+                    const SizedBox(height: 100),
+                  ],
                 ),
               ),
-
-              // ── KPI Grid ──
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: Obx(() => _buildKpiGrid(controller)),
-                ),
-              ),
-
-              // ── Invitation Status ──
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Obx(() => FadeInSlide(
-                    delay: const Duration(milliseconds: 300),
-                    child: _buildInvitationStatus(controller),
-                  )),
-                ),
-              ),
-
-              // ── Quick Actions ──
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: FadeInSlide(
-                    delay: const Duration(milliseconds: 450),
-                    child: _buildQuickActions(),
-                  ),
-                ),
-              ),
-
-              const SliverToBoxAdapter(child: SizedBox(height: 100)),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
       bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 
-  // ── Header ──
-  Widget _buildHeader(AuthController authController) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
-      child: Row(
+  // ── Wedding Header with Greeting + Avatar ──
+  Widget _buildWeddingHeader(AuthController authController) {
+    return WeddingHeader(
+      title: '',
+      showBack: false,
+      trailing: Obx(() {
+        final name = authController.profile.value?.fullName ?? 'Admin';
+        final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
+        final initials = parts.length >= 2
+            ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
+            : name.length >= 2
+                ? name.substring(0, 2).toUpperCase()
+                : name.toUpperCase();
+        return UserAvatar(
+          initials: initials,
+          radius: 20,
+          backgroundColor: Colors.white.withValues(alpha: 0.25),
+        );
+      }),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() {
-                  final name = authController.profile.value?.fullName ?? 'Marie';
-                  return Text(
-                    'Bonjour, $name 👋',
-                    style: AppTextStyles.headlineLgMobile.copyWith(
-                      color: AppColors.onSurface,
-                    ),
-                  );
-                }),
-                const SizedBox(height: 4),
-                Text(
-                  '${DateTime.now().day} ${_monthName(DateTime.now().month)} ${DateTime.now().year}',
-                  style: AppTextStyles.bodyMdOnVariant,
-                ),
-              ],
-            ),
-          ),
           Obx(() {
-            final name = authController.profile.value?.fullName ?? 'Admin';
-            final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
-            final initials = parts.length >= 2
-                ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
-                : name.length >= 2
-                    ? name.substring(0, 2).toUpperCase()
-                    : name.toUpperCase();
-            return UserAvatar(
-              initials: initials,
-              radius: 24,
-              backgroundColor: AppColors.primary,
+            final name = authController.profile.value?.fullName ?? 'Marie';
+            return Text(
+              'Bonjour, $name 👋',
+              style: AppTextStyles.headlineLgMobile.copyWith(
+                color: Colors.white,
+              ),
             );
           }),
+          const SizedBox(height: 4),
+          Text(
+            '${DateTime.now().day} ${_monthName(DateTime.now().month)} ${DateTime.now().year}',
+            style: AppTextStyles.bodyMd.copyWith(
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
         ],
       ),
     );

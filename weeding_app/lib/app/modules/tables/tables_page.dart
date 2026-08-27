@@ -6,7 +6,7 @@ import '../../core/utils/validators.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
-
+import '../../core/widgets/wedding_header.dart';
 import '../../routes/app_routes.dart';
 import 'tables_controller.dart';
 
@@ -19,89 +19,93 @@ class TablesPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // ── Header + Search ──
-            FadeInSlide(
-              duration: const Duration(milliseconds: 400),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Tables', style: AppTextStyles.headlineLgMobile),
-                    const SizedBox(height: 16),
-                    _SearchBar(controller: controller),
-                  ],
-                ),
+      body: Column(
+        children: [
+          // ── Gradient Header ──
+          WeddingHeader(
+            title: 'Tables',
+            showBack: false,
+            trailing: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(
+                Icons.search_rounded,
+                color: Colors.white,
+                size: 22,
               ),
             ),
+          ),
+          // ── Search ──
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            child: _SearchBar(controller: controller),
+          ),
+          const SizedBox(height: 16),
+          // ── Table List ──
+          Expanded(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-            const SizedBox(height: 16),
+              final tables = controller.filteredTables;
 
-            // ── Table List ──
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final tables = controller.filteredTables;
-
-                if (tables.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondaryContainer.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.table_restaurant_rounded,
-                            size: 40,
-                            color: AppColors.secondaryContainer.withValues(alpha: 0.5),
-                          ),
+              if (tables.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.secondaryContainer.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
                         ),
-                        const SizedBox(height: 16),
-                        Text('Aucune table', style: AppTextStyles.headlineMd),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Créez votre première table\npour commencer à organiser',
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.bodyMdOnVariant,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                  itemCount: tables.length,
-                  itemBuilder: (context, index) {
-                    final table = tables[index];
-                    return FadeInSlide(
-                      delay: Duration(milliseconds: index * 60),
-                      duration: const Duration(milliseconds: 400),
-                      child: _TableCard(
-                        table: table,
-                        onTap: () => Get.toNamed(
-                          AppRoutes.tableDetail,
-                          arguments: table,
+                        child: Icon(
+                          Icons.table_restaurant_rounded,
+                          size: 40,
+                          color: AppColors.secondaryContainer.withValues(alpha: 0.5),
                         ),
                       ),
-                    );
-                  },
+                      const SizedBox(height: 16),
+                      Text('Aucune table', style: AppTextStyles.headlineMd),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Créez votre première table\npour commencer à organiser',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.bodyMdOnVariant,
+                      ),
+                    ],
+                  ),
                 );
-              }),
-            ),
-          ],
-        ),
+              }
+
+              return ListView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                itemCount: tables.length,
+                itemBuilder: (context, index) {
+                  final table = tables[index];
+                  return FadeInSlide(
+                    delay: Duration(milliseconds: index * 60),
+                    duration: const Duration(milliseconds: 400),
+                    child: _TableCard(
+                      table: table,
+                      onTap: () => Get.toNamed(
+                        AppRoutes.tableDetail,
+                        arguments: table,
+                      ),
+                    ),
+                  );
+                },
+              );
+            }),
+          ),
+        ],
       ),
       floatingActionButton: Container(
         width: 56,

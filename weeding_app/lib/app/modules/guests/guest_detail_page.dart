@@ -11,6 +11,7 @@ import '../../data/models/guest_link.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
 import '../../data/repositories/guest_link_repository.dart';
+import '../../core/widgets/wedding_header.dart';
 import 'guests_controller.dart';
 
 class GuestDetailPage extends StatefulWidget {
@@ -67,16 +68,29 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text('Détails invité', style: AppTextStyles.headlineMdPrimary),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            onPressed: () => _confirmDelete(context, controller, guest),
+      body: Column(
+        children: [
+          WeddingHeader(
+            title: 'Détails invité',
+            trailing: GestureDetector(
+              onTap: () => _confirmDelete(context, controller, guest),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
-      body: SingleChildScrollView(
+          Expanded(
+            child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
@@ -304,7 +318,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                 ),
               ),
           ],
-        ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../auth/auth_controller.dart';
 import '../../routes/app_routes.dart';
 
@@ -17,18 +18,33 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text('Paramètres', style: AppTextStyles.headlineLgMobile),
+      body: Column(
+        children: [
+          // ── Gradient Header ──
+          WeddingHeader(
+            title: 'Paramètres',
+            showBack: false,
+            trailing: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(height: 20),
+              child: const Icon(
+                Icons.person_outline_rounded,
+                color: Colors.white,
+                size: 22,
+              ),
+            ),
+          ),
+          // ── Content ──
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
               // ── Premium Profile Card ──
               FadeInSlide(
@@ -224,9 +240,11 @@ class SettingsPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-            ],
+              ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
       bottomNavigationBar: const AppBottomNavBar(currentIndex: 4),
     );

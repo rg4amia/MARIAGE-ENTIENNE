@@ -59,7 +59,7 @@ class TableRepository {
   Future<List<Chair>> getChairsByTableId(String tableId) async {
     final response = await _client
         .from('chairs')
-        .select()
+        .select('*, guests(full_name)')
         .eq('table_id', tableId)
         .order('chair_number');
     return (response as List).map((json) => Chair.fromJson(json)).toList();
@@ -68,7 +68,7 @@ class TableRepository {
   Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {
     final response = await _client
         .from('chairs')
-        .select()
+        .select('*, guests(full_name)')
         .eq('table_id', tableId)
         .isFilter('guest_id', null)
         .order('chair_number');
