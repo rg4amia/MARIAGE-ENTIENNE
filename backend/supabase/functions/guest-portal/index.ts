@@ -526,18 +526,19 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
 
     /* ── Card invitation ── */
     .invitation-card {
-      background: linear-gradient(135deg, #1a1a2e, #0f3460);
-      border-radius: 16px; padding: 32px 24px;
-      text-align: center; color: #fff;
-      border: 1px solid rgba(201,168,76,.3);
+      background: var(--ivory);
+      border-radius: 20px; padding: 40px 24px;
+      text-align: center; color: var(--dark);
+      border: 2px solid var(--peach);
+      box-shadow: inset 0 0 20px rgba(255,122,61,0.05);
     }
-    .invitation-card .couple { font-size: 22px; color: var(--gold); margin: 8px 0 16px; letter-spacing: 1px; }
-    .invitation-card .divider { border: none; border-top: 1px solid rgba(201,168,76,.3); margin: 12px 0; }
-    .invitation-card .inv-name { font-size: 28px; font-weight: bold; margin: 8px 0; }
-    .invitation-card .inv-detail { font-size: 14px; color: rgba(255,255,255,.7); margin: 4px 0; }
+    .invitation-card .couple { font-size: 32px; color: var(--orange); margin: 8px 0 16px; letter-spacing: 1px; }
+    .invitation-card .divider { border: none; border-top: 1px solid var(--peach); margin: 16px 0; }
+    .invitation-card .inv-name { font-size: 28px; font-weight: bold; margin: 8px 0; color: var(--dark); }
+    .invitation-card .inv-detail { font-size: 15px; color: var(--text); margin: 6px 0; }
     .invitation-card .inv-code {
       font-size: 12px; letter-spacing: 3px;
-      color: rgba(255,255,255,.4); margin-top: 16px;
+      color: var(--muted); margin-top: 24px;
     }
     .unlock-badge {
       display: inline-flex; align-items: center; gap: 6px;
@@ -592,8 +593,8 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
   <div id="screen-error" class="screen">
     <div style="text-align:center; padding: 40px 20px;">
       <div style="font-size:60px;margin-bottom:16px;">💌</div>
-      <h2 style="color:#fff;margin-bottom:8px;">Invitation introuvable</h2>
-      <p style="color:rgba(255,255,255,.6);font-size:14px;" id="error-msg">
+      <h2 style="color:var(--dark);margin-bottom:8px;">Invitation introuvable</h2>
+      <p style="color:var(--muted);font-size:14px;" id="error-msg">
         Ce lien d'invitation n'est pas valide ou a expiré.
       </p>
     </div>
