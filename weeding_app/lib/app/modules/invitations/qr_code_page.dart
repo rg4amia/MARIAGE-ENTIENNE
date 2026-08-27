@@ -28,6 +28,14 @@ class QrCodePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments == null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(title: const Text('Erreur')),
+        body: const Center(child: Text('Aucun invité fourni.')),
+      );
+    }
+
     final controller = Get.find<InvitationsController>();
     final guest = Get.arguments as Guest;
 

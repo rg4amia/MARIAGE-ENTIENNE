@@ -32,6 +32,14 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   }
 
   Future<void> _loadOrCreateLink() async {
+    if (Get.arguments == null) {
+      if (mounted) {
+        setState(() {
+          _isLoadingLink = false;
+        });
+      }
+      return;
+    }
     final guest = Get.arguments as Guest;
     final linkRepo = GuestLinkRepository();
 
@@ -63,6 +71,14 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments == null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(title: const Text('Erreur')),
+        body: const Center(child: Text('Aucun invité fourni en paramètre.')),
+      );
+    }
+
     final controller = Get.find<GuestsController>();
     final guest = Get.arguments as Guest;
 

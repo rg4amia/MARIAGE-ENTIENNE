@@ -15,6 +15,14 @@ class TableDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Get.arguments == null) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        appBar: AppBar(title: const Text('Erreur')),
+        body: const Center(child: Text('Aucune table fournie.')),
+      );
+    }
+
     final controller = Get.find<TablesController>();
     final table = Get.arguments as WeddingTable;
 
