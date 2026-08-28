@@ -31,7 +31,7 @@ class _HoverCardState extends State<HoverCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _scaleAnim;
-  bool _isHovered = false;
+  bool _isHovered = false; // ignore: prefer_final_fields
 
   @override
   void initState() {
