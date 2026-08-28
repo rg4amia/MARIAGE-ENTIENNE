@@ -12,6 +12,7 @@ agence depuis la préparation jusqu'au contrôle d'accès le jour du mariage.
 - forfaits Découverte, Pro et Agence ;
 - essai Pro de 14 jours à l'onboarding ;
 - lieux Mairie, Église et Réception avec coordonnées Maps ;
+- identité visuelle par mariage : palettes prédéfinies, couleurs HEX et aperçu ;
 - modèles de cartes personnalisables ;
 - historique multicanal des envois ;
 - tables, chaises et plan de salle enrichis ;

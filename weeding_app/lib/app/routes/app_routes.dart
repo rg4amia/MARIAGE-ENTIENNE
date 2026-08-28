@@ -11,4 +11,5 @@ class AppRoutes {
   static const entranceQr = '/invitations/entrance';
   static const settings = '/settings';
   static const venues = '/venues';
+  static const weddingTheme = '/settings/wedding-theme';
 }

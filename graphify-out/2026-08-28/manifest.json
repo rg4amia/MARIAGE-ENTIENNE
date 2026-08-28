@@ -264,9 +264,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/data/repositories/auth_repository.dart": {
-    "mtime": 1787743323.1165006,
-    "seen": 1787909644.936762,
-    "ast_hash": "fbcebc5e2f1bbee8d00ddbd9efeaaab0",
+    "mtime": 1787912929.6321223,
+    "seen": 1787913838.788007,
+    "ast_hash": "2cc64f2d9802a1fc2e19325e0bae5a24",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/data/repositories/chair_repository.dart": {
@@ -324,9 +324,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/auth/auth_controller.dart": {
-    "mtime": 1787828685.5213017,
-    "seen": 1787909644.936776,
-    "ast_hash": "598f1be741c9104dfa1da5a817565ca2",
+    "mtime": 1787912880.0848973,
+    "seen": 1787913838.7884061,
+    "ast_hash": "3f129f2791dec289fabd7d3eb62592c1",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/auth/login_page.dart": {
@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/invitations/invitations_page.dart": {
-    "mtime": 1787909701.0364351,
-    "seen": 1787909724.6248,
-    "ast_hash": "000cb2ad626149d958f229340ec29959",
+    "mtime": 1787910239.130011,
+    "seen": 1787913838.789288,
+    "ast_hash": "cc717bf76338c65311376b05d057b315",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/invitations/qr_code_page.dart": {
@@ -480,9 +480,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/settings/settings_page.dart": {
-    "mtime": 1787909438.1817894,
-    "seen": 1787909644.936812,
-    "ast_hash": "3bc2d9a669a6de592f2f10f4d6ab10c4",
+    "mtime": 1787913578.948923,
+    "seen": 1787913838.7894158,
+    "ast_hash": "0297bd4af1381f07e88bd000944457e4",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/tables/table_detail_page.dart": {
@@ -510,21 +510,21 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/routes/app_pages.dart": {
-    "mtime": 1787909438.266315,
-    "seen": 1787909644.9368188,
-    "ast_hash": "b0bb03c3f4e5d17d1cb7e9968e24b5d6",
+    "mtime": 1787913479.842646,
+    "seen": 1787913838.789577,
+    "ast_hash": "879a9ab94bb62fd57f18018c85d55cd6",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/routes/app_routes.dart": {
-    "mtime": 1787745458.2370267,
-    "seen": 1787909644.9368231,
-    "ast_hash": "3e532cbd22ac88c1dca7a0b6df049fe2",
+    "mtime": 1787913479.8423924,
+    "seen": 1787913838.789578,
+    "ast_hash": "57caa06839e9571c0c1d7815ef13b92d",
     "semantic_hash": ""
   },
   "weeding_app/lib/main.dart": {
-    "mtime": 1787751772.0747528,
-    "seen": 1787909644.936825,
-    "ast_hash": "b32d047d2b2116662874cd5f500abc80",
+    "mtime": 1787912910.9406915,
+    "seen": 1787913838.789579,
+    "ast_hash": "0d800520162346e821381f06965c1d16",
     "semantic_hash": ""
   },
   "weeding_app/linux/flutter/generated_plugin_registrant.cc": {
@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   "weeding_app/macos/Flutter/GeneratedPluginRegistrant.swift": {
-    "mtime": 1787778934.3378558,
-    "seen": 1787909644.936832,
-    "ast_hash": "2aaf446693a78484131b2f1fd8e48bfc",
+    "mtime": 1787910205.6079128,
+    "seen": 1787913838.78991,
+    "ast_hash": "a05ad7a0f10f9b2cd34c7e44012416a8",
     "semantic_hash": ""
   },
   "weeding_app/macos/Runner/AppDelegate.swift": {
@@ -870,9 +870,9 @@
     "semantic_hash": ""
   },
   "weeding_app/pubspec.yaml": {
-    "mtime": 1787778932.460483,
-    "seen": 1787909644.936939,
-    "ast_hash": "7996256c37cedb8e76fd76ed276c68b3",
+    "mtime": 1787913479.8410425,
+    "seen": 1787913838.791691,
+    "ast_hash": "5de3d66d11d5f0146d1751cc272fc99d",
     "semantic_hash": ""
   },
   "weeding_app/web/index.html": {
@@ -1245,6 +1245,78 @@
     "mtime": 1779205212.5828936,
     "seen": 1787909644.937022,
     "ast_hash": "301a7604d45b3e739efc881eb04896ea",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/data/models/event_venue.dart": {
+    "mtime": 1787913578.8289857,
+    "seen": 1787913838.787714,
+    "ast_hash": "1ce17995e43860b80a90f3916a772798",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/data/repositories/event_venue_repository.dart": {
+    "mtime": 1787913479.8415031,
+    "seen": 1787913838.7880929,
+    "ast_hash": "e519c6172aaa2aa3f41347e6d52315c5",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/invitations/media_player_page.dart": {
+    "mtime": 1787911397.2949934,
+    "seen": 1787913838.78929,
+    "ast_hash": "cc3c4ab237c9e9e630467034c8ee483c",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart": {
+    "mtime": 1787912880.0862541,
+    "seen": 1787913838.789412,
+    "ast_hash": "b222443a9c078206e7a53cc158c5129d",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/onboarding/workspace_onboarding_controller.dart": {
+    "mtime": 1787912929.639439,
+    "seen": 1787913838.789414,
+    "ast_hash": "a4c9992178d08235cac5f5633b7e2130",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart": {
+    "mtime": 1787912929.650928,
+    "seen": 1787913838.789415,
+    "ast_hash": "d34bc8bb6a0b8cb4e48ebbc390472dc9",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/venues/venues_binding.dart": {
+    "mtime": 1787913479.8418183,
+    "seen": 1787913838.789574,
+    "ast_hash": "a671730bb054d9bca8fea92c89df1e88",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/venues/venues_controller.dart": {
+    "mtime": 1787913578.8368838,
+    "seen": 1787913838.7895749,
+    "ast_hash": "f917c0f2764af480ed4dc536c110de4a",
+    "semantic_hash": ""
+  },
+  "weeding_app/lib/app/modules/venues/venues_page.dart": {
+    "mtime": 1787913590.825241,
+    "seen": 1787913838.789576,
+    "ast_hash": "1c7680e5af79ec1948a9ecdcf8e7337e",
+    "semantic_hash": ""
+  },
+  "weeding_app/test/event_venue_test.dart": {
+    "mtime": 1787913753.467494,
+    "seen": 1787913838.790098,
+    "ast_hash": "7490243b18f08da742f3cce18b375ac3",
+    "semantic_hash": ""
+  },
+  "docs/SAAS_PRODUCT_ROADMAP.md": {
+    "mtime": 1787912481.519298,
+    "seen": 1787913838.7907782,
+    "ast_hash": "765d5a87cb50b3e7d293bebe63b50760",
+    "semantic_hash": ""
+  },
+  "docs/architecture/adr-001-saas-multi-tenant-foundation.md": {
+    "mtime": 1787912481.5191119,
+    "seen": 1787913838.7907782,
+    "ast_hash": "cd5d21ccac5d8fdcd714b511d231dbd5",
     "semantic_hash": ""
   }
 }

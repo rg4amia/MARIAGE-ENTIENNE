@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../data/models/profile.dart';
 import '../../routes/app_routes.dart';
+import '../../core/theme/wedding_theme_controller.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository = AuthRepository();
@@ -50,6 +51,9 @@ class AuthController extends GetxController {
         refreshProfile();
       } else if (event == AuthChangeEvent.signedOut) {
         profile.value = null;
+        if (Get.isRegistered<WeddingThemeController>()) {
+          Get.find<WeddingThemeController>().reset();
+        }
       }
     });
 
@@ -71,6 +75,9 @@ class AuthController extends GetxController {
   Future<void> refreshProfile() async {
     try {
       profile.value = await _authRepository.getProfile();
+      if (profile.value != null && Get.isRegistered<WeddingThemeController>()) {
+        await Get.find<WeddingThemeController>().loadForCurrentWedding();
+      }
     } catch (e) {
       debugPrint('Erreur chargement profil: $e');
     }

@@ -17,6 +17,7 @@ import '../modules/onboarding/workspace_onboarding_binding.dart';
 import '../modules/onboarding/workspace_onboarding_page.dart';
 import '../modules/venues/venues_binding.dart';
 import '../modules/venues/venues_page.dart';
+import '../modules/settings/wedding_theme_page.dart';
 
 class AppPages {
   static const initial = AppRoutes.login;
@@ -105,6 +106,12 @@ class AppPages {
       ),
       middlewares: [AuthMiddleware()],
       transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.weddingTheme,
+      page: () => const WeddingThemePage(),
+      middlewares: [AuthMiddleware()],
+      transition: Transition.rightToLeftWithFade,
     ),
   ];
 }

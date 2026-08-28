@@ -1,8 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../models/guest.dart';
 import '../models/guest_seat.dart';
-import '../../core/constants/supabase_config.dart';
 
 class GuestRepository {
   final SupabaseClient _client = Supabase.instance.client;
@@ -141,21 +141,36 @@ class GuestRepository {
     required String guestId,
     required String chairId,
   }) async {
-    await _client.rpc(
-      'assign_guest_to_chair',
-      params: {
-        'p_guest_id': guestId,
-        'p_chair_id': chairId,
-        'p_guest_portal_url': SupabaseConfig.guestPortalUrl,
-      },
-    );
+    try {
+      // First, unassign any existing seat for this guest
+      await _client
+          .from('chairs')
+          .update({'guest_id': null})
+          .eq('guest_id', guestId);
+
+      // Assign the new chair
+      await _client
+          .from('chairs')
+          .update({'guest_id': guestId})
+          .eq('id', chairId);
+
+      // Update guest status to 'pending_media' if it's still 'draft'
+      await _client
+          .from('guests')
+          .update({'status': 'pending_media'})
+          .eq('id', guestId)
+          .eq('status', 'draft');
+    } catch (e) {
+      debugPrint('Erreur assignation place: $e');
+      rethrow;
+    }
   }
 
   Future<void> unassignSeat(String guestId) async {
-    await _client.rpc(
-      'unassign_guest_from_chair',
-      params: {'p_guest_id': guestId},
-    );
+    await _client
+        .from('chairs')
+        .update({'guest_id': null})
+        .eq('guest_id', guestId);
   }
 
   String _generateQrToken(String fullName) {

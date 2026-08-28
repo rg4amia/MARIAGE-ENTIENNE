@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
 /// Barre unique de navigation de l'espace administrateur.
@@ -31,12 +30,13 @@ class AppBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
       child: Container(
         height: 68,
         decoration: BoxDecoration(
-          color: AppColors.dark,
+          color: scheme.inverseSurface,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Row(
@@ -59,7 +59,7 @@ class AppBottomNavBar extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? AppColors.primary.withValues(alpha: 0.2)
+                      ? scheme.primary.withValues(alpha: 0.2)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -69,10 +69,8 @@ class AppBottomNavBar extends StatelessWidget {
                     Icon(
                       _icons[index],
                       color: isActive
-                          ? AppColors.primary
-                          : AppColors.surfaceContainerHigh.withValues(
-                              alpha: 0.7,
-                            ),
+                          ? scheme.primary
+                          : scheme.onInverseSurface.withValues(alpha: 0.7),
                       size: 24,
                     ),
                     if (isActive) ...[
@@ -80,7 +78,7 @@ class AppBottomNavBar extends StatelessWidget {
                       Text(
                         _labels[index],
                         style: AppTextStyles.labelMd.copyWith(
-                          color: AppColors.primary,
+                          color: scheme.primary,
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),

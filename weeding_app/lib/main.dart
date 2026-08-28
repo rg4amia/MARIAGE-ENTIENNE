@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/core/theme/app_theme.dart';
+import 'app/core/theme/wedding_theme_controller.dart';
 import 'app/core/constants/supabase_config.dart';
 import 'app/core/storage/secure_local_storage.dart';
 import 'app/routes/app_pages.dart';
@@ -21,6 +22,8 @@ void main() async {
     ),
   );
 
+  Get.put(WeddingThemeController(), permanent: true);
+
   runApp(const WeddingApp());
 }
 
@@ -29,21 +32,24 @@ class WeddingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Mariage Étienne',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      initialBinding: AppBinding(),
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
-      defaultTransition: Transition.fadeIn,
-      locale: const Locale('fr', 'CI'),
-      supportedLocales: const [Locale('fr'), Locale('en')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+    final themeController = Get.find<WeddingThemeController>();
+    return Obx(
+      () => GetMaterialApp(
+        title: 'Mariage Étienne',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightThemeFor(themeController.palette.value),
+        initialBinding: AppBinding(),
+        initialRoute: AppPages.initial,
+        getPages: AppPages.routes,
+        defaultTransition: Transition.fadeIn,
+        locale: const Locale('fr', 'CI'),
+        supportedLocales: const [Locale('fr'), Locale('en')],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+      ),
     );
   }
 }

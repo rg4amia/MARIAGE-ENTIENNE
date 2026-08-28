@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'micro_interactions.dart';
 
@@ -24,10 +23,10 @@ class WeddingHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = gradientColors ?? const [
-      AppColors.primaryDark,
-      AppColors.primaryContainer,
-    ];
+    final scheme = Theme.of(context).colorScheme;
+    final colors =
+        gradientColors ??
+        [Color.lerp(scheme.primary, Colors.black, 0.2)!, scheme.secondary];
 
     return Container(
       padding: EdgeInsets.fromLTRB(
@@ -42,9 +41,7 @@ class WeddingHeader extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: colors,
         ),
-        borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(28),
-        ),
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
       child: Column(
         children: [
@@ -72,22 +69,14 @@ class WeddingHeader extends StatelessWidget {
               const Spacer(),
               Text(
                 title,
-                style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
-                ),
+                style: AppTextStyles.headlineMd.copyWith(color: Colors.white),
               ),
               const Spacer(),
-              if (trailing != null)
-                trailing!
-              else
-                const SizedBox(width: 40),
+              if (trailing != null) trailing! else const SizedBox(width: 40),
             ],
           ),
 
-          if (child != null) ...[
-            const SizedBox(height: 20),
-            child!,
-          ],
+          if (child != null) ...[const SizedBox(height: 20), child!],
         ],
       ),
     );
@@ -99,11 +88,7 @@ class HeaderInfoBanner extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const HeaderInfoBanner({
-    super.key,
-    required this.icon,
-    required this.text,
-  });
+  const HeaderInfoBanner({super.key, required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -115,11 +100,7 @@ class HeaderInfoBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: Colors.white.withValues(alpha: 0.9),
-            size: 18,
-          ),
+          Icon(icon, color: Colors.white.withValues(alpha: 0.9), size: 18),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

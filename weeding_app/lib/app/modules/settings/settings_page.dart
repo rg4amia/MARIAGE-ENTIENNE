@@ -180,6 +180,20 @@ class _SettingsPageState extends State<SettingsPage> {
                           onTap: () => Get.toNamed(AppRoutes.venues),
                         ),
                         _SettingsTile(
+                          icon: Icons.palette_outlined,
+                          iconColor: Theme.of(context).colorScheme.primary,
+                          title: 'Couleurs du mariage',
+                          subtitle: 'Application et invitations',
+                          trailing: _PaletteDots(
+                            colors: [
+                              Theme.of(context).colorScheme.primary,
+                              Theme.of(context).colorScheme.secondary,
+                              Theme.of(context).colorScheme.tertiary,
+                            ],
+                          ),
+                          onTap: () => Get.toNamed(AppRoutes.weddingTheme),
+                        ),
+                        _SettingsTile(
                           icon: Icons.person_outline_rounded,
                           iconColor: AppColors.dark,
                           title: 'Modifier le profil',
@@ -797,6 +811,37 @@ class _SettingsTile extends StatelessWidget {
                   size: 20,
                 ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PaletteDots extends StatelessWidget {
+  final List<Color> colors;
+
+  const _PaletteDots({required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 62,
+      height: 24,
+      child: Stack(
+        children: List.generate(
+          colors.length,
+          (index) => Positioned(
+            left: index * 18,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: colors[index],
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+            ),
+          ),
         ),
       ),
     );

@@ -2,7 +2,7 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions;
 
-SELECT plan(31);
+SELECT plan(42);
 
 SELECT has_table('public', 'organizations', 'organizations existe');
 SELECT has_table('public', 'organization_memberships', 'memberships existe');
@@ -11,6 +11,24 @@ SELECT has_table('public', 'organization_subscriptions', 'subscriptions existe')
 SELECT has_table('public', 'event_venues', 'event_venues existe');
 SELECT has_table('public', 'invitation_templates', 'invitation_templates existe');
 SELECT has_table('public', 'invitation_deliveries', 'invitation_deliveries existe');
+SELECT has_table('public', 'event_branding', 'event_branding existe');
+
+SELECT has_column(
+  'public', 'event_branding', 'primary_color',
+  'une identité visuelle possède une couleur principale'
+);
+SELECT has_column(
+  'public', 'event_branding', 'secondary_color',
+  'une identité visuelle possède une couleur secondaire'
+);
+SELECT has_column(
+  'public', 'event_branding', 'accent_color',
+  'une identité visuelle possède une couleur accent'
+);
+SELECT has_column(
+  'public', 'event_branding', 'background_color',
+  'une identité visuelle possède une couleur de fond'
+);
 
 SELECT has_column(
   'public', 'wedding_events', 'organization_id',
@@ -60,6 +78,10 @@ SELECT ok(
 SELECT ok(
   (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.event_venues'::regclass),
   'RLS active sur event_venues'
+);
+SELECT ok(
+  (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.event_branding'::regclass),
+  'RLS active sur event_branding'
 );
 SELECT has_function(
   'public', 'create_saas_workspace',
@@ -148,6 +170,41 @@ SELECT is(
   'une carte Celestial Romance est créée par défaut'
 );
 SELECT is(
+  (SELECT count(*)::bigint FROM public.event_branding),
+  1::bigint,
+  'une palette est créée automatiquement pour le mariage'
+);
+SELECT lives_ok(
+  $$
+    UPDATE public.event_branding
+    SET primary_color = '#123ABC',
+        secondary_color = '#456DEF',
+        accent_color = '#D4AF37',
+        background_color = '#FFFDF7'
+    WHERE event_id = public.current_event_id()
+  $$,
+  'le propriétaire peut personnaliser les couleurs du mariage'
+);
+SELECT is(
+  (
+    SELECT palette ->> 'primary'
+    FROM public.invitation_templates
+    WHERE event_id = public.current_event_id() AND is_default
+  ),
+  '#123ABC',
+  'la carte par défaut reprend automatiquement la palette du mariage'
+);
+SELECT throws_ok(
+  $$
+    UPDATE public.event_branding
+    SET primary_color = 'rouge'
+    WHERE event_id = public.current_event_id()
+  $$,
+  '23514',
+  'new row for relation "event_branding" violates check constraint "event_branding_primary_hex"',
+  'une couleur non HEX est refusée par la base'
+);
+SELECT is(
   (
     SELECT count(*)::bigint
     FROM public.organization_subscriptions
@@ -194,6 +251,11 @@ SELECT is(
   (SELECT count(*)::bigint FROM public.event_venues),
   0::bigint,
   'un autre compte ne voit aucun lieu étranger'
+);
+SELECT is(
+  (SELECT count(*)::bigint FROM public.event_branding),
+  0::bigint,
+  'un autre compte ne voit aucune palette étrangère'
 );
 
 RESET ROLE;

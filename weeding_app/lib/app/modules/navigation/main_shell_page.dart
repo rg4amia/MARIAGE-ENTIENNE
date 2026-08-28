@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/theme/app_colors.dart';
 import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../guests/guests_page.dart';
 import '../home/home_page.dart';
@@ -53,7 +52,7 @@ class _MainShellPageState extends State<MainShellPage> {
           }
         },
         child: Scaffold(
-          backgroundColor: AppColors.background,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: IndexedStack(index: currentIndex, children: _pages),
           bottomNavigationBar: AppBottomNavBar(
             currentIndex: currentIndex,

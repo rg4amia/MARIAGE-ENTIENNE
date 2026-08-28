@@ -1,18 +1,59 @@
+import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/guest_link.dart';
 
 class GuestLinkRepository {
   final SupabaseClient _client = Supabase.instance.client;
 
-  /// Create a short link for a guest via RPC
+  /// Generate a random short code
+  String _generateShortCode() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    final random = Random.secure();
+    final result = StringBuffer();
+    for (var i = 0; i < 8; i++) {
+      result.write(chars[random.nextInt(chars.length)]);
+    }
+    return result.toString();
+  }
+
+  /// Generate a random guest token
+  String _generateGuestToken() {
+    final random = Random.secure();
+    final values = List<int>.generate(32, (index) => random.nextInt(256));
+    return base64Url.encode(values).replaceAll('=', '');
+  }
+
+  /// Create a short link for a guest directly in the database
   Future<GuestLink?> createGuestLink(String guestId) async {
-    final response = await _client.rpc(
-      'create_guest_link',
-      params: {'p_guest_id': guestId},
-    );
-    return response == null
-        ? null
-        : GuestLink.fromJson(response as Map<String, dynamic>);
+    try {
+      // Check if link already exists
+      final existing = await getLinkByGuestId(guestId);
+      if (existing != null) return existing;
+
+      // Generate codes in Flutter
+      final shortCode = _generateShortCode();
+      final guestToken = _generateGuestToken();
+
+      // Insert directly into the database
+      final response = await _client
+          .from('guest_links')
+          .insert({
+            'guest_id': guestId,
+            'short_code': shortCode,
+            'guest_token': guestToken,
+            'is_active': true,
+            'scan_count': 0,
+          })
+          .select()
+          .single();
+
+      return GuestLink.fromJson(response);
+    } catch (e) {
+      debugPrint('Erreur création guest link: $e');
+      return null;
+    }
   }
 
   /// Get existing link for a guest
