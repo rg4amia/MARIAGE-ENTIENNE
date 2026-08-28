@@ -55,7 +55,9 @@ class GuestsPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator(color: AppColors.dark));
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.dark),
+                );
               }
 
               final guests = controller.filteredGuests;
@@ -75,7 +77,9 @@ class GuestsPage extends StatelessWidget {
                         child: Icon(
                           Icons.group_rounded,
                           size: 40,
-                          color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
+                          color: AppColors.onSurfaceVariant.withValues(
+                            alpha: 0.4,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -101,10 +105,8 @@ class GuestsPage extends StatelessWidget {
                     duration: const Duration(milliseconds: 400),
                     child: _GuestCard(
                       guest: guest,
-                      onTap: () => Get.toNamed(
-                        AppRoutes.guestDetail,
-                        arguments: guest,
-                      ),
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.guestDetail, arguments: guest),
                     ),
                   );
                 },
@@ -128,7 +130,7 @@ class GuestsPage extends StatelessWidget {
           ],
         ),
         child: FloatingActionButton(
-          heroTag: 'guests_fab',
+          heroTag: null,
           onPressed: () => _showAddGuestDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -182,7 +184,10 @@ class _SearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );
@@ -216,7 +221,9 @@ Widget _buildFilterChips(GuestsController controller) {
               color: isSelected ? AppColors.dark : Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isSelected ? AppColors.dark : AppColors.outlineVariant.withValues(alpha: 0.5),
+                color: isSelected
+                    ? AppColors.dark
+                    : AppColors.outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             child: Text(
@@ -388,30 +395,48 @@ class _AddGuestSheet extends StatelessWidget {
               Text('Nouvel invité', style: AppTextStyles.headlineMd),
               const SizedBox(height: 20),
 
-              _buildField('Nom complet *', TextFormField(
-                controller: nameController,
-                validator: (v) => Validators.required(v, 'Le nom'),
-                style: AppTextStyles.bodyLg,
-                decoration: _inputDecoration('Jean Dupont', Icons.person_outline_rounded),
-              )),
+              _buildField(
+                'Nom complet *',
+                TextFormField(
+                  controller: nameController,
+                  validator: (v) => Validators.required(v, 'Le nom'),
+                  style: AppTextStyles.bodyLg,
+                  decoration: _inputDecoration(
+                    'Jean Dupont',
+                    Icons.person_outline_rounded,
+                  ),
+                ),
+              ),
               const SizedBox(height: 14),
 
-              _buildField('Téléphone', TextFormField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                validator: Validators.phone,
-                style: AppTextStyles.bodyLg,
-                decoration: _inputDecoration('+225 07 00 00 00 00', Icons.phone_outlined),
-              )),
+              _buildField(
+                'Téléphone',
+                TextFormField(
+                  controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  validator: Validators.phone,
+                  style: AppTextStyles.bodyLg,
+                  decoration: _inputDecoration(
+                    '+225 07 00 00 00 00',
+                    Icons.phone_outlined,
+                  ),
+                ),
+              ),
               const SizedBox(height: 14),
 
-              _buildField('Email', TextFormField(
-                controller: emailController,
-                keyboardType: TextInputType.emailAddress,
-                validator: Validators.email,
-                style: AppTextStyles.bodyLg,
-                decoration: _inputDecoration('jean@mail.com', Icons.mail_outline_rounded),
-              )),
+              _buildField(
+                'Email',
+                TextFormField(
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: Validators.email,
+                  style: AppTextStyles.bodyLg,
+                  decoration: _inputDecoration(
+                    'jean@mail.com',
+                    Icons.mail_outline_rounded,
+                  ),
+                ),
+              ),
               const SizedBox(height: 24),
 
               SizedBox(
@@ -482,7 +507,9 @@ class _AddGuestSheet extends StatelessWidget {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+        borderSide: BorderSide(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

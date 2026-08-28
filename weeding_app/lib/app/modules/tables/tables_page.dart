@@ -48,7 +48,9 @@ class TablesPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator(color: AppColors.dark));
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColors.dark),
+                );
               }
 
               final tables = controller.filteredTables;
@@ -68,7 +70,9 @@ class TablesPage extends StatelessWidget {
                         child: Icon(
                           Icons.table_restaurant_rounded,
                           size: 40,
-                          color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
+                          color: AppColors.onSurfaceVariant.withValues(
+                            alpha: 0.4,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -94,10 +98,8 @@ class TablesPage extends StatelessWidget {
                     duration: const Duration(milliseconds: 400),
                     child: _TableCard(
                       table: table,
-                      onTap: () => Get.toNamed(
-                        AppRoutes.tableDetail,
-                        arguments: table,
-                      ),
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.tableDetail, arguments: table),
                     ),
                   );
                 },
@@ -121,7 +123,7 @@ class TablesPage extends StatelessWidget {
           ],
         ),
         child: FloatingActionButton(
-          heroTag: 'tables_fab',
+          heroTag: null,
           onPressed: () => _showCreateTableDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -131,7 +133,10 @@ class TablesPage extends StatelessWidget {
     );
   }
 
-  void _showCreateTableDialog(BuildContext context, TablesController controller) {
+  void _showCreateTableDialog(
+    BuildContext context,
+    TablesController controller,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -175,7 +180,10 @@ class _SearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );
@@ -339,21 +347,30 @@ class _CreateTableSheet extends StatelessWidget {
               Text('Nouvelle table', style: AppTextStyles.headlineMd),
               const SizedBox(height: 20),
 
-              _buildField('Nom de la table', TextFormField(
-                controller: labelController,
-                validator: (v) => Validators.required(v, 'Le nom'),
-                style: AppTextStyles.bodyLg,
-                decoration: _inputDecoration('Table 1', Icons.table_restaurant_outlined),
-              )),
+              _buildField(
+                'Nom de la table',
+                TextFormField(
+                  controller: labelController,
+                  validator: (v) => Validators.required(v, 'Le nom'),
+                  style: AppTextStyles.bodyLg,
+                  decoration: _inputDecoration(
+                    'Table 1',
+                    Icons.table_restaurant_outlined,
+                  ),
+                ),
+              ),
               const SizedBox(height: 14),
 
-              _buildField('Nombre de chaises', TextFormField(
-                controller: capacityController,
-                keyboardType: TextInputType.number,
-                validator: Validators.positiveNumber,
-                style: AppTextStyles.bodyLg,
-                decoration: _inputDecoration('10', Icons.event_seat_outlined),
-              )),
+              _buildField(
+                'Nombre de chaises',
+                TextFormField(
+                  controller: capacityController,
+                  keyboardType: TextInputType.number,
+                  validator: Validators.positiveNumber,
+                  style: AppTextStyles.bodyLg,
+                  decoration: _inputDecoration('10', Icons.event_seat_outlined),
+                ),
+              ),
               const SizedBox(height: 24),
 
               SizedBox(
@@ -419,7 +436,9 @@ class _CreateTableSheet extends StatelessWidget {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+        borderSide: BorderSide(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

@@ -8,7 +8,7 @@ class TableRepository {
   Future<List<WeddingTable>> getAllTables() async {
     final response = await _client
         .from('seating_tables')
-        .select('*, chairs(count)')
+        .select('*, chairs!chairs_table_id_fkey(count)')
         .order('created_at', ascending: false);
 
     return (response as List).map((json) {
