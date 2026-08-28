@@ -128,6 +128,7 @@ class GuestsPage extends StatelessWidget {
           ],
         ),
         child: FloatingActionButton(
+          heroTag: 'guests_fab',
           onPressed: () => _showAddGuestDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,

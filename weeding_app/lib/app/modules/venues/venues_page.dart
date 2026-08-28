@@ -60,6 +60,7 @@ class VenuesPage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'venues_fab',
         onPressed: () => _showVenueSheet(context, controller),
         icon: const Icon(Icons.add_location_alt_rounded),
         label: const Text('Ajouter un lieu'),

@@ -121,6 +121,7 @@ class TablesPage extends StatelessWidget {
           ],
         ),
         child: FloatingActionButton(
+          heroTag: 'tables_fab',
           onPressed: () => _showCreateTableDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
