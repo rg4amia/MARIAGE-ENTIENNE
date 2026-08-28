@@ -5,7 +5,10 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/guest_link_repository.dart';
+import '../../data/repositories/media_repository.dart';
 import '../../data/models/guest.dart';
+import '../../data/models/guest_media.dart';
+import 'media_player_page.dart';
 
 /// Admin page to track all guest invitation statuses and media submissions.
 class InvitationsPage extends StatefulWidget {
@@ -18,10 +21,12 @@ class InvitationsPage extends StatefulWidget {
 class _InvitationsPageState extends State<InvitationsPage> {
   final GuestRepository _guestRepo = GuestRepository();
   final GuestLinkRepository _linkRepo = GuestLinkRepository();
+  final MediaRepository _mediaRepo = MediaRepository();
 
   List<Guest> _guests = [];
   Map<String, int> _linkStats = {};
   bool _isLoading = true;
+  Map<String, GuestMedia?> _guestMedia = {};
 
   @override
   void initState() {
@@ -34,9 +39,18 @@ class _InvitationsPageState extends State<InvitationsPage> {
     try {
       final guests = await _guestRepo.getAllGuests();
       final stats = await _linkRepo.getLinkStats();
+      
+      // Fetch media for each guest
+      final mediaMap = <String, GuestMedia?>{};
+      for (final guest in guests) {
+        final media = await _mediaRepo.getValidMediaByGuestId(guest.id);
+        mediaMap[guest.id] = media;
+      }
+      
       setState(() {
         _guests = guests;
         _linkStats = stats;
+        _guestMedia = mediaMap;
         _isLoading = false;
       });
     } catch (e) {
@@ -196,6 +210,8 @@ class _InvitationsPageState extends State<InvitationsPage> {
   }
 
   void _showGuestDetails(Guest guest) {
+    final media = _guestMedia[guest.id];
+    
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -203,9 +219,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
+        initialChildSize: 0.7,
         minChildSize: 0.3,
-        maxChildSize: 0.9,
+        maxChildSize: 0.95,
         expand: false,
         builder: (ctx, scrollController) => SingleChildScrollView(
           controller: scrollController,
@@ -284,6 +300,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 isLast: true,
               ),
               const SizedBox(height: 24),
+              // Media status card
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -321,6 +338,68 @@ class _InvitationsPageState extends State<InvitationsPage> {
                   ],
                 ),
               ),
+              // Media player button
+              if (media != null) ...[
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context); // Close bottom sheet
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MediaPlayerPage(
+                            guest: guest,
+                            media: media,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      media.mediaType == 'video' ? Icons.play_circle : Icons.headphones,
+                      size: 20,
+                    ),
+                    label: Text(
+                      media.mediaType == 'video' ? 'Lire la vidéo' : 'Écouter le message',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+                // Media info
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _MediaInfo(
+                        icon: media.mediaType == 'video' ? Icons.videocam : Icons.mic,
+                        label: media.mediaType == 'video' ? 'Vidéo' : 'Audio',
+                      ),
+                      _MediaInfo(
+                        icon: Icons.timer,
+                        label: media.durationFormatted,
+                      ),
+                      _MediaInfo(
+                        icon: media.isValid ? Icons.check_circle : Icons.pending,
+                        label: media.isValid ? 'Validé' : 'En attente',
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -625,6 +704,32 @@ class _StatusStep extends StatelessWidget {
                   : AppColors.onSurfaceVariant,
               fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MediaInfo extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _MediaInfo({
+    required this.icon,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, size: 18, color: AppColors.onSurfaceVariant),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: AppTextStyles.labelMd.copyWith(
+            color: AppColors.onSurfaceVariant,
           ),
         ),
       ],
