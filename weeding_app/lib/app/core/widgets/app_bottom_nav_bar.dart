@@ -54,7 +54,7 @@ class AppBottomNavBar extends StatelessWidget {
                 child: Icon(
                   _icons[index],
                   color: isActive
-                      ? AppColors.dark
+                      ? AppColors.onPrimary
                       : Colors.white.withValues(alpha: 0.88),
                   size: 24,
                 ),

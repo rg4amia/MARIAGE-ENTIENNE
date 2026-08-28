@@ -57,6 +57,30 @@ class GuestLinkRepository {
 
   /// Get existing link for a guest
   Future<GuestLink?> getLinkByGuestId(String guestId) async {
+    try {
+      return await _fetchLinkByGuestId(guestId);
+    } on PostgrestException catch (error) {
+      // PGRST303 means PostgREST rejected the cached JWT before the query
+      // reached the database. A new token fixes a transient clock skew or a
+      // token issued while the emulator was offline.
+      if (!_isFutureJwt(error)) rethrow;
+
+      try {
+        final refreshed = await _client.auth.refreshSession();
+        if (refreshed.session == null) {
+          throw AuthException('Session Supabase invalide');
+        }
+        return await _fetchLinkByGuestId(guestId);
+      } catch (_) {
+        // Do not keep retrying a token that the API considers invalid. Local
+        // sign-out clears only the persisted session and keeps server data.
+        await _client.auth.signOut();
+        rethrow;
+      }
+    }
+  }
+
+  Future<GuestLink?> _fetchLinkByGuestId(String guestId) async {
     final response = await _client
         .from('guest_links')
         .select()
@@ -65,6 +89,11 @@ class GuestLinkRepository {
 
     if (response == null) return null;
     return GuestLink.fromJson(response);
+  }
+
+  bool _isFutureJwt(PostgrestException error) {
+    final message = error.message.toLowerCase();
+    return error.code == 'PGRST303' || message.contains('jwt issued at future');
   }
 
   /// Get link by short code

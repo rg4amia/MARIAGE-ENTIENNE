@@ -18,12 +18,17 @@ class QrCodePage extends StatelessWidget {
     Guest guest,
     InvitationsController controller,
   ) async {
-    final links = GuestLinkRepository();
-    final link =
-        await links.getLinkByGuestId(guest.id) ??
-        await links.createGuestLink(guest.id);
-    if (link != null) return link.getInviteUrl(SupabaseConfig.url);
-    return (await controller.getInvitationForGuest(guest.id))?.webUrl;
+    try {
+      final links = GuestLinkRepository();
+      final link =
+          await links.getLinkByGuestId(guest.id) ??
+          await links.createGuestLink(guest.id);
+      if (link != null) return link.getInviteUrl(SupabaseConfig.url);
+      return (await controller.getInvitationForGuest(guest.id))?.webUrl;
+    } catch (error) {
+      debugPrint('Impossible de générer le lien QR: $error');
+      return null;
+    }
   }
 
   @override

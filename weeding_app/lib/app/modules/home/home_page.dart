@@ -367,7 +367,11 @@ class _KpiCard extends StatelessWidget {
                     : AppColors.dark.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: AppColors.dark, size: 18),
+              child: Icon(
+                icon,
+                color: isDark ? AppColors.onPrimary : AppColors.dark,
+                size: 18,
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -454,7 +458,7 @@ class _QuickActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = color == AppColors.dark;
+    final isDark = color.computeLuminance() < 0.35;
     final contentColor = isDark ? Colors.white : AppColors.dark;
     return TapScale(
       onTap: onTap,
@@ -484,7 +488,7 @@ class _QuickActionCard extends StatelessWidget {
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: AppColors.primary, size: 18),
+                child: Icon(icon, color: AppColors.onPrimary, size: 18),
               )
             else
               Container(

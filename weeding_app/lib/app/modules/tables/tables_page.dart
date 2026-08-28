@@ -127,7 +127,11 @@ class TablesPage extends StatelessWidget {
           onPressed: () => _showCreateTableDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          child: const Icon(Icons.add_rounded, color: AppColors.dark, size: 28),
+          child: const Icon(
+            Icons.add_rounded,
+            color: AppColors.onPrimary,
+            size: 28,
+          ),
         ),
       ),
     );

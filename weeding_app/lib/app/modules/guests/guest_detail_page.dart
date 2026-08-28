@@ -44,11 +44,13 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     final guest = Get.arguments as Guest;
     final linkRepo = GuestLinkRepository();
 
-    var link = await linkRepo.getLinkByGuestId(guest.id);
-
+    GuestLink? link;
     try {
+      link = await linkRepo.getLinkByGuestId(guest.id);
       link ??= await linkRepo.createGuestLink(guest.id);
-    } catch (_) {}
+    } catch (error) {
+      debugPrint('Impossible de charger le lien invité: $error');
+    }
 
     if (mounted) {
       setState(() {

@@ -140,7 +140,7 @@ class AppTheme {
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.dark,
+        foregroundColor: AppColors.onPrimary,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         sizeConstraints: const BoxConstraints.tightFor(width: 56, height: 56),

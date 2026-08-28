@@ -27,7 +27,9 @@ class WeddingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isMainSection = !showBack;
     final background = isMainSection ? AppColors.primary : Colors.white;
-    final foreground = Colors.black;
+    final foreground = background.computeLuminance() > 0.48
+        ? AppColors.dark
+        : Colors.white;
 
     return Container(
       padding: EdgeInsets.fromLTRB(

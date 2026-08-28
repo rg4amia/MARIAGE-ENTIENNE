@@ -144,9 +144,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/theme/app_colors.dart": {
-    "mtime": 1787927410.0842168,
-    "seen": 1787928863.994428,
-    "ast_hash": "071f27c9d9f8029e5fff9da453310c27",
+    "mtime": 1787930454.848937,
+    "seen": 1787930555.850116,
+    "ast_hash": "f71e78eda9a3d7b650a898b351b45f09",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/theme/app_text_styles.dart": {
@@ -156,9 +156,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/theme/app_theme.dart": {
-    "mtime": 1787928816.696842,
-    "seen": 1787928863.994433,
-    "ast_hash": "6ffcde41d7f2cdd76c601b8371bb6c02",
+    "mtime": 1787930482.341842,
+    "seen": 1787930555.850146,
+    "ast_hash": "2cca484088c515fd4c5f51e38dac8179",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/utils/invitation_card_generator.dart": {
@@ -180,9 +180,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/widgets/app_bottom_nav_bar.dart": {
-    "mtime": 1787927786.2135346,
-    "seen": 1787928863.994567,
-    "ast_hash": "bf35a0d48bb1a7237f7791083b30d21e",
+    "mtime": 1787930482.3416495,
+    "seen": 1787930555.850268,
+    "ast_hash": "e84d4ee607fa9aab71ce961c847ace30",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/widgets/micro_interactions.dart": {
@@ -204,9 +204,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/widgets/wedding_header.dart": {
-    "mtime": 1787928061.311648,
-    "seen": 1787928863.994571,
-    "ast_hash": "2300ed067431b3c2b16694fa6d1c8cd3",
+    "mtime": 1787930482.3413079,
+    "seen": 1787930555.850354,
+    "ast_hash": "ace54a345b34b055d5b76784501f11ad",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/data/models/chair.dart": {
@@ -282,9 +282,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/data/repositories/guest_link_repository.dart": {
-    "mtime": 1787924650.4884853,
-    "seen": 1787924739.067426,
-    "ast_hash": "e10ca4f3f653da73fcb4d27628a229e5",
+    "mtime": 1787933024.55806,
+    "seen": 1787933057.374676,
+    "ast_hash": "09d8be3c190f8b3768d05c97bb57ad3d",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/data/repositories/guest_repository.dart": {
@@ -396,9 +396,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/guests/guest_detail_page.dart": {
-    "mtime": 1787928148.759167,
-    "seen": 1787928863.998629,
-    "ast_hash": "dcb9b174a75ac6d346216f7d0c9b6159",
+    "mtime": 1787933017.6200233,
+    "seen": 1787933057.3755672,
+    "ast_hash": "4ca3471802695fe0d5c45dcb4509f236",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/guests/guests_binding.dart": {
@@ -414,9 +414,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/guests/guests_page.dart": {
-    "mtime": 1787927786.3470984,
-    "seen": 1787928863.9987211,
-    "ast_hash": "49af37cfc0be3b229fba5411bb047b64",
+    "mtime": 1787930515.0619483,
+    "seen": 1787930555.851407,
+    "ast_hash": "c61fc7c116bbd3546f9c0fbf82ac594c",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/home/home_binding.dart": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/home/home_page.dart": {
-    "mtime": 1787927786.263233,
-    "seen": 1787928863.999029,
-    "ast_hash": "3a62678c685b69a96338c926556b351c",
+    "mtime": 1787930527.0667355,
+    "seen": 1787930555.851466,
+    "ast_hash": "07fd965cb758eb40d31d96088148ae9f",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/invitations/entrance_qr_page.dart": {
@@ -462,9 +462,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/invitations/qr_code_page.dart": {
-    "mtime": 1787928131.1030715,
-    "seen": 1787928863.999249,
-    "ast_hash": "a31627802941e9beac5426269e6a0a5e",
+    "mtime": 1787933017.6210947,
+    "seen": 1787933057.375946,
+    "ast_hash": "328ad9136309417510265fd873e83700",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart": {
@@ -504,9 +504,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/tables/tables_page.dart": {
-    "mtime": 1787927608.2536745,
-    "seen": 1787928864.000013,
-    "ast_hash": "849a8852897a8d1dd086fce611b0f561",
+    "mtime": 1787930482.342614,
+    "seen": 1787930555.8518882,
+    "ast_hash": "853de0ae3f9c6bbcb15d09291764ef71",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/routes/app_pages.dart": {
@@ -1320,9 +1320,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/theme/wedding_palette.dart": {
-    "mtime": 1787927415.168803,
-    "seen": 1787928863.994435,
-    "ast_hash": "21d8f5181dfcc8669edd0493fa45f947",
+    "mtime": 1787930454.849438,
+    "seen": 1787930555.8501482,
+    "ast_hash": "785e9bf1f93a80faa4c7d792aaebff7e",
     "semantic_hash": ""
   },
   "weeding_app/lib/app/core/theme/wedding_theme_controller.dart": {
@@ -1338,9 +1338,9 @@
     "semantic_hash": ""
   },
   "weeding_app/lib/app/modules/settings/wedding_theme_page.dart": {
-    "mtime": 1787928235.259537,
-    "seen": 1787928863.999561,
-    "ast_hash": "31b2739b9e2740b663d2509c46465a76",
+    "mtime": 1787930454.8500633,
+    "seen": 1787930555.851804,
+    "ast_hash": "6577b54e5aad0be03e53166730dd8607",
     "semantic_hash": ""
   },
   "weeding_app/test/wedding_palette_test.dart": {

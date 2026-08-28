@@ -25,8 +25,8 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
 
   static const _presets = <_PalettePreset>[
     _PalettePreset(
-      name: 'Neon Wedding',
-      description: 'Vert électrique, jaune solaire et noir',
+      name: 'Pourpre & blanc',
+      description: 'Pourpre intense, blanc lumineux et encre profonde',
       palette: WeddingPalette.celestialRomance,
     ),
     _PalettePreset(
