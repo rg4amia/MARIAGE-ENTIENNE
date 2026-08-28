@@ -13,11 +13,22 @@ import '../modules/invitations/invitations_binding.dart';
 import '../modules/invitations/entrance_qr_page.dart';
 import '../modules/navigation/main_navigation_controller.dart';
 import '../modules/navigation/main_shell_page.dart';
+import '../modules/onboarding/workspace_onboarding_binding.dart';
+import '../modules/onboarding/workspace_onboarding_page.dart';
+import '../modules/venues/venues_binding.dart';
+import '../modules/venues/venues_page.dart';
 
 class AppPages {
   static const initial = AppRoutes.login;
 
   static final routes = [
+    GetPage(
+      name: AppRoutes.onboarding,
+      page: () => const WorkspaceOnboardingPage(),
+      binding: WorkspaceOnboardingBinding(),
+      middlewares: [AuthMiddleware()],
+      transition: Transition.fadeIn,
+    ),
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginPage(),
@@ -81,6 +92,13 @@ class AppPages {
       transition: Transition.rightToLeftWithFade,
     ),
     GetPage(
+      name: AppRoutes.venues,
+      page: () => const VenuesPage(),
+      binding: VenuesBinding(),
+      middlewares: [AuthMiddleware()],
+      transition: Transition.rightToLeftWithFade,
+    ),
+    GetPage(
       name: AppRoutes.settings,
       page: () => const MainShellPage(
         initialIndex: MainNavigationController.settingsTab,
@@ -101,6 +119,13 @@ class AuthMiddleware extends GetMiddleware {
 
     if (!authController.isLoggedIn && route != AppRoutes.login) {
       return const RouteSettings(name: AppRoutes.login);
+    }
+
+    if (authController.isLoggedIn &&
+        authController.isInitialized.value &&
+        authController.profile.value == null &&
+        route != AppRoutes.onboarding) {
+      return const RouteSettings(name: AppRoutes.onboarding);
     }
 
     return null;

@@ -173,6 +173,13 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: 'GÉNÉRAL',
                       items: [
                         _SettingsTile(
+                          icon: Icons.location_city_rounded,
+                          iconColor: AppColors.primary,
+                          title: 'Lieux et itinéraires',
+                          subtitle: 'Mairie, église et salle de réception',
+                          onTap: () => Get.toNamed(AppRoutes.venues),
+                        ),
+                        _SettingsTile(
                           icon: Icons.person_outline_rounded,
                           iconColor: AppColors.dark,
                           title: 'Modifier le profil',

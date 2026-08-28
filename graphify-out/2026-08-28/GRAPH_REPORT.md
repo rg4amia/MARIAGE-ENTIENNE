@@ -118,15 +118,15 @@
 
 ## Surprising Connections (you probably didn't know these)
 - `OnCreate` --calls--> `RegisterPlugins()`  [INFERRED]
-  weeding_app/windows/runner/flutter_window.h → weeding_app/windows/flutter/generated_plugin_registrant.cc
+  windows/runner/flutter_window.h → windows/flutter/generated_plugin_registrant.cc
 - `wWinMain()` --calls--> `CreateAndAttachConsole()`  [INFERRED]
-  weeding_app/windows/runner/main.cpp → weeding_app/windows/runner/utils.cpp
+  windows/runner/main.cpp → windows/runner/utils.cpp
 - `Win32Window::Win32Window()` --calls--> `Destroy`  [INFERRED]
-  weeding_app/windows/runner/win32_window.cpp → weeding_app/windows/runner/win32_window.h
+  windows/runner/win32_window.cpp → windows/runner/win32_window.h
 - `my_application_activate()` --calls--> `fl_register_plugins()`  [INFERRED]
-  weeding_app/linux/runner/my_application.cc → weeding_app/linux/flutter/generated_plugin_registrant.cc
+  linux/runner/my_application.cc → linux/flutter/generated_plugin_registrant.cc
 - `main()` --calls--> `my_application_new()`  [INFERRED]
-  weeding_app/linux/runner/main.cc → weeding_app/linux/runner/my_application.cc
+  linux/runner/main.cc → linux/runner/my_application.cc
 
 ## Import Cycles
 - None detected.
@@ -210,8 +210,8 @@ Cohesion: 0.08
 Nodes (24): ../../data/models/guest_seat.dart, assignSeatToGuest, confirmedCount, createGuest, deleteGuest, filterStatus, getAllTables, getAvailableChairs (+16 more)
 
 ### Community 19 - "State"
-Cohesion: 0.15
-Nodes (25): SingleTickerProviderStateMixin, State, StatefulWidget, AnimatedCounter, _AnimatedCounterState, FadeInSlide, _FadeInSlideState, ScaleIn (+17 more)
+Cohesion: 0.14
+Nodes (25): SingleTickerProviderStateMixin, State, StatefulWidget, FadeInSlide, _FadeInSlideState, ScaleIn, _ScaleInState, ShimmerBox (+17 more)
 
 ### Community 20 - "audio_recorder_page.dart"
 Cohesion: 0.08
@@ -219,7 +219,7 @@ Nodes (23): FlutterSoundRecorder, package:flutter_sound/flutter_sound.dart, Time
 
 ### Community 21 - "animated_widgets.dart"
 Cohesion: 0.09
-Nodes (21): Animation, Duration, TextStyle?, _anim, borderRadius, build, child, createState (+13 more)
+Nodes (23): Animation, Duration, TextStyle?, _anim, AnimatedCounter, _AnimatedCounterState, borderRadius, build (+15 more)
 
 ### Community 22 - "web_audio_recorder.dart"
 Cohesion: 0.09
@@ -230,8 +230,8 @@ Cohesion: 0.10
 Nodes (20): app_routes.dart, GetMiddleware, int? get, ../modules/auth/auth_binding.dart, ../modules/auth/login_page.dart, ../modules/guests/guest_detail_page.dart, ../modules/guests/guests_binding.dart, ../modules/invitations/entrance_qr_page.dart (+12 more)
 
 ### Community 24 - "login_page.dart"
-Cohesion: 0.10
-Nodes (20): TextEditingController, VoidCallback, _bgCtrl, build, _buildInput, _buildLabel, controller, createState (+12 more)
+Cohesion: 0.11
+Nodes (18): TextEditingController, VoidCallback, _bgCtrl, build, _buildInput, _buildLabel, controller, createState (+10 more)
 
 ### Community 25 - "home_controller.dart"
 Cohesion: 0.10

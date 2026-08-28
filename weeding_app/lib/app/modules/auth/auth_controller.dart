@@ -37,7 +37,7 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
-  void _initializeAuth() {
+  Future<void> _initializeAuth() async {
     user.value = _authRepository.currentUser;
 
     _authSubscription = _authRepository.authStateChanges.listen((data) {
@@ -47,28 +47,28 @@ class AuthController extends GetxController {
       user.value = session?.user;
 
       if (event == AuthChangeEvent.signedIn && session != null) {
-        _loadProfile();
+        refreshProfile();
       } else if (event == AuthChangeEvent.signedOut) {
         profile.value = null;
       }
     });
 
-    if (user.value != null) {
-      _loadProfile();
-      // Refresh JWT to ensure app_metadata (admin role) is up-to-date
-      Supabase.instance.client.auth.refreshSession();
-      // Rediriger vers home si déjà connecté (session persistée)
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (Get.currentRoute == AppRoutes.login) {
-          Get.offAllNamed(AppRoutes.home);
-        }
-      });
+    try {
+      if (user.value != null) {
+        await Supabase.instance.client.auth.refreshSession();
+        await refreshProfile();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (Get.currentRoute == AppRoutes.login) {
+            Get.offAllNamed(authenticatedEntryRoute);
+          }
+        });
+      }
+    } finally {
+      isInitialized.value = true;
     }
-
-    isInitialized.value = true;
   }
 
-  Future<void> _loadProfile() async {
+  Future<void> refreshProfile() async {
     try {
       profile.value = await _authRepository.getProfile();
     } catch (e) {
@@ -96,8 +96,9 @@ class AuthController extends GetxController {
 
       // Refresh session to get latest app_metadata (admin role etc.)
       await Supabase.instance.client.auth.refreshSession();
+      await refreshProfile();
 
-      Get.offAllNamed(AppRoutes.home);
+      Get.offAllNamed(authenticatedEntryRoute);
       _clearControllers();
     } on AuthException catch (e) {
       Get.snackbar(
@@ -146,7 +147,8 @@ class AuthController extends GetxController {
       if (response.session != null) {
         // Refresh session to get latest app_metadata (admin role etc.)
         await Supabase.instance.client.auth.refreshSession();
-        Get.offAllNamed(AppRoutes.home);
+        profile.value = null;
+        Get.offAllNamed(AppRoutes.onboarding);
       } else {
         // Email confirmation requise : rediriger vers login avec message
         Get.offAllNamed(AppRoutes.login);
@@ -187,4 +189,7 @@ class AuthController extends GetxController {
   }
 
   bool get isLoggedIn => user.value != null;
+
+  String get authenticatedEntryRoute =>
+      profile.value == null ? AppRoutes.onboarding : AppRoutes.home;
 }

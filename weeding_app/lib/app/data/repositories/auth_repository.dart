@@ -1,6 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
-import '../../core/constants/supabase_config.dart';
 
 class AuthRepository {
   final SupabaseClient _client = Supabase.instance.client;
@@ -29,14 +28,35 @@ class AuthRepository {
     final response = await _client.auth.signUp(
       email: email,
       password: password,
-      data: {
-        'full_name': fullName,
-        'phone': phone,
-        'event_id': SupabaseConfig.eventId,
-      },
+      data: {'full_name': fullName, 'phone': phone},
     );
 
     return response;
+  }
+
+  Future<Map<String, dynamic>> createSaasWorkspace({
+    required String organizationName,
+    required String eventTitle,
+    required String brideName,
+    required String groomName,
+    DateTime? eventDate,
+    String countryCode = 'CI',
+    String timezone = 'Africa/Abidjan',
+  }) async {
+    final response = await _client.rpc(
+      'create_saas_workspace',
+      params: {
+        'p_organization_name': organizationName,
+        'p_event_title': eventTitle,
+        'p_bride_name': brideName,
+        'p_groom_name': groomName,
+        'p_event_date': eventDate?.toUtc().toIso8601String(),
+        'p_country_code': countryCode,
+        'p_timezone': timezone,
+      },
+    );
+
+    return Map<String, dynamic>.from(response as Map);
   }
 
   Future<void> signOut() async {
