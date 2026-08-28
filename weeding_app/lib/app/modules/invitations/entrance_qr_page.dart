@@ -72,7 +72,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     } catch (error, stackTrace) {
       debugPrint('Erreur QR entrée: $error');
       debugPrintStack(stackTrace: stackTrace);
-      // Retry once after refreshing JWT (may lack app_metadata.role)
       try {
         await Supabase.instance.client.auth.refreshSession();
         final qr = await _repository.getOrCreate(rotate: rotate);
@@ -101,12 +100,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: _isLoading && qr == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: AppColors.dark))
           : qr == null
               ? _buildEmptyState()
               : CustomScrollView(
                   slivers: [
-                    // ── Gradient Header ──
                     SliverToBoxAdapter(
                       child: WeddingHeader(
                         title: "QR d'entrée",
@@ -116,10 +114,10 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
+                              color: AppColors.dark.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.refresh_rounded, color: Colors.white, size: 22),
+                            child: const Icon(Icons.refresh_rounded, color: AppColors.dark, size: 22),
                           ),
                         ),
                         child: HeaderInfoBanner(
@@ -128,7 +126,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                         ),
                       ),
                     ),
-                    // ── QR Code Card ──
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
@@ -138,7 +135,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                         ),
                       ),
                     ),
-                    // ── Stats Row ──
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
@@ -148,7 +144,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                         ),
                       ),
                     ),
-                    // ── Actions ──
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
@@ -163,7 +158,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Empty State ──
   Widget _buildEmptyState() {
     return Center(
       child: Column(
@@ -173,18 +167,17 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: AppColors.primaryContainer.withValues(alpha: 0.1),
+              color: AppColors.surfaceContainerHigh,
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.qr_code_scanner_rounded,
               size: 40,
-              color: AppColors.primaryContainer.withValues(alpha: 0.5),
+              color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
             ),
           ),
           const SizedBox(height: 16),
-          Text('QR d\'entrée indisponible',
-              style: AppTextStyles.headlineMd),
+          Text('QR d\'entrée indisponible', style: AppTextStyles.headlineMd),
           const SizedBox(height: 8),
           Text(
             'Appuyez sur ⟳ pour réessayer',
@@ -196,8 +189,8 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(14),
+                color: AppColors.dark,
+                borderRadius: BorderRadius.circular(16),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
@@ -216,29 +209,25 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-
-
-  // ── QR Code Card with Decorative Frame ──
   Widget _buildQrCard(EntranceQr qr) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.06),
+            color: AppColors.dark.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
-        ),
       ),
       child: Column(
         children: [
           const SizedBox(height: 24),
-          // Title
           Text(
             'Scan pour arrivée',
             style: AppTextStyles.titleLg.copyWith(
@@ -246,16 +235,13 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             ),
           ),
           const SizedBox(height: 20),
-          // QR with decorative frame
           ScaleIn(
             delay: const Duration(milliseconds: 400),
             child: _buildDecorativeQrFrame(qr),
           ),
           const SizedBox(height: 16),
-          // Code display
           _buildCodeChip(qr.code),
           const SizedBox(height: 20),
-          // Share / Copy buttons
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             child: Row(
@@ -293,24 +279,23 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Decorative QR Frame ──
   Widget _buildDecorativeQrFrame(EntranceQr qr) {
     return AnimatedBuilder(
       animation: _pulseCtrl,
       builder: (context, _) {
-        final glowOpacity = 0.08 + (_pulseCtrl.value * 0.07);
+        final glowOpacity = 0.04 + (_pulseCtrl.value * 0.04);
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: AppColors.surfaceContainerLow,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.15),
+              color: AppColors.dark.withValues(alpha: 0.1),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: glowOpacity),
+                color: AppColors.dark.withValues(alpha: glowOpacity),
                 blurRadius: 24 + (_pulseCtrl.value * 8),
                 spreadRadius: 2,
               ),
@@ -322,11 +307,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             backgroundColor: Colors.white,
             eyeStyle: const QrEyeStyle(
               eyeShape: QrEyeShape.circle,
-              color: Color(0xFFA53C00),
+              color: AppColors.dark,
             ),
             dataModuleStyle: const QrDataModuleStyle(
               dataModuleShape: QrDataModuleShape.circle,
-              color: Color(0xFF3D3028),
+              color: AppColors.dark,
             ),
           ),
         );
@@ -334,9 +319,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Code Chip ──
   Widget _buildCodeChip(String code) {
-    // Truncate long codes for display
     final displayCode =
         code.length > 16 ? '${code.substring(0, 8)}···${code.substring(code.length - 8)}' : code;
     return TapScale(
@@ -358,8 +341,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.tag_rounded,
-                size: 16, color: AppColors.primary.withValues(alpha: 0.7)),
+            Icon(Icons.tag_rounded, size: 16, color: AppColors.dark.withValues(alpha: 0.6)),
             const SizedBox(width: 8),
             SelectableText(
               displayCode,
@@ -369,15 +351,13 @@ class _EntranceQrPageState extends State<EntranceQrPage>
               ),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.content_copy_rounded,
-                size: 14, color: AppColors.onSurfaceVariant.withValues(alpha: 0.5)),
+            Icon(Icons.content_copy_rounded, size: 14, color: AppColors.onSurfaceVariant.withValues(alpha: 0.5)),
           ],
         ),
       ),
     );
   }
 
-  // ── Action Chip (Partager / Copier) ──
   Widget _buildActionChip({
     required IconData icon,
     required String label,
@@ -387,15 +367,8 @@ class _EntranceQrPageState extends State<EntranceQrPage>
       duration: const Duration(milliseconds: 200),
       padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        gradient: isPrimary
-            ? const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFFA53C00), Color(0xFFFF7A3D)],
-              )
-            : null,
-        color: isPrimary ? null : Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        color: isPrimary ? AppColors.dark : Colors.white,
+        borderRadius: BorderRadius.circular(16),
         border: isPrimary
             ? null
             : Border.all(
@@ -404,7 +377,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         boxShadow: isPrimary
             ? [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.25),
+                  color: AppColors.dark.withValues(alpha: 0.15),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -415,13 +388,13 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon,
-              color: isPrimary ? Colors.white : AppColors.primary,
+              color: isPrimary ? Colors.white : AppColors.dark,
               size: 18),
           const SizedBox(width: 8),
           Text(
             label,
             style: TextStyle(
-              color: isPrimary ? Colors.white : AppColors.primary,
+              color: isPrimary ? Colors.white : AppColors.dark,
               fontSize: 15,
               fontWeight: FontWeight.w700,
             ),
@@ -431,7 +404,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Stats Row ──
   Widget _buildStatsRow(EntranceQr qr) {
     return Row(
       children: [
@@ -440,10 +412,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             icon: Icons.qr_code_scanner_rounded,
             value: qr.scanCount,
             label: 'Scans',
-            gradient: const [
-              Color(0xFFFF7A3D),
-              Color(0xFFFFB598),
-            ],
+            color: AppColors.dark,
           ),
         ),
         const SizedBox(width: 12),
@@ -452,10 +421,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             icon: Icons.how_to_reg_rounded,
             value: qr.checkInCount,
             label: 'Entrées',
-            gradient: const [
-              Color(0xFF4CAF50),
-              Color(0xFF81C784),
-            ],
+            color: AppColors.primary,
           ),
         ),
       ],
@@ -466,7 +432,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     required IconData icon,
     required int value,
     required String label,
-    required List<Color> gradient,
+    required Color color,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -475,13 +441,13 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: gradient.first.withValues(alpha: 0.08),
+            color: AppColors.dark.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: Column(
@@ -490,27 +456,16 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: gradient,
-              ),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14),
-              boxShadow: [
-                BoxShadow(
-                  color: gradient.first.withValues(alpha: 0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
             ),
-            child: Icon(icon, color: Colors.white, size: 22),
+            child: Icon(icon, color: color, size: 22),
           ),
           const SizedBox(height: 12),
           AnimatedCounter(
             target: value,
             style: AppTextStyles.headlineLgMobile.copyWith(
-              color: gradient.first,
+              color: color,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -526,7 +481,6 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Bottom Actions ──
   Widget _buildActions() {
     return TapScale(
       onTap: () => _confirmRotation(context),
@@ -542,8 +496,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.autorenew_rounded,
-                color: AppColors.error, size: 20),
+            Icon(Icons.autorenew_rounded, color: AppColors.error, size: 20),
             const SizedBox(width: 10),
             Text(
               'Générer un nouveau QR',
@@ -559,12 +512,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     );
   }
 
-  // ── Confirm Rotation Dialog ──
   void _confirmRotation(BuildContext context) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Renouveler le QR ?'),
         content: const Text(
           'L\'ancien QR ne fonctionnera plus. '
@@ -584,7 +536,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
               backgroundColor: AppColors.error,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
             ),
             child: const Text('Renouveler'),
@@ -599,18 +551,15 @@ class _EntranceQrPageState extends State<EntranceQrPage>
 String entranceQrErrorMessage(Object error) {
   if (error is PostgrestException) {
     if (error.message.contains('No wedding event is attached')) {
-      return 'Votre compte administrateur n’est associé à aucun mariage.';
+      return 'Votre compte administrateur n\'est associé à aucun mariage.';
     }
     if (error.message.contains('Administrator access required')) {
       return 'Accès administrateur requis. Reconnectez-vous.';
     }
-
     return 'Erreur Supabase (${error.code ?? 'inconnue'}) : ${error.message}';
   }
-
   if (error is AuthException) {
     return 'Votre session a expiré. Reconnectez-vous.';
   }
-
   return 'Impossible de charger le QR. Réessayez dans quelques instants.';
 }

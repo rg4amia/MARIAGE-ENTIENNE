@@ -30,12 +30,12 @@ class GuestsPage extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.dark.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
                 Icons.filter_list_rounded,
-                color: Colors.white,
+                color: AppColors.dark,
                 size: 22,
               ),
             ),
@@ -56,7 +56,7 @@ class GuestsPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: AppColors.dark));
               }
 
               final guests = controller.filteredGuests;
@@ -70,13 +70,13 @@ class GuestsPage extends StatelessWidget {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: AppColors.primaryContainer.withValues(alpha: 0.1),
+                          color: AppColors.surfaceContainerHigh,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.group_rounded,
                           size: 40,
-                          color: AppColors.primaryContainer.withValues(alpha: 0.5),
+                          color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -118,15 +118,11 @@ class GuestsPage extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.primary, AppColors.primaryContainer],
-          ),
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
+              color: AppColors.dark.withValues(alpha: 0.2),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -164,13 +160,9 @@ class _SearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: TextField(
         onChanged: controller.onSearchChanged,
@@ -198,7 +190,7 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-// ── Filter Chips (plain function — reactive reads must be inside Obx) ──
+// ── Filter Chips ──
 Widget _buildFilterChips(GuestsController controller) {
   final filters = [
     ('Tous', 'all', controller.guests.length),
@@ -222,20 +214,11 @@ Widget _buildFilterChips(GuestsController controller) {
             duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : Colors.white,
+              color: isSelected ? AppColors.dark : Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: isSelected ? AppColors.primary : AppColors.outlineVariant,
+                color: isSelected ? AppColors.dark : AppColors.outlineVariant.withValues(alpha: 0.5),
               ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : null,
             ),
             child: Text(
               '$label ($count)',
@@ -270,11 +253,11 @@ class _GuestCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+              color: AppColors.outlineVariant.withValues(alpha: 0.5),
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.03),
+                color: AppColors.dark.withValues(alpha: 0.03),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -330,22 +313,22 @@ class _GuestCard extends StatelessWidget {
   Color _avatarColor(String status) {
     switch (status) {
       case 'card_unlocked':
-        return const Color(0xFF4CAF50);
+        return AppColors.primary;
       case 'media_uploaded':
-        return AppColors.tertiary;
+        return const Color(0xFFB0A8FF);
       default:
-        return AppColors.primaryContainer;
+        return AppColors.dark;
     }
   }
 
   Color _statusColor(String status) {
     switch (status) {
       case 'card_unlocked':
-        return const Color(0xFF4CAF50);
+        return AppColors.primary;
       case 'media_uploaded':
-        return AppColors.tertiary;
+        return const Color(0xFFB0A8FF);
       default:
-        return AppColors.onSurfaceVariant;
+        return AppColors.secondary;
     }
   }
 
@@ -376,7 +359,7 @@ class _AddGuestSheet extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -451,11 +434,11 @@ class _AddGuestSheet extends StatelessWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
+                    backgroundColor: AppColors.dark,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: const Text(
@@ -495,19 +478,19 @@ class _AddGuestSheet extends StatelessWidget {
       filled: true,
       fillColor: AppColors.surfaceContainerLow,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

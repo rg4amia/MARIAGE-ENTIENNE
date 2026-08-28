@@ -48,9 +48,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // ── Animated gradient background ──
+          // ── Mint green gradient background ──
           AnimatedBuilder(
             animation: _bgCtrl,
             builder: (context, _) {
@@ -62,8 +63,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color.lerp(AppColors.primary, const Color(0xFFD4592A), t)!,
-                      Color.lerp(const Color(0xFFE8552A), AppColors.primaryContainer, t)!,
+                      Color.lerp(const Color(0xFF2AE88E), AppColors.primary, t)!,
+                      Color.lerp(AppColors.primary, const Color(0xFF32FFAA), t)!,
                     ],
                   ),
                 ),
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.08),
+                color: AppColors.dark.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -92,7 +93,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               height: 160,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.05),
+                color: AppColors.dark.withValues(alpha: 0.03),
               ),
             ),
           ),
@@ -117,10 +118,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withValues(alpha: 0.2),
+                            color: AppColors.dark.withValues(alpha: 0.1),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
+                                color: AppColors.dark.withValues(alpha: 0.08),
                                 blurRadius: 20,
                               ),
                             ],
@@ -128,7 +129,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           child: const Icon(
                             Icons.favorite_rounded,
                             size: 40,
-                            color: Colors.white,
+                            color: AppColors.dark,
                           ),
                         ),
                       ),
@@ -136,16 +137,16 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       Text(
                         'Mon Mariage',
                         style: AppTextStyles.headlineLg.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                          color: AppColors.dark,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.01,
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         'Gérez votre mariage en toute élégance',
                         style: AppTextStyles.bodyMd.copyWith(
-                          color: Colors.white.withValues(alpha: 0.85),
+                          color: AppColors.dark.withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -167,17 +168,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.08),
+                            color: AppColors.dark.withValues(alpha: 0.06),
                             blurRadius: 30,
                             offset: const Offset(0, 10),
-                          ),
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -224,7 +223,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 child: Text(
                                   'Mot de passe oublié ?',
                                   style: AppTextStyles.bodyMd.copyWith(
-                                    color: AppColors.primary,
+                                    color: AppColors.dark,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -253,7 +252,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       TextSpan(
                                         text: 'Créer un compte',
                                         style: AppTextStyles.bodyMd.copyWith(
-                                          color: AppColors.primary,
+                                          color: AppColors.dark,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -305,21 +304,21 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         filled: true,
         fillColor: AppColors.surfaceContainerLow,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -361,21 +360,21 @@ class _PasswordFieldState extends State<_PasswordField> {
         filled: true,
         fillColor: AppColors.surfaceContainerLow,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -384,7 +383,7 @@ class _PasswordFieldState extends State<_PasswordField> {
   }
 }
 
-// ── Premium login button with gradient ──
+// ── Login button — dark style ──
 class _LoginButton extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onPressed;
@@ -399,13 +398,13 @@ class _LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.dark,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+          disabledBackgroundColor: AppColors.dark.withValues(alpha: 0.5),
           elevation: 0,
-          shadowColor: AppColors.primary.withValues(alpha: 0.3),
+          shadowColor: AppColors.dark.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
@@ -423,7 +422,7 @@ class _LoginButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 0.5,
+                  letterSpacing: 0.3,
                 ),
               ),
       ),

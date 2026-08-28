@@ -42,10 +42,10 @@ class TableDetailPage extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.edit_rounded, color: Colors.white, size: 20),
+                    child: const Icon(Icons.edit_rounded, color: AppColors.dark, size: 20),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -55,10 +55,10 @@ class TableDetailPage extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 20),
+                    child: const Icon(Icons.delete_outline_rounded, color: AppColors.dark, size: 20),
                   ),
                 ),
               ],
@@ -77,23 +77,15 @@ class TableDetailPage extends StatelessWidget {
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                   children: [
-                    // ── Table Info Card ──
                     _buildInfoCard(table, assigned, occupancy),
                     const SizedBox(height: 16),
-
-                    // ── Chairs Section Header ──
                     _buildSectionHeader(assigned, chairs.length),
                     const SizedBox(height: 12),
-
-                    // ── Chairs Grid ──
                     if (chairs.isEmpty && snapshot.connectionState != ConnectionState.waiting)
                       _buildEmptyChairs()
                     else
                       _buildChairsGrid(chairs),
-
                     const SizedBox(height: 24),
-
-                    // ── Legend ──
                     _buildLegend(),
                   ],
                 );
@@ -110,14 +102,14 @@ class TableDetailPage extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withValues(alpha: 0.04),
+            color: AppColors.dark.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -132,9 +124,7 @@ class TableDetailPage extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFA53C00), Color(0xFFFF7A3D)],
-                  ),
+                  color: AppColors.dark,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Icon(Icons.table_restaurant_rounded, color: Colors.white, size: 26),
@@ -146,7 +136,7 @@ class TableDetailPage extends StatelessWidget {
                   children: [
                     Text(
                       table.label,
-                      style: AppTextStyles.headlineMdPrimary,
+                      style: AppTextStyles.headlineMd.copyWith(color: AppColors.dark),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -158,13 +148,12 @@ class TableDetailPage extends StatelessWidget {
                   ],
                 ),
               ),
-              // Occupancy badge
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: occupancy >= 1.0
-                      ? AppColors.tertiary.withValues(alpha: 0.1)
-                      : AppColors.primaryContainer.withValues(alpha: 0.15),
+                      ? AppColors.primary.withValues(alpha: 0.15)
+                      : AppColors.dark.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -173,15 +162,14 @@ class TableDetailPage extends StatelessWidget {
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: occupancy >= 1.0
-                        ? AppColors.tertiary
-                        : AppColors.primaryContainer,
+                        ? AppColors.primaryDark
+                        : AppColors.dark,
                   ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          // Occupancy progress bar
           ClipRRect(
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
@@ -190,10 +178,10 @@ class TableDetailPage extends StatelessWidget {
               backgroundColor: AppColors.outlineVariant.withValues(alpha: 0.2),
               valueColor: AlwaysStoppedAnimation<Color>(
                 occupancy >= 1.0
-                    ? AppColors.tertiary
+                    ? AppColors.primary
                     : occupancy >= 0.5
-                        ? AppColors.primaryContainer
-                        : AppColors.primary,
+                        ? AppColors.dark.withValues(alpha: 0.7)
+                        : AppColors.dark,
               ),
             ),
           ),
@@ -203,7 +191,7 @@ class TableDetailPage extends StatelessWidget {
                 ? 'Table complète ✓'
                 : '${table.capacity - assigned} place${table.capacity - assigned > 1 ? 's' : ''} restante${table.capacity - assigned > 1 ? 's' : ''}',
             style: AppTextStyles.bodyMd.copyWith(
-              color: occupancy >= 1.0 ? AppColors.tertiary : AppColors.onSurfaceVariant,
+              color: occupancy >= 1.0 ? AppColors.primaryDark : AppColors.onSurfaceVariant,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -215,7 +203,7 @@ class TableDetailPage extends StatelessWidget {
   Widget _buildSectionHeader(int assigned, int total) {
     return Row(
       children: [
-        const Icon(Icons.chair_rounded, size: 20, color: AppColors.primaryContainer),
+        const Icon(Icons.chair_rounded, size: 20, color: AppColors.dark),
         const SizedBox(width: 8),
         Text(
           'Chaises',
@@ -225,7 +213,7 @@ class TableDetailPage extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.primaryContainer.withValues(alpha: 0.1),
+            color: AppColors.dark.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -233,7 +221,7 @@ class TableDetailPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.primaryContainer,
+              color: AppColors.dark,
             ),
           ),
         ),
@@ -245,8 +233,11 @@ class TableDetailPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: const Center(
         child: Column(
@@ -275,16 +266,18 @@ class TableDetailPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLowest,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.outlineVariant.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.4),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _legendItem(AppColors.outlineVariant.withValues(alpha: 0.3), 'Libre'),
+          _legendItem(AppColors.outlineVariant.withValues(alpha: 0.4), 'Libre'),
           const SizedBox(width: 24),
-          _legendItem(AppColors.primaryContainer.withValues(alpha: 0.15), 'Occupée'),
+          _legendItem(AppColors.dark.withValues(alpha: 0.12), 'Occupée'),
         ],
       ),
     );
@@ -300,7 +293,6 @@ class TableDetailPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: AppColors.outlineVariant),
           ),
         ),
         const SizedBox(width: 6),
@@ -324,7 +316,7 @@ class TableDetailPage extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => Padding(
         padding: EdgeInsets.fromLTRB(
@@ -339,7 +331,7 @@ class TableDetailPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Modifier la table', style: AppTextStyles.headlineMdPrimary),
+              Text('Modifier la table', style: AppTextStyles.headlineMd),
               const SizedBox(height: 20),
               TextFormField(
                 controller: labelController,
@@ -374,6 +366,7 @@ class TableDetailPage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Supprimer la table ?'),
         content: Text('Voulez-vous vraiment supprimer "${table.label}" ?'),
         actions: [
@@ -408,7 +401,7 @@ class _ChairTile extends StatelessWidget {
             context: context,
             isScrollControlled: true,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
             ),
             builder: (ctx) => _GuestDetailSheet(chair: chair),
           );
@@ -419,14 +412,14 @@ class _ChairTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         decoration: BoxDecoration(
           color: chair.isAssigned
-              ? AppColors.primaryContainer.withValues(alpha: 0.12)
-              : AppColors.surfaceContainerLowest,
+              ? AppColors.dark.withValues(alpha: 0.08)
+              : Colors.white,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color: chair.isAssigned
-                ? AppColors.primaryContainer
+                ? AppColors.dark
                 : AppColors.outlineVariant.withValues(alpha: 0.4),
-            width: chair.isAssigned ? 2 : 1,
+            width: chair.isAssigned ? 1.5 : 1,
           ),
         ),
         child: Column(
@@ -435,7 +428,7 @@ class _ChairTile extends StatelessWidget {
             Icon(
               Icons.chair_rounded,
               color: chair.isAssigned
-                  ? AppColors.primaryContainer
+                  ? AppColors.dark
                   : AppColors.outlineVariant,
               size: 20,
             ),
@@ -445,7 +438,7 @@ class _ChairTile extends StatelessWidget {
               style: AppTextStyles.labelMd.copyWith(
                 fontWeight: FontWeight.w700,
                 color: chair.isAssigned
-                    ? AppColors.primaryContainer
+                    ? AppColors.dark
                     : AppColors.onSurfaceVariant,
               ),
             ),
@@ -461,7 +454,7 @@ class _ChairTile extends StatelessWidget {
                 style: AppTextStyles.labelMd.copyWith(
                   fontSize: 9,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: AppColors.dark,
                 ),
               ),
             ] else if (chair.isAssigned) ...[
@@ -469,13 +462,13 @@ class _ChairTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryContainer.withValues(alpha: 0.2),
+                  color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Icon(
                   Icons.person_rounded,
                   size: 10,
-                  color: AppColors.primaryContainer,
+                  color: AppColors.dark,
                 ),
               ),
             ],
@@ -554,10 +547,10 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryContainer.withValues(alpha: 0.2),
+                  color: AppColors.dark.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(Icons.person_rounded, color: AppColors.primaryContainer),
+                child: const Icon(Icons.person_rounded, color: AppColors.dark),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -566,7 +559,7 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
                   children: [
                     Text(
                       widget.chair.guestName ?? 'Invité',
-                      style: AppTextStyles.headlineMdPrimary,
+                      style: AppTextStyles.headlineMd.copyWith(color: AppColors.dark),
                     ),
                     Text(
                       'Chaise N°${widget.chair.chairNumber}',

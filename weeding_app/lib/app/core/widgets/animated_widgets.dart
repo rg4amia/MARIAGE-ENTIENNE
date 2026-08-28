@@ -209,9 +209,9 @@ class _ShimmerBoxState extends State<ShimmerBox>
               begin: Alignment(-1.0 + 2.0 * _ctrl.value, 0),
               end: Alignment(-0.5 + 2.0 * _ctrl.value, 0),
               colors: const [
-                Color(0xFFEAE1DB),
-                Color(0xFFF5ECE6),
-                Color(0xFFEAE1DB),
+                Color(0xFFF0EEEB),
+                Color(0xFFF8F7F5),
+                Color(0xFFF0EEEB),
               ],
             ),
           ),

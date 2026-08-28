@@ -55,12 +55,12 @@ class _SettingsPageState extends State<SettingsPage> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.dark.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
                 Icons.person_outline_rounded,
-                color: Colors.white,
+                color: AppColors.dark,
                 size: 22,
               ),
             ),
@@ -71,178 +71,174 @@ class _SettingsPageState extends State<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              // ── Profile Card ──
-              FadeInSlide(
-                duration: const Duration(milliseconds: 400),
-                child: Obx(() {
-                  final profile = authController.profile.value;
-                  final name = profile?.fullName ?? 'Admin';
-                  final initials = name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').join().toUpperCase();
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppColors.primary, Color(0xFFD4592A)],
-                      ),
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        UserAvatar(
-                          initials: initials.length >= 2 ? initials.substring(0, 2) : initials,
-                          radius: 28,
-                          backgroundColor: Colors.white.withValues(alpha: 0.2),
-                          child: Text(
-                            initials.length >= 2 ? initials.substring(0, 2) : initials,
-                            style: AppTextStyles.titleLg.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                  // ── Profile Card ──
+                  FadeInSlide(
+                    duration: const Duration(milliseconds: 400),
+                    child: Obx(() {
+                      final profile = authController.profile.value;
+                      final name = profile?.fullName ?? 'Admin';
+                      final initials = name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').join().toUpperCase();
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: AppColors.dark,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.dark.withValues(alpha: 0.2),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                name,
+                        child: Row(
+                          children: [
+                            UserAvatar(
+                              initials: initials.length >= 2 ? initials.substring(0, 2) : initials,
+                              radius: 28,
+                              backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                              child: Text(
+                                initials.length >= 2 ? initials.substring(0, 2) : initials,
                                 style: AppTextStyles.titleLg.copyWith(
-                                  color: Colors.white,
+                                  color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 3,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  'Admin',
-                                  style: AppTextStyles.labelMd.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 11,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    name,
+                                    style: AppTextStyles.titleLg.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(height: 2),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary.withValues(alpha: 0.15),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      'Admin',
+                                      style: AppTextStyles.labelMd.copyWith(
+                                        color: AppColors.primary,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+
+                  const SizedBox(height: 28),
+
+                  // ── Wedding Info Card ──
+                  FadeInSlide(
+                    delay: const Duration(milliseconds: 100),
+                    child: _buildWeddingInfoCard(context),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // ── General Section ──
+                  FadeInSlide(
+                    delay: const Duration(milliseconds: 200),
+                    child: _SettingsSection(
+                      title: 'GÉNÉRAL',
+                      items: [
+                        _SettingsTile(
+                          icon: Icons.person_outline_rounded,
+                          iconColor: AppColors.dark,
+                          title: 'Modifier le profil',
+                          onTap: () {},
+                        ),
+                        _SettingsTile(
+                          icon: Icons.notifications_outlined,
+                          iconColor: AppColors.dark,
+                          title: 'Notifications',
+                          onTap: () {},
                         ),
                       ],
                     ),
-                  );
-                }),
-              ),
-
-              const SizedBox(height: 28),
-
-              // ── Wedding Info Card ──
-              FadeInSlide(
-                delay: const Duration(milliseconds: 100),
-                child: _buildWeddingInfoCard(context),
-              ),
-
-              const SizedBox(height: 8),
-
-              // ── General Section ──
-              FadeInSlide(
-                delay: const Duration(milliseconds: 200),
-                child: _SettingsSection(
-                  title: 'GÉNÉRAL',
-                  items: [
-                    _SettingsTile(
-                      icon: Icons.person_outline_rounded,
-                      iconColor: AppColors.primaryContainer,
-                      title: 'Modifier le profil',
-                      onTap: () {},
-                    ),
-                    _SettingsTile(
-                      icon: Icons.notifications_outlined,
-                      iconColor: AppColors.secondaryContainer,
-                      title: 'Notifications',
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-
-              // ── Wedding Section ──
-              FadeInSlide(
-                delay: const Duration(milliseconds: 300),
-                child: _SettingsSection(
-                  title: 'MARIAGE',
-                  items: [
-                    _SettingsTile(
-                      icon: Icons.qr_code_2_rounded,
-                      iconColor: AppColors.secondaryContainer,
-                      title: 'QR d\'entrée de la salle',
-                      subtitle: 'Générer et suivre les arrivées',
-                      onTap: () => Get.toNamed(AppRoutes.entranceQr),
-                    ),
-                    _SettingsTile(
-                      icon: Icons.storage_rounded,
-                      iconColor: AppColors.tertiaryContainer,
-                      title: 'Stockage utilisé',
-                      trailing: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: AppColors.outlineVariant,
-                        size: 20,
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
-                ),
-              ),
-
-              // ── Account Section ──
-              FadeInSlide(
-                delay: const Duration(milliseconds: 400),
-                child: _SettingsSection(
-                  title: 'COMPTE',
-                  items: [
-                    _SettingsTile(
-                      icon: Icons.lock_outline_rounded,
-                      iconColor: AppColors.tertiaryContainer,
-                      title: 'Changer le mot de passe',
-                      onTap: () {},
-                    ),
-                    _SettingsTile(
-                      icon: Icons.logout_rounded,
-                      iconColor: AppColors.error,
-                      title: 'Déconnexion',
-                      titleColor: AppColors.error,
-                      onTap: () => _confirmLogout(context, authController),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 40),
-              Center(
-                child: Text(
-                  'Wedding App v1.0.0',
-                  style: AppTextStyles.bodyMd.copyWith(
-                    color: AppColors.outlineVariant,
                   ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              ],
+
+                  // ── Wedding Section ──
+                  FadeInSlide(
+                    delay: const Duration(milliseconds: 300),
+                    child: _SettingsSection(
+                      title: 'MARIAGE',
+                      items: [
+                        _SettingsTile(
+                          icon: Icons.qr_code_2_rounded,
+                          iconColor: AppColors.dark,
+                          title: 'QR d\'entrée de la salle',
+                          subtitle: 'Générer et suivre les arrivées',
+                          onTap: () => Get.toNamed(AppRoutes.entranceQr),
+                        ),
+                        _SettingsTile(
+                          icon: Icons.storage_rounded,
+                          iconColor: AppColors.dark,
+                          title: 'Stockage utilisé',
+                          trailing: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppColors.outlineVariant,
+                            size: 20,
+                          ),
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // ── Account Section ──
+                  FadeInSlide(
+                    delay: const Duration(milliseconds: 400),
+                    child: _SettingsSection(
+                      title: 'COMPTE',
+                      items: [
+                        _SettingsTile(
+                          icon: Icons.lock_outline_rounded,
+                          iconColor: AppColors.dark,
+                          title: 'Changer le mot de passe',
+                          onTap: () {},
+                        ),
+                        _SettingsTile(
+                          icon: Icons.logout_rounded,
+                          iconColor: AppColors.error,
+                          title: 'Déconnexion',
+                          titleColor: AppColors.error,
+                          onTap: () => _confirmLogout(context, authController),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
+                  Center(
+                    child: Text(
+                      'Wedding App v1.0.0',
+                      style: AppTextStyles.bodyMd.copyWith(
+                        color: AppColors.outlineVariant,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                ],
               ),
             ),
           ),
@@ -277,13 +273,13 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.2),
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.05),
+            color: AppColors.dark.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -291,10 +287,12 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       child: Column(
         children: [
-          // Title
           Text(
             '💒 $title',
-            style: AppTextStyles.headlineMdPrimary.copyWith(fontSize: 18),
+            style: AppTextStyles.headlineMd.copyWith(
+              color: AppColors.dark,
+              fontSize: 18,
+            ),
           ),
           const SizedBox(height: 4),
           if (bride.isNotEmpty || groom.isNotEmpty)
@@ -307,24 +305,22 @@ class _SettingsPageState extends State<SettingsPage> {
 
           const Divider(height: 24),
 
-          // Info rows
           _WeddingInfoRow(
             icon: Icons.calendar_today_rounded,
-            iconColor: AppColors.primaryContainer,
+            iconColor: AppColors.dark,
             label: 'Date',
             value: dateStr,
           ),
           const SizedBox(height: 12),
           _WeddingInfoRow(
             icon: Icons.location_on_outlined,
-            iconColor: AppColors.secondaryContainer,
+            iconColor: AppColors.dark,
             label: 'Lieu',
             value: location,
           ),
 
           const SizedBox(height: 16),
 
-          // Edit button
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -332,8 +328,8 @@ class _SettingsPageState extends State<SettingsPage> {
               icon: const Icon(Icons.edit_rounded, size: 18),
               label: const Text('Modifier les informations'),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                side: const BorderSide(color: AppColors.primary),
+                foregroundColor: AppColors.dark,
+                side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -372,7 +368,7 @@ class _SettingsPageState extends State<SettingsPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Modifier le mariage', style: AppTextStyles.headlineMdPrimary),
+              Text('Modifier le mariage', style: AppTextStyles.headlineMd),
               const SizedBox(height: 20),
 
               _buildTextField(controller: titleCtrl, label: 'Titre du mariage', icon: Icons.favorite_outline),
@@ -384,7 +380,6 @@ class _SettingsPageState extends State<SettingsPage> {
               _buildTextField(controller: locationCtrl, label: 'Lieu de la cérémonie', icon: Icons.location_on_outlined),
 
               const SizedBox(height: 12),
-              // Date picker
               InkWell(
                 onTap: () async {
                   final picked = await showDatePicker(
@@ -401,7 +396,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.outlineVariant),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
                     children: [
@@ -436,14 +431,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     await _loadWeddingSettings();
                     if (mounted) Get.snackbar('Succès', 'Informations du mariage mises à jour');
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
                   child: const Text('Enregistrer', style: TextStyle(fontWeight: FontWeight.w700)),
                 ),
               ),
@@ -465,7 +452,7 @@ class _SettingsPageState extends State<SettingsPage> {
         labelText: label,
         prefixIcon: Icon(icon, size: 20),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
@@ -522,7 +509,7 @@ class _WeddingInfoRow extends StatelessWidget {
           width: 36,
           height: 36,
           decoration: BoxDecoration(
-            color: iconColor.withValues(alpha: 0.12),
+            color: AppColors.surfaceContainerHigh,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: iconColor, size: 18),
@@ -572,15 +559,8 @@ class _SettingsSection extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: AppColors.outlineVariant.withValues(alpha: 0.2),
+                color: AppColors.outlineVariant.withValues(alpha: 0.5),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.03),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
             ),
             child: Column(children: items),
           ),
@@ -624,7 +604,7 @@ class _SettingsTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: iconColor.withValues(alpha: 0.12),
+                color: AppColors.surfaceContainerHigh,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: iconColor, size: 20),

@@ -29,12 +29,12 @@ class TablesPage extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
+                color: AppColors.dark.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
                 Icons.search_rounded,
-                color: Colors.white,
+                color: AppColors.dark,
                 size: 22,
               ),
             ),
@@ -49,7 +49,7 @@ class TablesPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator(color: AppColors.dark));
               }
 
               final tables = controller.filteredTables;
@@ -63,13 +63,13 @@ class TablesPage extends StatelessWidget {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: AppColors.secondaryContainer.withValues(alpha: 0.1),
+                          color: AppColors.surfaceContainerHigh,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.table_restaurant_rounded,
                           size: 40,
-                          color: AppColors.secondaryContainer.withValues(alpha: 0.5),
+                          color: AppColors.onSurfaceVariant.withValues(alpha: 0.4),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -111,15 +111,11 @@ class TablesPage extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.secondary, AppColors.secondaryContainer],
-          ),
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.secondary.withValues(alpha: 0.3),
+              color: AppColors.dark.withValues(alpha: 0.2),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -157,13 +153,9 @@ class _SearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.secondary.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: TextField(
         onChanged: controller.onSearchChanged,
@@ -210,11 +202,11 @@ class _TableCard extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.3),
+              color: AppColors.outlineVariant.withValues(alpha: 0.5),
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.secondary.withValues(alpha: 0.04),
+                color: AppColors.dark.withValues(alpha: 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -225,27 +217,13 @@ class _TableCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Table icon with gradient
+                  // Table icon
                   Container(
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          AppColors.secondaryContainer.withValues(alpha: 0.8),
-                          AppColors.secondary,
-                        ],
-                      ),
+                      color: AppColors.dark,
                       borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.secondary.withValues(alpha: 0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
                     ),
                     child: const Icon(
                       Icons.table_restaurant_rounded,
@@ -294,8 +272,8 @@ class _TableCard extends StatelessWidget {
                         backgroundColor: AppColors.surfaceContainerHigh,
                         valueColor: AlwaysStoppedAnimation<Color>(
                           table.occupancy >= 1.0
-                              ? const Color(0xFF4CAF50)
-                              : AppColors.secondaryContainer,
+                              ? AppColors.primary
+                              : AppColors.dark,
                         ),
                         minHeight: 6,
                       ),
@@ -333,7 +311,7 @@ class _CreateTableSheet extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -393,11 +371,11 @@ class _CreateTableSheet extends StatelessWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.secondary,
+                    backgroundColor: AppColors.dark,
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                   ),
                   child: const Text(
@@ -437,19 +415,19 @@ class _CreateTableSheet extends StatelessWidget {
       filled: true,
       fillColor: AppColors.surfaceContainerLow,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.secondary, width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

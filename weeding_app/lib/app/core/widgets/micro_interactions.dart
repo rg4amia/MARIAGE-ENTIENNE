@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 /// Animated card with hover/tap scale effect and dynamic shadow.
 class HoverCard extends StatefulWidget {
@@ -76,16 +77,16 @@ class _HoverCardState extends State<HoverCard>
                 boxShadow: [
                   BoxShadow(
                     color: _isHovered
-                        ? const Color(0xFFA53C00).withValues(alpha: 0.08)
-                        : const Color(0xFFA53C00).withValues(alpha: 0.03),
+                        ? AppColors.dark.withValues(alpha: 0.08)
+                        : AppColors.dark.withValues(alpha: 0.03),
                     blurRadius: _isHovered ? 16 : 8,
                     offset: Offset(0, _isHovered ? 6 : 2),
                   ),
                 ],
                 border: Border.all(
                   color: _isHovered
-                      ? const Color(0xFFA53C00).withValues(alpha: 0.12)
-                      : const Color(0xFFDFC0B4).withValues(alpha: 0.3),
+                      ? AppColors.dark.withValues(alpha: 0.12)
+                      : AppColors.outlineVariant.withValues(alpha: 0.5),
                 ),
               ),
               child: child,
@@ -172,7 +173,7 @@ class GradientButton extends StatefulWidget {
     this.foregroundColor = Colors.white,
     this.isLoading = false,
     this.height = 52,
-    this.borderRadius = 14,
+    this.borderRadius = 16,
   });
 
   @override
@@ -207,7 +208,7 @@ class _GradientButtonState extends State<GradientButton>
     final grad = widget.gradient ?? const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [Color(0xFFA53C00), Color(0xFFFF7A3D)],
+      colors: [AppColors.dark, Color(0xFF2A2B2B)],
     );
 
     return GestureDetector(
@@ -231,7 +232,7 @@ class _GradientButtonState extends State<GradientButton>
             borderRadius: BorderRadius.circular(widget.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: grad.colors.first.withValues(alpha: 0.3),
+                color: AppColors.dark.withValues(alpha: 0.15),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -242,8 +243,8 @@ class _GradientButtonState extends State<GradientButton>
             borderRadius: BorderRadius.circular(widget.borderRadius),
             child: InkWell(
               borderRadius: BorderRadius.circular(widget.borderRadius),
-              splashColor: Colors.white.withValues(alpha: 0.2),
-              highlightColor: Colors.white.withValues(alpha: 0.1),
+              splashColor: Colors.white.withValues(alpha: 0.15),
+              highlightColor: Colors.white.withValues(alpha: 0.05),
               onTap: widget.onPressed,
               child: Center(
                 child: widget.isLoading
@@ -268,7 +269,7 @@ class _GradientButtonState extends State<GradientButton>
                               color: widget.foregroundColor,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
+                              letterSpacing: 0.3,
                             ),
                           ),
                         ],
@@ -332,9 +333,9 @@ class _ShimmerSkeletonState extends State<ShimmerSkeleton>
               begin: Alignment(-1.0 + 2.0 * _ctrl.value, 0),
               end: Alignment(-0.5 + 2.0 * _ctrl.value, 0),
               colors: const [
-                Color(0xFFEAE1DB),
-                Color(0xFFF5ECE6),
-                Color(0xFFEAE1DB),
+                Color(0xFFF0EEEB),
+                Color(0xFFF8F7F5),
+                Color(0xFFF0EEEB),
               ],
             ),
           ),

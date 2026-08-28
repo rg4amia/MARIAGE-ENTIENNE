@@ -60,7 +60,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        // Animate on step change
         _stepCtrl.reset();
         _stepCtrl.forward();
 
@@ -105,7 +104,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     }
   }
 
-  // ── Loading ──
   Widget _buildLoading() {
     return Container(
       key: const ValueKey('loading'),
@@ -119,13 +117,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryContainer],
-                  ),
+                  color: AppColors.dark,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.3),
+                      color: AppColors.dark.withValues(alpha: 0.2),
                       blurRadius: 20,
                     ),
                   ],
@@ -143,7 +139,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               width: 160,
               child: LinearProgressIndicator(
                 backgroundColor: AppColors.surfaceContainerHigh,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.dark),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -153,7 +149,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Not Found ──
   Widget _buildNotFound() {
     return Container(
       key: const ValueKey('notFound'),
@@ -197,7 +192,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Error ──
   Widget _buildError() {
     return Container(
       key: const ValueKey('error'),
@@ -246,7 +240,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Verified / Welcome ──
   Widget _buildVerified() {
     final g = controller.guest.value;
     return Container(
@@ -255,7 +248,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.primary, Color(0xFFE85D2A), AppColors.background],
+          colors: [Color(0xFF2AE88E), AppColors.primary, AppColors.background],
           stops: [0.0, 0.3, 0.6],
         ),
       ),
@@ -265,39 +258,37 @@ class _GuestAccessPageState extends State<GuestAccessPage>
           child: Column(
             children: [
               const Spacer(flex: 2),
-              // Welcome circle
               ScaleIn(
                 child: Container(
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
+                    color: AppColors.dark.withValues(alpha: 0.08),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.3),
+                      color: AppColors.dark.withValues(alpha: 0.15),
                       width: 2,
                     ),
                   ),
-                  child: const Icon(Icons.waving_hand_rounded, size: 48, color: Colors.white),
+                  child: const Icon(Icons.waving_hand_rounded, size: 48, color: AppColors.dark),
                 ),
               ),
               const SizedBox(height: 28),
               Text(
                 'Bienvenue,',
                 style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: AppColors.dark.withValues(alpha: 0.7),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 g?.fullName ?? '',
                 style: AppTextStyles.headlineLg.copyWith(
-                  color: Colors.white,
+                  color: AppColors.dark,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const Spacer(flex: 2),
-              // Info card
               SlideTransition(
                 position: Tween<Offset>(
                   begin: const Offset(0, 0.3),
@@ -308,9 +299,12 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
+                        color: AppColors.dark.withValues(alpha: 0.06),
                         blurRadius: 30,
                         offset: const Offset(0, 12),
                       ),
@@ -355,7 +349,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Media Choice ──
   Widget _buildMediaChoice() {
     return Container(
       key: const ValueKey('mediaChoice'),
@@ -363,7 +356,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [AppColors.primary, Color(0xFFE85D2A), AppColors.background],
+          colors: [Color(0xFF2AE88E), AppColors.primary, AppColors.background],
           stops: [0.0, 0.3, 0.6],
         ),
       ),
@@ -377,14 +370,14 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                 child: const Icon(
                   Icons.mic_rounded,
                   size: 48,
-                  color: Colors.white,
+                  color: AppColors.dark,
                 ),
               ),
               const SizedBox(height: 20),
               Text(
                 'Choisissez votre format',
                 style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
+                  color: AppColors.dark,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -392,11 +385,10 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               Text(
                 'Enregistrez un message pour le couple',
                 style: AppTextStyles.bodyLg.copyWith(
-                  color: Colors.white.withValues(alpha: 0.85),
+                  color: AppColors.dark.withValues(alpha: 0.6),
                 ),
               ),
               const Spacer(flex: 1),
-              // Audio option
               SlideTransition(
                 position: Tween<Offset>(
                   begin: const Offset(0, 0.2),
@@ -406,14 +398,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   icon: Icons.mic_rounded,
                   title: 'Message Audio',
                   subtitle: 'Enregistrez un message vocal',
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFFF7A3D), Color(0xFFE85D2A)],
-                  ),
+                  color: AppColors.dark,
                   onTap: controller.startAudioRecording,
                 ),
               ),
               const SizedBox(height: 16),
-              // Video option
               SlideTransition(
                 position: Tween<Offset>(
                   begin: const Offset(0, 0.3),
@@ -423,9 +412,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   icon: Icons.videocam_rounded,
                   title: 'Message Vidéo',
                   subtitle: 'Enregistrez une courte vidéo',
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF9C4236), Color(0xFFB85A4E)],
-                  ),
+                  color: AppColors.primary,
                   onTap: controller.startVideoRecording,
                 ),
               ),
@@ -437,7 +424,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Recording (navigates to real recorder) ──
   Widget _buildRecordingPage({required bool isAudio}) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _openRecorder(isAudio));
     return _buildProcessing();
@@ -467,7 +453,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     }
   }
 
-  // ── Processing ──
   Widget _buildProcessing() {
     return Container(
       key: const ValueKey('processing'),
@@ -481,9 +466,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [AppColors.primary, AppColors.primaryContainer],
-                  ),
+                  color: AppColors.dark,
                   shape: BoxShape.circle,
                 ),
                 child: const Center(
@@ -514,7 +497,6 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     );
   }
 
-  // ── Card Unlocked ──
   final GlobalKey _cardKey = GlobalKey();
 
   Widget _buildCardUnlocked() {
@@ -525,7 +507,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF4CAF50), Color(0xFF388E3C), AppColors.background],
+          colors: [AppColors.primary, AppColors.primaryDark, AppColors.background],
           stops: [0.0, 0.2, 0.5],
         ),
       ),
@@ -536,24 +518,23 @@ class _GuestAccessPageState extends State<GuestAccessPage>
           child: Column(
             children: [
               const SizedBox(height: 20),
-              // Success animation
               ScaleIn(
                 child: Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: AppColors.dark.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 2),
+                    border: Border.all(color: AppColors.dark.withValues(alpha: 0.2), width: 2),
                   ),
-                  child: const Icon(Icons.check_rounded, size: 44, color: Colors.white),
+                  child: const Icon(Icons.check_rounded, size: 44, color: AppColors.dark),
                 ),
               ),
               const SizedBox(height: 20),
               Text(
                 'Carte débloquée !',
                 style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
+                  color: AppColors.dark,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -561,11 +542,10 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               Text(
                 'Merci pour votre message, ${g?.fullName ?? ''} ! 🎉',
                 style: AppTextStyles.bodyLg.copyWith(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: AppColors.dark.withValues(alpha: 0.7),
                 ),
               ),
               const SizedBox(height: 28),
-              // Invitation card
               SlideTransition(
                 position: Tween<Offset>(
                   begin: const Offset(0, 0.2),
@@ -580,18 +560,17 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                 ),
               ),
               const SizedBox(height: 24),
-              // Action buttons
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _downloadCard(g?.fullName ?? 'invite'),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        side: BorderSide(color: Colors.white.withValues(alpha: 0.5), width: 1.5),
+                        foregroundColor: AppColors.dark,
+                        side: BorderSide(color: AppColors.dark.withValues(alpha: 0.3), width: 1.5),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       icon: const Icon(Icons.download_rounded, size: 20),
@@ -603,11 +582,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                     child: ElevatedButton.icon(
                       onPressed: () => _shareCard(g?.fullName ?? 'invite'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF388E3C),
+                        backgroundColor: AppColors.dark,
+                        foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         elevation: 0,
                       ),
@@ -655,14 +634,14 @@ class _MediaOptionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final Gradient gradient;
+  final Color color;
   final VoidCallback onTap;
 
   const _MediaOptionCard({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.gradient,
+    required this.color,
     required this.onTap,
   });
 
@@ -675,9 +654,12 @@ class _MediaOptionCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
+              color: AppColors.dark.withValues(alpha: 0.06),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -689,17 +671,10 @@ class _MediaOptionCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                gradient: gradient,
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient.colors.first.withValues(alpha: 0.25),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
               ),
-              child: Icon(icon, color: Colors.white, size: 26),
+              child: Icon(icon, color: color, size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -726,7 +701,7 @@ class _MediaOptionCard extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerLow,
+                color: AppColors.surfaceContainerHigh,
                 shape: BoxShape.circle,
               ),
               child: Icon(

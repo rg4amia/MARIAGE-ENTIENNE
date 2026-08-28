@@ -44,15 +44,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     final guest = Get.arguments as Guest;
     final linkRepo = GuestLinkRepository();
 
-    // Try to get existing link
     var link = await linkRepo.getLinkByGuestId(guest.id);
 
-    // Create new link if none exists
     try {
       link ??= await linkRepo.createGuestLink(guest.id);
-    } catch (_) {
-      // Le lien ne peut être créé qu'après l'attribution d'une chaise.
-    }
+    } catch (_) {}
 
     if (mounted) {
       setState(() {
@@ -65,7 +61,6 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   String _getInviteUrl() {
     if (_guestLink == null) return '';
     final supabaseUrl = Supabase.instance.client.rest.url;
-    // Convert REST URL to base: https://xxx.supabase.co/rest/v1/ → https://xxx.supabase.co
     final baseUrl = supabaseUrl.replaceAll(RegExp(r'/rest/v1.*'), '');
     return _guestLink!.getInviteUrl(baseUrl);
   }
@@ -95,12 +90,12 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.delete_outline_rounded,
-                  color: Colors.white,
+                  color: AppColors.dark,
                   size: 20,
                 ),
               ),
@@ -108,280 +103,272 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
           ),
           Expanded(
             child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            // Profile Card
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    // Avatar
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundColor: AppColors.surfaceContainerHigh,
-                      child: Text(
-                        guest.initials,
-                        style: AppTextStyles.displayMdPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Name
-                    Text(guest.fullName, style: AppTextStyles.titleLg),
-                    const SizedBox(height: 4),
-
-                    // Phone
-                    if (guest.phone != null)
-                      Text(guest.phone!, style: AppTextStyles.bodyMdOnVariant),
-
-                    // Email
-                    if (guest.email != null) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  // Profile Card
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
                         children: [
-                          const Icon(
-                            Icons.mail,
-                            size: 16,
-                            color: AppColors.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            guest.email!,
-                            style: AppTextStyles.bodyMdOnVariant,
-                          ),
-                        ],
-                      ),
-                    ],
-
-                    const SizedBox(height: 16),
-
-                    // Status
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceContainer,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Statut', style: AppTextStyles.bodyMd),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 4,
+                          // Avatar
+                          CircleAvatar(
+                            radius: 48,
+                            backgroundColor: AppColors.surfaceContainerHigh,
+                            child: Text(
+                              guest.initials,
+                              style: AppTextStyles.displayMdPrimary.copyWith(
+                                color: AppColors.dark,
+                              ),
                             ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          Text(guest.fullName, style: AppTextStyles.titleLg),
+                          const SizedBox(height: 4),
+
+                          if (guest.phone != null)
+                            Text(guest.phone!, style: AppTextStyles.bodyMdOnVariant),
+
+                          if (guest.email != null) ...[
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.mail,
+                                  size: 16,
+                                  color: AppColors.onSurfaceVariant,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  guest.email!,
+                                  style: AppTextStyles.bodyMdOnVariant,
+                                ),
+                              ],
+                            ),
+                          ],
+
+                          const SizedBox(height: 16),
+
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: _statusColor(guest.status).withAlpha(51),
+                              color: AppColors.surfaceContainer,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Text(
-                              guest.statusLabel,
-                              style: AppTextStyles.labelMd.copyWith(
-                                color: _statusColor(guest.status),
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Statut', style: AppTextStyles.bodyMd),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: _statusColor(guest.status).withAlpha(30),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    guest.statusLabel,
+                                    style: AppTextStyles.labelMd.copyWith(
+                                      color: _statusColor(guest.status),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          FutureBuilder(
+                            future: controller.getGuestSeat(guest.id),
+                            builder: (context, snapshot) {
+                              final seat = snapshot.data;
+                              return Column(
+                                children: [
+                                  _InfoRow(
+                                    label: 'Table:',
+                                    value: seat?.tableLabel ?? 'Non assignée',
+                                  ),
+                                  const SizedBox(height: 8),
+                                  _InfoRow(
+                                    label: 'Chaise:',
+                                    value: seat == null
+                                        ? 'Non assignée'
+                                        : '${seat.chairNumber}',
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    FutureBuilder(
-                      future: controller.getGuestSeat(guest.id),
-                      builder: (context, snapshot) {
-                        final seat = snapshot.data;
-                        return Column(
-                          children: [
-                            _InfoRow(
-                              label: 'Table:',
-                              value: seat?.tableLabel ?? 'Non assignée',
-                            ),
-                            const SizedBox(height: 8),
-                            _InfoRow(
-                              label: 'Chaise:',
-                              value: seat == null
-                                  ? 'Non assignée'
-                                  : '${seat.chairNumber}',
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Assign + Share Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _showAssignDialog(context, controller, guest),
-                    icon: const Icon(Icons.chair),
-                    label: const Text('Assigner'),
                   ),
-                ),
-                const SizedBox(width: 12),
-                if (guest.qrToken.isNotEmpty)
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _shareViaWhatsApp(guest),
-                      icon: const Icon(Icons.share_rounded),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF25D366),
-                        foregroundColor: Colors.white,
-                      ),
-                      label: const Text('WhatsApp'),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
-            // QR Code & Invite Link
-            if (guest.qrToken.isNotEmpty)
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
+                  // Assign + Share Buttons
+                  Row(
                     children: [
-                      Text('Lien d\'invitation', style: AppTextStyles.titleLg),
-
-                      // WhatsApp share shortcut
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () => _shareViaWhatsApp(guest),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF25D366).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: const Color(0xFF25D366).withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.share_rounded, size: 14, color: Color(0xFF25D366)),
-                              SizedBox(width: 4),
-                              Text(
-                                'Partager via WhatsApp',
-                                style: TextStyle(
-                                  color: Color(0xFF25D366),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showAssignDialog(context, controller, guest),
+                          icon: const Icon(Icons.chair),
+                          label: const Text('Assigner'),
                         ),
                       ),
-                      const SizedBox(height: 12),
-
-                      // Short link display
-                      if (_isLoadingLink)
-                        const CircularProgressIndicator()
-                      else if (_guestLink != null) ...[
-                        // Short link URL
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.link,
-                                size: 16,
-                                color: AppColors.primary,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  _getInviteUrl(),
-                                  style: AppTextStyles.labelMd.copyWith(
-                                    color: AppColors.primary,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.copy, size: 16),
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(text: _getInviteUrl()),
-                                  );
-                                  Get.snackbar(
-                                    'Copié !',
-                                    'Lien copié dans le presse-papier',
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
-                                },
-                              ),
-                            ],
+                      const SizedBox(width: 12),
+                      if (guest.qrToken.isNotEmpty)
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => _shareViaWhatsApp(guest),
+                            icon: const Icon(Icons.share_rounded),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF25D366),
+                              foregroundColor: Colors.white,
+                            ),
+                            label: const Text('WhatsApp'),
                           ),
                         ),
-                        const SizedBox(height: 8),
-
-                        // Stats
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.remove_red_eye,
-                              size: 14,
-                              color: AppColors.onSurfaceVariant,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${_guestLink!.scanCount} scan(s)',
-                              style: AppTextStyles.labelMd.copyWith(
-                                color: AppColors.onSurfaceVariant,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-
-                      const SizedBox(height: 16),
-
-                      // QR Code du lien court public
-                      Container(
-                        width: 180,
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerLowest,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.outlineVariant),
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        child: Center(
-                          child: _guestLink == null
-                              ? const Icon(Icons.lock_outline, size: 60)
-                              : QrImageView(data: _getInviteUrl()),
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-                      Text(
-                        'Code: ${_guestLink?.shortCode ?? "..."}',
-                        style: AppTextStyles.labelMd,
-                        textAlign: TextAlign.center,
-                      ),
                     ],
                   ),
-                ),
-              ),
-          ],
+                  const SizedBox(height: 24),
+
+                  // QR Code & Invite Link
+                  if (guest.qrToken.isNotEmpty)
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            Text('Lien d\'invitation', style: AppTextStyles.titleLg),
+
+                            const SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () => _shareViaWhatsApp(guest),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF25D366).withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.share_rounded, size: 14, color: Color(0xFF25D366)),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      'Partager via WhatsApp',
+                                      style: TextStyle(
+                                        color: Color(0xFF25D366),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            if (_isLoadingLink)
+                              const CircularProgressIndicator()
+                            else if (_guestLink != null) ...[
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surfaceContainer,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.link,
+                                      size: 16,
+                                      color: AppColors.dark,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        _getInviteUrl(),
+                                        style: AppTextStyles.labelMd.copyWith(
+                                          color: AppColors.dark,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.copy, size: 16),
+                                      onPressed: () {
+                                        Clipboard.setData(
+                                          ClipboardData(text: _getInviteUrl()),
+                                        );
+                                        Get.snackbar(
+                                          'Copié !',
+                                          'Lien copié dans le presse-papier',
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.remove_red_eye,
+                                    size: 14,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    '${_guestLink!.scanCount} scan(s)',
+                                    style: AppTextStyles.labelMd.copyWith(
+                                      color: AppColors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+
+                            const SizedBox(height: 16),
+
+                            Container(
+                              width: 180,
+                              height: 180,
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceContainerLowest,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                              child: Center(
+                                child: _guestLink == null
+                                    ? const Icon(Icons.lock_outline, size: 60)
+                                    : QrImageView(data: _getInviteUrl()),
+                              ),
+                            ),
+
+                            const SizedBox(height: 8),
+                            Text(
+                              'Code: ${_guestLink?.shortCode ?? "..."}',
+                              style: AppTextStyles.labelMd,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -402,7 +389,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => _AssignSheet(
         tables: tables,
@@ -421,6 +408,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Supprimer l\'invité ?'),
         content: Text('Voulez-vous vraiment supprimer "${guest.fullName}" ?'),
         actions: [
@@ -443,11 +431,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return AppColors.secondary;
+        return const Color(0xFFB0A8FF);
       case 'card_unlocked':
-        return const Color(0xFF2E7D32);
+        return AppColors.primary;
       default:
-        return AppColors.onTertiaryContainer;
+        return AppColors.secondary;
     }
   }
 
@@ -514,10 +502,9 @@ class _AssignSheetState extends State<_AssignSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Assigner une place', style: AppTextStyles.headlineMdPrimary),
+          Text('Assigner une place', style: AppTextStyles.headlineMd),
           const SizedBox(height: 20),
 
-          // Table selector
           DropdownButtonFormField<WeddingTable>(
             value: selectedTable,
             decoration: const InputDecoration(labelText: 'Table'),
@@ -540,7 +527,6 @@ class _AssignSheetState extends State<_AssignSheet> {
           ),
           const SizedBox(height: 12),
 
-          // Chair selector
           if (selectedTable != null)
             DropdownButtonFormField<Chair>(
               value: selectedChair,

@@ -56,24 +56,19 @@ class QrCodePage extends StatelessWidget {
                     width: double.infinity,
                     constraints: const BoxConstraints(maxWidth: 400),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Gold accent top
+                        // Dark accent top
                         Container(
                           height: 4,
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(16),
+                              top: Radius.circular(20),
                             ),
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.tertiaryFixed,
-                                AppColors.secondaryFixed,
-                              ],
-                            ),
+                            color: AppColors.dark,
                           ),
                         ),
                         Padding(
@@ -94,11 +89,11 @@ class QrCodePage extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surfaceBright,
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.surfaceContainerLow,
+                                  borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: AppColors.tertiaryFixed,
-                                    width: 2,
+                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                    width: 1.5,
                                   ),
                                 ),
                                 child: FutureBuilder(
@@ -112,12 +107,12 @@ class QrCodePage extends StatelessWidget {
                                       data: payload,
                                       version: QrVersions.auto,
                                       size: 200,
-                                      backgroundColor: AppColors.surfaceBright,
+                                      backgroundColor: AppColors.surfaceContainerLow,
                                       eyeStyle: const QrEyeStyle(
-                                        color: AppColors.onSurface,
+                                        color: AppColors.dark,
                                       ),
                                       dataModuleStyle: const QrDataModuleStyle(
-                                        color: AppColors.onSurface,
+                                        color: AppColors.dark,
                                       ),
                                     );
                                   },
@@ -148,8 +143,8 @@ class QrCodePage extends StatelessWidget {
                                       icon: const Icon(Icons.share),
                                       label: const Text('Partager'),
                                       style: OutlinedButton.styleFrom(
-                                        foregroundColor: AppColors.secondaryContainer,
-                                        side: const BorderSide(color: AppColors.secondaryContainer, width: 2),
+                                        foregroundColor: AppColors.dark,
+                                        side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
                                         padding: const EdgeInsets.symmetric(vertical: 12),
                                       ),
                                     ),
@@ -166,9 +161,6 @@ class QrCodePage extends StatelessWidget {
                                       },
                                       icon: const Icon(Icons.copy),
                                       label: const Text('Copier'),
-                                      style: ElevatedButton.styleFrom(
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
-                                      ),
                                     ),
                                   ),
                                 ],

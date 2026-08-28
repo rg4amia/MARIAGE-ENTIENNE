@@ -58,29 +58,29 @@ class AppTheme {
         iconTheme: const IconThemeData(color: AppColors.onSurface),
       ),
 
-      // ── Cards ──
+      // ── Cards — Clean white with subtle shadow and rounded corners ──
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: AppColors.outlineVariant.withValues(alpha: 0.2),
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
         margin: EdgeInsets.zero,
       ),
 
-      // ── Elevated Button ──
+      // ── Elevated Button — Mint green, dark text ──
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.dark,
           foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 52),
           elevation: 0,
-          shadowColor: AppColors.primary.withValues(alpha: 0.3),
+          shadowColor: AppColors.dark.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           textStyle: AppTextStyles.titleLg.copyWith(color: Colors.white),
@@ -90,52 +90,55 @@ class AppTheme {
       // ── Outlined Button ──
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: AppColors.dark,
           minimumSize: const Size(double.infinity, 52),
-          side: const BorderSide(color: AppColors.primary, width: 1.5),
+          side: BorderSide(
+            color: AppColors.outlineVariant.withValues(alpha: 0.6),
+            width: 1.5,
+          ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(16),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          textStyle: AppTextStyles.titleLg.copyWith(color: AppColors.primary),
+          textStyle: AppTextStyles.titleLg.copyWith(color: AppColors.dark),
         ),
       ),
 
       // ── Text Button ──
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: AppColors.dark,
           textStyle: AppTextStyles.bodyLg.copyWith(
-            color: AppColors.primary,
+            color: AppColors.dark,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
 
-      // ── Input Decoration ──
+      // ── Input Decoration — Clean rounded with subtle border ──
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceContainerLow,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(
-            color: AppColors.outlineVariant.withValues(alpha: 0.3),
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
         labelStyle: AppTextStyles.labelMd.copyWith(color: AppColors.onSurface),
@@ -144,27 +147,27 @@ class AppTheme {
         ),
         prefixIconColor: AppColors.onSurfaceVariant,
         suffixIconColor: AppColors.onSurfaceVariant,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       ),
 
       // ── FAB ──
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.dark,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(24),
         ),
         sizeConstraints: const BoxConstraints.tightFor(width: 56, height: 56),
       ),
 
       // ── Bottom Navigation ──
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.dark,
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.onSurfaceVariant,
+        unselectedItemColor: AppColors.surfaceContainerHigh,
       ),
 
       // ── Dialog ──
@@ -182,7 +185,7 @@ class AppTheme {
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         showDragHandle: false,
       ),
@@ -191,27 +194,27 @@ class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.inverseSurface,
         contentTextStyle: AppTextStyles.bodyLg.copyWith(color: Colors.white),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         behavior: SnackBarBehavior.floating,
         elevation: 8,
       ),
 
       // ── Chip ──
       chipTheme: ChipThemeData(
-        backgroundColor: Colors.white,
-        selectedColor: AppColors.primaryContainer,
+        backgroundColor: AppColors.dark,
+        selectedColor: AppColors.primary,
         disabledColor: AppColors.surfaceContainerHigh,
-        labelStyle: AppTextStyles.labelMd,
+        labelStyle: AppTextStyles.labelMd.copyWith(color: Colors.white),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide.none,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       ),
 
       // ── Divider ──
       dividerTheme: DividerThemeData(
-        color: AppColors.outlineVariant.withValues(alpha: 0.2),
+        color: AppColors.outlineVariant.withValues(alpha: 0.4),
         thickness: 1,
         space: 0,
       ),

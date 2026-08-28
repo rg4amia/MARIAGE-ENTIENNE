@@ -26,18 +26,11 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.surface,
-            AppColors.surfaceContainerLow,
-          ],
-        ),
+        color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.06),
-            blurRadius: 12,
+            color: AppColors.dark.withValues(alpha: 0.04),
+            blurRadius: 8,
             offset: const Offset(0, 2),
           ),
         ],
@@ -75,12 +68,7 @@ class SectionHeader extends StatelessWidget {
   final String? actionText;
   final VoidCallback? onAction;
 
-  const SectionHeader({
-    super.key,
-    required this.title,
-    this.actionText,
-    this.onAction,
-  });
+  const SectionHeader({super.key, required this.title, this.actionText, this.onAction});
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +84,7 @@ class SectionHeader extends StatelessWidget {
               child: Text(
                 actionText!,
                 style: AppTextStyles.bodyMd.copyWith(
-                  color: AppColors.primary,
+                  color: AppColors.dark,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -113,12 +101,7 @@ class StatusBadge extends StatelessWidget {
   final Color color;
   final bool showDot;
 
-  const StatusBadge({
-    super.key,
-    required this.label,
-    required this.color,
-    this.showDot = true,
-  });
+  const StatusBadge({super.key, required this.label, required this.color, this.showDot = true});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +110,6 @@ class StatusBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -154,7 +136,7 @@ class StatusBadge extends StatelessWidget {
   }
 }
 
-/// Avatar with initials, gradient background and online dot.
+/// Avatar with initials, solid background and optional online dot.
 class UserAvatar extends StatelessWidget {
   final String initials;
   final double radius;
@@ -173,6 +155,7 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bgColor = backgroundColor ?? AppColors.dark;
     return Stack(
       children: [
         Container(
@@ -180,17 +163,10 @@ class UserAvatar extends StatelessWidget {
           height: radius * 2,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                backgroundColor ?? AppColors.primaryContainer,
-                (backgroundColor ?? AppColors.primaryContainer).withValues(alpha: 0.7),
-              ],
-            ),
+            color: bgColor,
             boxShadow: [
               BoxShadow(
-                color: (backgroundColor ?? AppColors.primaryContainer).withValues(alpha: 0.3),
+                color: bgColor.withValues(alpha: 0.2),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -216,7 +192,7 @@ class UserAvatar extends StatelessWidget {
               width: radius * 0.45,
               height: radius * 0.45,
               decoration: BoxDecoration(
-                color: const Color(0xFF4CAF50),
+                color: AppColors.primary,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white, width: 2),
               ),
@@ -227,7 +203,7 @@ class UserAvatar extends StatelessWidget {
   }
 }
 
-/// Gradient card with subtle shadow — used for primary content cards.
+/// Clean white card with subtle border — used for primary content cards.
 class GradientCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
@@ -247,29 +223,16 @@ class GradientCard extends StatelessWidget {
     return Container(
       margin: margin,
       decoration: BoxDecoration(
-        gradient: gradient ?? LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white,
-            AppColors.surfaceContainerLow.withValues(alpha: 0.5),
-          ],
-        ),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
-          width: 0.5,
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.04),
-            blurRadius: 16,
+            color: AppColors.dark.withValues(alpha: 0.04),
+            blurRadius: 12,
             offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
           ),
         ],
       ),

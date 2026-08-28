@@ -60,7 +60,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          // ── Gradient Header ──
           WeddingHeader(
             title: 'Invitations',
             showBack: false,
@@ -70,125 +69,127 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.refresh_rounded,
-                  color: Colors.white,
+                  color: AppColors.dark,
                   size: 22,
                 ),
               ),
             ),
           ),
-          // ── Body ──
           Expanded(
             child: _isLoading
                 ? const Center(
-                    child: CircularProgressIndicator(color: AppColors.primary),
+                    child: CircularProgressIndicator(color: AppColors.dark),
                   )
                 : RefreshIndicator(
-              onRefresh: _loadData,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Stats cards
-                    Text(
-                      'Vue d\'ensemble',
-                      style: AppTextStyles.titleLg.copyWith(
-                        color: AppColors.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        _StatCard(
-                          title: 'En attente',
-                          count: pending,
-                          color: AppColors.statusPending,
-                          icon: Icons.hourglass_empty,
-                        ),
-                        const SizedBox(width: 12),
-                        _StatCard(
-                          title: 'Média reçu',
-                          count: mediaUploaded,
-                          color: AppColors.secondary,
-                          icon: Icons.upload_file,
-                        ),
-                        const SizedBox(width: 12),
-                        _StatCard(
-                          title: 'Carte débloquée',
-                          count: cardUnlocked,
-                          color: AppColors.statusCardUnlocked,
-                          icon: Icons.check_circle,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Link stats
-                    if (_linkStats.isNotEmpty)
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            _MiniStat(
-                              label: 'Liens créés',
-                              value: '${_linkStats['totalLinks'] ?? 0}',
-                            ),
-                            _MiniStat(
-                              label: 'Scans totaux',
-                              value: '${_linkStats['totalScans'] ?? 0}',
-                            ),
-                            _MiniStat(
-                              label: 'Taux scan',
-                              value:
-                                  '${_linkStats['scannedAtLeastOnce'] ?? 0}/${_linkStats['totalLinks'] ?? 0}',
-                            ),
-                          ],
-                        ),
-                      ),
-                    const SizedBox(height: 24),
-                    // Guest list
-                    Text(
-                      'Détails par invité',
-                      style: AppTextStyles.titleLg.copyWith(
-                        color: AppColors.onSurface,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    if (_guests.isEmpty)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Text(
-                            'Aucun invité pour le moment',
-                            style: AppTextStyles.bodyMd.copyWith(
-                              color: AppColors.onSurfaceVariant,
+                    onRefresh: _loadData,
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Stats cards
+                          Text(
+                            'Vue d\'ensemble',
+                            style: AppTextStyles.titleLg.copyWith(
+                              color: AppColors.onSurface,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      )
-                    else
-                      ...List.generate(_guests.length, (index) {
-                        final guest = _guests[index];
-                        return _GuestStatusCard(
-                          guest: guest,
-                          onTap: () => _showGuestDetails(guest),
-                        );
-                      }),
-                  ],
-                ),
-              ),
-            ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              _StatCard(
+                                title: 'En attente',
+                                count: pending,
+                                color: AppColors.secondary,
+                                icon: Icons.hourglass_empty,
+                              ),
+                              const SizedBox(width: 12),
+                              _StatCard(
+                                title: 'Média reçu',
+                                count: mediaUploaded,
+                                color: const Color(0xFFB0A8FF),
+                                icon: Icons.upload_file,
+                              ),
+                              const SizedBox(width: 12),
+                              _StatCard(
+                                title: 'Carte débloquée',
+                                count: cardUnlocked,
+                                color: AppColors.primary,
+                                icon: Icons.check_circle,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Link stats
+                          if (_linkStats.isNotEmpty)
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  _MiniStat(
+                                    label: 'Liens créés',
+                                    value: '${_linkStats['totalLinks'] ?? 0}',
+                                  ),
+                                  _MiniStat(
+                                    label: 'Scans totaux',
+                                    value: '${_linkStats['totalScans'] ?? 0}',
+                                  ),
+                                  _MiniStat(
+                                    label: 'Taux scan',
+                                    value:
+                                        '${_linkStats['scannedAtLeastOnce'] ?? 0}/${_linkStats['totalLinks'] ?? 0}',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          const SizedBox(height: 24),
+                          // Guest list
+                          Text(
+                            'Détails par invité',
+                            style: AppTextStyles.titleLg.copyWith(
+                              color: AppColors.onSurface,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          if (_guests.isEmpty)
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(32),
+                                child: Text(
+                                  'Aucun invité pour le moment',
+                                  style: AppTextStyles.bodyMd.copyWith(
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ),
+                            )
+                          else
+                            ...List.generate(_guests.length, (index) {
+                              final guest = _guests[index];
+                              return _GuestStatusCard(
+                                guest: guest,
+                                onTap: () => _showGuestDetails(guest),
+                              );
+                            }),
+                        ],
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
@@ -201,7 +202,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => DraggableScrollableSheet(
         initialChildSize: 0.6,
@@ -225,16 +226,15 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              // Guest info
               Row(
                 children: [
                   CircleAvatar(
                     radius: 32,
-                    backgroundColor: AppColors.primaryFixed,
+                    backgroundColor: AppColors.dark.withValues(alpha: 0.08),
                     child: Text(
                       guest.initials,
                       style: AppTextStyles.titleLg.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.dark,
                       ),
                     ),
                   ),
@@ -262,7 +262,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
               const SizedBox(height: 20),
               const Divider(),
               const SizedBox(height: 16),
-              // Status timeline
               Text('Parcours', style: AppTextStyles.titleLg),
               const SizedBox(height: 16),
               _StatusStep(
@@ -287,12 +286,11 @@ class _InvitationsPageState extends State<InvitationsPage> {
                 isLast: true,
               ),
               const SizedBox(height: 24),
-              // Status badge
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: _statusColor(guest.status).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: _statusColor(guest.status).withValues(alpha: 0.3),
                   ),
@@ -335,11 +333,11 @@ class _InvitationsPageState extends State<InvitationsPage> {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return AppColors.secondary;
+        return const Color(0xFFB0A8FF);
       case 'card_unlocked':
-        return AppColors.statusCardUnlocked;
+        return AppColors.primary;
       default:
-        return AppColors.onTertiaryContainer;
+        return AppColors.secondary;
     }
   }
 
@@ -386,8 +384,10 @@ class _StatCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: color.withValues(alpha: 0.3),
+          ),
         ),
         child: Column(
           children: [
@@ -426,7 +426,7 @@ class _MiniStat extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.titleLg.copyWith(
-            color: AppColors.primary,
+            color: AppColors.dark,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -453,7 +453,7 @@ class _GuestStatusCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -462,7 +462,7 @@ class _GuestStatusCard extends StatelessWidget {
                 radius: 24,
                 backgroundColor: _statusColor(
                   guest.status,
-                ).withValues(alpha: 0.15),
+                ).withValues(alpha: 0.12),
                 child: Text(
                   guest.initials,
                   style: AppTextStyles.bodyMd.copyWith(
@@ -534,11 +534,11 @@ class _GuestStatusCard extends StatelessWidget {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return AppColors.secondary;
+        return const Color(0xFFB0A8FF);
       case 'card_unlocked':
-        return AppColors.statusCardUnlocked;
+        return AppColors.primary;
       default:
-        return AppColors.onTertiaryContainer;
+        return AppColors.secondary;
     }
   }
 
@@ -580,20 +580,20 @@ class _StatusStep extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isCompleted
-                    ? AppColors.statusCardUnlocked
-                    : isCurrent
                     ? AppColors.primary
+                    : isCurrent
+                    ? AppColors.dark
                     : AppColors.surfaceContainerHigh,
                 border: Border.all(
                   color: isCompleted
-                      ? AppColors.statusCardUnlocked
-                      : isCurrent
                       ? AppColors.primary
+                      : isCurrent
+                      ? AppColors.dark
                       : AppColors.outlineVariant,
                 ),
               ),
               child: isCompleted
-                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                  ? const Icon(Icons.check, size: 14, color: AppColors.dark)
                   : isCurrent
                   ? Container(
                       margin: const EdgeInsets.all(6),
@@ -609,7 +609,7 @@ class _StatusStep extends StatelessWidget {
                 width: 2,
                 height: 24,
                 color: isCompleted
-                    ? AppColors.statusCardUnlocked
+                    ? AppColors.primary
                     : AppColors.outlineVariant,
               ),
           ],
@@ -623,7 +623,7 @@ class _StatusStep extends StatelessWidget {
               color: isCompleted
                   ? AppColors.onSurface
                   : isCurrent
-                  ? AppColors.primary
+                  ? AppColors.dark
                   : AppColors.onSurfaceVariant,
               fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
             ),

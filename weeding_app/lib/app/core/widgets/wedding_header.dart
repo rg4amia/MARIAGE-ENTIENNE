@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'micro_interactions.dart';
 
-/// Premium gradient header matching the wedding app's design system.
+/// Premium gradient header with mint green gradient.
 /// Used across all main pages for visual consistency.
 class WeddingHeader extends StatelessWidget {
   final String title;
@@ -25,16 +26,15 @@ class WeddingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = gradientColors ?? const [
-      Color(0xFFA53C00),
-      Color(0xFFD4690A),
-      Color(0xFFFF7A3D),
+      Color(0xFF2AE88E),
+      Color(0xFF32FFAA),
     ];
 
     return Container(
       padding: EdgeInsets.fromLTRB(
-        16,
+        20,
         MediaQuery.of(context).padding.top + 8,
-        16,
+        20,
         24,
       ),
       decoration: BoxDecoration(
@@ -44,15 +44,8 @@ class WeddingHeader extends StatelessWidget {
           colors: colors,
         ),
         borderRadius: const BorderRadius.vertical(
-          bottom: Radius.circular(32),
+          bottom: Radius.circular(28),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: colors.first.withValues(alpha: 0.19),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
       child: Column(
         children: [
@@ -66,12 +59,12 @@ class WeddingHeader extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
+                      color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.arrow_back_rounded,
-                      color: Colors.white,
+                      color: AppColors.dark,
                       size: 22,
                     ),
                   ),
@@ -82,7 +75,7 @@ class WeddingHeader extends StatelessWidget {
               Text(
                 title,
                 style: AppTextStyles.headlineMd.copyWith(
-                  color: Colors.white,
+                  color: AppColors.dark,
                 ),
               ),
               const Spacer(),
@@ -120,14 +113,14 @@ class HeaderInfoBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: AppColors.dark.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: Colors.white.withValues(alpha: 0.9),
+            color: AppColors.dark.withValues(alpha: 0.7),
             size: 18,
           ),
           const SizedBox(width: 10),
@@ -135,9 +128,10 @@ class HeaderInfoBanner extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: AppColors.dark.withValues(alpha: 0.8),
                 fontSize: 13,
                 height: 1.3,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

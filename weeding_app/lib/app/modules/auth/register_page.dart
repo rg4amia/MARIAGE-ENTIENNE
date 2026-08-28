@@ -37,16 +37,17 @@ class _RegisterPageState extends State<RegisterPage>
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // Gradient header
+          // Mint green gradient header
           Container(
             height: 180,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [AppColors.primary, AppColors.primaryContainer],
+                colors: [Color(0xFF2AE88E), Color(0xFF32FFAA)],
               ),
             ),
           ),
@@ -56,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage>
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.dark, size: 20),
                 onPressed: () => Get.back(),
               ),
             ),
@@ -79,10 +80,13 @@ class _RegisterPageState extends State<RegisterPage>
                       padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.08),
+                            color: AppColors.dark.withValues(alpha: 0.06),
                             blurRadius: 30,
                             offset: const Offset(0, 10),
                           ),
@@ -99,12 +103,10 @@ class _RegisterPageState extends State<RegisterPage>
                                 height: 60,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  gradient: LinearGradient(
-                                    colors: [AppColors.primary, AppColors.primaryContainer],
-                                  ),
+                                  color: AppColors.dark,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppColors.primary.withValues(alpha: 0.3),
+                                      color: AppColors.dark.withValues(alpha: 0.2),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
                                     ),
@@ -186,12 +188,12 @@ class _RegisterPageState extends State<RegisterPage>
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
+                                  backgroundColor: AppColors.dark,
                                   foregroundColor: Colors.white,
-                                  disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+                                  disabledBackgroundColor: AppColors.dark.withValues(alpha: 0.5),
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
                                 ),
                                 child: controller.isLoading.value
@@ -219,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage>
                                       TextSpan(
                                         text: 'Se connecter',
                                         style: AppTextStyles.bodyMd.copyWith(
-                                          color: AppColors.primary,
+                                          color: AppColors.dark,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -266,19 +268,19 @@ class _RegisterPageState extends State<RegisterPage>
       filled: true,
       fillColor: AppColors.surfaceContainerLow,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

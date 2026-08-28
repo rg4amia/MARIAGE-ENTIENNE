@@ -39,21 +39,18 @@ class HomePage extends StatelessWidget {
                     const SizedBox(height: 16),
                     // ── KPI Grid ──
                     Obx(() => _buildKpiGrid(controller)),
-
                     const SizedBox(height: 20),
                     // ── Invitation Status ──
                     Obx(() => FadeInSlide(
                       delay: const Duration(milliseconds: 300),
                       child: _buildInvitationStatus(controller),
                     )),
-
                     const SizedBox(height: 20),
                     // ── Quick Actions ──
                     FadeInSlide(
                       delay: const Duration(milliseconds: 450),
                       child: _buildQuickActions(),
                     ),
-
                     const SizedBox(height: 100),
                   ],
                 ),
@@ -82,7 +79,7 @@ class HomePage extends StatelessWidget {
         return UserAvatar(
           initials: initials,
           radius: 20,
-          backgroundColor: Colors.white.withValues(alpha: 0.25),
+          backgroundColor: AppColors.dark.withValues(alpha: 0.15),
         );
       }),
       child: Column(
@@ -93,7 +90,7 @@ class HomePage extends StatelessWidget {
             return Text(
               'Bonjour, $name 👋',
               style: AppTextStyles.headlineLgMobile.copyWith(
-                color: Colors.white,
+                color: AppColors.dark,
               ),
             );
           }),
@@ -101,7 +98,7 @@ class HomePage extends StatelessWidget {
           Text(
             '${DateTime.now().day} ${_monthName(DateTime.now().month)} ${DateTime.now().year}',
             style: AppTextStyles.bodyMd.copyWith(
-              color: Colors.white.withValues(alpha: 0.85),
+              color: AppColors.dark.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -109,7 +106,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ── KPI Grid ──
+  // ── KPI Grid — Dark cards matching design ──
   Widget _buildKpiGrid(HomeController controller) {
     return GridView.count(
       crossAxisCount: 2,
@@ -121,44 +118,28 @@ class HomePage extends StatelessWidget {
       children: [
         _KpiCard(
           icon: Icons.group_rounded,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFFF7A3D), Color(0xFFE85D2A)],
-          ),
+          color: AppColors.dark,
           label: 'Invités',
           value: controller.totalGuests.value,
           delay: 0,
         ),
         _KpiCard(
           icon: Icons.table_restaurant_rounded,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF9C4236), Color(0xFFB85A4E)],
-          ),
+          color: AppColors.dark,
           label: 'Tables',
           value: controller.totalTables.value,
           delay: 100,
         ),
         _KpiCard(
           icon: Icons.event_seat_rounded,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF76583D), Color(0xFF9A7A5E)],
-          ),
+          color: AppColors.dark,
           label: 'Chaises',
           value: controller.totalChairs.value,
           delay: 200,
         ),
         _KpiCard(
           icon: Icons.perm_media_rounded,
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF4CAF50), Color(0xFF388E3C)],
-          ),
+          color: AppColors.dark,
           label: 'Médias reçus',
           value: controller.totalMedia.value,
           delay: 300,
@@ -184,7 +165,7 @@ class HomePage extends StatelessWidget {
               Text('Statut des invitations', style: AppTextStyles.titleLg),
               StatusBadge(
                 label: '$total total',
-                color: AppColors.primary,
+                color: AppColors.dark,
               ),
             ],
           ),
@@ -196,7 +177,6 @@ class HomePage extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Animated donut segments
                   SizedBox(
                     width: 160,
                     height: 160,
@@ -216,6 +196,7 @@ class HomePage extends StatelessWidget {
                         total.toString(),
                         style: AppTextStyles.displayMdPrimary.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: AppColors.dark,
                         ),
                       ),
                       Text(
@@ -230,19 +211,19 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           _StatusLegend(
-            color: AppColors.primaryContainer,
+            color: AppColors.secondary,
             label: 'En attente',
             count: pending,
           ),
           const SizedBox(height: 10),
           _StatusLegend(
-            color: AppColors.tertiaryContainer,
+            color: AppColors.primary,
             label: 'Média reçu',
             count: mediaUploaded,
           ),
           const SizedBox(height: 10),
           _StatusLegend(
-            color: const Color(0xFF4CAF50),
+            color: AppColors.primary,
             label: 'Carte débloquée',
             count: cardUnlocked,
           ),
@@ -251,67 +232,52 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // ── Quick Actions ──
+  // ── Quick Actions — 2x2 grid of service cards ──
   Widget _buildQuickActions() {
-    return GradientCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Actions rapides', style: AppTextStyles.titleLg),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.person_add_rounded,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFFF7A3D), Color(0xFFE85D2A)],
-                  ),
-                  title: 'Ajouter\nun invité',
-                  onTap: () => Get.toNamed(AppRoutes.guests),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.table_restaurant_rounded,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF9C4236), Color(0xFFB85A4E)],
-                  ),
-                  title: 'Gérer\nles tables',
-                  onTap: () => Get.toNamed(AppRoutes.tables),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.analytics_rounded,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF4CAF50), Color(0xFF388E3C)],
-                  ),
-                  title: 'Suivi des\ninvitations',
-                  onTap: () => Get.toNamed(AppRoutes.invitations),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _QuickActionCard(
-                  icon: Icons.qr_code_2_rounded,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF76583D), Color(0xFF9A7A5E)],
-                  ),
-                  title: 'QR entrée\nsalle',
-                  onTap: () => Get.toNamed(AppRoutes.entranceQr),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Actions rapides', style: AppTextStyles.titleLg),
+        const SizedBox(height: 12),
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 1.3,
+          children: [
+            _QuickActionCard(
+              icon: Icons.person_add_rounded,
+              color: AppColors.primary,
+              title: 'Ajouter\nun invité',
+              subtitle: 'Invités',
+              onTap: () => Get.toNamed(AppRoutes.guests),
+            ),
+            _QuickActionCard(
+              icon: Icons.table_restaurant_rounded,
+              color: AppColors.dark,
+              title: 'Gérer\nles tables',
+              subtitle: 'Tables',
+              onTap: () => Get.toNamed(AppRoutes.tables),
+            ),
+            _QuickActionCard(
+              icon: Icons.analytics_rounded,
+              color: AppColors.dark,
+              title: 'Suivi des\ninvitations',
+              subtitle: 'Suivi',
+              onTap: () => Get.toNamed(AppRoutes.invitations),
+            ),
+            _QuickActionCard(
+              icon: Icons.qr_code_2_rounded,
+              color: AppColors.secondary,
+              title: 'QR entrée\nsalle',
+              subtitle: 'QR Code',
+              onTap: () => Get.toNamed(AppRoutes.entranceQr),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -324,17 +290,17 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ── KPI Card ──
+// ── KPI Card — Dark card matching design ──
 class _KpiCard extends StatelessWidget {
   final IconData icon;
-  final Gradient gradient;
+  final Color color;
   final String label;
   final int value;
   final int delay;
 
   const _KpiCard({
     required this.icon,
-    required this.gradient,
+    required this.color,
     required this.label,
     required this.value,
     required this.delay,
@@ -346,26 +312,21 @@ class _KpiCard extends StatelessWidget {
       delay: Duration(milliseconds: 100 + delay),
       duration: const Duration(milliseconds: 500),
       child: HoverCard(
+        backgroundColor: color,
         padding: const EdgeInsets.all(16),
+        borderRadius: 20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
-                gradient: gradient,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient.colors.first.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                color: AppColors.primary.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, color: Colors.white, size: 20),
+              child: Icon(icon, color: AppColors.primary, size: 18),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,11 +334,16 @@ class _KpiCard extends StatelessWidget {
                 Text(
                   value.toString(),
                   style: AppTextStyles.headlineLg.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
                   ),
                 ),
-                Text(label, style: AppTextStyles.labelMd),
+                Text(
+                  label,
+                  style: AppTextStyles.labelMd.copyWith(
+                    color: Colors.white.withValues(alpha: 0.7),
+                  ),
+                ),
               ],
             ),
           ],
@@ -409,12 +375,6 @@ class _StatusLegend extends StatelessWidget {
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.3),
-                blurRadius: 4,
-              ),
-            ],
           ),
         ),
         const SizedBox(width: 12),
@@ -431,7 +391,7 @@ class _StatusLegend extends StatelessWidget {
             count.toString(),
             style: AppTextStyles.bodyLg.copyWith(
               fontWeight: FontWeight.w700,
-              color: color,
+              color: AppColors.onSurface,
             ),
           ),
         ),
@@ -440,67 +400,90 @@ class _StatusLegend extends StatelessWidget {
   }
 }
 
-// ── Quick Action Card ──
+// ── Quick Action Card — matching design style ──
 class _QuickActionCard extends StatelessWidget {
   final IconData icon;
-  final Gradient gradient;
+  final Color color;
   final String title;
+  final String subtitle;
   final VoidCallback onTap;
 
   const _QuickActionCard({
     required this.icon,
-    required this.gradient,
+    required this.color,
     required this.title,
+    required this.subtitle,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = color == AppColors.dark;
     return TapScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              gradient.colors.first.withValues(alpha: 0.08),
-              gradient.colors.last.withValues(alpha: 0.04),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(16),
+          color: isDark ? AppColors.dark : Colors.white,
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: gradient.colors.first.withValues(alpha: 0.12),
+            color: isDark
+                ? AppColors.dark
+                : AppColors.outlineVariant.withValues(alpha: 0.5),
           ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.dark.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                gradient: gradient,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient.colors.first.withValues(alpha: 0.25),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            if (isDark)
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.primary, size: 18),
+              )
+            else
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: AppColors.dark.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(icon, color: AppColors.dark, size: 18),
+              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.bodyMd.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : AppColors.onSurface,
+                    height: 1.2,
                   ),
-                ],
-              ),
-              child: Icon(icon, color: Colors.white, size: 22),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyMd.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.onSurface,
-                height: 1.3,
-              ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.labelMd.copyWith(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.5)
+                        : AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -543,10 +526,10 @@ class _DonutPainter extends CustomPainter {
     double startAngle = -math.pi / 2;
     final totalAngle = 2 * math.pi;
 
-    // Pending
+    // Pending — yellow
     final pendingAngle = (pending / total) * totalAngle;
     if (pendingAngle > 0) {
-      paint.color = AppColors.primaryContainer;
+      paint.color = AppColors.secondary;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,
@@ -557,10 +540,10 @@ class _DonutPainter extends CustomPainter {
       startAngle += pendingAngle;
     }
 
-    // Media uploaded
+    // Media uploaded — dark
     final mediaAngle = (mediaUploaded / total) * totalAngle;
     if (mediaAngle > 0) {
-      paint.color = AppColors.tertiaryContainer;
+      paint.color = AppColors.dark;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,
@@ -571,10 +554,10 @@ class _DonutPainter extends CustomPainter {
       startAngle += mediaAngle;
     }
 
-    // Card unlocked
+    // Card unlocked — mint green
     final unlockedAngle = (cardUnlocked / total) * totalAngle;
     if (unlockedAngle > 0) {
-      paint.color = const Color(0xFF4CAF50);
+      paint.color = AppColors.primary;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,

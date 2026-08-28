@@ -4,7 +4,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../../routes/app_routes.dart';
 
-/// Floating pill-shaped bottom navigation bar with animated indicator.
+/// Dark bottom navigation bar with green accent plus button.
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
@@ -37,24 +37,12 @@ class AppBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
       child: Container(
         height: 68,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.08),
-              blurRadius: 20,
-              offset: const Offset(0, -4),
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -68,33 +56,58 @@ class AppBottomNavBar extends StatelessWidget {
               },
               behavior: HitTestBehavior.opaque,
               child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInOut,
                 padding: EdgeInsets.symmetric(
-                  horizontal: isActive ? 16 : 8,
-                  vertical: 8,
+                  horizontal: isActive ? 14 : 10,
+                  vertical: 10,
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? AppColors.primary.withValues(alpha: 0.1)
+                      ? AppColors.primary.withValues(alpha: 0.15)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      _icons[index],
-                      color: isActive ? AppColors.primary : AppColors.onSurfaceVariant,
-                      size: 24,
-                    ),
+                    if (index == 0 && !isActive)
+                      // Special green plus button for home
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.add_rounded,
+                          color: AppColors.dark,
+                          size: 20,
+                        ),
+                      )
+                    else
+                      Icon(
+                        _icons[index],
+                        color: isActive
+                            ? AppColors.primary
+                            : AppColors.surfaceContainerHigh.withValues(alpha: 0.6),
+                        size: 24,
+                      ),
                     if (isActive) ...[
                       const SizedBox(width: 8),
                       Text(
                         _labels[index],
                         style: AppTextStyles.labelMd.copyWith(
                           color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           fontSize: 12,
                         ),
                       ),
