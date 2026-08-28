@@ -44,7 +44,7 @@ extension WaveformStyleExtension on WaveformStyle {
       case WaveformStyle.sine:
         return Icons.waves;
       case WaveformStyle.pulse:
-        return Icons.heart_pulse;
+        return Icons.favorite;
     }
   }
 
@@ -513,7 +513,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: WaveformStyle.values.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final style = WaveformStyle.values[index];
           final isSelected = _waveformStyle == style;
