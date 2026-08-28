@@ -565,7 +565,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
 String entranceQrErrorMessage(Object error) {
   if (error is PostgrestException) {
     if (error.message.contains('No wedding event is attached')) {
-      return 'Votre compte administrateur n\'est associé à aucun mariage.';
+      return 'Votre compte administrateur n’est associé à aucun mariage.';
     }
     if (error.message.contains('Administrator access required')) {
       return 'Accès administrateur requis. Reconnectez-vous.';

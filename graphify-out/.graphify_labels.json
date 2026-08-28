@@ -54,7 +54,7 @@
   "52": "table_repository.dart",
   "53": "wedding_settings_repository.dart",
   "54": "wedding_theme_controller.dart",
-  "55": "Bindings",
+  "55": "register_page.dart",
   "56": "app_pages.dart",
   "57": "6. Plan d'Implementation",
   "58": "profile.dart",
@@ -93,7 +93,7 @@
   "91": "Runner-Bridging-Header.h",
   "92": "event_venue_repository.dart",
   "93": "app_routes.dart",
-  "94": "GetxController",
+  "94": "WeddingPalette",
   "95": "WaveformStyle",
   "96": "String?",
   "97": "main.dart",
@@ -104,8 +104,7 @@
   "102": "package:flutter/material.dart",
   "103": "app_binding.dart",
   "104": "GuestsController",
-  "105": "invitations_binding.dart",
-  "106": "TablesController",
-  "107": "entranceQrErrorMessage",
+  "105": "AuthMiddleware",
+  "106": "WeddingThemePage",
   "108": "_MediaPlayerPageState"
 }

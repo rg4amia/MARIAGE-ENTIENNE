@@ -37,7 +37,10 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.background,
+      // The wedding palette remains user-configurable. The default Neon
+      // Wedding background matches the reference captures, while custom
+      // weddings keep their chosen canvas color.
+      scaffoldBackgroundColor: palette.background,
       colorScheme: scheme,
       textTheme: TextTheme(
         displayLarge: AppTextStyles.displayLg,

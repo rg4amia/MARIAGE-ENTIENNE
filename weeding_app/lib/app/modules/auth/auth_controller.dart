@@ -59,7 +59,10 @@ class AuthController extends GetxController {
 
     try {
       if (user.value != null) {
-        await Supabase.instance.client.auth.refreshSession();
+        // Supabase refreshes tokens automatically. Avoid an unconditional
+        // request on every cold start: it produces noisy retry warnings (and
+        // can block the shell) when the device is temporarily offline.
+        await _refreshSessionIfNeeded();
         await refreshProfile();
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (Get.currentRoute == AppRoutes.login) {
@@ -67,9 +70,22 @@ class AuthController extends GetxController {
           }
         });
       }
+    } on AuthException catch (e) {
+      debugPrint('Session refresh différée: ${e.message}');
     } finally {
       isInitialized.value = true;
     }
+  }
+
+  Future<void> _refreshSessionIfNeeded() async {
+    final session = _authRepository.currentSession;
+    if (session == null) return;
+
+    final expiresAt = session.expiresAt;
+    final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    if (expiresAt != null && expiresAt > now + 60) return;
+
+    await Supabase.instance.client.auth.refreshSession();
   }
 
   Future<void> refreshProfile() async {
