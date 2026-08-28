@@ -100,61 +100,68 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: _isLoading && qr == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.dark))
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.dark),
+            )
           : qr == null
-              ? _buildEmptyState()
-              : CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: WeddingHeader(
-                        title: "QR d'entrée",
-                        trailing: TapScale(
-                          onTap: _load,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: AppColors.dark.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(Icons.refresh_rounded, color: AppColors.dark, size: 22),
-                          ),
+          ? _buildEmptyState()
+          : CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: WeddingHeader(
+                    title: "QR d'entrée",
+                    trailing: TapScale(
+                      onTap: _load,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.dark.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: HeaderInfoBanner(
-                          icon: Icons.info_outline_rounded,
-                          text: "Affichez ce QR à l'entrée — les invités le scannent pour confirmer leur arrivée.",
+                        child: const Icon(
+                          Icons.refresh_rounded,
+                          color: AppColors.dark,
+                          size: 22,
                         ),
                       ),
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                        child: FadeInSlide(
-                          delay: const Duration(milliseconds: 200),
-                          child: _buildQrCard(qr),
-                        ),
-                      ),
+                    child: HeaderInfoBanner(
+                      icon: Icons.info_outline_rounded,
+                      text:
+                          "Affichez ce QR à l'entrée — les invités le scannent pour confirmer leur arrivée.",
                     ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                        child: FadeInSlide(
-                          delay: const Duration(milliseconds: 350),
-                          child: _buildStatsRow(qr),
-                        ),
-                      ),
-                    ),
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-                        child: FadeInSlide(
-                          delay: const Duration(milliseconds: 500),
-                          child: _buildActions(),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                    child: FadeInSlide(
+                      delay: const Duration(milliseconds: 200),
+                      child: _buildQrCard(qr),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                    child: FadeInSlide(
+                      delay: const Duration(milliseconds: 350),
+                      child: _buildStatsRow(qr),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                    child: FadeInSlide(
+                      delay: const Duration(milliseconds: 500),
+                      child: _buildActions(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -197,9 +204,13 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                 children: [
                   Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
                   SizedBox(width: 8),
-                  Text('Réessayer',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w600)),
+                  Text(
+                    'Réessayer',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -213,10 +224,8 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.35),
         boxShadow: [
           BoxShadow(
             color: AppColors.dark.withValues(alpha: 0.04),
@@ -230,9 +239,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
           const SizedBox(height: 24),
           Text(
             'Scan pour arrivée',
-            style: AppTextStyles.titleLg.copyWith(
-              color: AppColors.onSurface,
-            ),
+            style: AppTextStyles.titleLg.copyWith(color: AppColors.onSurface),
           ),
           const SizedBox(height: 20),
           ScaleIn(
@@ -287,12 +294,9 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerLow,
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.dark.withValues(alpha: 0.1),
-              width: 1.5,
-            ),
+            border: Border.all(color: AppColors.dark, width: 1.5),
             boxShadow: [
               BoxShadow(
                 color: AppColors.dark.withValues(alpha: glowOpacity),
@@ -320,8 +324,9 @@ class _EntranceQrPageState extends State<EntranceQrPage>
   }
 
   Widget _buildCodeChip(String code) {
-    final displayCode =
-        code.length > 16 ? '${code.substring(0, 8)}···${code.substring(code.length - 8)}' : code;
+    final displayCode = code.length > 16
+        ? '${code.substring(0, 8)}···${code.substring(code.length - 8)}'
+        : code;
     return TapScale(
       onTap: () async {
         await Clipboard.setData(ClipboardData(text: code));
@@ -332,16 +337,18 @@ class _EntranceQrPageState extends State<EntranceQrPage>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainer,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.outlineVariant.withValues(alpha: 0.4),
-          ),
+          color: AppColors.secondary,
+          borderRadius: BorderRadius.circular(99),
+          border: Border.all(color: AppColors.dark, width: 1.2),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.tag_rounded, size: 16, color: AppColors.dark.withValues(alpha: 0.6)),
+            Icon(
+              Icons.tag_rounded,
+              size: 16,
+              color: AppColors.dark.withValues(alpha: 0.6),
+            ),
             const SizedBox(width: 8),
             SelectableText(
               displayCode,
@@ -351,7 +358,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
               ),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.content_copy_rounded, size: 14, color: AppColors.onSurfaceVariant.withValues(alpha: 0.5)),
+            Icon(
+              Icons.content_copy_rounded,
+              size: 14,
+              color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+            ),
           ],
         ),
       ),
@@ -387,9 +398,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon,
-              color: isPrimary ? Colors.white : AppColors.dark,
-              size: 18),
+          Icon(
+            icon,
+            color: isPrimary ? Colors.white : AppColors.dark,
+            size: 18,
+          ),
           const SizedBox(width: 8),
           Text(
             label,
@@ -434,10 +447,14 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     required String label,
     required Color color,
   }) {
+    final foreground = color.computeLuminance() > 0.48
+        ? AppColors.dark
+        : Colors.white;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: color,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -446,9 +463,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             offset: const Offset(0, 4),
           ),
         ],
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: AppColors.dark, width: 1.3),
       ),
       child: Column(
         children: [
@@ -456,16 +471,17 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.dark),
             ),
-            child: Icon(icon, color: color, size: 22),
+            child: Icon(icon, color: AppColors.dark, size: 22),
           ),
           const SizedBox(height: 12),
           AnimatedCounter(
             target: value,
             style: AppTextStyles.headlineLgMobile.copyWith(
-              color: color,
+              color: foreground,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -473,7 +489,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
           Text(
             label,
             style: AppTextStyles.labelMd.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: foreground.withValues(alpha: 0.72),
             ),
           ),
         ],
@@ -489,9 +505,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: AppColors.error.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

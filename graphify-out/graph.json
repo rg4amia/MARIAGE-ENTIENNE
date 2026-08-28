@@ -82,6 +82,19 @@
       "source_location": "L5"
     },
     {
+      "id": "backend_supabase_functions_guest_portal_index_guesttokenrecord",
+      "label": "GuestTokenRecord",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "media-duration.ts",
+      "file_type": "code",
+      "norm_label": "guesttokenrecord",
+      "source_file": "backend/supabase/functions/guest-portal/index.ts",
+      "source_location": "L11"
+    },
+    {
       "id": "backend_supabase_functions_shared_media_duration_elementheader",
       "label": "ElementHeader",
       "_callable": true,
@@ -291,7 +304,7 @@
       "file_type": "code",
       "norm_label": "apierror()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L250"
+      "source_location": "L272"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_apijson",
@@ -303,7 +316,19 @@
       "file_type": "code",
       "norm_label": "apijson()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L243"
+      "source_location": "L265"
+    },
+    {
+      "id": "backend_supabase_functions_guest_portal_index_findguestbytoken",
+      "label": "findGuestByToken()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 11,
+      "community_name": "media-duration.ts",
+      "file_type": "code",
+      "norm_label": "findguestbytoken()",
+      "source_file": "backend/supabase/functions/guest-portal/index.ts",
+      "source_location": "L14"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_inlinescriptvalue",
@@ -315,7 +340,7 @@
       "file_type": "code",
       "norm_label": "inlinescriptvalue()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L257"
+      "source_location": "L279"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_rendericonsvg",
@@ -327,7 +352,7 @@
       "file_type": "code",
       "norm_label": "rendericonsvg()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1532"
+      "source_location": "L1554"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_renderserviceworker",
@@ -339,7 +364,7 @@
       "file_type": "code",
       "norm_label": "renderserviceworker()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1470"
+      "source_location": "L1492"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_renderspa",
@@ -351,7 +376,7 @@
       "file_type": "code",
       "norm_label": "renderspa()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L276"
+      "source_location": "L298"
     },
     {
       "id": "backend_supabase_functions_shared_media_duration_ascii",
@@ -2009,28 +2034,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_gradientbutton",
-      "label": "GradientButton",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "micro_interactions.dart",
-      "file_type": "code",
-      "norm_label": "gradientbutton",
-      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_gradientbuttonstate",
-      "label": "_GradientButtonState",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "micro_interactions.dart",
-      "file_type": "code",
-      "norm_label": "_gradientbuttonstate",
-      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_core_widgets_micro_interactions_height",
       "label": "height",
       "_origin": "ast",
@@ -2038,6 +2041,28 @@
       "community_name": "micro_interactions.dart",
       "file_type": "code",
       "norm_label": "height",
+      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercard",
+      "label": "HoverCard",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "micro_interactions.dart",
+      "file_type": "code",
+      "norm_label": "hovercard",
+      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercardstate",
+      "label": "_HoverCardState",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "micro_interactions.dart",
+      "file_type": "code",
+      "norm_label": "_hovercardstate",
       "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
       "source_location": null
     },
@@ -2196,47 +2221,553 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_theme_wedding_palette_weddingpalette",
-      "label": "WeddingPalette",
+      "id": "rxint",
+      "label": "RxInt",
       "_origin": "ast",
       "community": 100,
-      "community_name": "WeddingPalette",
+      "community_name": "main_navigation_controller.dart",
       "file_type": "code",
-      "norm_label": "weddingpalette",
-      "source_file": "weeding_app/lib/app/core/theme/wedding_palette.dart",
-      "source_location": null
-    },
-    {
-      "id": "annotation_immutable",
-      "label": "@immutable",
-      "_origin": "ast",
-      "community": 100,
-      "community_name": "WeddingPalette",
-      "file_type": "concept",
-      "norm_label": "@immutable",
+      "norm_label": "rxint",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_settings_wedding_theme_page_weddingthemepage",
-      "label": "WeddingThemePage",
+      "id": "static_const",
+      "label": "static const",
       "_origin": "ast",
-      "community": 101,
-      "community_name": "WeddingThemePage",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
       "file_type": "code",
-      "norm_label": "weddingthemepage",
-      "source_file": "weeding_app/lib/app/modules/settings/wedding_theme_page.dart",
+      "norm_label": "static const",
+      "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_settings_wedding_theme_page_weddingthemepagestate",
-      "label": "_WeddingThemePageState",
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller",
+      "label": "main_navigation_controller.dart",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "main_navigation_controller.dart",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_currentindex",
+      "label": "currentIndex",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "currentindex",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_gueststab",
+      "label": "guestsTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "gueststab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_hometab",
+      "label": "homeTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "hometab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_invitationstab",
+      "label": "invitationsTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "invitationstab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_selecttab",
+      "label": "selectTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "selecttab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_settingstab",
+      "label": "settingsTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "settingstab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_tablestab",
+      "label": "tablesTab",
+      "_origin": "ast",
+      "community": 100,
+      "community_name": "main_navigation_controller.dart",
+      "file_type": "code",
+      "norm_label": "tablestab",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "core_widgets_wedding_header_dart",
+      "label": "../../core/widgets/wedding_header.dart",
       "_origin": "ast",
       "community": 101,
-      "community_name": "WeddingThemePage",
+      "community_name": "qr_code_page.dart",
       "file_type": "code",
-      "norm_label": "_weddingthemepagestate",
-      "source_file": "weeding_app/lib/app/modules/settings/wedding_theme_page.dart",
+      "norm_label": "../../core/widgets/wedding_header.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "data_repositories_guest_link_repository_dart",
+      "label": "../../data/repositories/guest_link_repository.dart",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "../../data/repositories/guest_link_repository.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "package_flutter_services_dart",
+      "label": "package:flutter/services.dart",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "package:flutter/services.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "package_qr_flutter_qr_flutter_dart",
+      "label": "package:qr_flutter/qr_flutter.dart",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "package:qr_flutter/qr_flutter.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "package_share_plus_share_plus_dart",
+      "label": "package:share_plus/share_plus.dart",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "package:share_plus/share_plus.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_qr_code_page",
+      "label": "qr_code_page.dart",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "qr_code_page.dart",
+      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_build",
+      "label": "build",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "build",
+      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_getpublicurl",
+      "label": "_getPublicUrl",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "_getpublicurl",
+      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_qrcodepage",
+      "label": "QrCodePage",
+      "_origin": "ast",
+      "community": 101,
+      "community_name": "qr_code_page.dart",
+      "file_type": "code",
+      "norm_label": "qrcodepage",
+      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "package_flutter_material_dart",
+      "label": "package:flutter/material.dart",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "package:flutter/material.dart",
+      "file_type": "code",
+      "norm_label": "package:flutter/material.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory",
+      "label": "recorder_factory.dart",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "package:flutter/material.dart",
+      "file_type": "code",
+      "norm_label": "recorder_factory.dart",
+      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory_buildwebaudiorecorderpage",
+      "label": "buildWebAudioRecorderPage",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "package:flutter/material.dart",
+      "file_type": "code",
+      "norm_label": "buildwebaudiorecorderpage",
+      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory_buildwebvideorecorderpage",
+      "label": "buildWebVideoRecorderPage",
+      "_origin": "ast",
+      "community": 102,
+      "community_name": "package:flutter/material.dart",
+      "file_type": "code",
+      "norm_label": "buildwebvideorecorderpage",
+      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
+      "source_location": null
+    },
+    {
+      "id": "modules_auth_auth_controller_dart",
+      "label": "../modules/auth/auth_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/auth/auth_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "modules_guests_guests_controller_dart",
+      "label": "../modules/guests/guests_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/guests/guests_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "modules_home_home_controller_dart",
+      "label": "../modules/home/home_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/home/home_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "modules_invitations_invitations_controller_dart",
+      "label": "../modules/invitations/invitations_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/invitations/invitations_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "modules_navigation_main_navigation_controller_dart",
+      "label": "../modules/navigation/main_navigation_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/navigation/main_navigation_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "modules_tables_tables_controller_dart",
+      "label": "../modules/tables/tables_controller.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "../modules/tables/tables_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_bindings_app_binding",
+      "label": "app_binding.dart",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "app_binding.dart",
+      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_bindings_app_binding_dependencies",
+      "label": "dependencies",
+      "_origin": "ast",
+      "community": 103,
+      "community_name": "app_binding.dart",
+      "file_type": "code",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "guests_controller_dart",
+      "label": "guests_controller.dart",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "GuestsController",
+      "file_type": "code",
+      "norm_label": "guests_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guests_guests_binding",
+      "label": "guests_binding.dart",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "GuestsController",
+      "file_type": "code",
+      "norm_label": "guests_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guests_guests_binding_dependencies",
+      "label": "dependencies",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "GuestsController",
+      "file_type": "code",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guests_guests_binding_guestsbinding",
+      "label": "GuestsBinding",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "GuestsController",
+      "file_type": "code",
+      "norm_label": "guestsbinding",
+      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guests_guests_controller_guestscontroller",
+      "label": "GuestsController",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "GuestsController",
+      "file_type": "code",
+      "norm_label": "guestscontroller",
+      "source_file": "weeding_app/lib/app/modules/guests/guests_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "invitations_controller_dart",
+      "label": "invitations_controller.dart",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "invitations_binding.dart",
+      "file_type": "code",
+      "norm_label": "invitations_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_invitations_binding",
+      "label": "invitations_binding.dart",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "invitations_binding.dart",
+      "file_type": "code",
+      "norm_label": "invitations_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_invitations_binding_dependencies",
+      "label": "dependencies",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "invitations_binding.dart",
+      "file_type": "code",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_invitations_binding_invitationsbinding",
+      "label": "InvitationsBinding",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "invitations_binding.dart",
+      "file_type": "code",
+      "norm_label": "invitationsbinding",
+      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_invitations_controller_invitationscontroller",
+      "label": "InvitationsController",
+      "_origin": "ast",
+      "community": 105,
+      "community_name": "invitations_binding.dart",
+      "file_type": "code",
+      "norm_label": "invitationscontroller",
+      "source_file": "weeding_app/lib/app/modules/invitations/invitations_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "tables_controller_dart",
+      "label": "tables_controller.dart",
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "TablesController",
+      "file_type": "code",
+      "norm_label": "tables_controller.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_tables_tables_binding",
+      "label": "tables_binding.dart",
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "TablesController",
+      "file_type": "code",
+      "norm_label": "tables_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_tables_tables_binding_dependencies",
+      "label": "dependencies",
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "TablesController",
+      "file_type": "code",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_tables_tables_binding_tablesbinding",
+      "label": "TablesBinding",
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "TablesController",
+      "file_type": "code",
+      "norm_label": "tablesbinding",
+      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_tables_tables_controller_tablescontroller",
+      "label": "TablesController",
+      "_origin": "ast",
+      "community": 106,
+      "community_name": "TablesController",
+      "file_type": "code",
+      "norm_label": "tablescontroller",
+      "source_file": "weeding_app/lib/app/modules/tables/tables_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_entrance_qr_page_entranceqrerrormessage",
+      "label": "entranceQrErrorMessage",
+      "_origin": "ast",
+      "community": 107,
+      "community_name": "entranceQrErrorMessage",
+      "file_type": "code",
+      "norm_label": "entranceqrerrormessage",
+      "source_file": "weeding_app/lib/app/modules/invitations/entrance_qr_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "annotation_visiblefortesting",
+      "label": "@visibleForTesting",
+      "_origin": "ast",
+      "community": 107,
+      "community_name": "entranceQrErrorMessage",
+      "file_type": "concept",
+      "norm_label": "@visiblefortesting",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_media_player_page_mediaplayerpage",
+      "label": "MediaPlayerPage",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "_MediaPlayerPageState",
+      "file_type": "code",
+      "norm_label": "mediaplayerpage",
+      "source_file": "weeding_app/lib/app/modules/invitations/media_player_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_invitations_media_player_page_mediaplayerpagestate",
+      "label": "_MediaPlayerPageState",
+      "_origin": "ast",
+      "community": 108,
+      "community_name": "_MediaPlayerPageState",
+      "file_type": "code",
+      "norm_label": "_mediaplayerpagestate",
+      "source_file": "weeding_app/lib/app/modules/invitations/media_player_page.dart",
       "source_location": null
     },
     {
@@ -2270,7 +2801,7 @@
       "file_type": "code",
       "norm_label": "corsheaders",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L11"
+      "source_location": "L41"
     },
     {
       "id": "backend_supabase_functions_shared_media_duration",
@@ -2313,6 +2844,17 @@
       "community_name": "shared_components.dart",
       "file_type": "code",
       "norm_label": "gradient?",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "preferredsizewidget",
+      "label": "PreferredSizeWidget",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "preferredsizewidget",
       "source_file": null,
       "source_location": null
     },
@@ -2427,6 +2969,17 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_core_widgets_shared_components_gradientcard",
+      "label": "GradientCard",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "gradientcard",
+      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_core_widgets_shared_components_initials",
       "label": "initials",
       "_origin": "ast",
@@ -2515,6 +3068,17 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_core_widgets_shared_components_sectionheader",
+      "label": "SectionHeader",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "sectionheader",
+      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_core_widgets_shared_components_showback",
       "label": "showBack",
       "_origin": "ast",
@@ -2548,6 +3112,17 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_core_widgets_shared_components_statusbadge",
+      "label": "StatusBadge",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "statusbadge",
+      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_core_widgets_shared_components_title",
       "label": "title",
       "_origin": "ast",
@@ -2555,6 +3130,28 @@
       "community_name": "shared_components.dart",
       "file_type": "code",
       "norm_label": "title",
+      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_shared_components_useravatar",
+      "label": "UserAvatar",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "useravatar",
+      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_shared_components_weddingappbar",
+      "label": "WeddingAppBar",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "shared_components.dart",
+      "file_type": "code",
+      "norm_label": "weddingappbar",
       "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
       "source_location": null
     },
@@ -3065,6 +3662,28 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_modules_settings_wedding_theme_page_weddingthemepage",
+      "label": "WeddingThemePage",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "wedding_theme_page.dart",
+      "file_type": "code",
+      "norm_label": "weddingthemepage",
+      "source_file": "weeding_app/lib/app/modules/settings/wedding_theme_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_settings_wedding_theme_page_weddingthemepagestate",
+      "label": "_WeddingThemePageState",
+      "_origin": "ast",
+      "community": 14,
+      "community_name": "wedding_theme_page.dart",
+      "file_type": "code",
+      "norm_label": "_weddingthemepagestate",
+      "source_file": "weeding_app/lib/app/modules/settings/wedding_theme_page.dart",
+      "source_location": null
+    },
+    {
       "id": "custompainter",
       "label": "CustomPainter",
       "_origin": "ast",
@@ -3072,17 +3691,6 @@
       "community_name": "home_page.dart",
       "file_type": "code",
       "norm_label": "custompainter",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "dart_math",
-      "label": "dart:math",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "home_page.dart",
-      "file_type": "code",
-      "norm_label": "dart:math",
       "source_file": null,
       "source_location": null
     },
@@ -3219,17 +3827,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_home_home_page_homepage",
-      "label": "HomePage",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "home_page.dart",
-      "file_type": "code",
-      "norm_label": "homepage",
-      "source_file": "weeding_app/lib/app/modules/home/home_page.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_home_home_page_icon",
       "label": "icon",
       "_origin": "ast",
@@ -3336,17 +3933,6 @@
       "community_name": "home_page.dart",
       "file_type": "code",
       "norm_label": "shouldrepaint",
-      "source_file": "weeding_app/lib/app/modules/home/home_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_home_home_page_statuslegend",
-      "label": "_StatusLegend",
-      "_origin": "ast",
-      "community": 15,
-      "community_name": "home_page.dart",
-      "file_type": "code",
-      "norm_label": "_statuslegend",
       "source_file": "weeding_app/lib/app/modules/home/home_page.dart",
       "source_location": null
     },
@@ -3743,6 +4329,17 @@
       "community_name": "guest_detail_page.dart",
       "file_type": "code",
       "norm_label": "build",
+      "source_file": "weeding_app/lib/app/modules/guests/guest_detail_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guests_guest_detail_page_confirmcancellation",
+      "label": "_confirmCancellation",
+      "_origin": "ast",
+      "community": 17,
+      "community_name": "guest_detail_page.dart",
+      "file_type": "code",
+      "norm_label": "_confirmcancellation",
       "source_file": "weeding_app/lib/app/modules/guests/guest_detail_page.dart",
       "source_location": null
     },
@@ -4209,6 +4806,17 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_modules_guests_guests_controller_setguestcancelled",
+      "label": "setGuestCancelled",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "guests_controller.dart",
+      "file_type": "code",
+      "norm_label": "setguestcancelled",
+      "source_file": "weeding_app/lib/app/modules/guests/guests_controller.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_modules_guests_guests_controller_tablerepository",
       "label": "_tableRepository",
       "_origin": "ast",
@@ -4297,24 +4905,24 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercard",
-      "label": "HoverCard",
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_gradientbutton",
+      "label": "GradientButton",
       "_origin": "ast",
       "community": 19,
       "community_name": "State",
       "file_type": "code",
-      "norm_label": "hovercard",
+      "norm_label": "gradientbutton",
       "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercardstate",
-      "label": "_HoverCardState",
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_gradientbuttonstate",
+      "label": "_GradientButtonState",
       "_origin": "ast",
       "community": 19,
       "community_name": "State",
       "file_type": "code",
-      "norm_label": "_hovercardstate",
+      "norm_label": "_gradientbuttonstate",
       "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
       "source_location": null
     },
@@ -4429,28 +5037,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_guest_access_video_recorder_page_videorecorderpage",
-      "label": "VideoRecorderPage",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "State",
-      "file_type": "code",
-      "norm_label": "videorecorderpage",
-      "source_file": "weeding_app/lib/app/modules/guest_access/video_recorder_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_video_recorder_page_videorecorderpagestate",
-      "label": "_VideoRecorderPageState",
-      "_origin": "ast",
-      "community": 19,
-      "community_name": "State",
-      "file_type": "code",
-      "norm_label": "_videorecorderpagestate",
-      "source_file": "weeding_app/lib/app/modules/guest_access/video_recorder_page.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_guest_access_web_audio_recorder_webaudiorecorderpage",
       "label": "WebAudioRecorderPage",
       "_origin": "ast",
@@ -4536,6 +5122,28 @@
       "file_type": "code",
       "norm_label": "_fullscreenwaveformpagestate",
       "source_file": "weeding_app/lib/app/modules/invitations/media_player_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_settings_settings_page_settingspage",
+      "label": "SettingsPage",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "State",
+      "file_type": "code",
+      "norm_label": "settingspage",
+      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_settings_settings_page_settingspagestate",
+      "label": "_SettingsPageState",
+      "_origin": "ast",
+      "community": 19,
+      "community_name": "State",
+      "file_type": "code",
+      "norm_label": "_settingspagestate",
+      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
       "source_location": null
     },
     {
@@ -5639,17 +6247,6 @@
       "source_location": null
     },
     {
-      "id": "rxint",
-      "label": "RxInt",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "rxint",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "settings_settings_page_dart",
       "label": "../settings/settings_page.dart",
       "_origin": "ast",
@@ -5657,17 +6254,6 @@
       "community_name": "main_shell_page.dart",
       "file_type": "code",
       "norm_label": "../settings/settings_page.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "static_const",
-      "label": "static const",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "static const",
       "source_file": null,
       "source_location": null
     },
@@ -5680,94 +6266,6 @@
       "file_type": "code",
       "norm_label": "../tables/tables_page.dart",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller",
-      "label": "main_navigation_controller.dart",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "main_navigation_controller.dart",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_currentindex",
-      "label": "currentIndex",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "currentindex",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_gueststab",
-      "label": "guestsTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "gueststab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_hometab",
-      "label": "homeTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "hometab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_invitationstab",
-      "label": "invitationsTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "invitationstab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_selecttab",
-      "label": "selectTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "selecttab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_settingstab",
-      "label": "settingsTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "settingstab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_tablestab",
-      "label": "tablesTab",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "tablestab",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
       "source_location": null
     },
     {
@@ -5870,168 +6368,58 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_routes_app_routes",
-      "label": "app_routes.dart",
+      "id": "animationcontroller",
+      "label": "AnimationController",
       "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
+      "community": 24,
+      "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "app_routes.dart",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "norm_label": "animationcontroller",
+      "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_routes_app_routes_approutes",
-      "label": "AppRoutes",
+      "id": "auth_controller_dart",
+      "label": "auth_controller.dart",
       "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
+      "community": 24,
+      "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "approutes",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "norm_label": "auth_controller.dart",
+      "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_routes_app_routes_entranceqr",
-      "label": "entranceQr",
+      "id": "core_theme_app_text_styles_dart",
+      "label": "../../core/theme/app_text_styles.dart",
       "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
+      "community": 24,
+      "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "entranceqr",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "norm_label": "../../core/theme/app_text_styles.dart",
+      "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_routes_app_routes_guestdetail",
-      "label": "guestDetail",
+      "id": "core_utils_validators_dart",
+      "label": "../../core/utils/validators.dart",
       "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
+      "community": 24,
+      "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "guestdetail",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "norm_label": "../../core/utils/validators.dart",
+      "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_routes_app_routes_guests",
-      "label": "guests",
+      "id": "formstate",
+      "label": "FormState",
       "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
+      "community": 24,
+      "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "guests",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_home",
-      "label": "home",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "home",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_invitations",
-      "label": "invitations",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "invitations",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_login",
-      "label": "login",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "login",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_onboarding",
-      "label": "onboarding",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "onboarding",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_qrcode",
-      "label": "qrCode",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "qrcode",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_settings",
-      "label": "settings",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "settings",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_tabledetail",
-      "label": "tableDetail",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "tabledetail",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_tables",
-      "label": "tables",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "tables",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_venues",
-      "label": "venues",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "venues",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_routes_app_routes_weddingtheme",
-      "label": "weddingTheme",
-      "_origin": "ast",
-      "community": 23,
-      "community_name": "main_shell_page.dart",
-      "file_type": "code",
-      "norm_label": "weddingtheme",
-      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "norm_label": "formstate",
+      "source_file": null,
       "source_location": null
     },
     {
@@ -6046,14 +6434,36 @@
       "source_location": null
     },
     {
-      "id": "voidcallback",
-      "label": "VoidCallback",
+      "id": "weeding_app_lib_app_modules_auth_auth_binding",
+      "label": "auth_binding.dart",
       "_origin": "ast",
       "community": 24,
       "community_name": "login_page.dart",
       "file_type": "code",
-      "norm_label": "voidcallback",
-      "source_file": null,
+      "norm_label": "auth_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_auth_binding_dependencies",
+      "label": "dependencies",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_auth_controller_authcontroller",
+      "label": "AuthController",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "authcontroller",
+      "source_file": "weeding_app/lib/app/modules/auth/auth_controller.dart",
       "source_location": null
     },
     {
@@ -6200,6 +6610,28 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_modules_auth_login_page_loginpage",
+      "label": "LoginPage",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "loginpage",
+      "source_file": "weeding_app/lib/app/modules/auth/login_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_login_page_loginpagestate",
+      "label": "_LoginPageState",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "_loginpagestate",
+      "source_file": "weeding_app/lib/app/modules/auth/login_page.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_modules_auth_login_page_obscure",
       "label": "_obscure",
       "_origin": "ast",
@@ -6222,6 +6654,94 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_modules_auth_register_page",
+      "label": "register_page.dart",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "register_page.dart",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_build",
+      "label": "build",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "build",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_buildfield",
+      "label": "_buildField",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "_buildfield",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_createstate",
+      "label": "createState",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "createstate",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_ctrl",
+      "label": "_ctrl",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "_ctrl",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_dispose",
+      "label": "dispose",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "dispose",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_initstate",
+      "label": "initState",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "initstate",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_auth_register_page_inputdecoration",
+      "label": "_inputDecoration",
+      "_origin": "ast",
+      "community": 24,
+      "community_name": "login_page.dart",
+      "file_type": "code",
+      "norm_label": "_inputdecoration",
+      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
+      "source_location": null
+    },
+    {
       "id": "data_models_profile_dart",
       "label": "../../data/models/profile.dart",
       "_origin": "ast",
@@ -6241,6 +6761,17 @@
       "file_type": "code",
       "norm_label": "profile? get",
       "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_guest_repository_guestrepository",
+      "label": "GuestRepository",
+      "_origin": "ast",
+      "community": 25,
+      "community_name": "home_controller.dart",
+      "file_type": "code",
+      "norm_label": "guestrepository",
+      "source_file": "weeding_app/lib/app/data/repositories/guest_repository.dart",
       "source_location": null
     },
     {
@@ -6431,6 +6962,28 @@
       "source_location": null
     },
     {
+      "id": "dart_io",
+      "label": "dart:io",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "dart:io",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "dart_typed_data",
+      "label": "dart:typed_data",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "dart:typed_data",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "dart_ui",
       "label": "dart:ui",
       "_origin": "ast",
@@ -6438,6 +6991,17 @@
       "community_name": "invitation_card_generator.dart",
       "file_type": "code",
       "norm_label": "dart:ui",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "models_guest_media_dart",
+      "label": "../models/guest_media.dart",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "../models/guest_media.dart",
       "source_file": null,
       "source_location": null
     },
@@ -6460,17 +7024,6 @@
       "community_name": "invitation_card_generator.dart",
       "file_type": "code",
       "norm_label": "package:path_provider/path_provider.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "package_qr_flutter_qr_flutter_dart",
-      "label": "package:qr_flutter/qr_flutter.dart",
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "invitation_card_generator.dart",
-      "file_type": "code",
-      "norm_label": "package:qr_flutter/qr_flutter.dart",
       "source_file": null,
       "source_location": null
     },
@@ -6662,6 +7215,105 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_data_repositories_media_repository",
+      "label": "media_repository.dart",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "media_repository.dart",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_client",
+      "label": "_client",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "_client",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_getmediabyguestid",
+      "label": "getMediaByGuestId",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "getmediabyguestid",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_getmediadownloadurl",
+      "label": "getMediaDownloadUrl",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "getmediadownloadurl",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_getvalidmediabyguestid",
+      "label": "getValidMediaByGuestId",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "getvalidmediabyguestid",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_mediarepository",
+      "label": "MediaRepository",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "mediarepository",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_submitmedia",
+      "label": "submitMedia",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "submitmedia",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_media_repository_uploadmediatostorage",
+      "label": "uploadMediaToStorage",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "code",
+      "norm_label": "uploadmediatostorage",
+      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "annotation_deprecated",
+      "label": "@Deprecated",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "invitation_card_generator.dart",
+      "file_type": "concept",
+      "norm_label": "@deprecated",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "models_guest_dart",
       "label": "../models/guest.dart",
       "_origin": "ast",
@@ -6827,13 +7479,13 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_guest_repository_guestrepository",
-      "label": "GuestRepository",
+      "id": "weeding_app_lib_app_data_repositories_guest_repository_setguestcancelled",
+      "label": "setGuestCancelled",
       "_origin": "ast",
       "community": 27,
       "community_name": "guest_repository.dart",
       "file_type": "code",
-      "norm_label": "guestrepository",
+      "norm_label": "setguestcancelled",
       "source_file": "weeding_app/lib/app/data/repositories/guest_repository.dart",
       "source_location": null
     },
@@ -7575,39 +8227,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_settings_settings_page_settingspage",
-      "label": "SettingsPage",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "settings_page.dart",
-      "file_type": "code",
-      "norm_label": "settingspage",
-      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_settings_settings_page_settingspagestate",
-      "label": "_SettingsPageState",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "settings_page.dart",
-      "file_type": "code",
-      "norm_label": "_settingspagestate",
-      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_settings_settings_page_settingssection",
-      "label": "_SettingsSection",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "settings_page.dart",
-      "file_type": "code",
-      "norm_label": "_settingssection",
-      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_settings_settings_page_showeditweddingsheet",
       "label": "_showEditWeddingSheet",
       "_origin": "ast",
@@ -7674,17 +8293,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_settings_settings_page_weddinginforow",
-      "label": "_WeddingInfoRow",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "settings_page.dart",
-      "file_type": "code",
-      "norm_label": "_weddinginforow",
-      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_settings_settings_page_weddingsettings",
       "label": "_weddingSettings",
       "_origin": "ast",
@@ -7693,17 +8301,6 @@
       "file_type": "code",
       "norm_label": "_weddingsettings",
       "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "dart_io",
-      "label": "dart:io",
-      "_origin": "ast",
-      "community": 30,
-      "community_name": "video_recorder_page.dart",
-      "file_type": "code",
-      "norm_label": "dart:io",
-      "source_file": null,
       "source_location": null
     },
     {
@@ -7872,168 +8469,113 @@
       "source_location": null
     },
     {
-      "id": "animationcontroller",
-      "label": "AnimationController",
+      "id": "weeding_app_lib_app_modules_guest_access_video_recorder_page_videorecorderpage",
+      "label": "VideoRecorderPage",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "video_recorder_page.dart",
+      "file_type": "code",
+      "norm_label": "videorecorderpage",
+      "source_file": "weeding_app/lib/app/modules/guest_access/video_recorder_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_video_recorder_page_videorecorderpagestate",
+      "label": "_VideoRecorderPageState",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "video_recorder_page.dart",
+      "file_type": "code",
+      "norm_label": "_videorecorderpagestate",
+      "source_file": "weeding_app/lib/app/modules/guest_access/video_recorder_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "offset",
+      "label": "Offset",
       "_origin": "ast",
       "community": 31,
-      "community_name": "register_page.dart",
+      "community_name": "Widget?",
       "file_type": "code",
-      "norm_label": "animationcontroller",
+      "norm_label": "offset",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "auth_controller_dart",
-      "label": "auth_controller.dart",
+      "id": "pageroutebuilder",
+      "label": "PageRouteBuilder",
       "_origin": "ast",
       "community": 31,
-      "community_name": "register_page.dart",
+      "community_name": "Widget?",
       "file_type": "code",
-      "norm_label": "auth_controller.dart",
+      "norm_label": "pageroutebuilder",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "core_utils_validators_dart",
-      "label": "../../core/utils/validators.dart",
+      "id": "t",
+      "label": "T",
       "_origin": "ast",
       "community": 31,
-      "community_name": "register_page.dart",
+      "community_name": "Widget?",
       "file_type": "code",
-      "norm_label": "../../core/utils/validators.dart",
+      "norm_label": "t",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "formstate",
-      "label": "FormState",
+      "id": "weeding_app_lib_app_core_widgets_page_transitions",
+      "label": "page_transitions.dart",
       "_origin": "ast",
       "community": 31,
-      "community_name": "register_page.dart",
+      "community_name": "Widget?",
       "file_type": "code",
-      "norm_label": "formstate",
+      "norm_label": "page_transitions.dart",
+      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_page_transitions_page",
+      "label": "page",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Widget?",
+      "file_type": "code",
+      "norm_label": "page",
+      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_page_transitions_slidefaderoute",
+      "label": "SlideFadeRoute",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Widget?",
+      "file_type": "code",
+      "norm_label": "slidefaderoute",
+      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_page_transitions_slideuproute",
+      "label": "SlideUpRoute",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Widget?",
+      "file_type": "code",
+      "norm_label": "slideuproute",
+      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "source_location": null
+    },
+    {
+      "id": "widget",
+      "label": "Widget?",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "Widget?",
+      "file_type": "code",
+      "norm_label": "widget?",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_auth_binding",
-      "label": "auth_binding.dart",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "auth_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_auth_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_auth_controller_authcontroller",
-      "label": "AuthController",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "authcontroller",
-      "source_file": "weeding_app/lib/app/modules/auth/auth_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page",
-      "label": "register_page.dart",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "register_page.dart",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_build",
-      "label": "build",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "build",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_buildfield",
-      "label": "_buildField",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "_buildfield",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_createstate",
-      "label": "createState",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "createstate",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_ctrl",
-      "label": "_ctrl",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "_ctrl",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_dispose",
-      "label": "dispose",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "dispose",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_initstate",
-      "label": "initState",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "initstate",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_register_page_inputdecoration",
-      "label": "_inputDecoration",
-      "_origin": "ast",
-      "community": 31,
-      "community_name": "register_page.dart",
-      "file_type": "code",
-      "norm_label": "_inputdecoration",
-      "source_file": "weeding_app/lib/app/modules/auth/register_page.dart",
       "source_location": null
     },
     {
@@ -8400,17 +8942,6 @@
       "source_location": null
     },
     {
-      "id": "preferredsizewidget",
-      "label": "PreferredSizeWidget",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "preferredsizewidget",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "statelesswidget",
       "label": "StatelessWidget",
       "_origin": "ast",
@@ -8422,61 +8953,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_shared_components_gradientcard",
-      "label": "GradientCard",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "gradientcard",
-      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_shared_components_sectionheader",
-      "label": "SectionHeader",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "sectionheader",
-      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_shared_components_statusbadge",
-      "label": "StatusBadge",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "statusbadge",
-      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_shared_components_useravatar",
-      "label": "UserAvatar",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "useravatar",
-      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_shared_components_weddingappbar",
-      "label": "WeddingAppBar",
-      "_origin": "ast",
-      "community": 34,
-      "community_name": "StatelessWidget",
-      "file_type": "code",
-      "norm_label": "weddingappbar",
-      "source_file": "weeding_app/lib/app/core/widgets/shared_components.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_guest_access_guest_access_page_mediaoptioncard",
       "label": "_MediaOptionCard",
       "_origin": "ast",
@@ -8485,6 +8961,28 @@
       "file_type": "code",
       "norm_label": "_mediaoptioncard",
       "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_home_home_page_homepage",
+      "label": "HomePage",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "StatelessWidget",
+      "file_type": "code",
+      "norm_label": "homepage",
+      "source_file": "weeding_app/lib/app/modules/home/home_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_home_home_page_statuslegend",
+      "label": "_StatusLegend",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "StatelessWidget",
+      "file_type": "code",
+      "norm_label": "_statuslegend",
+      "source_file": "weeding_app/lib/app/modules/home/home_page.dart",
       "source_location": null
     },
     {
@@ -8576,6 +9074,17 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_modules_settings_settings_page_settingssection",
+      "label": "_SettingsSection",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "StatelessWidget",
+      "file_type": "code",
+      "norm_label": "_settingssection",
+      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_modules_settings_settings_page_settingstile",
       "label": "_SettingsTile",
       "_origin": "ast",
@@ -8583,6 +9092,17 @@
       "community_name": "StatelessWidget",
       "file_type": "code",
       "norm_label": "_settingstile",
+      "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_settings_settings_page_weddinginforow",
+      "label": "_WeddingInfoRow",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "StatelessWidget",
+      "file_type": "code",
+      "norm_label": "_weddinginforow",
       "source_file": "weeding_app/lib/app/modules/settings/settings_page.dart",
       "source_location": null
     },
@@ -9983,6 +10503,17 @@
       "source_location": null
     },
     {
+      "id": "double",
+      "label": "double?",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "double?",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_data_models_event_venue",
       "label": "event_venue.dart",
       "_origin": "ast",
@@ -10192,6 +10723,160 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_data_models_guest_media",
+      "label": "guest_media.dart",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "guest_media.dart",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_clientdurationseconds",
+      "label": "clientDurationSeconds",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "clientdurationseconds",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_clientvalidated",
+      "label": "clientValidated",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "clientvalidated",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_fromjson",
+      "label": "fromJson",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "fromjson",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_guestid",
+      "label": "guestId",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "guestid",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_guestmedia",
+      "label": "GuestMedia",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "guestmedia",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_id",
+      "label": "id",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "id",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_isvalid",
+      "label": "isValid",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "isvalid",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_mediatype",
+      "label": "mediaType",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "mediatype",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_serverdurationseconds",
+      "label": "serverDurationSeconds",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "serverdurationseconds",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_servervalidated",
+      "label": "serverValidated",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "servervalidated",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_storagepath",
+      "label": "storagePath",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "storagepath",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_submittedat",
+      "label": "submittedAt",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "submittedat",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_models_guest_media_tojson",
+      "label": "toJson",
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "event_venue.dart",
+      "file_type": "code",
+      "norm_label": "tojson",
+      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
+      "source_location": null
+    },
+    {
       "id": "icondata",
       "label": "IconData",
       "_origin": "ast",
@@ -10221,6 +10906,17 @@
       "community_name": "wedding_header.dart",
       "file_type": "code",
       "norm_label": "micro_interactions.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "voidcallback",
+      "label": "VoidCallback",
+      "_origin": "ast",
+      "community": 39,
+      "community_name": "wedding_header.dart",
+      "file_type": "code",
+      "norm_label": "voidcallback",
       "source_file": null,
       "source_location": null
     },
@@ -10357,28 +11053,6 @@
       "source_location": null
     },
     {
-      "id": "core_theme_app_colors_dart",
-      "label": "../../core/theme/app_colors.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "../../core/theme/app_colors.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "core_widgets_wedding_header_dart",
-      "label": "../../core/widgets/wedding_header.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "../../core/widgets/wedding_header.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "data_models_entrance_qr_dart",
       "label": "../../data/models/entrance_qr.dart",
       "_origin": "ast",
@@ -10397,39 +11071,6 @@
       "community_name": "entrance_qr_page.dart",
       "file_type": "code",
       "norm_label": "../../data/repositories/entrance_repository.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "data_repositories_guest_link_repository_dart",
-      "label": "../../data/repositories/guest_link_repository.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "../../data/repositories/guest_link_repository.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "package_flutter_services_dart",
-      "label": "package:flutter/services.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "package:flutter/services.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "package_share_plus_share_plus_dart",
-      "label": "package:share_plus/share_plus.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "package:share_plus/share_plus.dart",
       "source_file": null,
       "source_location": null
     },
@@ -10610,17 +11251,6 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_invitations_entrance_qr_page_entranceqrerrormessage",
-      "label": "entranceQrErrorMessage",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "entranceqrerrormessage",
-      "source_file": "weeding_app/lib/app/modules/invitations/entrance_qr_page.dart",
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_modules_invitations_entrance_qr_page_initstate",
       "label": "initState",
       "_origin": "ast",
@@ -10673,61 +11303,6 @@
       "file_type": "code",
       "norm_label": "_repository",
       "source_file": "weeding_app/lib/app/modules/invitations/entrance_qr_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_qr_code_page",
-      "label": "qr_code_page.dart",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "qr_code_page.dart",
-      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_build",
-      "label": "build",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "build",
-      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_getpublicurl",
-      "label": "_getPublicUrl",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "_getpublicurl",
-      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_qr_code_page_qrcodepage",
-      "label": "QrCodePage",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "code",
-      "norm_label": "qrcodepage",
-      "source_file": "weeding_app/lib/app/modules/invitations/qr_code_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "annotation_visiblefortesting",
-      "label": "@visibleForTesting",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "entrance_qr_page.dart",
-      "file_type": "concept",
-      "norm_label": "@visiblefortesting",
-      "source_file": null,
       "source_location": null
     },
     {
@@ -11061,6 +11636,17 @@
       "source_location": null
     },
     {
+      "id": "rxlist",
+      "label": "RxList",
+      "_origin": "ast",
+      "community": 42,
+      "community_name": "invitations_controller.dart",
+      "file_type": "code",
+      "norm_label": "rxlist",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_modules_invitations_invitations_controller",
       "label": "invitations_controller.dart",
       "_origin": "ast",
@@ -11160,50 +11746,6 @@
       "source_location": null
     },
     {
-      "id": "data_models_event_venue_dart",
-      "label": "../../data/models/event_venue.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "../../data/models/event_venue.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "data_repositories_event_venue_repository_dart",
-      "label": "../../data/repositories/event_venue_repository.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "../../data/repositories/event_venue_repository.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "package_url_launcher_url_launcher_dart",
-      "label": "package:url_launcher/url_launcher.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "package:url_launcher/url_launcher.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "rxlist",
-      "label": "RxList",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "rxlist",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "textinputtype",
       "label": "TextInputType?",
       "_origin": "ast",
@@ -11212,204 +11754,6 @@
       "file_type": "code",
       "norm_label": "textinputtype?",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "venues_controller_dart",
-      "label": "venues_controller.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venues_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_binding",
-      "label": "venues_binding.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venues_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_binding_venuesbinding",
-      "label": "VenuesBinding",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venuesbinding",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller",
-      "label": "venues_controller.dart",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venues_controller.dart",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_deletevenue",
-      "label": "deleteVenue",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "deletevenue",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_isloading",
-      "label": "isLoading",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "isloading",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_issaving",
-      "label": "isSaving",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "issaving",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_loadvenues",
-      "label": "loadVenues",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "loadvenues",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_mapuri",
-      "label": "_mapUri",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "_mapuri",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_nullifempty",
-      "label": "_nullIfEmpty",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "_nullifempty",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_oninit",
-      "label": "onInit",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "oninit",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_openmap",
-      "label": "openMap",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "openmap",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_parsecoordinate",
-      "label": "_parseCoordinate",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "_parsecoordinate",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_repository",
-      "label": "_repository",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "_repository",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_savevenue",
-      "label": "saveVenue",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "savevenue",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_venues",
-      "label": "venues",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venues",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_venues_venues_controller_venuescontroller",
-      "label": "VenuesController",
-      "_origin": "ast",
-      "community": 43,
-      "community_name": "venues_page.dart",
-      "file_type": "code",
-      "norm_label": "venuescontroller",
-      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
@@ -12112,39 +12456,6 @@
       "source_location": null
     },
     {
-      "id": "bindings",
-      "label": "Bindings",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "bindings",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "getxcontroller",
-      "label": "GetxController",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "getxcontroller",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "guests_controller_dart",
-      "label": "guests_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "guests_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "home_controller_dart",
       "label": "home_controller.dart",
       "_origin": "ast",
@@ -12152,83 +12463,6 @@
       "community_name": "package:get/get.dart",
       "file_type": "code",
       "norm_label": "home_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "invitations_controller_dart",
-      "label": "invitations_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "invitations_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_auth_auth_controller_dart",
-      "label": "../modules/auth/auth_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/auth/auth_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_guests_guests_controller_dart",
-      "label": "../modules/guests/guests_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/guests/guests_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_home_home_controller_dart",
-      "label": "../modules/home/home_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/home/home_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_invitations_invitations_controller_dart",
-      "label": "../modules/invitations/invitations_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/invitations/invitations_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_navigation_main_navigation_controller_dart",
-      "label": "../modules/navigation/main_navigation_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/navigation/main_navigation_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "modules_tables_tables_controller_dart",
-      "label": "../modules/tables/tables_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "../modules/tables/tables_controller.dart",
       "source_file": null,
       "source_location": null
     },
@@ -12241,116 +12475,6 @@
       "file_type": "code",
       "norm_label": "package:get/get.dart",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "tables_controller_dart",
-      "label": "tables_controller.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "tables_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_bindings_app_binding",
-      "label": "app_binding.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "app_binding.dart",
-      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_bindings_app_binding_appbinding",
-      "label": "AppBinding",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "appbinding",
-      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_bindings_app_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_theme_wedding_theme_controller_weddingthemecontroller",
-      "label": "WeddingThemeController",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "weddingthemecontroller",
-      "source_file": "weeding_app/lib/app/core/theme/wedding_theme_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_auth_auth_binding_authbinding",
-      "label": "AuthBinding",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "authbinding",
-      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guests_guests_binding",
-      "label": "guests_binding.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "guests_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guests_guests_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guests_guests_binding_guestsbinding",
-      "label": "GuestsBinding",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "guestsbinding",
-      "source_file": "weeding_app/lib/app/modules/guests/guests_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guests_guests_controller_guestscontroller",
-      "label": "GuestsController",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "guestscontroller",
-      "source_file": "weeding_app/lib/app/modules/guests/guests_controller.dart",
       "source_location": null
     },
     {
@@ -12376,124 +12500,58 @@
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_home_home_binding_homebinding",
-      "label": "HomeBinding",
+      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding",
+      "label": "workspace_onboarding_binding.dart",
       "_origin": "ast",
       "community": 47,
       "community_name": "package:get/get.dart",
       "file_type": "code",
-      "norm_label": "homebinding",
-      "source_file": "weeding_app/lib/app/modules/home/home_binding.dart",
+      "norm_label": "workspace_onboarding_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_home_home_controller_homecontroller",
-      "label": "HomeController",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "homecontroller",
-      "source_file": "weeding_app/lib/app/modules/home/home_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_invitations_binding",
-      "label": "invitations_binding.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "invitations_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_invitations_invitations_binding_dependencies",
+      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding_dependencies",
       "label": "dependencies",
       "_origin": "ast",
       "community": 47,
       "community_name": "package:get/get.dart",
       "file_type": "code",
       "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_invitations_invitations_binding_invitationsbinding",
-      "label": "InvitationsBinding",
+      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding_workspaceonboardingbinding",
+      "label": "WorkspaceOnboardingBinding",
       "_origin": "ast",
       "community": 47,
       "community_name": "package:get/get.dart",
       "file_type": "code",
-      "norm_label": "invitationsbinding",
-      "source_file": "weeding_app/lib/app/modules/invitations/invitations_binding.dart",
+      "norm_label": "workspaceonboardingbinding",
+      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_invitations_invitations_controller_invitationscontroller",
-      "label": "InvitationsController",
+      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_controller_workspaceonboardingcontroller",
+      "label": "WorkspaceOnboardingController",
       "_origin": "ast",
       "community": 47,
       "community_name": "package:get/get.dart",
       "file_type": "code",
-      "norm_label": "invitationscontroller",
-      "source_file": "weeding_app/lib/app/modules/invitations/invitations_controller.dart",
+      "norm_label": "workspaceonboardingcontroller",
+      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_mainnavigationcontroller",
-      "label": "MainNavigationController",
+      "id": "workspace_onboarding_controller_dart",
+      "label": "workspace_onboarding_controller.dart",
       "_origin": "ast",
       "community": 47,
       "community_name": "package:get/get.dart",
       "file_type": "code",
-      "norm_label": "mainnavigationcontroller",
-      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_tables_tables_binding",
-      "label": "tables_binding.dart",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "tables_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_tables_tables_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_tables_tables_binding_tablesbinding",
-      "label": "TablesBinding",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "tablesbinding",
-      "source_file": "weeding_app/lib/app/modules/tables/tables_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_tables_tables_controller_tablescontroller",
-      "label": "TablesController",
-      "_origin": "ast",
-      "community": 47,
-      "community_name": "package:get/get.dart",
-      "file_type": "code",
-      "norm_label": "tablescontroller",
-      "source_file": "weeding_app/lib/app/modules/tables/tables_controller.dart",
+      "norm_label": "workspace_onboarding_controller.dart",
+      "source_file": null,
       "source_location": null
     },
     {
@@ -13520,17 +13578,6 @@
       "source_location": null
     },
     {
-      "id": "package_flutter_foundation_dart",
-      "label": "package:flutter/foundation.dart",
-      "_origin": "ast",
-      "community": 54,
-      "community_name": "wedding_theme_controller.dart",
-      "file_type": "code",
-      "norm_label": "package:flutter/foundation.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "rx",
       "label": "Rx",
       "_origin": "ast",
@@ -13641,124 +13688,102 @@
       "source_location": null
     },
     {
-      "id": "dart_typed_data",
-      "label": "dart:typed_data",
+      "id": "bindings",
+      "label": "Bindings",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "dart:typed_data",
+      "norm_label": "bindings",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "models_guest_media_dart",
-      "label": "../models/guest_media.dart",
+      "id": "guest_access_controller_dart",
+      "label": "guest_access_controller.dart",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "../models/guest_media.dart",
+      "norm_label": "guest_access_controller.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository",
-      "label": "media_repository.dart",
+      "id": "weeding_app_lib_app_bindings_app_binding_appbinding",
+      "label": "AppBinding",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "media_repository.dart",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "appbinding",
+      "source_file": "weeding_app/lib/app/bindings/app_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_client",
-      "label": "_client",
+      "id": "weeding_app_lib_app_modules_auth_auth_binding_authbinding",
+      "label": "AuthBinding",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "_client",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "authbinding",
+      "source_file": "weeding_app/lib/app/modules/auth/auth_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_getmediabyguestid",
-      "label": "getMediaByGuestId",
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding",
+      "label": "guest_access_binding.dart",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "getmediabyguestid",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "guest_access_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_getmediadownloadurl",
-      "label": "getMediaDownloadUrl",
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding_dependencies",
+      "label": "dependencies",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "getmediadownloadurl",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_getvalidmediabyguestid",
-      "label": "getValidMediaByGuestId",
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding_guestaccessbinding",
+      "label": "GuestAccessBinding",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "getvalidmediabyguestid",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "guestaccessbinding",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_mediarepository",
-      "label": "MediaRepository",
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_controller_guestaccesscontroller",
+      "label": "GuestAccessController",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "mediarepository",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
+      "norm_label": "guestaccesscontroller",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_submitmedia",
-      "label": "submitMedia",
+      "id": "weeding_app_lib_app_modules_home_home_binding_homebinding",
+      "label": "HomeBinding",
       "_origin": "ast",
       "community": 55,
-      "community_name": "media_repository.dart",
+      "community_name": "Bindings",
       "file_type": "code",
-      "norm_label": "submitmedia",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_repositories_media_repository_uploadmediatostorage",
-      "label": "uploadMediaToStorage",
-      "_origin": "ast",
-      "community": 55,
-      "community_name": "media_repository.dart",
-      "file_type": "code",
-      "norm_label": "uploadmediatostorage",
-      "source_file": "weeding_app/lib/app/data/repositories/media_repository.dart",
-      "source_location": null
-    },
-    {
-      "id": "annotation_deprecated",
-      "label": "@Deprecated",
-      "_origin": "ast",
-      "community": 55,
-      "community_name": "media_repository.dart",
-      "file_type": "concept",
-      "norm_label": "@deprecated",
-      "source_file": null,
+      "norm_label": "homebinding",
+      "source_file": "weeding_app/lib/app/modules/home/home_binding.dart",
       "source_location": null
     },
     {
@@ -14796,6 +14821,17 @@
       "source_location": null
     },
     {
+      "id": "dart_math",
+      "label": "dart:math",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "guest_link_repository.dart",
+      "file_type": "code",
+      "norm_label": "dart:math",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "models_guest_link_dart",
       "label": "../models/guest_link.dart",
       "_origin": "ast",
@@ -14803,6 +14839,17 @@
       "community_name": "guest_link_repository.dart",
       "file_type": "code",
       "norm_label": "../models/guest_link.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "package_flutter_foundation_dart",
+      "label": "package:flutter/foundation.dart",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "guest_link_repository.dart",
+      "file_type": "code",
+      "norm_label": "package:flutter/foundation.dart",
       "source_file": null,
       "source_location": null
     },
@@ -14836,6 +14883,17 @@
       "community_name": "guest_link_repository.dart",
       "file_type": "code",
       "norm_label": "createguestlink",
+      "source_file": "weeding_app/lib/app/data/repositories/guest_link_repository.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_data_repositories_guest_link_repository_generateshortcode",
+      "label": "_generateShortCode",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "guest_link_repository.dart",
+      "file_type": "code",
+      "norm_label": "_generateshortcode",
       "source_file": "weeding_app/lib/app/data/repositories/guest_link_repository.dart",
       "source_location": null
     },
@@ -15771,91 +15829,179 @@
       "source_location": "L39"
     },
     {
-      "id": "offset",
-      "label": "Offset",
+      "id": "data_models_event_venue_dart",
+      "label": "../../data/models/event_venue.dart",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "offset",
+      "norm_label": "../../data/models/event_venue.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "pageroutebuilder",
-      "label": "PageRouteBuilder",
+      "id": "data_repositories_event_venue_repository_dart",
+      "label": "../../data/repositories/event_venue_repository.dart",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "pageroutebuilder",
+      "norm_label": "../../data/repositories/event_venue_repository.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "t",
-      "label": "T",
+      "id": "package_url_launcher_url_launcher_dart",
+      "label": "package:url_launcher/url_launcher.dart",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "t",
+      "norm_label": "package:url_launcher/url_launcher.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_page_transitions",
-      "label": "page_transitions.dart",
+      "id": "weeding_app_lib_app_modules_venues_venues_controller",
+      "label": "venues_controller.dart",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "page_transitions.dart",
-      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "norm_label": "venues_controller.dart",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_page_transitions_page",
-      "label": "page",
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_deletevenue",
+      "label": "deleteVenue",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "page",
-      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "norm_label": "deletevenue",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_page_transitions_slidefaderoute",
-      "label": "SlideFadeRoute",
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_isloading",
+      "label": "isLoading",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "slidefaderoute",
-      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "norm_label": "isloading",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_core_widgets_page_transitions_slideuproute",
-      "label": "SlideUpRoute",
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_issaving",
+      "label": "isSaving",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "slideuproute",
-      "source_file": "weeding_app/lib/app/core/widgets/page_transitions.dart",
+      "norm_label": "issaving",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
-      "id": "widget",
-      "label": "Widget?",
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_loadvenues",
+      "label": "loadVenues",
       "_origin": "ast",
       "community": 68,
-      "community_name": "page_transitions.dart",
+      "community_name": "venues_controller.dart",
       "file_type": "code",
-      "norm_label": "widget?",
-      "source_file": null,
+      "norm_label": "loadvenues",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_mapuri",
+      "label": "_mapUri",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "_mapuri",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_nullifempty",
+      "label": "_nullIfEmpty",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "_nullifempty",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_oninit",
+      "label": "onInit",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "oninit",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_openmap",
+      "label": "openMap",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "openmap",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_parsecoordinate",
+      "label": "_parseCoordinate",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "_parsecoordinate",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_repository",
+      "label": "_repository",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "_repository",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_savevenue",
+      "label": "saveVenue",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "savevenue",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_venues",
+      "label": "venues",
+      "_origin": "ast",
+      "community": 68,
+      "community_name": "venues_controller.dart",
+      "file_type": "code",
+      "norm_label": "venues",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
@@ -15969,17 +16115,6 @@
       "source_location": null
     },
     {
-      "id": "guest_access_controller_dart",
-      "label": "guest_access_controller.dart",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "guest_access_page.dart",
-      "file_type": "code",
-      "norm_label": "guest_access_controller.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "recorder_factory_dart",
       "label": "recorder_factory.dart",
       "_origin": "ast",
@@ -15987,6 +16122,17 @@
       "community_name": "guest_access_page.dart",
       "file_type": "code",
       "norm_label": "recorder_factory.dart",
+      "source_file": null,
+      "source_location": null
+    },
+    {
+      "id": "tickerproviderstatemixin",
+      "label": "TickerProviderStateMixin",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "guest_access_page.dart",
+      "file_type": "code",
+      "norm_label": "tickerproviderstatemixin",
       "source_file": null,
       "source_location": null
     },
@@ -15999,50 +16145,6 @@
       "file_type": "code",
       "norm_label": "video_recorder_page.dart",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding",
-      "label": "guest_access_binding.dart",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "guest_access_page.dart",
-      "file_type": "code",
-      "norm_label": "guest_access_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "guest_access_page.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_binding_guestaccessbinding",
-      "label": "GuestAccessBinding",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "guest_access_page.dart",
-      "file_type": "code",
-      "norm_label": "guestaccessbinding",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_controller_guestaccesscontroller",
-      "label": "GuestAccessController",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "guest_access_page.dart",
-      "file_type": "code",
-      "norm_label": "guestaccesscontroller",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_controller.dart",
       "source_location": null
     },
     {
@@ -16229,6 +16331,28 @@
       "community_name": "guest_access_page.dart",
       "file_type": "code",
       "norm_label": "_downloadcard",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_page_guestaccesspage",
+      "label": "GuestAccessPage",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "guest_access_page.dart",
+      "file_type": "code",
+      "norm_label": "guestaccesspage",
+      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_guest_access_guest_access_page_guestaccesspagestate",
+      "label": "_GuestAccessPageState",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "guest_access_page.dart",
+      "file_type": "code",
+      "norm_label": "_guestaccesspagestate",
       "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
       "source_location": null
     },
@@ -17168,65 +17292,21 @@
       "label": "../auth/auth_controller.dart",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "../auth/auth_controller.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "core_theme_app_text_styles_dart",
-      "label": "../../core/theme/app_text_styles.dart",
+      "id": "core_theme_app_colors_dart",
+      "label": "../../core/theme/app_colors.dart",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
-      "norm_label": "../../core/theme/app_text_styles.dart",
+      "norm_label": "../../core/theme/app_colors.dart",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding",
-      "label": "workspace_onboarding_binding.dart",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
-      "file_type": "code",
-      "norm_label": "workspace_onboarding_binding.dart",
-      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding_dependencies",
-      "label": "dependencies",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
-      "file_type": "code",
-      "norm_label": "dependencies",
-      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_binding_workspaceonboardingbinding",
-      "label": "WorkspaceOnboardingBinding",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
-      "file_type": "code",
-      "norm_label": "workspaceonboardingbinding",
-      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_binding.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_onboarding_workspace_onboarding_controller_workspaceonboardingcontroller",
-      "label": "WorkspaceOnboardingController",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
-      "file_type": "code",
-      "norm_label": "workspaceonboardingcontroller",
-      "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_controller.dart",
       "source_location": null
     },
     {
@@ -17234,7 +17314,7 @@
       "label": "workspace_onboarding_page.dart",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "workspace_onboarding_page.dart",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17245,7 +17325,7 @@
       "label": "build",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "build",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17256,7 +17336,7 @@
       "label": "child",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "child",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17267,7 +17347,7 @@
       "label": "_pickDate",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "_pickdate",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17278,7 +17358,7 @@
       "label": "_SectionCard",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "_sectioncard",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17289,7 +17369,7 @@
       "label": "title",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "title",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
@@ -17300,21 +17380,10 @@
       "label": "WorkspaceOnboardingPage",
       "_origin": "ast",
       "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
+      "community_name": "../../core/theme/app_colors.dart",
       "file_type": "code",
       "norm_label": "workspaceonboardingpage",
       "source_file": "weeding_app/lib/app/modules/onboarding/workspace_onboarding_page.dart",
-      "source_location": null
-    },
-    {
-      "id": "workspace_onboarding_controller_dart",
-      "label": "workspace_onboarding_controller.dart",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "../../core/theme/app_text_styles.dart",
-      "file_type": "code",
-      "norm_label": "workspace_onboarding_controller.dart",
-      "source_file": null,
       "source_location": null
     },
     {
@@ -17914,6 +17983,28 @@
       "file_type": "code",
       "norm_label": "tojson",
       "source_file": "weeding_app/lib/app/core/theme/wedding_palette.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_theme_wedding_palette_weddingpalette",
+      "label": "WeddingPalette",
+      "_origin": "ast",
+      "community": 84,
+      "community_name": "wedding_palette.dart",
+      "file_type": "code",
+      "norm_label": "weddingpalette",
+      "source_file": "weeding_app/lib/app/core/theme/wedding_palette.dart",
+      "source_location": null
+    },
+    {
+      "id": "annotation_immutable",
+      "label": "@immutable",
+      "_origin": "ast",
+      "community": 84,
+      "community_name": "wedding_palette.dart",
+      "file_type": "concept",
+      "norm_label": "@immutable",
+      "source_file": null,
       "source_location": null
     },
     {
@@ -18521,245 +18612,267 @@
       "source_location": null
     },
     {
-      "id": "double",
-      "label": "double?",
+      "id": "weeding_app_lib_app_routes_app_routes",
+      "label": "app_routes.dart",
       "_origin": "ast",
       "community": 93,
-      "community_name": "guest_media.dart",
+      "community_name": "app_routes.dart",
       "file_type": "code",
-      "norm_label": "double?",
+      "norm_label": "app_routes.dart",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_approutes",
+      "label": "AppRoutes",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "approutes",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_entranceqr",
+      "label": "entranceQr",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "entranceqr",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_guestdetail",
+      "label": "guestDetail",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "guestdetail",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_guests",
+      "label": "guests",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "guests",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_home",
+      "label": "home",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "home",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_invitations",
+      "label": "invitations",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "invitations",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_login",
+      "label": "login",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "login",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_onboarding",
+      "label": "onboarding",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "onboarding",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_qrcode",
+      "label": "qrCode",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "qrcode",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_settings",
+      "label": "settings",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "settings",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_tabledetail",
+      "label": "tableDetail",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "tabledetail",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_tables",
+      "label": "tables",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "tables",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_venues",
+      "label": "venues",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "venues",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_routes_app_routes_weddingtheme",
+      "label": "weddingTheme",
+      "_origin": "ast",
+      "community": 93,
+      "community_name": "app_routes.dart",
+      "file_type": "code",
+      "norm_label": "weddingtheme",
+      "source_file": "weeding_app/lib/app/routes/app_routes.dart",
+      "source_location": null
+    },
+    {
+      "id": "getxcontroller",
+      "label": "GetxController",
+      "_origin": "ast",
+      "community": 94,
+      "community_name": "GetxController",
+      "file_type": "code",
+      "norm_label": "getxcontroller",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_data_models_guest_media",
-      "label": "guest_media.dart",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "guest_media.dart",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_clientdurationseconds",
-      "label": "clientDurationSeconds",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "clientdurationseconds",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_clientvalidated",
-      "label": "clientValidated",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "clientvalidated",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_fromjson",
-      "label": "fromJson",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "fromjson",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_guestid",
-      "label": "guestId",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "guestid",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_guestmedia",
-      "label": "GuestMedia",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "guestmedia",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_id",
-      "label": "id",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "id",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_isvalid",
-      "label": "isValid",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "isvalid",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_mediatype",
-      "label": "mediaType",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "mediatype",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_serverdurationseconds",
-      "label": "serverDurationSeconds",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "serverdurationseconds",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_servervalidated",
-      "label": "serverValidated",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "servervalidated",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_storagepath",
-      "label": "storagePath",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "storagepath",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_submittedat",
-      "label": "submittedAt",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "submittedat",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_data_models_guest_media_tojson",
-      "label": "toJson",
-      "_origin": "ast",
-      "community": 93,
-      "community_name": "guest_media.dart",
-      "file_type": "code",
-      "norm_label": "tojson",
-      "source_file": "weeding_app/lib/app/data/models/guest_media.dart",
-      "source_location": null
-    },
-    {
-      "id": "tickerproviderstatemixin",
-      "label": "TickerProviderStateMixin",
+      "id": "venues_controller_dart",
+      "label": "venues_controller.dart",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "tickerproviderstatemixin",
+      "norm_label": "venues_controller.dart",
       "source_file": null,
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_auth_login_page_loginpage",
-      "label": "LoginPage",
+      "id": "weeding_app_lib_app_core_theme_wedding_theme_controller_weddingthemecontroller",
+      "label": "WeddingThemeController",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "loginpage",
-      "source_file": "weeding_app/lib/app/modules/auth/login_page.dart",
+      "norm_label": "weddingthemecontroller",
+      "source_file": "weeding_app/lib/app/core/theme/wedding_theme_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_auth_login_page_loginpagestate",
-      "label": "_LoginPageState",
+      "id": "weeding_app_lib_app_modules_home_home_controller_homecontroller",
+      "label": "HomeController",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "_loginpagestate",
-      "source_file": "weeding_app/lib/app/modules/auth/login_page.dart",
+      "norm_label": "homecontroller",
+      "source_file": "weeding_app/lib/app/modules/home/home_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_page_guestaccesspage",
-      "label": "GuestAccessPage",
+      "id": "weeding_app_lib_app_modules_navigation_main_navigation_controller_mainnavigationcontroller",
+      "label": "MainNavigationController",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "guestaccesspage",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
+      "norm_label": "mainnavigationcontroller",
+      "source_file": "weeding_app/lib/app/modules/navigation/main_navigation_controller.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_guest_access_guest_access_page_guestaccesspagestate",
-      "label": "_GuestAccessPageState",
+      "id": "weeding_app_lib_app_modules_venues_venues_binding",
+      "label": "venues_binding.dart",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "_guestaccesspagestate",
-      "source_file": "weeding_app/lib/app/modules/guest_access/guest_access_page.dart",
+      "norm_label": "venues_binding.dart",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_invitations_media_player_page_mediaplayerpage",
-      "label": "MediaPlayerPage",
+      "id": "weeding_app_lib_app_modules_venues_venues_binding_dependencies",
+      "label": "dependencies",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "mediaplayerpage",
-      "source_file": "weeding_app/lib/app/modules/invitations/media_player_page.dart",
+      "norm_label": "dependencies",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
       "source_location": null
     },
     {
-      "id": "weeding_app_lib_app_modules_invitations_media_player_page_mediaplayerpagestate",
-      "label": "_MediaPlayerPageState",
+      "id": "weeding_app_lib_app_modules_venues_venues_binding_venuesbinding",
+      "label": "VenuesBinding",
       "_origin": "ast",
       "community": 94,
-      "community_name": "_LoginPageState",
+      "community_name": "GetxController",
       "file_type": "code",
-      "norm_label": "_mediaplayerpagestate",
-      "source_file": "weeding_app/lib/app/modules/invitations/media_player_page.dart",
+      "norm_label": "venuesbinding",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_binding.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_modules_venues_venues_controller_venuescontroller",
+      "label": "VenuesController",
+      "_origin": "ast",
+      "community": 94,
+      "community_name": "GetxController",
+      "file_type": "code",
+      "norm_label": "venuescontroller",
+      "source_file": "weeding_app/lib/app/modules/venues/venues_controller.dart",
       "source_location": null
     },
     {
@@ -18928,22 +19041,11 @@
       "source_location": null
     },
     {
-      "id": "package_flutter_material_dart",
-      "label": "package:flutter/material.dart",
-      "_origin": "ast",
-      "community": 98,
-      "community_name": "package:flutter/material.dart",
-      "file_type": "code",
-      "norm_label": "package:flutter/material.dart",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "web_audio_recorder_dart",
       "label": "web_audio_recorder.dart",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "web_audio_recorder.dart",
       "source_file": null,
@@ -18954,43 +19056,10 @@
       "label": "web_video_recorder.dart",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "web_video_recorder.dart",
       "source_file": null,
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory",
-      "label": "recorder_factory.dart",
-      "_origin": "ast",
-      "community": 98,
-      "community_name": "package:flutter/material.dart",
-      "file_type": "code",
-      "norm_label": "recorder_factory.dart",
-      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory_buildwebaudiorecorderpage",
-      "label": "buildWebAudioRecorderPage",
-      "_origin": "ast",
-      "community": 98,
-      "community_name": "package:flutter/material.dart",
-      "file_type": "code",
-      "norm_label": "buildwebaudiorecorderpage",
-      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_modules_guest_access_recorder_factory_buildwebvideorecorderpage",
-      "label": "buildWebVideoRecorderPage",
-      "_origin": "ast",
-      "community": 98,
-      "community_name": "package:flutter/material.dart",
-      "file_type": "code",
-      "norm_label": "buildwebvideorecorderpage",
-      "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory.dart",
       "source_location": null
     },
     {
@@ -18998,7 +19067,7 @@
       "label": "recorder_factory_web.dart",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "recorder_factory_web.dart",
       "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory_web.dart",
@@ -19009,7 +19078,7 @@
       "label": "buildWebAudioRecorderPage",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "buildwebaudiorecorderpage",
       "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory_web.dart",
@@ -19020,7 +19089,7 @@
       "label": "buildWebVideoRecorderPage",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "buildwebvideorecorderpage",
       "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory_web.dart",
@@ -19031,7 +19100,7 @@
       "label": "minDurationSeconds",
       "_origin": "ast",
       "community": 98,
-      "community_name": "package:flutter/material.dart",
+      "community_name": "recorder_factory_web.dart",
       "file_type": "code",
       "norm_label": "mindurationseconds",
       "source_file": "weeding_app/lib/app/modules/guest_access/recorder_factory_web.dart",
@@ -19136,7 +19205,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L873",
+      "source_location": "L895",
       "weight": 1.0
     },
     {
@@ -24497,7 +24566,7 @@
     },
     {
       "source": "backend_supabase_functions_guest_portal_index",
-      "target": "backend_supabase_functions_guest_portal_index_corsheaders",
+      "target": "backend_supabase_functions_guest_portal_index_guesttokenrecord",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24508,13 +24577,24 @@
     },
     {
       "source": "backend_supabase_functions_guest_portal_index",
+      "target": "backend_supabase_functions_guest_portal_index_findguestbytoken",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/supabase/functions/guest-portal/index.ts",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_supabase_functions_guest_portal_index",
       "target": "backend_supabase_functions_guest_portal_index_renderserviceworker",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1470",
+      "source_location": "L1492",
       "weight": 1.0
     },
     {
@@ -24525,7 +24605,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1532",
+      "source_location": "L1554",
       "weight": 1.0
     },
     {
@@ -24536,7 +24616,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L243",
+      "source_location": "L265",
       "weight": 1.0
     },
     {
@@ -24547,7 +24627,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L250",
+      "source_location": "L272",
       "weight": 1.0
     },
     {
@@ -24558,7 +24638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L257",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -24569,7 +24649,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L276",
+      "source_location": "L298",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_supabase_functions_guest_portal_index",
+      "target": "backend_supabase_functions_guest_portal_index_corsheaders",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/supabase/functions/guest-portal/index.ts",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -30723,6 +30814,17 @@
     },
     {
       "source": "weeding_app_lib_app_data_repositories_guest_link_repository",
+      "target": "weeding_app_lib_app_data_repositories_guest_link_repository_generateshortcode",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/data/repositories/guest_link_repository.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_data_repositories_guest_link_repository",
       "target": "weeding_app_lib_app_data_repositories_guest_link_repository_getalllinks",
       "relation": "defines",
       "_origin": "ast",
@@ -30911,6 +31013,17 @@
     {
       "source": "weeding_app_lib_app_data_repositories_guest_repository",
       "target": "weeding_app_lib_app_data_repositories_guest_repository_guestrepository",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/data/repositories/guest_repository.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_data_repositories_guest_repository",
+      "target": "weeding_app_lib_app_data_repositories_guest_repository_setguestcancelled",
       "relation": "defines",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -33572,6 +33685,17 @@
     },
     {
       "source": "weeding_app_lib_app_modules_guests_guest_detail_page",
+      "target": "weeding_app_lib_app_modules_guests_guest_detail_page_confirmcancellation",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/modules/guests/guest_detail_page.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_modules_guests_guest_detail_page",
       "target": "weeding_app_lib_app_modules_guests_guest_detail_page_confirmdelete",
       "relation": "defines",
       "_origin": "ast",
@@ -34035,6 +34159,17 @@
     {
       "source": "weeding_app_lib_app_modules_guests_guests_controller",
       "target": "weeding_app_lib_app_modules_guests_guests_controller_searchquery",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/modules/guests/guests_controller.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_modules_guests_guests_controller",
+      "target": "weeding_app_lib_app_modules_guests_guests_controller_setguestcancelled",
       "relation": "defines",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -39105,7 +39240,29 @@
     },
     {
       "source": "weeding_app_lib_app_data_repositories_guest_link_repository",
+      "target": "dart_math",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/data/repositories/guest_link_repository.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_data_repositories_guest_link_repository",
       "target": "models_guest_link_dart",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/data/repositories/guest_link_repository.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_data_repositories_guest_link_repository",
+      "target": "package_flutter_foundation_dart",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -39150,6 +39307,17 @@
     {
       "source": "weeding_app_lib_app_data_repositories_guest_repository",
       "target": "models_guest_seat_dart",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "weeding_app/lib/app/data/repositories/guest_repository.dart",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "weeding_app_lib_app_data_repositories_guest_repository",
+      "target": "package_flutter_foundation_dart",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -45228,5 +45396,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2968ea305d47d16400a13c8d28a7188e49ab5aeb"
+  "built_at_commit": "a208f309db4e504379afe8bdf9c0b4c83ff5a720"
 }

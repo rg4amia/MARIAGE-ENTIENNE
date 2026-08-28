@@ -69,8 +69,7 @@ class ScaleIn extends StatefulWidget {
   State<ScaleIn> createState() => _ScaleInState();
 }
 
-class _ScaleInState extends State<ScaleIn>
-    with SingleTickerProviderStateMixin {
+class _ScaleInState extends State<ScaleIn> with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _anim;
 

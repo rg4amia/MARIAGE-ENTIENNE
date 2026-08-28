@@ -127,6 +127,25 @@ class GuestsController extends GetxController {
     }
   }
 
+  Future<void> setGuestCancelled(String id, {required bool cancelled}) async {
+    try {
+      await _guestRepository.setGuestCancelled(id, cancelled: cancelled);
+      await loadGuests();
+      Get.back();
+      Get.snackbar(
+        'Succès',
+        cancelled ? 'Invité annulé et place libérée' : 'Invité réactivé',
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Erreur',
+        cancelled
+            ? 'Impossible d\'annuler l\'invité'
+            : 'Impossible de réactiver l\'invité',
+      );
+    }
+  }
+
   Future<void> assignSeatToGuest({
     required String guestId,
     required String chairId,

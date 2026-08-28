@@ -129,7 +129,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           const SizedBox(height: 4),
 
                           if (guest.phone != null)
-                            Text(guest.phone!, style: AppTextStyles.bodyMdOnVariant),
+                            Text(
+                              guest.phone!,
+                              style: AppTextStyles.bodyMdOnVariant,
+                            ),
 
                           if (guest.email != null) ...[
                             const SizedBox(height: 4),
@@ -156,8 +159,9 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.surfaceContainer,
-                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.secondary,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppColors.dark),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,7 +173,9 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: _statusColor(guest.status).withAlpha(30),
+                                    color: _statusColor(
+                                      guest.status,
+                                    ).withAlpha(30),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
@@ -216,62 +222,102 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          onPressed: () => _showAssignDialog(context, controller, guest),
-                          icon: const Icon(Icons.chair),
-                          label: const Text('Assigner'),
+                          onPressed: guest.status == 'cancelled'
+                              ? null
+                              : () => _showAssignDialog(
+                                  context,
+                                  controller,
+                                  guest,
+                                ),
+                          icon: const Icon(Icons.chair_rounded, size: 20),
+                          label: const Text(
+                            'Assigner',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 14,
+                            ),
+                            textStyle: AppTextStyles.bodyMd.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       if (guest.qrToken.isNotEmpty)
                         Expanded(
                           child: ElevatedButton.icon(
-                            onPressed: () => _shareViaWhatsApp(guest),
-                            icon: const Icon(Icons.share_rounded),
+                            onPressed: guest.status == 'cancelled'
+                                ? null
+                                : () => _shareViaWhatsApp(guest),
+                            icon: const Icon(Icons.share_rounded, size: 20),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF25D366),
                               foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 14,
+                              ),
+                              textStyle: AppTextStyles.bodyMd.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            label: const Text('WhatsApp'),
+                            label: const Text(
+                              'WhatsApp',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                     ],
                   ),
                   const SizedBox(height: 24),
 
+                  // Cancel or reactivate without deleting the guest history.
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () =>
+                          _confirmCancellation(context, controller, guest),
+                      icon: Icon(
+                        guest.status == 'cancelled'
+                            ? Icons.undo_rounded
+                            : Icons.person_off_outlined,
+                        size: 20,
+                      ),
+                      label: Text(
+                        guest.status == 'cancelled'
+                            ? 'Réactiver l\'invité'
+                            : 'Annuler l\'invité',
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: guest.status == 'cancelled'
+                            ? AppColors.dark
+                            : AppColors.error,
+                        side: BorderSide(
+                          color: guest.status == 'cancelled'
+                              ? AppColors.dark.withValues(alpha: 0.35)
+                              : AppColors.error.withValues(alpha: 0.6),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
                   // QR Code & Invite Link
-                  if (guest.qrToken.isNotEmpty)
+                  if (guest.qrToken.isNotEmpty && guest.status != 'cancelled')
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            Text('Lien d\'invitation', style: AppTextStyles.titleLg),
-
-                            const SizedBox(height: 8),
-                            GestureDetector(
-                              onTap: () => _shareViaWhatsApp(guest),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF25D366).withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.share_rounded, size: 14, color: Color(0xFF25D366)),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      'Partager via WhatsApp',
-                                      style: TextStyle(
-                                        color: Color(0xFF25D366),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            Text(
+                              'Lien d\'invitation',
+                              style: AppTextStyles.titleLg,
                             ),
                             const SizedBox(height: 12),
 
@@ -281,8 +327,9 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surfaceContainer,
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: AppColors.primaryLight,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: AppColors.dark),
                                 ),
                                 child: Row(
                                   children: [
@@ -345,9 +392,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                               height: 180,
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceContainerLowest,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
-                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  color: AppColors.dark,
+                                  width: 1.4,
                                 ),
                               ),
                               padding: const EdgeInsets.all(12),
@@ -417,7 +465,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             child: const Text('Annuler'),
           ),
           TextButton(
-            onPressed: () => controller.deleteGuest(guest.id),
+            onPressed: () {
+              Navigator.pop(ctx);
+              controller.deleteGuest(guest.id);
+            },
             child: const Text(
               'Supprimer',
               style: TextStyle(color: AppColors.error),
@@ -428,8 +479,50 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     );
   }
 
+  void _confirmCancellation(
+    BuildContext context,
+    GuestsController controller,
+    Guest guest,
+  ) {
+    final isCancelled = guest.status == 'cancelled';
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          isCancelled ? 'Réactiver l\'invité ?' : 'Annuler l\'invité ?',
+        ),
+        content: Text(
+          isCancelled
+              ? 'L\'invité pourra de nouveau recevoir son invitation. Une nouvelle place devra être assignée.'
+              : 'L\'invité sera conservé dans l\'historique, sa place libérée et son lien désactivé.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Retour'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              controller.setGuestCancelled(guest.id, cancelled: !isCancelled);
+            },
+            child: Text(
+              isCancelled ? 'Réactiver' : 'Annuler',
+              style: TextStyle(
+                color: isCancelled ? AppColors.dark : AppColors.error,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Color _statusColor(String status) {
     switch (status) {
+      case 'cancelled':
+        return AppColors.error;
       case 'media_uploaded':
         return AppColors.statusMediaReceived;
       case 'card_unlocked':
@@ -446,7 +539,8 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       return;
     }
     final name = guest.fullName.split(' ').first;
-    final message = 'Bonjour $name ! 🎉\n\n'
+    final message =
+        'Bonjour $name ! 🎉\n\n'
         'Tu es invité(e) au mariage ! 🥂\n'
         'Clique sur le lien ci-dessous pour accéder à ton invitation :\n\n'
         '$url';
@@ -462,11 +556,18 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isUnassigned = value == 'Non assignée';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: AppTextStyles.bodyMdOnVariant),
-        Text(value, style: AppTextStyles.bodyMd),
+        Text(
+          value,
+          style: AppTextStyles.bodyMd.copyWith(
+            color: isUnassigned ? AppColors.statusPending : null,
+            fontWeight: isUnassigned ? FontWeight.w600 : FontWeight.w400,
+          ),
+        ),
       ],
     );
   }

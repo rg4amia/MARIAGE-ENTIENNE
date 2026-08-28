@@ -1,16 +1,16 @@
 # Graph Report - MARIAGE ENTIENNE  (2026-08-28)
 
 ## Corpus Check
-- 153 files · ~482,314 words
+- 158 files · ~484,540 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1717 nodes · 2331 edges · 102 communities (92 shown, 10 thin omitted)
+- 1723 nodes · 2340 edges · 109 communities (99 shown, 10 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2968ea30`
+- Built from commit: `a208f309`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -46,7 +46,7 @@
 - models_test.dart
 - guests_page.dart
 - video_recorder_page.dart
-- register_page.dart
+- Widget?
 - tables_controller.dart
 - invitation.dart
 - StatelessWidget
@@ -70,7 +70,7 @@
 - table_repository.dart
 - wedding_settings_repository.dart
 - wedding_theme_controller.dart
-- media_repository.dart
+- Bindings
 - app_pages.dart
 - 6. Plan d'Implementation
 - profile.dart
@@ -83,7 +83,7 @@
 - secure_local_storage.dart
 - invitation_repository.dart
 - 1. Prompt Produit Reorganise
-- page_transitions.dart
+- venues_controller.dart
 - SupabaseClient
 - Déploiement mobile, portail invité et Supabase
 - chair_repository.dart
@@ -94,7 +94,7 @@
 - package:supabase_flutter/supabase_flutter.dart
 - entrance_qr.dart
 - ADR-001 — Socle SaaS multi-tenant pour l'organisation de mariages
-- ../../core/theme/app_text_styles.dart
+- ../../core/theme/app_colors.dart
 - FlutterActivity
 - weeding_app
 - AGENTS.md
@@ -104,15 +104,22 @@
 - @mail
 - Feuille de route — SaaS d'organisation de mariages
 - event_venue_repository.dart
-- guest_media.dart
-- _LoginPageState
+- app_routes.dart
+- GetxController
 - WaveformStyle
 - String?
 - main.dart
-- package:flutter/material.dart
+- recorder_factory_web.dart
 - app_theme.dart
-- WeddingPalette
-- WeddingThemePage
+- main_navigation_controller.dart
+- qr_code_page.dart
+- package:flutter/material.dart
+- app_binding.dart
+- GuestsController
+- invitations_binding.dart
+- TablesController
+- entranceQrErrorMessage
+- _MediaPlayerPageState
 
 ## God Nodes (most connected - your core abstractions)
 1. `Win32Window` - 24 edges
@@ -141,7 +148,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (102 total, 10 thin omitted)
+## Communities (109 total, 10 thin omitted)
 
 ### Community 0 - "app_colors.dart"
 Cohesion: 0.04
@@ -156,12 +163,12 @@ Cohesion: 0.10
 Nodes (20): app_colors.dart, package:google_fonts/google_fonts.dart, static TextStyle, AppTextStyles, bodyLg, bodyMd, bodyMdOnVariant, displayLg (+12 more)
 
 ### Community 3 - "settings_page.dart"
-Cohesion: 0.07
-Nodes (29): ../../data/repositories/wedding_settings_repository.dart, package:intl/date_symbol_data_local.dart, package:intl/intl.dart, build, _buildTextField, _buildWeddingInfoCard, colors, _confirmLogout (+21 more)
+Cohesion: 0.08
+Nodes (25): ../../data/repositories/wedding_settings_repository.dart, package:intl/date_symbol_data_local.dart, package:intl/intl.dart, build, _buildTextField, _buildWeddingInfoCard, colors, _confirmLogout (+17 more)
 
 ### Community 4 - "entrance_qr_page.dart"
-Cohesion: 0.06
-Nodes (32): @visibleForTesting, ../../core/theme/app_colors.dart, ../../core/widgets/wedding_header.dart, ../../data/models/entrance_qr.dart, ../../data/repositories/entrance_repository.dart, ../../data/repositories/guest_link_repository.dart, package:flutter/services.dart, package:share_plus/share_plus.dart (+24 more)
+Cohesion: 0.09
+Nodes (22): ../../data/models/entrance_qr.dart, ../../data/repositories/entrance_repository.dart, RealtimeChannel?, build, _buildActionChip, _buildActions, _buildCodeChip, _buildDecorativeQrFrame (+14 more)
 
 ### Community 5 - "auth_controller.dart"
 Cohesion: 0.08
@@ -173,7 +180,7 @@ Nodes (33): copyWith, createdAt, email, fromJson, fullName, Guest, id, phone (+2
 
 ### Community 7 - "guest_access_page.dart"
 Cohesion: 0.06
-Nodes (34): audio_recorder_page.dart, ../../core/utils/invitation_card_generator.dart, GlobalKey, guest_access_controller.dart, recorder_factory.dart, video_recorder_page.dart, dependencies, GuestAccessBinding (+26 more)
+Nodes (33): audio_recorder_page.dart, ../../core/utils/invitation_card_generator.dart, GlobalKey, recorder_factory.dart, TickerProviderStateMixin, video_recorder_page.dart, build, _buildCardUnlocked (+25 more)
 
 ### Community 8 - "guest_access_controller.dart"
 Cohesion: 0.07
@@ -188,12 +195,12 @@ Cohesion: 0.07
 Nodes (29): _anim, backgroundColor, borderRadius, boxShadow, build, child, createState, _ctrl (+21 more)
 
 ### Community 11 - "media-duration.ts"
-Cohesion: 0.13
-Nodes (16): admin, corsHeaders, inlineScriptValue(), renderSPA(), ascii(), detectMediaDuration(), ElementHeader, findTopLevel() (+8 more)
+Cohesion: 0.11
+Nodes (17): admin, corsHeaders, GuestTokenRecord, inlineScriptValue(), renderSPA(), ascii(), detectMediaDuration(), ElementHeader (+9 more)
 
 ### Community 12 - "shared_components.dart"
-Cohesion: 0.08
-Nodes (23): EdgeInsets, Gradient?, Size get, actions, actionText, backgroundColor, bottom, build (+15 more)
+Cohesion: 0.07
+Nodes (29): EdgeInsets, Gradient?, PreferredSizeWidget, Size get, actions, actionText, backgroundColor, bottom (+21 more)
 
 ### Community 13 - "my_application.cc"
 Cohesion: 0.09
@@ -201,11 +208,11 @@ Nodes (22): FlPluginRegistry, FlView, GApplication, gboolean, gchar, GObject, Gt
 
 ### Community 14 - "wedding_theme_page.dart"
 Cohesion: 0.06
-Nodes (30): _accentController, _backgroundController, build, color, _ColorSlot, controller, createState, description (+22 more)
+Nodes (32): _accentController, _backgroundController, build, color, _ColorSlot, controller, createState, description (+24 more)
 
 ### Community 15 - "home_page.dart"
 Cohesion: 0.07
-Nodes (29): CustomPainter, dart:math, ../navigation/main_navigation_controller.dart, build, _buildInvitationStatus, _buildKpiGrid, _buildQuickActions, _buildWeddingHeader (+21 more)
+Nodes (26): CustomPainter, ../navigation/main_navigation_controller.dart, build, _buildInvitationStatus, _buildKpiGrid, _buildQuickActions, _buildWeddingHeader, cardUnlocked (+18 more)
 
 ### Community 16 - "web_video_recorder.dart"
 Cohesion: 0.08
@@ -213,15 +220,15 @@ Nodes (25): VideoElement?, build, _cameraReady, _chunks, createState, dispose, _
 
 ### Community 17 - "guest_detail_page.dart"
 Cohesion: 0.08
-Nodes (25): ../../data/models/guest_link.dart, _AssignSheet, _AssignSheetState, availableChairs, build, _confirmDelete, controller, createState (+17 more)
+Nodes (26): ../../data/models/guest_link.dart, _AssignSheet, _AssignSheetState, availableChairs, build, _confirmCancellation, _confirmDelete, controller (+18 more)
 
 ### Community 18 - "guests_controller.dart"
 Cohesion: 0.08
-Nodes (24): ../../data/models/guest_seat.dart, assignSeatToGuest, confirmedCount, createGuest, deleteGuest, filterStatus, getAllTables, getAvailableChairs (+16 more)
+Nodes (25): ../../data/models/guest_seat.dart, assignSeatToGuest, confirmedCount, createGuest, deleteGuest, filterStatus, getAllTables, getAvailableChairs (+17 more)
 
 ### Community 19 - "State"
 Cohesion: 0.13
-Nodes (27): SingleTickerProviderStateMixin, State, StatefulWidget, ShimmerBox, _ShimmerBoxState, HoverCard, _HoverCardState, ShimmerSkeleton (+19 more)
+Nodes (27): SingleTickerProviderStateMixin, State, StatefulWidget, ShimmerBox, _ShimmerBoxState, GradientButton, _GradientButtonState, ShimmerSkeleton (+19 more)
 
 ### Community 20 - "audio_recorder_page.dart"
 Cohesion: 0.08
@@ -236,20 +243,20 @@ Cohesion: 0.09
 Nodes (21): dart:html, MediaRecorder?, MediaStream?, build, _chunks, createState, dispose, _elapsedSeconds (+13 more)
 
 ### Community 23 - "main_shell_page.dart"
-Cohesion: 0.05
-Nodes (38): ../../core/widgets/app_bottom_nav_bar.dart, ../guests/guests_page.dart, ../home/home_page.dart, ../invitations/invitations_page.dart, main_navigation_controller.dart, RxInt, ../settings/settings_page.dart, static const (+30 more)
+Cohesion: 0.13
+Nodes (15): ../../core/widgets/app_bottom_nav_bar.dart, ../guests/guests_page.dart, ../home/home_page.dart, ../invitations/invitations_page.dart, main_navigation_controller.dart, ../settings/settings_page.dart, ../tables/tables_page.dart, build (+7 more)
 
 ### Community 24 - "login_page.dart"
-Cohesion: 0.12
-Nodes (16): TextEditingController, VoidCallback, _bgCtrl, build, _buildInput, _buildLabel, controller, createState (+8 more)
+Cohesion: 0.07
+Nodes (31): AnimationController, auth_controller.dart, ../../core/theme/app_text_styles.dart, ../../core/utils/validators.dart, FormState, TextEditingController, dependencies, AuthController (+23 more)
 
 ### Community 25 - "home_controller.dart"
-Cohesion: 0.11
-Nodes (18): ../../data/models/profile.dart, Profile? get, cardUnlocked, _channels, currentProfile, _guestRepository, _invitationRepository, isLoading (+10 more)
+Cohesion: 0.10
+Nodes (19): ../../data/models/profile.dart, Profile? get, GuestRepository, cardUnlocked, _channels, currentProfile, _guestRepository, _invitationRepository (+11 more)
 
 ### Community 26 - "invitation_card_generator.dart"
-Cohesion: 0.10
-Nodes (20): dart:ui, package:flutter/rendering.dart, package:path_provider/path_provider.dart, package:qr_flutter/qr_flutter.dart, ../theme/app_colors.dart, build, captureCard, _CardInfo (+12 more)
+Cohesion: 0.06
+Nodes (30): @Deprecated, dart:io, dart:typed_data, dart:ui, ../models/guest_media.dart, package:flutter/rendering.dart, package:path_provider/path_provider.dart, ../theme/app_colors.dart (+22 more)
 
 ### Community 27 - "guest_repository.dart"
 Cohesion: 0.11
@@ -265,11 +272,11 @@ Nodes (18): ../../core/widgets/shared_components.dart, _AddGuestSheet, _avatarCo
 
 ### Community 30 - "video_recorder_page.dart"
 Cohesion: 0.12
-Nodes (15): dart:io, ImagePicker, package:image_picker/image_picker.dart, build, createState, _formatDuration, _getVideoDuration, initState (+7 more)
+Nodes (16): ImagePicker, package:image_picker/image_picker.dart, build, createState, _formatDuration, _getVideoDuration, initState, _isProcessing (+8 more)
 
-### Community 31 - "register_page.dart"
-Cohesion: 0.14
-Nodes (13): AnimationController, auth_controller.dart, ../../core/utils/validators.dart, FormState, dependencies, AuthController, build, _buildField (+5 more)
+### Community 31 - "Widget?"
+Cohesion: 0.32
+Nodes (7): Offset, PageRouteBuilder, T, page, SlideFadeRoute, SlideUpRoute, Widget?
 
 ### Community 32 - "tables_controller.dart"
 Cohesion: 0.12
@@ -280,8 +287,8 @@ Cohesion: 0.12
 Nodes (16): chairId, copyWith, createdAt, deepLink, fromJson, guestId, id, Invitation (+8 more)
 
 ### Community 34 - "StatelessWidget"
-Cohesion: 0.10
-Nodes (20): PreferredSizeWidget, StatelessWidget, GradientCard, SectionHeader, StatusBadge, UserAvatar, WeddingAppBar, _MediaOptionCard (+12 more)
+Cohesion: 0.11
+Nodes (18): StatelessWidget, _MediaOptionCard, HomePage, _StatusLegend, _GuestStatusCard, _MediaInfo, _MiniStat, _StatCard (+10 more)
 
 ### Community 35 - "Win32Window"
 Cohesion: 0.05
@@ -296,12 +303,12 @@ Cohesion: 0.14
 Nodes (13): ../../core/widgets/animated_widgets.dart, ../../core/widgets/micro_interactions.dart, build, _buildField, controller, _CreateTableSheet, _inputDecoration, onTap (+5 more)
 
 ### Community 38 - "event_venue.dart"
-Cohesion: 0.11
-Nodes (18): addressLine, city, countryCode, endsAt, eventId, EventVenue, fromJson, id (+10 more)
+Cohesion: 0.06
+Nodes (32): double?, addressLine, city, countryCode, endsAt, eventId, EventVenue, fromJson (+24 more)
 
 ### Community 39 - "wedding_header.dart"
-Cohesion: 0.13
-Nodes (14): IconData, List, micro_interactions.dart, build, child, gradientColors, HeaderInfoBanner, icon (+6 more)
+Cohesion: 0.12
+Nodes (15): IconData, List, micro_interactions.dart, VoidCallback, build, child, gradientColors, HeaderInfoBanner (+7 more)
 
 ### Community 40 - "auth_repository.dart"
 Cohesion: 0.12
@@ -312,12 +319,12 @@ Cohesion: 0.19
 Nodes (5): admin, admin, admin, corsHeaders, admin
 
 ### Community 42 - "invitations_controller.dart"
-Cohesion: 0.15
-Nodes (12): ../../data/models/guest.dart, ../../data/models/invitation.dart, ../../data/repositories/guest_repository.dart, ../../data/repositories/invitation_repository.dart, getGuestForInvitation, getInvitationForGuest, _guestRepository, _invitationRepository (+4 more)
+Cohesion: 0.14
+Nodes (13): ../../data/models/guest.dart, ../../data/models/invitation.dart, ../../data/repositories/guest_repository.dart, ../../data/repositories/invitation_repository.dart, RxList, getGuestForInvitation, getInvitationForGuest, _guestRepository (+5 more)
 
 ### Community 43 - "venues_page.dart"
-Cohesion: 0.05
-Nodes (41): ../../data/models/event_venue.dart, ../../data/repositories/event_venue_repository.dart, package:url_launcher/url_launcher.dart, RxList, TextInputType?, venues_controller.dart, dependencies, VenuesBinding (+33 more)
+Cohesion: 0.09
+Nodes (21): TextInputType?, build, _confirmDelete, controller, _EmptyVenues, icon, keyboardType, label (+13 more)
 
 ### Community 44 - "DESIGN.md"
 Cohesion: 0.14
@@ -332,8 +339,8 @@ Cohesion: 0.15
 Nodes (12): bool get, Chair, chairNumber, copyWith, createdAt, fromJson, guestId, guestName (+4 more)
 
 ### Community 47 - "package:get/get.dart"
-Cohesion: 0.08
-Nodes (30): Bindings, GetxController, guests_controller.dart, home_controller.dart, invitations_controller.dart, ../modules/auth/auth_controller.dart, ../modules/guests/guests_controller.dart, ../modules/home/home_controller.dart (+22 more)
+Cohesion: 0.22
+Nodes (7): home_controller.dart, package:get/get.dart, dependencies, dependencies, WorkspaceOnboardingBinding, WorkspaceOnboardingController, workspace_onboarding_controller.dart
 
 ### Community 48 - "guest-portal-web/manifest.json"
 Cohesion: 0.17
@@ -360,12 +367,12 @@ Cohesion: 0.17
 Nodes (11): brideName, _client, eventDate, fromJson, getSettings, groomName, location, title (+3 more)
 
 ### Community 54 - "wedding_theme_controller.dart"
-Cohesion: 0.17
-Nodes (11): ../../data/repositories/wedding_theme_repository.dart, package:flutter/foundation.dart, Rx, RxBool, isLoading, isSaving, loadForCurrentWedding, palette (+3 more)
+Cohesion: 0.18
+Nodes (10): ../../data/repositories/wedding_theme_repository.dart, Rx, RxBool, isLoading, isSaving, loadForCurrentWedding, palette, _repository (+2 more)
 
-### Community 55 - "media_repository.dart"
-Cohesion: 0.20
-Nodes (10): @Deprecated, dart:typed_data, ../models/guest_media.dart, _client, getMediaByGuestId, getMediaDownloadUrl, getValidMediaByGuestId, MediaRepository (+2 more)
+### Community 55 - "Bindings"
+Cohesion: 0.22
+Nodes (8): Bindings, guest_access_controller.dart, AppBinding, AuthBinding, dependencies, GuestAccessBinding, GuestAccessController, HomeBinding
 
 ### Community 56 - "app_pages.dart"
 Cohesion: 0.08
@@ -384,8 +391,8 @@ Cohesion: 0.18
 Nodes (10): background_color, description, display, icons, name, orientation, prefer_related_applications, short_name (+2 more)
 
 ### Community 60 - "guest_link_repository.dart"
-Cohesion: 0.20
-Nodes (9): ../models/guest_link.dart, _client, createGuestLink, getAllLinks, getLinkByGuestId, getLinkByShortCode, getLinkStats, GuestLinkRepository (+1 more)
+Cohesion: 0.15
+Nodes (12): dart:math, ../models/guest_link.dart, package:flutter/foundation.dart, _client, createGuestLink, _generateShortCode, getAllLinks, getLinkByGuestId (+4 more)
 
 ### Community 61 - "Application Mariage Entienne"
 Cohesion: 0.20
@@ -415,9 +422,9 @@ Nodes (8): ../models/invitation.dart, _client, getAllInvitations, getInvitationB
 Cohesion: 0.22
 Nodes (9): 1. Prompt Produit Reorganise, Back-office metier, Espace invite, Espace maries, Fonctionnalites minimales MVP, Objectif principal, Parcours attendu, Regle metier principale (+1 more)
 
-### Community 68 - "page_transitions.dart"
-Cohesion: 0.32
-Nodes (7): Offset, PageRouteBuilder, T, page, SlideFadeRoute, SlideUpRoute, Widget?
+### Community 68 - "venues_controller.dart"
+Cohesion: 0.12
+Nodes (15): ../../data/models/event_venue.dart, ../../data/repositories/event_venue_repository.dart, package:url_launcher/url_launcher.dart, deleteVenue, isLoading, isSaving, loadVenues, _mapUri (+7 more)
 
 ### Community 69 - "SupabaseClient"
 Cohesion: 0.29
@@ -459,13 +466,13 @@ Nodes (11): checkInCount, code, createdAt, EntranceQr, eventId, fromJson, id, is
 Cohesion: 0.18
 Nodes (10): ADR-001 — Socle SaaS multi-tenant pour l'organisation de mariages, Arbitrages acceptés, Conséquences, Contexte, Décision, Déclencheurs de réévaluation, Options considérées, Positives (+2 more)
 
-### Community 79 - "../../core/theme/app_text_styles.dart"
-Cohesion: 0.15
-Nodes (12): ../auth/auth_controller.dart, ../../core/theme/app_text_styles.dart, dependencies, WorkspaceOnboardingBinding, WorkspaceOnboardingController, build, child, _pickDate (+4 more)
+### Community 79 - "../../core/theme/app_colors.dart"
+Cohesion: 0.22
+Nodes (8): ../auth/auth_controller.dart, ../../core/theme/app_colors.dart, build, child, _pickDate, _SectionCard, title, WorkspaceOnboardingPage
 
 ### Community 84 - "wedding_palette.dart"
-Cohesion: 0.13
-Nodes (14): Color, int? get, accent, background, celestialRomance, colorFromHex, colorToHex, fromJson (+6 more)
+Cohesion: 0.12
+Nodes (16): @immutable, Color, int? get, accent, background, celestialRomance, colorFromHex, colorToHex (+8 more)
 
 ### Community 87 - "Feuille de route — SaaS d'organisation de mariages"
 Cohesion: 0.25
@@ -475,28 +482,56 @@ Nodes (7): Critères de passage en production de la phase 1, Feuille de route �
 Cohesion: 0.25
 Nodes (7): ../models/event_venue.dart, _client, _currentEventId, delete, EventVenueRepository, getVenues, save
 
-### Community 93 - "guest_media.dart"
+### Community 93 - "app_routes.dart"
 Cohesion: 0.13
-Nodes (14): double?, clientDurationSeconds, clientValidated, fromJson, guestId, GuestMedia, id, isValid (+6 more)
+Nodes (14): AppRoutes, entranceQr, guestDetail, guests, home, invitations, login, onboarding (+6 more)
 
-### Community 94 - "_LoginPageState"
-Cohesion: 0.29
-Nodes (7): TickerProviderStateMixin, LoginPage, _LoginPageState, GuestAccessPage, _GuestAccessPageState, MediaPlayerPage, _MediaPlayerPageState
+### Community 94 - "GetxController"
+Cohesion: 0.22
+Nodes (8): GetxController, venues_controller.dart, WeddingThemeController, HomeController, MainNavigationController, dependencies, VenuesBinding, VenuesController
 
 ### Community 97 - "main.dart"
 Cohesion: 0.17
 Nodes (11): app/bindings/app_binding.dart, app/core/constants/supabase_config.dart, app/core/storage/secure_local_storage.dart, app/core/theme/app_theme.dart, app/core/theme/wedding_theme_controller.dart, app/routes/app_pages.dart, package:flutter_localizations/flutter_localizations.dart, build (+3 more)
 
-### Community 98 - "package:flutter/material.dart"
-Cohesion: 0.20
-Nodes (8): package:flutter/material.dart, web_audio_recorder.dart, web_video_recorder.dart, buildWebAudioRecorderPage, buildWebVideoRecorderPage, buildWebAudioRecorderPage, buildWebVideoRecorderPage, minDurationSeconds
+### Community 98 - "recorder_factory_web.dart"
+Cohesion: 0.33
+Nodes (5): web_audio_recorder.dart, web_video_recorder.dart, buildWebAudioRecorderPage, buildWebVideoRecorderPage, minDurationSeconds
 
 ### Community 99 - "app_theme.dart"
 Cohesion: 0.25
 Nodes (7): app_text_styles.dart, static ThemeData get, wedding_palette.dart, AppTheme, _foregroundFor, lightTheme, lightThemeFor
 
+### Community 100 - "main_navigation_controller.dart"
+Cohesion: 0.20
+Nodes (9): RxInt, static const, currentIndex, guestsTab, homeTab, invitationsTab, selectTab, settingsTab (+1 more)
+
+### Community 101 - "qr_code_page.dart"
+Cohesion: 0.22
+Nodes (8): ../../core/widgets/wedding_header.dart, ../../data/repositories/guest_link_repository.dart, package:flutter/services.dart, package:qr_flutter/qr_flutter.dart, package:share_plus/share_plus.dart, build, _getPublicUrl, QrCodePage
+
+### Community 102 - "package:flutter/material.dart"
+Cohesion: 0.50
+Nodes (3): package:flutter/material.dart, buildWebAudioRecorderPage, buildWebVideoRecorderPage
+
+### Community 103 - "app_binding.dart"
+Cohesion: 0.25
+Nodes (7): ../modules/auth/auth_controller.dart, ../modules/guests/guests_controller.dart, ../modules/home/home_controller.dart, ../modules/invitations/invitations_controller.dart, ../modules/navigation/main_navigation_controller.dart, ../modules/tables/tables_controller.dart, dependencies
+
+### Community 104 - "GuestsController"
+Cohesion: 0.40
+Nodes (4): guests_controller.dart, dependencies, GuestsBinding, GuestsController
+
+### Community 105 - "invitations_binding.dart"
+Cohesion: 0.40
+Nodes (4): invitations_controller.dart, dependencies, InvitationsBinding, InvitationsController
+
+### Community 106 - "TablesController"
+Cohesion: 0.40
+Nodes (4): tables_controller.dart, dependencies, TablesBinding, TablesController
+
 ## Knowledge Gaps
-- **1066 isolated node(s):** `name`, `short_name`, `description`, `start_url`, `scope` (+1061 more)
+- **1071 isolated node(s):** `name`, `short_name`, `description`, `start_url`, `scope` (+1066 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -504,13 +539,13 @@ Nodes (7): app_text_styles.dart, static ThemeData get, wedding_palette.dart, App
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Guest` connect `table_detail_page.dart` to `guest_detail_page.dart`, `media_player_page.dart`, `invitations_page.dart`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
-- **Why does `GuestRepository` connect `guest_repository.dart` to `table_detail_page.dart`, `guest_access_controller.dart`, `invitations_page.dart`, `invitations_controller.dart`, `guests_controller.dart`, `home_controller.dart`?**
-  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **Why does `GuestLink` connect `guest_link.dart` to `guest_detail_page.dart`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Why does `EventVenue` connect `event_venue.dart` to `venues_page.dart`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **What connects `name`, `short_name`, `description` to the rest of the system?**
-  _1066 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1071 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `app_colors.dart` be split into smaller, more focused modules?**
   _Cohesion score 0.038461538461538464 - nodes in this community are weakly interconnected._
 - **Should `GeneratedPluginRegistrant.swift` be split into smaller, more focused modules?**

@@ -45,7 +45,11 @@ class TableDetailPage extends StatelessWidget {
                       color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.edit_rounded, color: AppColors.dark, size: 20),
+                    child: const Icon(
+                      Icons.edit_rounded,
+                      color: AppColors.dark,
+                      size: 20,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -58,7 +62,11 @@ class TableDetailPage extends StatelessWidget {
                       color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.delete_outline_rounded, color: AppColors.dark, size: 20),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.dark,
+                      size: 20,
+                    ),
                   ),
                 ),
               ],
@@ -72,7 +80,9 @@ class TableDetailPage extends StatelessWidget {
               builder: (context, snapshot) {
                 final chairs = snapshot.data ?? [];
                 final assigned = chairs.where((c) => c.isAssigned).length;
-                final occupancy = chairs.isNotEmpty ? assigned / chairs.length : 0.0;
+                final occupancy = chairs.isNotEmpty
+                    ? assigned / chairs.length
+                    : 0.0;
 
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
@@ -81,7 +91,8 @@ class TableDetailPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     _buildSectionHeader(assigned, chairs.length),
                     const SizedBox(height: 12),
-                    if (chairs.isEmpty && snapshot.connectionState != ConnectionState.waiting)
+                    if (chairs.isEmpty &&
+                        snapshot.connectionState != ConnectionState.waiting)
                       _buildEmptyChairs()
                     else
                       _buildChairsGrid(chairs),
@@ -103,10 +114,8 @@ class TableDetailPage extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.35),
         boxShadow: [
           BoxShadow(
             color: AppColors.dark.withValues(alpha: 0.04),
@@ -127,7 +136,11 @@ class TableDetailPage extends StatelessWidget {
                   color: AppColors.dark,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(Icons.table_restaurant_rounded, color: Colors.white, size: 26),
+                child: const Icon(
+                  Icons.table_restaurant_rounded,
+                  color: Colors.white,
+                  size: 26,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -136,7 +149,9 @@ class TableDetailPage extends StatelessWidget {
                   children: [
                     Text(
                       table.label,
-                      style: AppTextStyles.headlineMd.copyWith(color: AppColors.dark),
+                      style: AppTextStyles.headlineMd.copyWith(
+                        color: AppColors.dark,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -149,21 +164,23 @@ class TableDetailPage extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: occupancy >= 1.0
-                      ? AppColors.primary.withValues(alpha: 0.15)
-                      : AppColors.dark.withValues(alpha: 0.08),
+                      ? AppColors.primary
+                      : AppColors.secondary,
                   borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.dark),
                 ),
                 child: Text(
                   '$assigned/${table.capacity}',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: occupancy >= 1.0
-                        ? AppColors.primaryDark
-                        : AppColors.dark,
+                    color: occupancy >= 1.0 ? AppColors.dark : AppColors.dark,
                   ),
                 ),
               ),
@@ -180,8 +197,8 @@ class TableDetailPage extends StatelessWidget {
                 occupancy >= 1.0
                     ? AppColors.primary
                     : occupancy >= 0.5
-                        ? AppColors.dark.withValues(alpha: 0.7)
-                        : AppColors.dark,
+                    ? AppColors.dark.withValues(alpha: 0.7)
+                    : AppColors.dark,
               ),
             ),
           ),
@@ -191,7 +208,9 @@ class TableDetailPage extends StatelessWidget {
                 ? 'Table complète ✓'
                 : '${table.capacity - assigned} place${table.capacity - assigned > 1 ? 's' : ''} restante${table.capacity - assigned > 1 ? 's' : ''}',
             style: AppTextStyles.bodyMd.copyWith(
-              color: occupancy >= 1.0 ? AppColors.primaryDark : AppColors.onSurfaceVariant,
+              color: occupancy >= 1.0
+                  ? AppColors.primaryDark
+                  : AppColors.onSurfaceVariant,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -235,14 +254,16 @@ class TableDetailPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
+        border: Border.all(color: AppColors.dark, width: 1.2),
       ),
       child: const Center(
         child: Column(
           children: [
-            Icon(Icons.chair_rounded, size: 40, color: AppColors.outlineVariant),
+            Icon(
+              Icons.chair_rounded,
+              size: 40,
+              color: AppColors.outlineVariant,
+            ),
             SizedBox(height: 8),
             Text(
               'Chargement...',
@@ -268,14 +289,12 @@ class TableDetailPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.4),
-        ),
+        border: Border.all(color: AppColors.dark, width: 1.2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _legendItem(AppColors.outlineVariant.withValues(alpha: 0.4), 'Libre'),
+          _legendItem(Colors.white, 'Libre'),
           const SizedBox(width: 24),
           _legendItem(AppColors.dark.withValues(alpha: 0.12), 'Occupée'),
         ],
@@ -298,7 +317,9 @@ class TableDetailPage extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           label,
-          style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurfaceVariant),
+          style: AppTextStyles.labelMd.copyWith(
+            color: AppColors.onSurfaceVariant,
+          ),
         ),
       ],
     );
@@ -411,16 +432,9 @@ class _ChairTile extends StatelessWidget {
         width: 64,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         decoration: BoxDecoration(
-          color: chair.isAssigned
-              ? AppColors.dark.withValues(alpha: 0.08)
-              : Colors.white,
+          color: chair.isAssigned ? AppColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: chair.isAssigned
-                ? AppColors.dark
-                : AppColors.outlineVariant.withValues(alpha: 0.4),
-            width: chair.isAssigned ? 1.5 : 1,
-          ),
+          border: Border.all(color: AppColors.dark, width: 1.3),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -429,7 +443,7 @@ class _ChairTile extends StatelessWidget {
               Icons.chair_rounded,
               color: chair.isAssigned
                   ? AppColors.dark
-                  : AppColors.outlineVariant,
+                  : AppColors.onSurfaceVariant,
               size: 20,
             ),
             const SizedBox(height: 2),
@@ -559,11 +573,15 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
                   children: [
                     Text(
                       widget.chair.guestName ?? 'Invité',
-                      style: AppTextStyles.headlineMd.copyWith(color: AppColors.dark),
+                      style: AppTextStyles.headlineMd.copyWith(
+                        color: AppColors.dark,
+                      ),
                     ),
                     Text(
                       'Chaise N°${widget.chair.chairNumber}',
-                      style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
+                      style: AppTextStyles.bodyMd.copyWith(
+                        color: AppColors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -576,11 +594,23 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
           else if (_error != null)
             Text(_error!, style: const TextStyle(color: AppColors.error))
           else if (_guest != null) ...[
-            _buildDetailRow(Icons.phone_outlined, 'Téléphone', _guest!.phone ?? 'Non renseigné'),
+            _buildDetailRow(
+              Icons.phone_outlined,
+              'Téléphone',
+              _guest!.phone ?? 'Non renseigné',
+            ),
             const SizedBox(height: 12),
-            _buildDetailRow(Icons.email_outlined, 'Email', _guest!.email ?? 'Non renseigné'),
+            _buildDetailRow(
+              Icons.email_outlined,
+              'Email',
+              _guest!.email ?? 'Non renseigné',
+            ),
             const SizedBox(height: 12),
-            _buildDetailRow(Icons.info_outline_rounded, 'Statut', _guest!.statusLabel),
+            _buildDetailRow(
+              Icons.info_outline_rounded,
+              'Statut',
+              _guest!.statusLabel,
+            ),
           ],
           const SizedBox(height: 24),
           SizedBox(
@@ -603,7 +633,12 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurfaceVariant)),
+            Text(
+              label,
+              style: AppTextStyles.labelMd.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
             Text(value, style: AppTextStyles.bodyMd),
           ],
         ),

@@ -19,7 +19,8 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + (bottom != null ? 56 : 0));
+  Size get preferredSize =>
+      Size.fromHeight(kToolbarHeight + (bottom != null ? 56 : 0));
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +46,10 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
               centerTitle: false,
               leading: showBack
                   ? IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                       onPressed: onBackPressed ?? () => Navigator.pop(context),
                       color: AppColors.onSurface,
                     )
@@ -66,7 +70,12 @@ class SectionHeader extends StatelessWidget {
   final String? actionText;
   final VoidCallback? onAction;
 
-  const SectionHeader({super.key, required this.title, this.actionText, this.onAction});
+  const SectionHeader({
+    super.key,
+    required this.title,
+    this.actionText,
+    this.onAction,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -98,15 +107,21 @@ class StatusBadge extends StatelessWidget {
   final Color color;
   final bool showDot;
 
-  const StatusBadge({super.key, required this.label, required this.color, this.showDot = true});
+  const StatusBadge({
+    super.key,
+    required this.label,
+    required this.color,
+    this.showDot = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.dark, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -115,14 +130,19 @@ class StatusBadge extends StatelessWidget {
             Container(
               width: 6,
               height: 6,
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              decoration: const BoxDecoration(
+                color: AppColors.dark,
+                shape: BoxShape.circle,
+              ),
             ),
             const SizedBox(width: 5),
           ],
           Text(
             label,
             style: AppTextStyles.labelMd.copyWith(
-              color: color,
+              color: color.computeLuminance() > 0.55
+                  ? AppColors.dark
+                  : Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: 11,
             ),
@@ -160,20 +180,17 @@ class UserAvatar extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: bgColor,
-            boxShadow: [
-              BoxShadow(
-                color: bgColor.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            border: Border.all(color: AppColors.dark, width: 1.2),
           ),
           child: Center(
-            child: child ??
+            child:
+                child ??
                 Text(
                   initials,
                   style: AppTextStyles.titleLg.copyWith(
-                    color: Colors.white,
+                    color: bgColor.computeLuminance() > 0.48
+                        ? AppColors.dark
+                        : Colors.white,
                     fontSize: radius * 0.7,
                     fontWeight: FontWeight.w700,
                   ),
@@ -219,20 +236,11 @@ class GradientCard extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.35),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         child: Padding(padding: padding, child: child),
       ),
     );

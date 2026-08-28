@@ -22,7 +22,7 @@ class VenuesPage extends StatelessWidget {
             trailing: IconButton(
               tooltip: 'Actualiser',
               onPressed: controller.loadVenues,
-              icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+              icon: const Icon(Icons.refresh_rounded, color: AppColors.dark),
             ),
           ),
           Expanded(
@@ -355,10 +355,8 @@ class _VenueCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.55),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,12 +368,14 @@ class _VenueCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: _venueColor(venue.venueType).withValues(alpha: 0.13),
+                  color: _venueColor(venue.venueType),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
                   _venueIcon(venue.venueType),
-                  color: _venueColor(venue.venueType),
+                  color: _venueColor(venue.venueType).computeLuminance() > 0.5
+                      ? AppColors.dark
+                      : Colors.white,
                 ),
               ),
               const SizedBox(width: 14),

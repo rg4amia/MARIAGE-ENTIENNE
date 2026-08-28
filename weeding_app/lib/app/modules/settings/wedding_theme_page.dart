@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/wedding_palette.dart';
 import '../../core/theme/wedding_theme_controller.dart';
@@ -24,8 +25,8 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
 
   static const _presets = <_PalettePreset>[
     _PalettePreset(
-      name: 'Celestial Romance',
-      description: 'Terracotta, saumon et or chaud',
+      name: 'Neon Wedding',
+      description: 'Vert électrique, jaune solaire et noir',
       palette: WeddingPalette.celestialRomance,
     ),
     _PalettePreset(
@@ -326,18 +327,14 @@ class _ThemePreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: palette.background,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: palette.accent.withValues(alpha: 0.55)),
+        border: Border.all(color: AppColors.dark, width: 1.4),
       ),
       child: Column(
         children: [
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [palette.primary, palette.secondary],
-              ),
-            ),
+            decoration: BoxDecoration(color: palette.primary),
             child: Text(
               'Aïcha & Karim',
               style: AppTextStyles.headlineMd.copyWith(color: onPrimary),
@@ -364,6 +361,7 @@ class _ThemePreview extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: palette.accent,
                       borderRadius: BorderRadius.circular(99),
+                      border: Border.all(color: AppColors.dark),
                     ),
                     child: Text(
                       'Voir l’invitation',

@@ -5,18 +5,13 @@ import 'package:video_player/video_player.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/widgets/wedding_header.dart';
 import '../../data/repositories/media_repository.dart';
 import '../../data/models/guest_media.dart';
 import '../../data/models/guest.dart';
 
 /// Waveform visualization styles
-enum WaveformStyle {
-  linear,
-  rounded,
-  random,
-  sine,
-  pulse,
-}
+enum WaveformStyle { linear, rounded, random, sine, pulse }
 
 extension WaveformStyleExtension on WaveformStyle {
   String get label {
@@ -52,52 +47,37 @@ extension WaveformStyleExtension on WaveformStyle {
   List<double> generateBars(int count, Random random) {
     switch (this) {
       case WaveformStyle.linear:
-        return List.generate(
-          count,
-          (i) {
-            final center = count / 2;
-            final distance = (i - center).abs() / center;
-            return 0.3 + (1 - distance) * 0.7;
-          },
-        );
+        return List.generate(count, (i) {
+          final center = count / 2;
+          final distance = (i - center).abs() / center;
+          return 0.3 + (1 - distance) * 0.7;
+        });
 
       case WaveformStyle.rounded:
-        return List.generate(
-          count,
-          (i) {
-            final center = count / 2;
-            final distance = (i - center).abs() / center;
-            final curve = cos(distance * pi / 2);
-            return 0.2 + curve * 0.8;
-          },
-        );
+        return List.generate(count, (i) {
+          final center = count / 2;
+          final distance = (i - center).abs() / center;
+          final curve = cos(distance * pi / 2);
+          return 0.2 + curve * 0.8;
+        });
 
       case WaveformStyle.random:
-        return List.generate(
-          count,
-          (_) => 0.1 + random.nextDouble() * 0.9,
-        );
+        return List.generate(count, (_) => 0.1 + random.nextDouble() * 0.9);
 
       case WaveformStyle.sine:
-        return List.generate(
-          count,
-          (i) {
-            final value = sin(i * 0.3) * 0.5 + 0.5;
-            return 0.2 + value * 0.8;
-          },
-        );
+        return List.generate(count, (i) {
+          final value = sin(i * 0.3) * 0.5 + 0.5;
+          return 0.2 + value * 0.8;
+        });
 
       case WaveformStyle.pulse:
-        return List.generate(
-          count,
-          (i) {
-            if (i % 4 < 2) {
-              return 0.8 + random.nextDouble() * 0.2;
-            } else {
-              return 0.2 + random.nextDouble() * 0.3;
-            }
-          },
-        );
+        return List.generate(count, (i) {
+          if (i % 4 < 2) {
+            return 0.8 + random.nextDouble() * 0.2;
+          } else {
+            return 0.2 + random.nextDouble() * 0.3;
+          }
+        });
     }
   }
 }
@@ -106,11 +86,7 @@ class MediaPlayerPage extends StatefulWidget {
   final Guest guest;
   final GuestMedia media;
 
-  const MediaPlayerPage({
-    super.key,
-    required this.guest,
-    required this.media,
-  });
+  const MediaPlayerPage({super.key, required this.guest, required this.media});
 
   @override
   State<MediaPlayerPage> createState() => _MediaPlayerPageState();
@@ -179,13 +155,13 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       PageRouteBuilder(
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            )),
+            position: Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
+                .animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
             child: child,
           );
         },
@@ -218,7 +194,9 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       );
 
       if (widget.media.mediaType == 'video') {
-        _videoController = VideoPlayerController.networkUrl(Uri.parse(_mediaUrl!));
+        _videoController = VideoPlayerController.networkUrl(
+          Uri.parse(_mediaUrl!),
+        );
         await _videoController!.initialize();
         _videoController!.addListener(_videoListener);
         setState(() {
@@ -312,26 +290,23 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.dark),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Média de ${widget.guest.fullName}',
-          style: AppTextStyles.titleLg.copyWith(color: AppColors.dark),
-        ),
-        centerTitle: true,
+      body: Column(
+        children: [
+          WeddingHeader(
+            title: 'Média de ${widget.guest.fullName}',
+            trailing: const SizedBox(width: 40),
+          ),
+          Expanded(
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(color: AppColors.dark),
+                  )
+                : _error != null
+                ? _buildErrorView()
+                : _buildPlayerView(),
+          ),
+        ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: AppColors.primary),
-            )
-          : _error != null
-              ? _buildErrorView()
-              : _buildPlayerView(),
     );
   }
 
@@ -364,8 +339,11 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                foregroundColor: AppColors.dark,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -387,10 +365,8 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.3),
-            ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.dark, width: 1.3),
           ),
           child: Row(
             children: [
@@ -430,7 +406,10 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: widget.media.isValid
                       ? AppColors.statusCardUnlocked.withValues(alpha: 0.1)
@@ -595,9 +574,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                     : AppColors.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.outlineVariant.withValues(alpha: 0.5),
+                  color: isSelected ? AppColors.dark : AppColors.dark,
                   width: 1.5,
                 ),
                 boxShadow: isSelected
@@ -616,14 +593,20 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                   Icon(
                     style.icon,
                     size: 16,
-                    color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
+                    color: isSelected
+                        ? AppColors.dark
+                        : AppColors.onSurfaceVariant,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     style.label,
                     style: AppTextStyles.labelMd.copyWith(
-                      color: isSelected ? Colors.white : AppColors.onSurfaceVariant,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      color: isSelected
+                          ? AppColors.dark
+                          : AppColors.onSurfaceVariant,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                   ),
                 ],
@@ -641,6 +624,9 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        border: const Border(
+          top: BorderSide(color: AppColors.dark, width: 1.3),
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.dark.withValues(alpha: 0.08),
@@ -664,9 +650,9 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
             ),
             child: Slider(
               value: _position.inSeconds.toDouble().clamp(
-                    0,
-                    _duration.inSeconds.toDouble(),
-                  ),
+                0,
+                _duration.inSeconds.toDouble(),
+              ),
               max: _duration.inSeconds.toDouble().clamp(1, double.infinity),
               onChanged: (value) {
                 _seek(Duration(seconds: value.toInt()));
@@ -725,7 +711,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                   ),
                   child: Icon(
                     _isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
+                    color: AppColors.dark,
                     size: 36,
                   ),
                 ),
@@ -775,7 +761,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                   label: const Text('Débloquer carte'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.dark,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -864,8 +850,10 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
     Future.delayed(const Duration(milliseconds: 200), () {
       if (!mounted || !widget.isPlaying) return;
       setState(() {
-        _bars = (_selectedStyle ?? widget.waveformStyle)
-            .generateBars(_barCount, _random);
+        _bars = (_selectedStyle ?? widget.waveformStyle).generateBars(
+          _barCount,
+          _random,
+        );
       });
       _startBarAnimation();
     });
@@ -955,7 +943,10 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                   ),
                   // Style indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
@@ -998,7 +989,10 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                     onTap: () => _changeStyle(style),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.primary
@@ -1016,13 +1010,15 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                           Icon(
                             style.icon,
                             size: 16,
-                            color: isSelected ? Colors.white : Colors.white70,
+                            color: isSelected ? AppColors.dark : Colors.white70,
                           ),
                           const SizedBox(width: 6),
                           Text(
                             style.label,
                             style: AppTextStyles.labelMd.copyWith(
-                              color: isSelected ? Colors.white : Colors.white70,
+                              color: isSelected
+                                  ? AppColors.dark
+                                  : Colors.white70,
                             ),
                           ),
                         ],
@@ -1061,16 +1057,23 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                       activeTrackColor: AppColors.primary,
                       inactiveTrackColor: Colors.white.withValues(alpha: 0.2),
                       thumbColor: AppColors.primary,
-                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                      thumbShape: const RoundSliderThumbShape(
+                        enabledThumbRadius: 8,
+                      ),
                       trackHeight: 4,
-                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+                      overlayShape: const RoundSliderOverlayShape(
+                        overlayRadius: 16,
+                      ),
                     ),
                     child: Slider(
                       value: widget.position.inSeconds.toDouble().clamp(
-                            0,
-                            widget.duration.inSeconds.toDouble(),
-                          ),
-                      max: widget.duration.inSeconds.toDouble().clamp(1, double.infinity),
+                        0,
+                        widget.duration.inSeconds.toDouble(),
+                      ),
+                      max: widget.duration.inSeconds.toDouble().clamp(
+                        1,
+                        double.infinity,
+                      ),
                       onChanged: (value) {
                         widget.onSeek(Duration(seconds: value.toInt()));
                       },
@@ -1105,8 +1108,11 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                       _FullscreenControlButton(
                         icon: Icons.replay_10,
                         onTap: () {
-                          final newPos = widget.position - const Duration(seconds: 10);
-                          widget.onSeek(newPos.isNegative ? Duration.zero : newPos);
+                          final newPos =
+                              widget.position - const Duration(seconds: 10);
+                          widget.onSeek(
+                            newPos.isNegative ? Duration.zero : newPos,
+                          );
                         },
                       ),
                       const SizedBox(width: 32),
@@ -1137,7 +1143,8 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
                       _FullscreenControlButton(
                         icon: Icons.forward_10,
                         onTap: () {
-                          final newPos = widget.position + const Duration(seconds: 10);
+                          final newPos =
+                              widget.position + const Duration(seconds: 10);
                           if (newPos > widget.duration) {
                             widget.onSeek(widget.duration);
                           } else {
@@ -1173,40 +1180,37 @@ class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: List.generate(
-          _barCount,
-          (index) {
-            final baseHeight = widget.isPlaying
-                ? _bars[index % _bars.length] * 140
-                : 30.0 + (sin(index * 0.3) * 20);
+        children: List.generate(_barCount, (index) {
+          final baseHeight = widget.isPlaying
+              ? _bars[index % _bars.length] * 140
+              : 30.0 + (sin(index * 0.3) * 20);
 
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              width: _getBarWidth(),
-              height: baseHeight,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary.withValues(alpha: 0.5),
-                    AppColors.primary,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-                borderRadius: _getBarRadius(),
-                boxShadow: widget.isPlaying
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.4),
-                          blurRadius: 6,
-                          offset: const Offset(0, 3),
-                        ),
-                      ]
-                    : null,
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: _getBarWidth(),
+            height: baseHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.5),
+                  AppColors.primary,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
               ),
-            );
-          },
-        ),
+              borderRadius: _getBarRadius(),
+              boxShadow: widget.isPlaying
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
+                      ),
+                    ]
+                  : null,
+            ),
+          );
+        }),
       ),
     );
   }
@@ -1244,10 +1248,7 @@ class _FullscreenControlButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _FullscreenControlButton({
-    required this.icon,
-    required this.onTap,
-  });
+  const _FullscreenControlButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -1259,15 +1260,9 @@ class _FullscreenControlButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.1),
           shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
         ),
-        child: Icon(
-          icon,
-          color: Colors.white,
-          size: 28,
-        ),
+        child: Icon(icon, color: Colors.white, size: 28),
       ),
     );
   }
@@ -1304,40 +1299,37 @@ class _AudioWaveform extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: List.generate(
-          barCount,
-          (index) {
-            final baseHeight = isPlaying
-                ? bars[index % bars.length] * 70
-                : 20.0 + (sin(index * 0.5) * 10);
+        children: List.generate(barCount, (index) {
+          final baseHeight = isPlaying
+              ? bars[index % bars.length] * 70
+              : 20.0 + (sin(index * 0.5) * 10);
 
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              width: _getBarWidth(),
-              height: baseHeight,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.primary.withValues(alpha: 0.6),
-                    AppColors.primary,
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-                borderRadius: _getBarRadius(),
-                boxShadow: isPlaying
-                    ? [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ]
-                    : null,
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: _getBarWidth(),
+            height: baseHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.6),
+                  AppColors.primary,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
               ),
-            );
-          },
-        ),
+              borderRadius: _getBarRadius(),
+              boxShadow: isPlaying
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : null,
+            ),
+          );
+        }),
       ),
     );
   }
@@ -1373,10 +1365,7 @@ class _ControlButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _ControlButton({
-    required this.icon,
-    required this.onTap,
-  });
+  const _ControlButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -1389,11 +1378,7 @@ class _ControlButton extends StatelessWidget {
           color: AppColors.surfaceContainerHigh,
           shape: BoxShape.circle,
         ),
-        child: Icon(
-          icon,
-          color: AppColors.dark,
-          size: 24,
-        ),
+        child: Icon(icon, color: AppColors.dark, size: 24),
       ),
     );
   }

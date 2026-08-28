@@ -39,14 +39,14 @@ class _InvitationsPageState extends State<InvitationsPage> {
     try {
       final guests = await _guestRepo.getAllGuests();
       final stats = await _linkRepo.getLinkStats();
-      
+
       // Fetch media for each guest
       final mediaMap = <String, GuestMedia?>{};
       for (final guest in guests) {
         final media = await _mediaRepo.getValidMediaByGuestId(guest.id);
         mediaMap[guest.id] = media;
       }
-      
+
       setState(() {
         _guests = guests;
         _linkStats = stats;
@@ -147,11 +147,13 @@ class _InvitationsPageState extends State<InvitationsPage> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  color: AppColors.dark,
+                                  width: 1.2,
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   _MiniStat(
                                     label: 'Liens créés',
@@ -211,7 +213,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
 
   void _showGuestDetails(Guest guest) {
     final media = _guestMedia[guest.id];
-    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -349,23 +351,25 @@ class _InvitationsPageState extends State<InvitationsPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MediaPlayerPage(
-                            guest: guest,
-                            media: media,
-                          ),
+                          builder: (context) =>
+                              MediaPlayerPage(guest: guest, media: media),
                         ),
                       );
                     },
                     icon: Icon(
-                      media.mediaType == 'video' ? Icons.play_circle : Icons.headphones,
+                      media.mediaType == 'video'
+                          ? Icons.play_circle
+                          : Icons.headphones,
                       size: 20,
                     ),
                     label: Text(
-                      media.mediaType == 'video' ? 'Lire la vidéo' : 'Écouter le message',
+                      media.mediaType == 'video'
+                          ? 'Lire la vidéo'
+                          : 'Écouter le message',
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.dark,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -385,7 +389,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _MediaInfo(
-                        icon: media.mediaType == 'video' ? Icons.videocam : Icons.mic,
+                        icon: media.mediaType == 'video'
+                            ? Icons.videocam
+                            : Icons.mic,
                         label: media.mediaType == 'video' ? 'Vidéo' : 'Audio',
                       ),
                       _MediaInfo(
@@ -393,7 +399,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
                         label: media.durationFormatted,
                       ),
                       _MediaInfo(
-                        icon: media.isValid ? Icons.check_circle : Icons.pending,
+                        icon: media.isValid
+                            ? Icons.check_circle
+                            : Icons.pending,
                         label: media.isValid ? 'Validé' : 'En attente',
                       ),
                     ],
@@ -456,31 +464,32 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final contentColor = color.computeLuminance() > 0.48
+        ? AppColors.dark
+        : Colors.white;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: color.withValues(alpha: 0.3),
-          ),
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.dark, width: 1.2),
         ),
         child: Column(
           children: [
-            Icon(icon, color: color, size: 24),
+            Icon(icon, color: contentColor, size: 24),
             const SizedBox(height: 8),
             Text(
               '$count',
               style: AppTextStyles.headlineMd.copyWith(
-                color: color,
+                color: contentColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               title,
-              style: AppTextStyles.labelMd.copyWith(color: color),
+              style: AppTextStyles.labelMd.copyWith(color: contentColor),
               textAlign: TextAlign.center,
             ),
           ],
@@ -715,10 +724,7 @@ class _MediaInfo extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const _MediaInfo({
-    required this.icon,
-    required this.label,
-  });
+  const _MediaInfo({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {

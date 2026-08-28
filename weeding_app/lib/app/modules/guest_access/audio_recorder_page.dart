@@ -186,7 +186,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                         shape: BoxShape.circle,
                         color: _isRecording
                             ? AppColors.error.withValues(alpha: 0.15)
-                            : AppColors.primary.withValues(alpha: 0.1),
+                            : AppColors.primary,
                         border: Border.all(
                           color: _isRecording
                               ? AppColors.error
@@ -199,9 +199,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                             ? (_isPaused ? Icons.pause : Icons.mic)
                             : Icons.mic_none,
                         size: 56,
-                        color: _isRecording
-                            ? AppColors.error
-                            : AppColors.primary,
+                        color: _isRecording ? AppColors.error : AppColors.dark,
                       ),
                     ),
                   );
@@ -308,9 +306,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                       height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _isRecording
-                            ? AppColors.error
-                            : AppColors.primary,
+                        color: _isRecording ? AppColors.error : AppColors.dark,
                         boxShadow: [
                           BoxShadow(
                             color:
@@ -326,7 +322,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                       child: Icon(
                         _isRecording ? Icons.stop : Icons.mic,
                         size: 36,
-                        color: Colors.white,
+                        color: _isRecording ? Colors.white : AppColors.dark,
                       ),
                     ),
                   ),

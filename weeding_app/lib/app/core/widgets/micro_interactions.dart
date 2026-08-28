@@ -16,7 +16,7 @@ class HoverCard extends StatefulWidget {
     required this.child,
     this.onTap,
     this.scaleOnHover = 1.02,
-    this.borderRadius = 20,
+    this.borderRadius = 24,
     this.padding = const EdgeInsets.all(20),
     this.margin = EdgeInsets.zero,
     this.backgroundColor,
@@ -73,19 +73,20 @@ class _HoverCardState extends State<HoverCard>
               decoration: BoxDecoration(
                 color: widget.backgroundColor ?? Colors.white,
                 borderRadius: BorderRadius.circular(widget.borderRadius),
-                boxShadow: [
-                  BoxShadow(
-                    color: _isHovered
-                        ? AppColors.primary.withValues(alpha: 0.1)
-                        : AppColors.primary.withValues(alpha: 0.04),
-                    blurRadius: _isHovered ? 16 : 8,
-                    offset: Offset(0, _isHovered ? 6 : 2),
-                  ),
-                ],
+                boxShadow:
+                    widget.boxShadow ??
+                    [
+                      BoxShadow(
+                        color: AppColors.dark.withValues(
+                          alpha: _isHovered ? 0.13 : 0.07,
+                        ),
+                        blurRadius: _isHovered ? 16 : 8,
+                        offset: Offset(0, _isHovered ? 7 : 4),
+                      ),
+                    ],
                 border: Border.all(
-                  color: _isHovered
-                      ? AppColors.primary.withValues(alpha: 0.15)
-                      : AppColors.outlineVariant.withValues(alpha: 0.5),
+                  color: AppColors.dark,
+                  width: _isHovered ? 1.6 : 1.25,
                 ),
               ),
               child: child,
@@ -189,9 +190,10 @@ class _GradientButtonState extends State<GradientButton>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    _scaleAnim = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(parent: _pressCtrl, curve: Curves.easeInOut),
-    );
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _pressCtrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -202,11 +204,13 @@ class _GradientButtonState extends State<GradientButton>
 
   @override
   Widget build(BuildContext context) {
-    final grad = widget.gradient ?? const LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [AppColors.primaryDark, AppColors.primaryContainer],
-    );
+    final grad =
+        widget.gradient ??
+        const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.dark, AppColors.dark],
+        );
 
     return GestureDetector(
       onTapDown: (_) => _pressCtrl.forward(),
@@ -227,13 +231,7 @@ class _GradientButtonState extends State<GradientButton>
                 ? grad.colors.first.withValues(alpha: 0.5)
                 : null,
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.25),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            border: Border.all(color: AppColors.dark, width: 1.3),
           ),
           child: Material(
             color: Colors.transparent,
@@ -257,7 +255,11 @@ class _GradientButtonState extends State<GradientButton>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (widget.icon != null) ...[
-                            Icon(widget.icon, color: widget.foregroundColor, size: 20),
+                            Icon(
+                              widget.icon,
+                              color: widget.foregroundColor,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                           ],
                           Text(

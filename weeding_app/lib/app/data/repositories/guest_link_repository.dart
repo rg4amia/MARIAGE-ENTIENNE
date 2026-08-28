@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -18,13 +17,6 @@ class GuestLinkRepository {
     return result.toString();
   }
 
-  /// Generate a random guest token
-  String _generateGuestToken() {
-    final random = Random.secure();
-    final values = List<int>.generate(32, (index) => random.nextInt(256));
-    return base64Url.encode(values).replaceAll('=', '');
-  }
-
   /// Create a short link for a guest directly in the database
   Future<GuestLink?> createGuestLink(String guestId) async {
     try {
@@ -32,9 +24,16 @@ class GuestLinkRepository {
       final existing = await getLinkByGuestId(guestId);
       if (existing != null) return existing;
 
-      // Generate codes in Flutter
+      // Reuse the canonical guest token. A second random token would not be
+      // resolvable by the invitation portal.
       final shortCode = _generateShortCode();
-      final guestToken = _generateGuestToken();
+      final guest = await _client
+          .from('guests')
+          .select('qr_token')
+          .eq('id', guestId)
+          .single();
+      final guestToken = (guest['qr_token'] as String?)?.trim();
+      if (guestToken == null || guestToken.isEmpty) return null;
 
       // Insert directly into the database
       final response = await _client

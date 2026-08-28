@@ -112,11 +112,11 @@ class TablesPage extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          color: AppColors.dark,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: AppColors.dark.withValues(alpha: 0.2),
+              color: AppColors.dark.withValues(alpha: 0.16),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -127,7 +127,7 @@ class TablesPage extends StatelessWidget {
           onPressed: () => _showCreateTableDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
+          child: const Icon(Icons.add_rounded, color: AppColors.dark, size: 28),
         ),
       ),
     );
@@ -208,9 +208,7 @@ class _TableCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.outlineVariant.withValues(alpha: 0.5),
-            ),
+            border: Border.all(color: AppColors.dark, width: 1.2),
             boxShadow: [
               BoxShadow(
                 color: AppColors.dark.withValues(alpha: 0.04),

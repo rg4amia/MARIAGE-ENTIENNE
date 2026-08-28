@@ -15,10 +15,10 @@ class WeddingPalette {
   });
 
   static const celestialRomance = WeddingPalette(
-    primary: Color(0xFFA53C00),
-    secondary: Color(0xFF9C4236),
-    accent: Color(0xFFBE9A7A),
-    background: Color(0xFFFFF8F4),
+    primary: Color(0xFF32FFAA),
+    secondary: Color(0xFFFFE86E),
+    accent: Color(0xFF141515),
+    background: Color(0xFFF7F7F5),
   );
 
   factory WeddingPalette.fromJson(Map<String, dynamic> json) {

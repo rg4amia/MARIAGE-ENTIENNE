@@ -78,100 +78,90 @@ class InvitationCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = Theme.of(context).colorScheme;
+    final onPrimary = palette.primary.computeLuminance() > 0.48
+        ? AppColors.dark
+        : Colors.white;
+
     return RepaintBoundary(
       child: Container(
         width: 360,
         padding: const EdgeInsets.all(28),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.primary, Color(0xFF8B2F00)],
-          ),
+          color: palette.primary,
           borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.dark, width: 2),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.3),
-              blurRadius: 30,
-              offset: const Offset(0, 15),
+              color: AppColors.dark.withValues(alpha: 0.16),
+              blurRadius: 0,
+              offset: const Offset(8, 8),
             ),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Top decoration
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                3,
-                (i) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: i == 1 ? 8 : 4,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: palette.secondary,
+                borderRadius: BorderRadius.circular(99),
+                border: Border.all(color: AppColors.dark, width: 1.2),
+              ),
+              child: Text(
+                'VOUS ÊTES INVITÉ(E)',
+                style: AppTextStyles.labelMd.copyWith(
+                  color: palette.secondary.computeLuminance() > 0.48
+                      ? AppColors.dark
+                      : Colors.white,
+                  letterSpacing: 1.6,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
             const SizedBox(height: 24),
-            // Title
-            Text(
-              'VOUS ÊTES INVITÉ(E)',
-              style: AppTextStyles.labelMd.copyWith(
-                color: Colors.white.withValues(alpha: 0.8),
-                letterSpacing: 3,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Guest name
             Text(
               guestName,
               style: AppTextStyles.headlineLg.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+                color: onPrimary,
+                fontWeight: FontWeight.w800,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            // Divider
-            Container(height: 1, color: Colors.white.withValues(alpha: 0.3)),
-            const SizedBox(height: 20),
-            // Table & Seat info
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _CardInfo(
-                  icon: Icons.table_restaurant_rounded,
-                  label: 'TABLE',
-                  value: tableName,
-                ),
-                Container(
-                  width: 1,
-                  height: 50,
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
-                _CardInfo(
-                  icon: Icons.event_seat_rounded,
-                  label: 'PLACE',
-                  value: seatNumber,
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: AppColors.dark, width: 1.4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _CardInfo(
+                    icon: Icons.table_restaurant_rounded,
+                    label: 'TABLE',
+                    value: tableName,
+                  ),
+                  Container(width: 1, height: 50, color: AppColors.dark),
+                  _CardInfo(
+                    icon: Icons.event_seat_rounded,
+                    label: 'PLACE',
+                    value: seatNumber,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            // Divider
-            Container(height: 1, color: Colors.white.withValues(alpha: 0.3)),
-            const SizedBox(height: 20),
-            // QR Code
             if (showQrCode && qrToken != null && qrToken!.isNotEmpty)
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.dark, width: 1.4),
                 ),
                 child: QrImageView(
                   data: qrToken!,
@@ -180,21 +170,21 @@ class InvitationCardWidget extends StatelessWidget {
                   backgroundColor: Colors.white,
                   eyeStyle: const QrEyeStyle(
                     eyeShape: QrEyeShape.circle,
-                    color: AppColors.primary,
+                    color: AppColors.dark,
                   ),
                   dataModuleStyle: const QrDataModuleStyle(
                     dataModuleShape: QrDataModuleShape.circle,
-                    color: AppColors.primary,
+                    color: AppColors.dark,
                   ),
                 ),
               ),
             const SizedBox(height: 16),
-            // Footer
             Text(
               '💍 Montrer ce badge à l\'entrée 💍',
               style: AppTextStyles.labelMd.copyWith(
-                color: Colors.white.withValues(alpha: 0.7),
+                color: onPrimary,
                 fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
@@ -219,12 +209,12 @@ class _CardInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: Colors.white, size: 28),
+        Icon(icon, color: AppColors.dark, size: 28),
         const SizedBox(height: 8),
         Text(
           label,
           style: AppTextStyles.labelMd.copyWith(
-            color: Colors.white.withValues(alpha: 0.7),
+            color: AppColors.onSurfaceVariant,
             letterSpacing: 2,
           ),
         ),
@@ -232,7 +222,7 @@ class _CardInfo extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.titleLg.copyWith(
-            color: Colors.white,
+            color: AppColors.dark,
             fontWeight: FontWeight.bold,
           ),
         ),

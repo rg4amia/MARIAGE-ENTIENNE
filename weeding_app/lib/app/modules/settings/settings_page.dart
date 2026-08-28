@@ -304,10 +304,8 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.2),
         boxShadow: [
           BoxShadow(
             color: AppColors.dark.withValues(alpha: 0.04),
@@ -727,10 +725,8 @@ class _SettingsSection extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.outlineVariant.withValues(alpha: 0.5),
-              ),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.dark, width: 1.2),
             ),
             child: Column(children: items),
           ),

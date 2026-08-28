@@ -2,55 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Styles de texte inspirés Satoshi : Poppins Bold pour les titres,
-/// Poppins Medium pour les labels, Plus Jakarta Sans pour le body.
+/// Plus Jakarta Sans reproduit la géométrie compacte de Satoshi utilisée par
+/// les références, avec des titres très lourds et un corps plus calme.
 class AppTextStyles {
-  // ── Display (Poppins Bold — Satoshi Bold equivalent) ──
-  static TextStyle displayLg = GoogleFonts.poppins(
-    fontSize: 48,
-    height: 56 / 48,
-    letterSpacing: -0.02,
+  static TextStyle displayLg = GoogleFonts.plusJakartaSans(
+    fontSize: 46,
+    height: 1.02,
+    letterSpacing: -1.8,
     color: AppColors.onBackground,
     fontWeight: FontWeight.w800,
   );
 
-  static TextStyle displayMd = GoogleFonts.poppins(
+  static TextStyle displayMd = GoogleFonts.plusJakartaSans(
     fontSize: 36,
-    height: 44 / 36,
-    letterSpacing: -0.01,
+    height: 1.05,
+    letterSpacing: -1.2,
     color: AppColors.onBackground,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w800,
   );
 
-  // ── Headlines (Poppins Bold) ──
-  static TextStyle headlineLg = GoogleFonts.poppins(
+  static TextStyle headlineLg = GoogleFonts.plusJakartaSans(
     fontSize: 32,
-    height: 40 / 32,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.01,
+    height: 1.08,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.9,
     color: AppColors.onBackground,
   );
 
-  static TextStyle headlineLgMobile = GoogleFonts.poppins(
+  static TextStyle headlineLgMobile = GoogleFonts.plusJakartaSans(
     fontSize: 28,
-    height: 36 / 28,
-    fontWeight: FontWeight.w700,
-    letterSpacing: -0.01,
+    height: 1.08,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.8,
     color: AppColors.onBackground,
   );
 
-  static TextStyle headlineMd = GoogleFonts.poppins(
+  static TextStyle headlineMd = GoogleFonts.plusJakartaSans(
     fontSize: 24,
-    height: 32 / 24,
-    fontWeight: FontWeight.w700,
+    height: 1.12,
+    fontWeight: FontWeight.w800,
+    letterSpacing: -0.5,
     color: AppColors.onBackground,
   );
 
-  // ── Titles (Poppins SemiBold) ──
-  static TextStyle titleLg = GoogleFonts.poppins(
+  static TextStyle titleLg = GoogleFonts.plusJakartaSans(
     fontSize: 20,
-    height: 28 / 20,
-    fontWeight: FontWeight.w600,
+    height: 1.2,
+    fontWeight: FontWeight.w700,
+    letterSpacing: -0.25,
     color: AppColors.onBackground,
   );
 
@@ -69,12 +68,11 @@ class AppTextStyles {
     color: AppColors.onBackground,
   );
 
-  // ── Labels (Poppins Medium — Satoshi Medium equivalent) ──
-  static TextStyle labelMd = GoogleFonts.poppins(
+  static TextStyle labelMd = GoogleFonts.plusJakartaSans(
     fontSize: 12,
-    height: 16 / 12,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.02,
+    height: 1.3,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0,
     color: AppColors.onSurfaceVariant,
   );
 

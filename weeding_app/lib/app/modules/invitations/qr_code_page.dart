@@ -43,10 +43,7 @@ class QrCodePage extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          WeddingHeader(
-            title: 'QR Code',
-            trailing: const SizedBox(width: 40),
-          ),
+          WeddingHeader(title: 'QR Code', trailing: const SizedBox(width: 40)),
           Expanded(
             child: Center(
               child: SingleChildScrollView(
@@ -89,10 +86,10 @@ class QrCodePage extends StatelessWidget {
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: AppColors.surfaceContainerLow,
-                                  borderRadius: BorderRadius.circular(16),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                    color: AppColors.dark,
                                     width: 1.5,
                                   ),
                                 ),
@@ -107,7 +104,8 @@ class QrCodePage extends StatelessWidget {
                                       data: payload,
                                       version: QrVersions.auto,
                                       size: 200,
-                                      backgroundColor: AppColors.surfaceContainerLow,
+                                      backgroundColor:
+                                          AppColors.surfaceContainerLow,
                                       eyeStyle: const QrEyeStyle(
                                         color: AppColors.dark,
                                       ),
@@ -120,13 +118,29 @@ class QrCodePage extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               FutureBuilder(
-                                future: controller.getInvitationForGuest(guest.id),
+                                future: controller.getInvitationForGuest(
+                                  guest.id,
+                                ),
                                 builder: (context, snapshot) {
                                   final invitation = snapshot.data;
-                                  return Text(
-                                    invitation?.invitationCode ?? 'INV-XXXX-XXXX',
-                                    style: AppTextStyles.labelMd.copyWith(
-                                      letterSpacing: 0.1,
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondary,
+                                      borderRadius: BorderRadius.circular(99),
+                                      border: Border.all(color: AppColors.dark),
+                                    ),
+                                    child: Text(
+                                      invitation?.invitationCode ??
+                                          'INV-XXXX-XXXX',
+                                      style: AppTextStyles.labelMd.copyWith(
+                                        color: AppColors.dark,
+                                        letterSpacing: 0.1,
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                     ),
                                   );
                                 },
@@ -137,15 +151,23 @@ class QrCodePage extends StatelessWidget {
                                   Expanded(
                                     child: OutlinedButton.icon(
                                       onPressed: () async {
-                                        final url = await _getPublicUrl(guest, controller);
+                                        final url = await _getPublicUrl(
+                                          guest,
+                                          controller,
+                                        );
                                         if (url != null) await Share.share(url);
                                       },
                                       icon: const Icon(Icons.share),
                                       label: const Text('Partager'),
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: AppColors.dark,
-                                        side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
-                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        side: const BorderSide(
+                                          color: AppColors.dark,
+                                          width: 1.3,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -153,10 +175,18 @@ class QrCodePage extends StatelessWidget {
                                   Expanded(
                                     child: ElevatedButton.icon(
                                       onPressed: () async {
-                                        final url = await _getPublicUrl(guest, controller);
+                                        final url = await _getPublicUrl(
+                                          guest,
+                                          controller,
+                                        );
                                         if (url != null) {
-                                          await Clipboard.setData(ClipboardData(text: url));
-                                          Get.snackbar('Copié', 'Lien d\'invitation copié');
+                                          await Clipboard.setData(
+                                            ClipboardData(text: url),
+                                          );
+                                          Get.snackbar(
+                                            'Copié',
+                                            'Lien d\'invitation copié',
+                                          );
                                         }
                                       },
                                       icon: const Icon(Icons.copy),

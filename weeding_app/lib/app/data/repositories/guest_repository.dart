@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import '../../core/constants/supabase_config.dart';
 import '../models/guest.dart';
 import '../models/guest_seat.dart';
 
@@ -86,6 +87,13 @@ class GuestRepository {
     await _client.rpc('delete_guest', params: {'p_guest_id': id});
   }
 
+  Future<void> setGuestCancelled(String id, {required bool cancelled}) async {
+    await _client.rpc(
+      'set_guest_cancelled',
+      params: {'p_guest_id': id, 'p_cancelled': cancelled},
+    );
+  }
+
   Future<int> getGuestCount() async {
     final response = await _client.from('guests').select('id');
     return (response as List).length;
@@ -142,24 +150,16 @@ class GuestRepository {
     required String chairId,
   }) async {
     try {
-      // First, unassign any existing seat for this guest
-      await _client
-          .from('chairs')
-          .update({'guest_id': null})
-          .eq('guest_id', guestId);
-
-      // Assign the new chair
-      await _client
-          .from('chairs')
-          .update({'guest_id': guestId})
-          .eq('id', chairId);
-
-      // Update guest status to 'pending_media' if it's still 'draft'
-      await _client
-          .from('guests')
-          .update({'status': 'pending_media'})
-          .eq('id', guestId)
-          .eq('status', 'draft');
+      // L'assignation est atomique côté base : elle libère l'ancienne chaise,
+      // crée/met à jour l'invitation et conserve le même token QR.
+      await _client.rpc(
+        'assign_guest_to_chair',
+        params: {
+          'p_guest_id': guestId,
+          'p_chair_id': chairId,
+          'p_guest_portal_url': SupabaseConfig.guestPortalUrl,
+        },
+      );
     } catch (e) {
       debugPrint('Erreur assignation place: $e');
       rethrow;

@@ -218,13 +218,13 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                   height: 200,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    border: Border.all(color: AppColors.primary, width: 4),
+                    color: AppColors.primary,
+                    border: Border.all(color: AppColors.dark, width: 4),
                   ),
                   child: const Icon(
                     Icons.videocam_off,
                     size: 48,
-                    color: AppColors.primary,
+                    color: AppColors.dark,
                   ),
                 ),
               const SizedBox(height: 32),
@@ -302,7 +302,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     onPressed: _launchCamera,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: AppColors.dark,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

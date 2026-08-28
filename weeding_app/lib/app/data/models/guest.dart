@@ -81,6 +81,8 @@ class Guest {
         return 'Média reçu';
       case 'card_unlocked':
         return 'Carte débloquée';
+      case 'cancelled':
+        return 'Annulé';
       default:
         return status;
     }

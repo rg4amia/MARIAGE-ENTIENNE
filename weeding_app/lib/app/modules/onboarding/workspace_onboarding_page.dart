@@ -34,7 +34,7 @@ class WorkspaceOnboardingPage extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.favorite_rounded,
-                          color: Colors.white,
+                          color: AppColors.dark,
                         ),
                       ),
                       const Spacer(),
@@ -144,15 +144,16 @@ class WorkspaceOnboardingPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryContainer.withValues(alpha: 0.12),
+                      color: AppColors.secondary,
                       borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: AppColors.dark, width: 1.2),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Icon(
                           Icons.workspace_premium_rounded,
-                          color: AppColors.primary,
+                          color: AppColors.dark,
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -230,10 +231,8 @@ class _SectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.55),
-        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.dark, width: 1.25),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

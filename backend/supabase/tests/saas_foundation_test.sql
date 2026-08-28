@@ -2,7 +2,7 @@ BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions;
 
-SELECT plan(42);
+SELECT plan(44);
 
 SELECT has_table('public', 'organizations', 'organizations existe');
 SELECT has_table('public', 'organization_memberships', 'memberships existe');
@@ -91,6 +91,22 @@ SELECT has_function(
 SELECT has_function(
   'public', 'switch_active_event', ARRAY['uuid'],
   'RPC de changement de mariage disponible'
+);
+SELECT ok(
+  (
+    SELECT prosrc NOT LIKE '%gen_random_bytes(%'
+    FROM pg_proc
+    WHERE oid = 'public.assign_guest_to_chair(uuid,uuid,text)'::regprocedure
+  ),
+  'assign_guest_to_chair ne dépend plus de gen_random_bytes non résolu'
+);
+SELECT ok(
+  (
+    SELECT prosrc LIKE '%gen_random_uuid%'
+    FROM pg_proc
+    WHERE oid = 'public.assign_guest_to_chair(uuid,uuid,text)'::regprocedure
+  ),
+  'assign_guest_to_chair possède une génération de token portable'
 );
 SELECT ok(
   (

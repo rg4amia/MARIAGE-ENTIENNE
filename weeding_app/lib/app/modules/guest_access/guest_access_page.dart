@@ -68,10 +68,13 @@ class _GuestAccessPageState extends State<GuestAccessPage>
           transitionBuilder: (child, anim) => FadeTransition(
             opacity: anim,
             child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0.05, 0),
-                end: Offset.zero,
-              ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0.05, 0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(parent: anim, curve: Curves.easeOutCubic),
+                  ),
               child: child,
             ),
           ),
@@ -126,13 +129,19 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                     ),
                   ],
                 ),
-                child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 36),
+                child: const Icon(
+                  Icons.favorite_rounded,
+                  color: Colors.white,
+                  size: 36,
+                ),
               ),
             ),
             const SizedBox(height: 24),
             Text(
               'Vérification en cours...',
-              style: AppTextStyles.headlineMd.copyWith(color: AppColors.onSurface),
+              style: AppTextStyles.headlineMd.copyWith(
+                color: AppColors.onSurface,
+              ),
             ),
             const SizedBox(height: 12),
             SizedBox(
@@ -177,7 +186,9 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               const SizedBox(height: 28),
               Text(
                 'Invitation introuvable',
-                style: AppTextStyles.headlineMd.copyWith(fontWeight: FontWeight.bold),
+                style: AppTextStyles.headlineMd.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
               Text(
@@ -220,7 +231,9 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               const SizedBox(height: 28),
               Text(
                 'Une erreur est survenue',
-                style: AppTextStyles.headlineMd.copyWith(fontWeight: FontWeight.bold),
+                style: AppTextStyles.headlineMd.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 12),
               Text(
@@ -229,10 +242,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                 style: AppTextStyles.bodyMdOnVariant,
               ),
               const SizedBox(height: 28),
-              GradientButton(
-                label: 'Réessayer',
-                onPressed: controller.retry,
-              ),
+              GradientButton(label: 'Réessayer', onPressed: controller.retry),
             ],
           ),
         ),
@@ -244,18 +254,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     final g = controller.guest.value;
     return Container(
       key: const ValueKey('verified'),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.primaryDarker,
-            AppColors.primary,
-            AppColors.background,
-          ],
-          stops: [0.0, 0.3, 0.6],
-        ),
-      ),
+      color: AppColors.primary,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -274,7 +273,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                       width: 2,
                     ),
                   ),
-                  child: const Icon(Icons.waving_hand_rounded, size: 48, color: AppColors.dark),
+                  child: const Icon(
+                    Icons.waving_hand_rounded,
+                    size: 48,
+                    color: AppColors.dark,
+                  ),
                 ),
               ),
               const SizedBox(height: 28),
@@ -294,18 +297,22 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               ),
               const Spacer(flex: 2),
               SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.3),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                position:
+                    Tween<Offset>(
+                      begin: const Offset(0, 0.3),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(
+                        parent: _stepCtrl,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
                 child: Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: AppColors.outlineVariant.withValues(alpha: 0.5),
-                    ),
+                    border: Border.all(color: AppColors.dark, width: 1.4),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.dark.withValues(alpha: 0.06),
@@ -316,10 +323,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        '📸',
-                        style: const TextStyle(fontSize: 36),
-                      ),
+                      Text('📸', style: const TextStyle(fontSize: 36)),
                       const SizedBox(height: 16),
                       Text(
                         'Enregistrez votre message',
@@ -356,18 +360,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
   Widget _buildMediaChoice() {
     return Container(
       key: const ValueKey('mediaChoice'),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.primaryDarker,
-            AppColors.primary,
-            AppColors.background,
-          ],
-          stops: [0.0, 0.3, 0.6],
-        ),
-      ),
+      color: AppColors.primary,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -398,10 +391,16 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               ),
               const Spacer(flex: 1),
               SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.2),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                position:
+                    Tween<Offset>(
+                      begin: const Offset(0, 0.2),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(
+                        parent: _stepCtrl,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
                 child: _MediaOptionCard(
                   icon: Icons.mic_rounded,
                   title: 'Message Audio',
@@ -412,15 +411,21 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               ),
               const SizedBox(height: 16),
               SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.3),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                position:
+                    Tween<Offset>(
+                      begin: const Offset(0, 0.3),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(
+                        parent: _stepCtrl,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
                 child: _MediaOptionCard(
                   icon: Icons.videocam_rounded,
                   title: 'Message Vidéo',
                   subtitle: 'Enregistrez une courte vidéo',
-                  color: AppColors.primary,
+                  color: AppColors.secondary,
                   onTap: controller.startVideoRecording,
                 ),
               ),
@@ -449,13 +454,19 @@ class _GuestAccessPageState extends State<GuestAccessPage>
           : const VideoRecorderPage(minDurationSeconds: 30);
     }
 
-    final result = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => recorderPage),
-    );
+    final result = await Navigator.of(
+      context,
+    ).push<String>(MaterialPageRoute(builder: (_) => recorderPage));
 
     if (result != null && result.isNotEmpty) {
-      controller.setRecordedFile(result, durationSeconds: controller.recordingDuration.value);
-      controller.submitMedia(isAudio: isAudio, durationSeconds: controller.recordingDuration.value);
+      controller.setRecordedFile(
+        result,
+        durationSeconds: controller.recordingDuration.value,
+      );
+      controller.submitMedia(
+        isAudio: isAudio,
+        durationSeconds: controller.recordingDuration.value,
+      );
     } else {
       controller.currentStep.value = GuestAccessStep.mediaChoice;
     }
@@ -490,10 +501,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               ),
             ),
             const SizedBox(height: 28),
-            Text(
-              'Traitement en cours...',
-              style: AppTextStyles.headlineMd,
-            ),
+            Text('Traitement en cours...', style: AppTextStyles.headlineMd),
             const SizedBox(height: 8),
             Text(
               'Nous traitons votre enregistrement',
@@ -511,14 +519,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
     final g = controller.guest.value;
     return Container(
       key: const ValueKey('unlocked'),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [AppColors.primary, AppColors.primaryDark, AppColors.background],
-          stops: [0.0, 0.2, 0.5],
-        ),
-      ),
+      color: AppColors.primary,
       child: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -533,9 +534,16 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   decoration: BoxDecoration(
                     color: AppColors.dark.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.dark.withValues(alpha: 0.2), width: 2),
+                    border: Border.all(
+                      color: AppColors.dark.withValues(alpha: 0.2),
+                      width: 2,
+                    ),
                   ),
-                  child: const Icon(Icons.check_rounded, size: 44, color: AppColors.dark),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    size: 44,
+                    color: AppColors.dark,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -555,14 +563,21 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               ),
               const SizedBox(height: 28),
               SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.2),
-                  end: Offset.zero,
-                ).animate(CurvedAnimation(parent: _stepCtrl, curve: Curves.easeOutCubic)),
+                position:
+                    Tween<Offset>(
+                      begin: const Offset(0, 0.2),
+                      end: Offset.zero,
+                    ).animate(
+                      CurvedAnimation(
+                        parent: _stepCtrl,
+                        curve: Curves.easeOutCubic,
+                      ),
+                    ),
                 child: InvitationCardWidget(
                   key: _cardKey,
                   guestName: g?.fullName ?? 'Invité',
-                  tableName: controller.guestSeat.value?.tableId ?? 'Non assigné',
+                  tableName:
+                      controller.guestSeat.value?.tableId ?? 'Non assigné',
                   seatNumber: controller.guestSeat.value?.chairId ?? '-',
                   qrToken: g?.qrToken,
                 ),
@@ -575,14 +590,20 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                       onPressed: () => _downloadCard(g?.fullName ?? 'invite'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.dark,
-                        side: BorderSide(color: AppColors.dark.withValues(alpha: 0.3), width: 1.5),
+                        side: BorderSide(
+                          color: AppColors.dark.withValues(alpha: 0.3),
+                          width: 1.5,
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       icon: const Icon(Icons.download_rounded, size: 20),
-                      label: const Text('Télécharger', style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: const Text(
+                        'Télécharger',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -599,7 +620,10 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                         elevation: 0,
                       ),
                       icon: const Icon(Icons.share_rounded, size: 20),
-                      label: const Text('Partager', style: TextStyle(fontWeight: FontWeight.w600)),
+                      label: const Text(
+                        'Partager',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 ],
@@ -615,7 +639,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
   Future<void> _downloadCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Impossible de capturer la carte',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     final path = await InvitationCardGenerator.saveToFile(
@@ -623,14 +651,22 @@ class _GuestAccessPageState extends State<GuestAccessPage>
       'invitation_${guestName.replaceAll(' ', '_')}.png',
     );
     if (path != null) {
-      Get.snackbar('Succès', 'Carte sauvegardée', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Succès',
+        'Carte sauvegardée',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
   Future<void> _shareCard(String guestName) async {
     final imageBytes = await InvitationCardGenerator.captureCard(_cardKey);
     if (imageBytes == null) {
-      Get.snackbar('Erreur', 'Impossible de capturer la carte', snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Erreur',
+        'Impossible de capturer la carte',
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return;
     }
     await InvitationCardGenerator.shareCard(imageBytes, guestName);
@@ -655,16 +691,18 @@ class _MediaOptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final foreground = color.computeLuminance() > 0.48
+        ? AppColors.dark
+        : Colors.white;
+
     return TapScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: color,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: AppColors.outlineVariant.withValues(alpha: 0.5),
-          ),
+          border: Border.all(color: AppColors.dark, width: 1.4),
           boxShadow: [
             BoxShadow(
               color: AppColors.dark.withValues(alpha: 0.06),
@@ -679,10 +717,11 @@ class _MediaOptionCard extends StatelessWidget {
               width: 56,
               height: 56,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.dark, width: 1.2),
               ),
-              child: Icon(icon, color: color, size: 26),
+              child: Icon(icon, color: AppColors.dark, size: 26),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -692,6 +731,7 @@ class _MediaOptionCard extends StatelessWidget {
                   Text(
                     title,
                     style: AppTextStyles.titleLg.copyWith(
+                      color: foreground,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -699,7 +739,7 @@ class _MediaOptionCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: AppTextStyles.bodyMd.copyWith(
-                      color: AppColors.onSurfaceVariant,
+                      color: foreground.withValues(alpha: 0.68),
                     ),
                   ),
                 ],
@@ -709,12 +749,13 @@ class _MediaOptionCard extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: AppColors.surfaceContainerHigh,
+                color: Colors.white,
                 shape: BoxShape.circle,
+                border: Border.all(color: AppColors.dark),
               ),
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: AppColors.onSurfaceVariant,
+                color: AppColors.dark,
                 size: 14,
               ),
             ),

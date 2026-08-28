@@ -55,19 +55,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           AnimatedBuilder(
             animation: _bgCtrl,
             builder: (context, _) {
-              final t = CurvedAnimation(parent: _bgCtrl, curve: Curves.easeInOut).value;
               return Container(
                 height: size.height * 0.55,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color.lerp(AppColors.primaryDarker, AppColors.primary, t)!,
-                      Color.lerp(AppColors.primary, AppColors.primaryLight, t)!,
-                    ],
-                  ),
-                ),
+                decoration: const BoxDecoration(color: AppColors.primary),
               );
             },
           ),
@@ -80,7 +70,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               width: 200,
               height: 200,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,                            color: AppColors.primary.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+                color: AppColors.primary.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -91,7 +82,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               width: 160,
               height: 160,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,                            color: AppColors.primary.withValues(alpha: 0.03),
+                shape: BoxShape.circle,
+                color: AppColors.primary.withValues(alpha: 0.03),
               ),
             ),
           ),
@@ -104,19 +96,29 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                 // ── Branding / Logo ──
                 FadeTransition(
-                  opacity: CurvedAnimation(parent: _bgCtrl, curve: const Interval(0.0, 0.5)),
+                  opacity: CurvedAnimation(
+                    parent: _bgCtrl,
+                    curve: const Interval(0.0, 0.5),
+                  ),
                   child: Column(
                     children: [
                       ScaleTransition(
                         scale: Tween<double>(begin: 0.5, end: 1.0).animate(
-                          CurvedAnimation(parent: _heartCtrl, curve: Curves.elasticOut),
+                          CurvedAnimation(
+                            parent: _heartCtrl,
+                            curve: Curves.elasticOut,
+                          ),
                         ),
                         child: Container(
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.primary.withValues(alpha: 0.15),
+                            color: Colors.white,
+                            border: Border.all(
+                              color: AppColors.dark,
+                              width: 1.3,
+                            ),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.primary.withValues(alpha: 0.1),
@@ -127,7 +129,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           child: const Icon(
                             Icons.favorite_rounded,
                             size: 40,
-                            color: AppColors.primary,
+                            color: AppColors.dark,
                           ),
                         ),
                       ),
@@ -155,10 +157,16 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                 // ── Login Form Card ──
                 SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 0.3),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(parent: _formCtrl, curve: Curves.easeOutCubic)),
+                  position:
+                      Tween<Offset>(
+                        begin: const Offset(0, 0.3),
+                        end: Offset.zero,
+                      ).animate(
+                        CurvedAnimation(
+                          parent: _formCtrl,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      ),
                   child: FadeTransition(
                     opacity: _formCtrl,
                     child: Container(
@@ -166,10 +174,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: AppColors.outlineVariant.withValues(alpha: 0.5),
-                        ),
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(color: AppColors.dark, width: 1.3),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primary.withValues(alpha: 0.06),
@@ -230,10 +236,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                             const SizedBox(height: 12),
 
                             // Login button
-                            Obx(() => _LoginButton(
-                              isLoading: controller.isLoading.value,
-                              onPressed: controller.login,
-                            )),
+                            Obx(
+                              () => _LoginButton(
+                                isLoading: controller.isLoading.value,
+                                onPressed: controller.login,
+                              ),
+                            ),
                             const SizedBox(height: 20),
 
                             // Register link
@@ -319,7 +327,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
     );
   }
@@ -346,7 +357,11 @@ class _PasswordFieldState extends State<_PasswordField> {
       style: AppTextStyles.bodyLg,
       decoration: InputDecoration(
         hintText: '••••••••',
-        prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.onSurfaceVariant, size: 20),
+        prefixIcon: const Icon(
+          Icons.lock_outline_rounded,
+          color: AppColors.onSurfaceVariant,
+          size: 20,
+        ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
@@ -375,7 +390,10 @@ class _PasswordFieldState extends State<_PasswordField> {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: AppColors.error),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
       ),
     );
   }
@@ -396,9 +414,9 @@ class _LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.dark,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+          disabledBackgroundColor: AppColors.dark.withValues(alpha: 0.45),
           elevation: 0,
           shadowColor: AppColors.dark.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(

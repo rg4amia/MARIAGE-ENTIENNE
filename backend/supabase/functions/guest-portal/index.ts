@@ -8,6 +8,36 @@ const publicPortalUrl = Deno.env.get('GUEST_PORTAL_URL') ??
 
 const admin = createClient(supabaseUrl, serviceRoleKey);
 
+type GuestTokenRecord = { id: string; event_id: string };
+
+/** Resolve both canonical guest QR tokens and legacy guest-link tokens. */
+async function findGuestByToken(token: string): Promise<GuestTokenRecord | null> {
+  const direct = await admin
+    .from('guests')
+    .select('id, event_id')
+    .eq('qr_token', token)
+    .neq('status', 'cancelled')
+    .maybeSingle();
+  if (direct.data) return direct.data as GuestTokenRecord;
+
+  const link = await admin
+    .from('guest_links')
+    .select('guest_id')
+    .eq('guest_token', token)
+    .eq('is_active', true)
+    .maybeSingle();
+  const guestId = link.data?.guest_id;
+  if (!guestId) return null;
+
+  const guest = await admin
+    .from('guests')
+    .select('id, event_id')
+    .eq('id', guestId)
+    .neq('status', 'cancelled')
+    .maybeSingle();
+  return (guest.data as GuestTokenRecord | null) ?? null;
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -47,12 +77,8 @@ Deno.serve(async (req) => {
       return apiError('Format de média non autorisé', 400);
     }
 
-    // Retrouver le guest
-    const { data: guest } = await admin
-      .from('guests')
-      .select('id, event_id')
-      .eq('qr_token', token)
-      .single();
+    // Retrouver le guest (QR canonique ou lien court historique).
+    const guest = await findGuestByToken(token);
     if (!guest) return apiError('Invité introuvable', 404);
 
     const storagePath = `${guest.event_id}/${guest.id}/${crypto.randomUUID()}.${extension}`;
@@ -75,12 +101,8 @@ Deno.serve(async (req) => {
     }
     if (!['audio', 'video'].includes(media_type)) return apiError('Type de média invalide', 400);
 
-    const { data: guest, error: guestError } = await admin
-      .from('guests')
-      .select('id, event_id')
-      .eq('qr_token', token)
-      .single();
-    if (guestError || !guest) return apiError('Invité introuvable', 404);
+    const guest = await findGuestByToken(token);
+    if (!guest) return apiError('Invité introuvable', 404);
     const expectedPrefix = `${guest.event_id}/${guest.id}/`;
     if (!storage_path.startsWith(expectedPrefix)) {
       return apiError('Chemin de média invalide pour cette invitation', 403);

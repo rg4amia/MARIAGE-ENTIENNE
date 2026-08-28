@@ -41,10 +41,12 @@ class HomePage extends StatelessWidget {
                     Obx(() => _buildKpiGrid(controller)),
                     const SizedBox(height: 20),
                     // ── Invitation Status ──
-                    Obx(() => FadeInSlide(
-                      delay: const Duration(milliseconds: 300),
-                      child: _buildInvitationStatus(controller),
-                    )),
+                    Obx(
+                      () => FadeInSlide(
+                        delay: const Duration(milliseconds: 300),
+                        child: _buildInvitationStatus(controller),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     // ── Quick Actions ──
                     FadeInSlide(
@@ -67,37 +69,81 @@ class HomePage extends StatelessWidget {
     return WeddingHeader(
       title: '',
       showBack: false,
-      trailing: Obx(() {
-        final name = authController.profile.value?.fullName ?? 'Admin';
-        final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
-        final initials = parts.length >= 2
-            ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
-            : name.length >= 2
-                ? name.substring(0, 2).toUpperCase()
-                : name.toUpperCase();
-        return UserAvatar(
-          initials: initials,
-          radius: 20,
-          backgroundColor: AppColors.dark.withValues(alpha: 0.15),
-        );
-      }),
+      trailing: Container(
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.82),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: const Icon(Icons.tune_rounded, color: AppColors.dark, size: 21),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Obx(() {
-            final name = authController.profile.value?.fullName ?? 'Marie';
-            return Text(
-              'Bonjour, $name 👋',
-              style: AppTextStyles.headlineLgMobile.copyWith(
-                color: AppColors.dark,
-              ),
+            final name =
+                authController.profile.value?.fullName ?? 'Organisateur';
+            final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
+            final initials = parts.length >= 2
+                ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
+                : name.substring(0, math.min(2, name.length)).toUpperCase();
+            return Row(
+              children: [
+                UserAvatar(
+                  initials: initials,
+                  radius: 24,
+                  backgroundColor: Colors.white,
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name, style: AppTextStyles.titleLg),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${DateTime.now().day.toString().padLeft(2, '0')}.${DateTime.now().month.toString().padLeft(2, '0')}.${DateTime.now().year}',
+                        style: AppTextStyles.bodyMdOnVariant.copyWith(
+                          color: AppColors.dark.withValues(alpha: 0.58),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             );
           }),
-          const SizedBox(height: 4),
+          const SizedBox(height: 28),
           Text(
-            '${DateTime.now().day} ${_monthName(DateTime.now().month)} ${DateTime.now().year}',
-            style: AppTextStyles.bodyMd.copyWith(
-              color: AppColors.dark.withValues(alpha: 0.6),
+            'Comment organiser\nvotre mariage ?',
+            style: AppTextStyles.displayMd.copyWith(
+              color: AppColors.dark,
+              fontSize: 38,
+            ),
+          ),
+          const SizedBox(height: 22),
+          TapScale(
+            onTap: () => Get.find<MainNavigationController>().selectTab(
+              MainNavigationController.guestsTab,
+            ),
+            child: Container(
+              height: 58,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search_rounded, color: AppColors.dark),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Rechercher un invité, une table…',
+                    style: AppTextStyles.bodyMdOnVariant,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -124,21 +170,21 @@ class HomePage extends StatelessWidget {
         ),
         _KpiCard(
           icon: Icons.table_restaurant_rounded,
-          color: AppColors.dark,
+          color: Colors.white,
           label: 'Tables',
           value: controller.totalTables.value,
           delay: 100,
         ),
         _KpiCard(
           icon: Icons.event_seat_rounded,
-          color: AppColors.dark,
+          color: AppColors.secondary,
           label: 'Chaises',
           value: controller.totalChairs.value,
           delay: 200,
         ),
         _KpiCard(
           icon: Icons.perm_media_rounded,
-          color: AppColors.dark,
+          color: AppColors.primary,
           label: 'Médias reçus',
           value: controller.totalMedia.value,
           delay: 300,
@@ -162,10 +208,7 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Statut des invitations', style: AppTextStyles.titleLg),
-              StatusBadge(
-                label: '$total total',
-                color: AppColors.dark,
-              ),
+              StatusBadge(label: '$total total', color: AppColors.dark),
             ],
           ),
           const SizedBox(height: 24),
@@ -198,10 +241,7 @@ class HomePage extends StatelessWidget {
                           color: AppColors.dark,
                         ),
                       ),
-                      Text(
-                        'Invités',
-                        style: AppTextStyles.labelMdOnVariant,
-                      ),
+                      Text('Invités', style: AppTextStyles.labelMdOnVariant),
                     ],
                   ),
                 ],
@@ -285,14 +325,6 @@ class HomePage extends StatelessWidget {
       ],
     );
   }
-
-  String _monthName(int month) {
-    const months = [
-      '', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-      'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
-    ];
-    return months[month];
-  }
 }
 
 // ── KPI Card — Dark card matching design ──
@@ -313,13 +345,15 @@ class _KpiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = color.computeLuminance() < 0.35;
+    final contentColor = isDark ? Colors.white : AppColors.dark;
     return FadeInSlide(
       delay: Duration(milliseconds: 100 + delay),
       duration: const Duration(milliseconds: 500),
       child: HoverCard(
         backgroundColor: color,
         padding: const EdgeInsets.all(16),
-        borderRadius: 20,
+        borderRadius: 24,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,10 +362,12 @@ class _KpiCard extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(10),
+                color: isDark
+                    ? AppColors.primary
+                    : AppColors.dark.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: AppColors.primary, size: 18),
+              child: Icon(icon, color: AppColors.dark, size: 18),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,13 +376,13 @@ class _KpiCard extends StatelessWidget {
                   value.toString(),
                   style: AppTextStyles.headlineLg.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: contentColor,
                   ),
                 ),
                 Text(
                   label,
                   style: AppTextStyles.labelMd.copyWith(
-                    color: Colors.white.withValues(alpha: 0.7),
+                    color: contentColor.withValues(alpha: 0.62),
                   ),
                 ),
               ],
@@ -377,15 +413,10 @@ class _StatusLegend extends StatelessWidget {
         Container(
           width: 10,
           height: 10,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 12),
-        Expanded(
-          child: Text(label, style: AppTextStyles.bodyMdOnVariant),
-        ),
+        Expanded(child: Text(label, style: AppTextStyles.bodyMdOnVariant)),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           decoration: BoxDecoration(
@@ -424,23 +455,20 @@ class _QuickActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = color == AppColors.dark;
+    final contentColor = isDark ? Colors.white : AppColors.dark;
     return TapScale(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.dark : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isDark
-                ? AppColors.dark
-                : AppColors.outlineVariant.withValues(alpha: 0.5),
-          ),
+          color: color,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.dark, width: 1.25),
           boxShadow: [
             BoxShadow(
-              color: AppColors.dark.withValues(alpha: 0.06),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
+              color: AppColors.dark.withValues(alpha: 0.07),
+              blurRadius: 8,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
@@ -453,8 +481,8 @@ class _QuickActionCard extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: AppColors.primary, size: 18),
               )
@@ -463,8 +491,8 @@ class _QuickActionCard extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColors.dark.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white.withValues(alpha: 0.7),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: AppColors.dark, size: 18),
               ),
@@ -475,7 +503,7 @@ class _QuickActionCard extends StatelessWidget {
                   title,
                   style: AppTextStyles.bodyMd.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : AppColors.onSurface,
+                    color: contentColor,
                     height: 1.2,
                   ),
                 ),
@@ -483,9 +511,7 @@ class _QuickActionCard extends StatelessWidget {
                 Text(
                   subtitle,
                   style: AppTextStyles.labelMd.copyWith(
-                    color: isDark
-                        ? Colors.white.withValues(alpha: 0.5)
-                        : AppColors.onSurfaceVariant,
+                    color: contentColor.withValues(alpha: 0.58),
                   ),
                 ),
               ],
