@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'micro_interactions.dart';
 
-/// Premium gradient header with mint green gradient.
-/// Used across all main pages for visual consistency.
+/// Premium gradient header with violet gradient.
 class WeddingHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onBackPressed;
@@ -26,8 +24,8 @@ class WeddingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = gradientColors ?? const [
-      Color(0xFF2AE88E),
-      Color(0xFF32FFAA),
+      Color(0xFF7A00CC),
+      Color(0xFF9D00FF),
     ];
 
     return Container(
@@ -49,7 +47,6 @@ class WeddingHeader extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ── Top bar ──
           Row(
             children: [
               if (showBack)
@@ -59,12 +56,12 @@ class WeddingHeader extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.dark.withValues(alpha: 0.1),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.arrow_back_rounded,
-                      color: AppColors.dark,
+                      color: Colors.white,
                       size: 22,
                     ),
                   ),
@@ -75,7 +72,7 @@ class WeddingHeader extends StatelessWidget {
               Text(
                 title,
                 style: AppTextStyles.headlineMd.copyWith(
-                  color: AppColors.dark,
+                  color: Colors.white,
                 ),
               ),
               const Spacer(),
@@ -86,7 +83,6 @@ class WeddingHeader extends StatelessWidget {
             ],
           ),
 
-          // ── Optional child (info banner, greeting, etc.) ──
           if (child != null) ...[
             const SizedBox(height: 20),
             child!,
@@ -97,7 +93,7 @@ class WeddingHeader extends StatelessWidget {
   }
 }
 
-/// Small info banner used inside the header (e.g. QR d'entrée instructions).
+/// Small info banner used inside the header.
 class HeaderInfoBanner extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -113,14 +109,14 @@ class HeaderInfoBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.dark.withValues(alpha: 0.08),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: AppColors.dark.withValues(alpha: 0.7),
+            color: Colors.white.withValues(alpha: 0.9),
             size: 18,
           ),
           const SizedBox(width: 10),
@@ -128,7 +124,7 @@ class HeaderInfoBanner extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                color: AppColors.dark.withValues(alpha: 0.8),
+                color: Colors.white.withValues(alpha: 0.9),
                 fontSize: 13,
                 height: 1.3,
                 fontWeight: FontWeight.w500,

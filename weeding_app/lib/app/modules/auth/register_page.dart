@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage>
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFF2AE88E), Color(0xFF32FFAA)],
+                colors: [Color(0xFF5C0099), Color(0xFF9D00FF)],
               ),
             ),
           ),
@@ -100,15 +100,14 @@ class _RegisterPageState extends State<RegisterPage>
                             Center(
                               child: Container(
                                 width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
+                                height: 60,                                  decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: AppColors.dark,
+                                  color: AppColors.primary,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppColors.dark.withValues(alpha: 0.2),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
                                     ),
                                   ],
                                 ),
@@ -188,9 +187,9 @@ class _RegisterPageState extends State<RegisterPage>
                                         }
                                       },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.dark,
+                                  backgroundColor: AppColors.primary,
                                   foregroundColor: Colors.white,
-                                  disabledBackgroundColor: AppColors.dark.withValues(alpha: 0.5),
+                                  disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
@@ -277,7 +276,7 @@ class _RegisterPageState extends State<RegisterPage>
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
+        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

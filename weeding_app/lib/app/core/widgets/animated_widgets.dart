@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Fade + slide up entrance animation — used on most page elements.
 class FadeInSlide extends StatefulWidget {
   final Widget child;
   final Duration delay;
@@ -34,7 +33,6 @@ class _FadeInSlideState extends State<FadeInSlide>
       begin: Offset(0, widget.slideOffset / 100),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
-
     Future.delayed(widget.delay, () {
       if (mounted) _ctrl.forward();
     });
@@ -55,7 +53,6 @@ class _FadeInSlideState extends State<FadeInSlide>
   }
 }
 
-/// Scale-in animation with bounce.
 class ScaleIn extends StatefulWidget {
   final Widget child;
   final Duration delay;
@@ -99,7 +96,6 @@ class _ScaleInState extends State<ScaleIn>
   }
 }
 
-/// Animated counter that counts up from 0 to [target].
 class AnimatedCounter extends StatefulWidget {
   final int target;
   final Duration duration;
@@ -150,16 +146,12 @@ class _AnimatedCounterState extends State<AnimatedCounter>
       animation: _anim,
       builder: (context, _) {
         final value = (_anim.value * widget.target).round();
-        return Text(
-          value.toString(),
-          style: widget.style,
-        );
+        return Text(value.toString(), style: widget.style);
       },
     );
   }
 }
 
-/// Gradient shimmer effect for loading states.
 class ShimmerBox extends StatefulWidget {
   final double width;
   final double height;
@@ -209,9 +201,9 @@ class _ShimmerBoxState extends State<ShimmerBox>
               begin: Alignment(-1.0 + 2.0 * _ctrl.value, 0),
               end: Alignment(-0.5 + 2.0 * _ctrl.value, 0),
               colors: const [
-                Color(0xFFF0EEEB),
-                Color(0xFFF8F7F5),
-                Color(0xFFF0EEEB),
+                Color(0xFFF2EEF8),
+                Color(0xFFFBF9FE),
+                Color(0xFFF2EEF8),
               ],
             ),
           ),

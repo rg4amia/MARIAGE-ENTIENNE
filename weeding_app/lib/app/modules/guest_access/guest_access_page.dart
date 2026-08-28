@@ -248,7 +248,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF2AE88E), AppColors.primary, AppColors.background],
+          colors: [Color(0xFF5C0099), AppColors.primary, AppColors.background],
           stops: [0.0, 0.3, 0.6],
         ),
       ),
@@ -356,7 +356,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Color(0xFF2AE88E), AppColors.primary, AppColors.background],
+          colors: [Color(0xFF5C0099), AppColors.primary, AppColors.background],
           stops: [0.0, 0.3, 0.6],
         ),
       ),

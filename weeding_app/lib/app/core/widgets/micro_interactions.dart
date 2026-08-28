@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
-/// Animated card with hover/tap scale effect and dynamic shadow.
 class HoverCard extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -32,7 +31,7 @@ class _HoverCardState extends State<HoverCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _scaleAnim;
-  bool _isHovered = false; // ignore: prefer_final_fields
+  bool _isHovered = false;
 
   @override
   void initState() {
@@ -77,15 +76,15 @@ class _HoverCardState extends State<HoverCard>
                 boxShadow: [
                   BoxShadow(
                     color: _isHovered
-                        ? AppColors.dark.withValues(alpha: 0.08)
-                        : AppColors.dark.withValues(alpha: 0.03),
+                        ? AppColors.primary.withValues(alpha: 0.1)
+                        : AppColors.primary.withValues(alpha: 0.04),
                     blurRadius: _isHovered ? 16 : 8,
                     offset: Offset(0, _isHovered ? 6 : 2),
                   ),
                 ],
                 border: Border.all(
                   color: _isHovered
-                      ? AppColors.dark.withValues(alpha: 0.12)
+                      ? AppColors.primary.withValues(alpha: 0.15)
                       : AppColors.outlineVariant.withValues(alpha: 0.5),
                 ),
               ),
@@ -99,7 +98,6 @@ class _HoverCardState extends State<HoverCard>
   }
 }
 
-/// Tap-to-scale widget — provides tactile press feedback on any child.
 class TapScale extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
@@ -153,7 +151,6 @@ class _TapScaleState extends State<TapScale>
   }
 }
 
-/// Gradient button with built-in ripple, press scale, and optional icon.
 class GradientButton extends StatefulWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -208,7 +205,7 @@ class _GradientButtonState extends State<GradientButton>
     final grad = widget.gradient ?? const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [AppColors.dark, Color(0xFF2A2B2B)],
+      colors: [Color(0xFF7A00CC), Color(0xFF9D00FF)],
     );
 
     return GestureDetector(
@@ -232,7 +229,7 @@ class _GradientButtonState extends State<GradientButton>
             borderRadius: BorderRadius.circular(widget.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: AppColors.dark.withValues(alpha: 0.15),
+                color: AppColors.primary.withValues(alpha: 0.25),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -283,7 +280,6 @@ class _GradientButtonState extends State<GradientButton>
   }
 }
 
-/// Shimmer loading skeleton placeholder.
 class ShimmerSkeleton extends StatefulWidget {
   final double width;
   final double height;
@@ -333,9 +329,9 @@ class _ShimmerSkeletonState extends State<ShimmerSkeleton>
               begin: Alignment(-1.0 + 2.0 * _ctrl.value, 0),
               end: Alignment(-0.5 + 2.0 * _ctrl.value, 0),
               colors: const [
-                Color(0xFFF0EEEB),
-                Color(0xFFF8F7F5),
-                Color(0xFFF0EEEB),
+                Color(0xFFF2EEF8),
+                Color(0xFFFBF9FE),
+                Color(0xFFF2EEF8),
               ],
             ),
           ),

@@ -4,7 +4,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import '../../routes/app_routes.dart';
 
-/// Dark bottom navigation bar with green accent plus button.
+/// Dark purple bottom navigation bar with green accent plus button.
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
 
@@ -64,7 +64,7 @@ class AppBottomNavBar extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isActive
-                      ? AppColors.primary.withValues(alpha: 0.15)
+                      ? AppColors.primary.withValues(alpha: 0.2)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -72,7 +72,6 @@ class AppBottomNavBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (index == 0 && !isActive)
-                      // Special green plus button for home
                       Container(
                         width: 36,
                         height: 36,
@@ -81,7 +80,7 @@ class AppBottomNavBar extends StatelessWidget {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.3),
+                              color: AppColors.primary.withValues(alpha: 0.4),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -89,7 +88,7 @@ class AppBottomNavBar extends StatelessWidget {
                         ),
                         child: const Icon(
                           Icons.add_rounded,
-                          color: AppColors.dark,
+                          color: Colors.white,
                           size: 20,
                         ),
                       )

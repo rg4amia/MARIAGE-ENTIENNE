@@ -554,7 +554,7 @@ class _DonutPainter extends CustomPainter {
       startAngle += mediaAngle;
     }
 
-    // Card unlocked — mint green
+    // Card unlocked — purple
     final unlockedAngle = (cardUnlocked / total) * totalAngle;
     if (unlockedAngle > 0) {
       paint.color = AppColors.primary;

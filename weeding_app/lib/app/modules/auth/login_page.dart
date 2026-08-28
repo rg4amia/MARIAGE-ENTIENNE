@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color.lerp(const Color(0xFF2AE88E), AppColors.primary, t)!,
-                      Color.lerp(AppColors.primary, const Color(0xFF32FFAA), t)!,
+                      Color.lerp(const Color(0xFF5C0099), AppColors.primary, t)!,
+                      Color.lerp(AppColors.primary, const Color(0xFFD4A0FF), t)!,
                     ],
                   ),
                 ),
@@ -80,8 +80,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               width: 200,
               height: 200,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.dark.withValues(alpha: 0.05),
+                shape: BoxShape.circle,                            color: AppColors.primary.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -92,8 +91,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               width: 160,
               height: 160,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.dark.withValues(alpha: 0.03),
+                shape: BoxShape.circle,                            color: AppColors.primary.withValues(alpha: 0.03),
               ),
             ),
           ),
@@ -118,10 +116,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           height: 80,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.dark.withValues(alpha: 0.1),
+                            color: AppColors.primary.withValues(alpha: 0.15),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.dark.withValues(alpha: 0.08),
+                                color: AppColors.primary.withValues(alpha: 0.1),
                                 blurRadius: 20,
                               ),
                             ],
@@ -129,7 +127,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           child: const Icon(
                             Icons.favorite_rounded,
                             size: 40,
-                            color: AppColors.dark,
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -174,7 +172,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.dark.withValues(alpha: 0.06),
+                            color: AppColors.primary.withValues(alpha: 0.06),
                             blurRadius: 30,
                             offset: const Offset(0, 10),
                           ),
@@ -315,7 +313,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -371,7 +369,7 @@ class _PasswordFieldState extends State<_PasswordField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -398,9 +396,9 @@ class _LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.dark,
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: AppColors.dark.withValues(alpha: 0.5),
+          disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
           elevation: 0,
           shadowColor: AppColors.dark.withValues(alpha: 0.2),
           shape: RoundedRectangleBorder(

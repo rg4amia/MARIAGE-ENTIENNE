@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
-/// Custom gradient AppBar used across all admin pages.
 class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
@@ -29,7 +28,7 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
         color: AppColors.background,
         boxShadow: [
           BoxShadow(
-            color: AppColors.dark.withValues(alpha: 0.04),
+            color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -62,7 +61,6 @@ class WeddingAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-/// Premium section header with optional action button.
 class SectionHeader extends StatelessWidget {
   final String title;
   final String? actionText;
@@ -84,7 +82,7 @@ class SectionHeader extends StatelessWidget {
               child: Text(
                 actionText!,
                 style: AppTextStyles.bodyMd.copyWith(
-                  color: AppColors.dark,
+                  color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -95,7 +93,6 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
-/// Premium status badge with dot indicator.
 class StatusBadge extends StatelessWidget {
   final String label;
   final Color color;
@@ -136,7 +133,6 @@ class StatusBadge extends StatelessWidget {
   }
 }
 
-/// Avatar with initials, solid background and optional online dot.
 class UserAvatar extends StatelessWidget {
   final String initials;
   final double radius;
@@ -155,7 +151,7 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = backgroundColor ?? AppColors.dark;
+    final bgColor = backgroundColor ?? AppColors.primary;
     return Stack(
       children: [
         Container(
@@ -166,7 +162,7 @@ class UserAvatar extends StatelessWidget {
             color: bgColor,
             boxShadow: [
               BoxShadow(
-                color: bgColor.withValues(alpha: 0.2),
+                color: bgColor.withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -203,7 +199,6 @@ class UserAvatar extends StatelessWidget {
   }
 }
 
-/// Clean white card with subtle border — used for primary content cards.
 class GradientCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
@@ -230,7 +225,7 @@ class GradientCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.dark.withValues(alpha: 0.04),
+            color: AppColors.primary.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
