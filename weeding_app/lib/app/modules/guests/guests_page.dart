@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
-import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
@@ -135,7 +134,6 @@ class GuestsPage extends StatelessWidget {
           child: const Icon(Icons.add_rounded, color: Colors.white, size: 28),
         ),
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 1),
     );
   }
 
@@ -313,9 +311,9 @@ class _GuestCard extends StatelessWidget {
   Color _avatarColor(String status) {
     switch (status) {
       case 'card_unlocked':
-        return AppColors.primary;
+        return AppColors.statusCardUnlocked;
       case 'media_uploaded':
-        return const Color(0xFFB0A8FF);
+        return AppColors.statusMediaReceived;
       default:
         return AppColors.dark;
     }
@@ -324,11 +322,11 @@ class _GuestCard extends StatelessWidget {
   Color _statusColor(String status) {
     switch (status) {
       case 'card_unlocked':
-        return AppColors.primary;
+        return AppColors.statusCardUnlocked;
       case 'media_uploaded':
-        return const Color(0xFFB0A8FF);
+        return AppColors.statusMediaReceived;
       default:
-        return AppColors.secondary;
+        return AppColors.statusPending;
     }
   }
 

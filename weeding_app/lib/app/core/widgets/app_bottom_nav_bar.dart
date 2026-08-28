@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
-import '../../routes/app_routes.dart';
 
-/// Dark purple bottom navigation bar with green accent plus button.
+/// Barre unique de navigation de l'espace administrateur.
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
+  final ValueChanged<int> onTabSelected;
 
-  const AppBottomNavBar({super.key, required this.currentIndex});
-
-  static const _routes = [
-    AppRoutes.home,
-    AppRoutes.guests,
-    AppRoutes.tables,
-    AppRoutes.invitations,
-    AppRoutes.settings,
-  ];
+  const AppBottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTabSelected,
+  });
 
   static const _icons = [
     Icons.home_rounded,
@@ -51,7 +46,7 @@ class AppBottomNavBar extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 if (index != currentIndex) {
-                  Get.offAllNamed(_routes[index]);
+                  onTabSelected(index);
                 }
               },
               behavior: HitTestBehavior.opaque,
@@ -71,35 +66,15 @@ class AppBottomNavBar extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (index == 0 && !isActive)
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.4),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
+                    Icon(
+                      _icons[index],
+                      color: isActive
+                          ? AppColors.primary
+                          : AppColors.surfaceContainerHigh.withValues(
+                              alpha: 0.7,
                             ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.add_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      )
-                    else
-                      Icon(
-                        _icons[index],
-                        color: isActive
-                            ? AppColors.primary
-                            : AppColors.surfaceContainerHigh.withValues(alpha: 0.6),
-                        size: 24,
-                      ),
+                      size: 24,
+                    ),
                     if (isActive) ...[
                       const SizedBox(width: 8),
                       Text(

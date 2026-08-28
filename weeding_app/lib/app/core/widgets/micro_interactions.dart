@@ -205,7 +205,7 @@ class _GradientButtonState extends State<GradientButton>
     final grad = widget.gradient ?? const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [Color(0xFF7A00CC), Color(0xFF9D00FF)],
+      colors: [AppColors.primaryDark, AppColors.primaryContainer],
     );
 
     return GestureDetector(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
@@ -11,6 +10,7 @@ import '../../core/widgets/wedding_header.dart';
 import '../../routes/app_routes.dart';
 import 'home_controller.dart';
 import '../auth/auth_controller.dart';
+import '../navigation/main_navigation_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -59,7 +59,6 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
     );
   }
 
@@ -211,19 +210,19 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           _StatusLegend(
-            color: AppColors.secondary,
+            color: AppColors.statusPending,
             label: 'En attente',
             count: pending,
           ),
           const SizedBox(height: 10),
           _StatusLegend(
-            color: AppColors.primary,
+            color: AppColors.statusMediaReceived,
             label: 'Média reçu',
             count: mediaUploaded,
           ),
           const SizedBox(height: 10),
           _StatusLegend(
-            color: AppColors.primary,
+            color: AppColors.statusCardUnlocked,
             label: 'Carte débloquée',
             count: cardUnlocked,
           ),
@@ -252,21 +251,27 @@ class HomePage extends StatelessWidget {
               color: AppColors.primary,
               title: 'Ajouter\nun invité',
               subtitle: 'Invités',
-              onTap: () => Get.toNamed(AppRoutes.guests),
+              onTap: () => Get.find<MainNavigationController>().selectTab(
+                MainNavigationController.guestsTab,
+              ),
             ),
             _QuickActionCard(
               icon: Icons.table_restaurant_rounded,
               color: AppColors.dark,
               title: 'Gérer\nles tables',
               subtitle: 'Tables',
-              onTap: () => Get.toNamed(AppRoutes.tables),
+              onTap: () => Get.find<MainNavigationController>().selectTab(
+                MainNavigationController.tablesTab,
+              ),
             ),
             _QuickActionCard(
               icon: Icons.analytics_rounded,
               color: AppColors.dark,
               title: 'Suivi des\ninvitations',
               subtitle: 'Suivi',
-              onTap: () => Get.toNamed(AppRoutes.invitations),
+              onTap: () => Get.find<MainNavigationController>().selectTab(
+                MainNavigationController.invitationsTab,
+              ),
             ),
             _QuickActionCard(
               icon: Icons.qr_code_2_rounded,
@@ -529,7 +534,7 @@ class _DonutPainter extends CustomPainter {
     // Pending — yellow
     final pendingAngle = (pending / total) * totalAngle;
     if (pendingAngle > 0) {
-      paint.color = AppColors.secondary;
+      paint.color = AppColors.statusPending;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,
@@ -543,7 +548,7 @@ class _DonutPainter extends CustomPainter {
     // Media uploaded — dark
     final mediaAngle = (mediaUploaded / total) * totalAngle;
     if (mediaAngle > 0) {
-      paint.color = AppColors.dark;
+      paint.color = AppColors.statusMediaReceived;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,
@@ -554,10 +559,10 @@ class _DonutPainter extends CustomPainter {
       startAngle += mediaAngle;
     }
 
-    // Card unlocked — purple
+    // Card unlocked — terracotta
     final unlockedAngle = (cardUnlocked / total) * totalAngle;
     if (unlockedAngle > 0) {
-      paint.color = AppColors.primary;
+      paint.color = AppColors.statusCardUnlocked;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,

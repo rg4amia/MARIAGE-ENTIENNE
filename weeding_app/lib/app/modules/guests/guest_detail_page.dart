@@ -431,11 +431,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return const Color(0xFFB0A8FF);
+        return AppColors.statusMediaReceived;
       case 'card_unlocked':
-        return AppColors.primary;
+        return AppColors.statusCardUnlocked;
       default:
-        return AppColors.secondary;
+        return AppColors.statusPending;
     }
   }
 

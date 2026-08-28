@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color.lerp(const Color(0xFF5C0099), AppColors.primary, t)!,
-                      Color.lerp(AppColors.primary, const Color(0xFFD4A0FF), t)!,
+                      Color.lerp(AppColors.primaryDarker, AppColors.primary, t)!,
+                      Color.lerp(AppColors.primary, AppColors.primaryLight, t)!,
                     ],
                   ),
                 ),

@@ -4,12 +4,14 @@ import '../modules/home/home_controller.dart';
 import '../modules/tables/tables_controller.dart';
 import '../modules/guests/guests_controller.dart';
 import '../modules/invitations/invitations_controller.dart';
+import '../modules/navigation/main_navigation_controller.dart';
 
 class AppBinding extends Bindings {
   @override
   void dependencies() {
     // Core controllers
     Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
+    Get.put(MainNavigationController(), permanent: true);
 
     // Feature controllers
     Get.lazyPut<HomeController>(() => HomeController(), fenix: true);

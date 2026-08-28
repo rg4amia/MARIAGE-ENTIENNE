@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/guest_link_repository.dart';
@@ -106,21 +105,21 @@ class _InvitationsPageState extends State<InvitationsPage> {
                               _StatCard(
                                 title: 'En attente',
                                 count: pending,
-                                color: AppColors.secondary,
+                                color: AppColors.statusPending,
                                 icon: Icons.hourglass_empty,
                               ),
                               const SizedBox(width: 12),
                               _StatCard(
                                 title: 'Média reçu',
                                 count: mediaUploaded,
-                                color: const Color(0xFFB0A8FF),
+                                color: AppColors.statusMediaReceived,
                                 icon: Icons.upload_file,
                               ),
                               const SizedBox(width: 12),
                               _StatCard(
                                 title: 'Carte débloquée',
                                 count: cardUnlocked,
-                                color: AppColors.primary,
+                                color: AppColors.statusCardUnlocked,
                                 icon: Icons.check_circle,
                               ),
                             ],
@@ -193,7 +192,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 3),
     );
   }
 
@@ -333,11 +331,11 @@ class _InvitationsPageState extends State<InvitationsPage> {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return const Color(0xFFB0A8FF);
+        return AppColors.statusMediaReceived;
       case 'card_unlocked':
-        return AppColors.primary;
+        return AppColors.statusCardUnlocked;
       default:
-        return AppColors.secondary;
+        return AppColors.statusPending;
     }
   }
 
@@ -534,11 +532,11 @@ class _GuestStatusCard extends StatelessWidget {
   Color _statusColor(String status) {
     switch (status) {
       case 'media_uploaded':
-        return const Color(0xFFB0A8FF);
+        return AppColors.statusMediaReceived;
       case 'card_unlocked':
-        return AppColors.primary;
+        return AppColors.statusCardUnlocked;
       default:
-        return AppColors.secondary;
+        return AppColors.statusPending;
     }
   }
 

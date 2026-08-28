@@ -4,19 +4,15 @@ import 'app_routes.dart';
 import '../modules/auth/auth_controller.dart';
 import '../modules/auth/auth_binding.dart';
 import '../modules/auth/login_page.dart';
-import '../modules/home/home_page.dart';
-import '../modules/home/home_binding.dart';
-import '../modules/tables/tables_page.dart';
 import '../modules/tables/tables_binding.dart';
 import '../modules/tables/table_detail_page.dart';
-import '../modules/guests/guests_page.dart';
 import '../modules/guests/guests_binding.dart';
 import '../modules/guests/guest_detail_page.dart';
 import '../modules/invitations/qr_code_page.dart';
-import '../modules/invitations/invitations_page.dart';
 import '../modules/invitations/invitations_binding.dart';
 import '../modules/invitations/entrance_qr_page.dart';
-import '../modules/settings/settings_page.dart';
+import '../modules/navigation/main_navigation_controller.dart';
+import '../modules/navigation/main_shell_page.dart';
 
 class AppPages {
   static const initial = AppRoutes.login;
@@ -30,17 +26,17 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.home,
-      page: () => const HomePage(),
-      binding: HomeBinding(),
+      page: () =>
+          const MainShellPage(initialIndex: MainNavigationController.homeTab),
       middlewares: [AuthMiddleware()],
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: AppRoutes.tables,
-      page: () => const TablesPage(),
-      binding: TablesBinding(),
+      page: () =>
+          const MainShellPage(initialIndex: MainNavigationController.tablesTab),
       middlewares: [AuthMiddleware()],
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: AppRoutes.tableDetail,
@@ -51,10 +47,10 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.guests,
-      page: () => const GuestsPage(),
-      binding: GuestsBinding(),
+      page: () =>
+          const MainShellPage(initialIndex: MainNavigationController.guestsTab),
       middlewares: [AuthMiddleware()],
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: AppRoutes.guestDetail,
@@ -65,9 +61,11 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.invitations,
-      page: () => const InvitationsPage(),
+      page: () => const MainShellPage(
+        initialIndex: MainNavigationController.invitationsTab,
+      ),
       middlewares: [AuthMiddleware()],
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: AppRoutes.qrCode,
@@ -84,9 +82,11 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.settings,
-      page: () => const SettingsPage(),
+      page: () => const MainShellPage(
+        initialIndex: MainNavigationController.settingsTab,
+      ),
       middlewares: [AuthMiddleware()],
-      transition: Transition.rightToLeft,
+      transition: Transition.fadeIn,
     ),
   ];
 }

@@ -4,7 +4,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
-import '../../core/widgets/app_bottom_nav_bar.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
 import '../../core/widgets/wedding_header.dart';
@@ -77,7 +76,11 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Obx(() {
                       final profile = authController.profile.value;
                       final name = profile?.fullName ?? 'Admin';
-                      final initials = name.split(' ').map((e) => e.isNotEmpty ? e[0] : '').join().toUpperCase();
+                      final initials = name
+                          .split(' ')
+                          .map((e) => e.isNotEmpty ? e[0] : '')
+                          .join()
+                          .toUpperCase();
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         padding: const EdgeInsets.all(20),
@@ -95,11 +98,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         child: Row(
                           children: [
                             UserAvatar(
-                              initials: initials.length >= 2 ? initials.substring(0, 2) : initials,
+                              initials: initials.length >= 2
+                                  ? initials.substring(0, 2)
+                                  : initials,
                               radius: 28,
-                              backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                              backgroundColor: AppColors.primary.withValues(
+                                alpha: 0.15,
+                              ),
                               child: Text(
-                                initials.length >= 2 ? initials.substring(0, 2) : initials,
+                                initials.length >= 2
+                                    ? initials.substring(0, 2)
+                                    : initials,
                                 style: AppTextStyles.titleLg.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
@@ -125,7 +134,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                       vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary.withValues(alpha: 0.15),
+                                      color: AppColors.primary.withValues(
+                                        alpha: 0.15,
+                                      ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
@@ -244,7 +255,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: const AppBottomNavBar(currentIndex: 4),
     );
   }
 
@@ -329,7 +339,9 @@ class _SettingsPageState extends State<SettingsPage> {
               label: const Text('Modifier les informations'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.dark,
-                side: BorderSide(color: AppColors.outlineVariant.withValues(alpha: 0.5)),
+                side: BorderSide(
+                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -342,103 +354,231 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showEditWeddingSheet(BuildContext context) {
+  Future<void> _showEditWeddingSheet(BuildContext context) async {
     final s = _weddingSettings;
     final titleCtrl = TextEditingController(text: s?.title ?? '');
     final brideCtrl = TextEditingController(text: s?.brideName ?? '');
     final groomCtrl = TextEditingController(text: s?.groomName ?? '');
     final locationCtrl = TextEditingController(text: s?.location ?? '');
     DateTime? selectedDate = s?.eventDate;
+    var isSaving = false;
 
-    showModalBottomSheet(
+    await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: AppColors.dark.withValues(alpha: 0.48),
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setSheetState) => Padding(
-          padding: EdgeInsets.only(
-            left: 24,
-            right: 24,
-            top: 24,
-            bottom: MediaQuery.of(ctx).viewInsets.bottom + 24,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Modifier le mariage', style: AppTextStyles.headlineMd),
-              const SizedBox(height: 20),
-
-              _buildTextField(controller: titleCtrl, label: 'Titre du mariage', icon: Icons.favorite_outline),
-              const SizedBox(height: 12),
-              _buildTextField(controller: brideCtrl, label: 'Nom de la mariée', icon: Icons.person_outline),
-              const SizedBox(height: 12),
-              _buildTextField(controller: groomCtrl, label: 'Nom du marié', icon: Icons.person_outline),
-              const SizedBox(height: 12),
-              _buildTextField(controller: locationCtrl, label: 'Lieu de la cérémonie', icon: Icons.location_on_outlined),
-
-              const SizedBox(height: 12),
-              InkWell(
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: ctx,
-                    initialDate: selectedDate ?? DateTime.now(),
-                    firstDate: DateTime(2024),
-                    lastDate: DateTime(2030),
-                  );
-                  if (picked != null) {
-                    setSheetState(() => selectedDate = picked);
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.outlineVariant),
-                    borderRadius: BorderRadius.circular(16),
+        builder: (ctx, setSheetState) => AnimatedPadding(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom),
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.9,
+            minChildSize: 0.6,
+            maxChildSize: 0.96,
+            expand: false,
+            builder: (ctx, scrollController) => DecoratedBox(
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  Container(
+                    width: 42,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.outlineVariant,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.calendar_today_rounded, size: 20, color: AppColors.onSurfaceVariant),
-                      const SizedBox(width: 12),
-                      Text(
-                        selectedDate != null
-                            ? DateFormat('d MMMM yyyy', 'fr_FR').format(selectedDate!)
-                            : 'Sélectionner la date',
-                        style: AppTextStyles.bodyMd.copyWith(
-                          color: selectedDate != null ? AppColors.onSurface : AppColors.onSurfaceVariant,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 18, 12, 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Modifier le mariage',
+                            style: AppTextStyles.headlineMd,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'Fermer',
+                          onPressed: () => Navigator.pop(ctx),
+                          icon: const Icon(Icons.close_rounded),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+                      child: Column(
+                        children: [
+                          _buildTextField(
+                            controller: titleCtrl,
+                            label: 'Titre du mariage',
+                            icon: Icons.favorite_outline,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextField(
+                            controller: brideCtrl,
+                            label: 'Nom de la mariée',
+                            icon: Icons.person_outline,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextField(
+                            controller: groomCtrl,
+                            label: 'Nom du marié',
+                            icon: Icons.person_outline,
+                          ),
+                          const SizedBox(height: 12),
+                          _buildTextField(
+                            controller: locationCtrl,
+                            label: 'Lieu de la cérémonie',
+                            icon: Icons.location_on_outlined,
+                          ),
+                          const SizedBox(height: 12),
+                          InkWell(
+                            onTap: () async {
+                              final picked = await showDatePicker(
+                                context: ctx,
+                                initialDate: selectedDate ?? DateTime.now(),
+                                firstDate: DateTime(2024),
+                                lastDate: DateTime(2035),
+                              );
+                              if (picked != null) {
+                                setSheetState(() => selectedDate = picked);
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 17,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceContainerLow,
+                                border: Border.all(
+                                  color: AppColors.outlineVariant,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.calendar_today_rounded,
+                                    size: 20,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    selectedDate != null
+                                        ? DateFormat(
+                                            'd MMMM yyyy',
+                                            'fr_FR',
+                                          ).format(selectedDate!)
+                                        : 'Sélectionner la date',
+                                    style: AppTextStyles.bodyMd.copyWith(
+                                      color: selectedDate != null
+                                          ? AppColors.onSurface
+                                          : AppColors.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SafeArea(
+                    top: false,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        border: Border(
+                          top: BorderSide(
+                            color: AppColors.outlineVariant.withValues(
+                              alpha: 0.45,
+                            ),
+                          ),
                         ),
                       ),
-                    ],
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: isSaving
+                              ? null
+                              : () async {
+                                  setSheetState(() => isSaving = true);
+                                  try {
+                                    await WeddingSettingsRepository()
+                                        .updateSettings(
+                                          title: titleCtrl.text.trim(),
+                                          brideName: brideCtrl.text.trim(),
+                                          groomName: groomCtrl.text.trim(),
+                                          location: locationCtrl.text.trim(),
+                                          eventDate: selectedDate,
+                                        );
+                                    if (ctx.mounted) Navigator.pop(ctx);
+                                    await _loadWeddingSettings();
+                                    if (mounted) {
+                                      Get.snackbar(
+                                        'Succès',
+                                        'Informations du mariage mises à jour',
+                                      );
+                                    }
+                                  } catch (_) {
+                                    if (ctx.mounted) {
+                                      setSheetState(() => isSaving = false);
+                                    }
+                                    if (mounted) {
+                                      Get.snackbar(
+                                        'Erreur',
+                                        'Impossible de modifier le mariage',
+                                      );
+                                    }
+                                  }
+                                },
+                          child: isSaving
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Text(
+                                  'Enregistrer',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    await WeddingSettingsRepository().updateSettings(
-                      title: titleCtrl.text.trim(),
-                      brideName: brideCtrl.text.trim(),
-                      groomName: groomCtrl.text.trim(),
-                      location: locationCtrl.text.trim(),
-                      eventDate: selectedDate,
-                    );
-                    if (ctx.mounted) Navigator.pop(ctx);
-                    await _loadWeddingSettings();
-                    if (mounted) Get.snackbar('Succès', 'Informations du mariage mises à jour');
-                  },
-                  child: const Text('Enregistrer', style: TextStyle(fontWeight: FontWeight.w700)),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
+
+    titleCtrl.dispose();
+    brideCtrl.dispose();
+    groomCtrl.dispose();
+    locationCtrl.dispose();
   }
 
   Widget _buildTextField({
@@ -451,10 +591,11 @@ class _SettingsPageState extends State<SettingsPage> {
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, size: 20),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
@@ -478,7 +619,10 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: const Text(
               'Déconnexion',
-              style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                color: AppColors.error,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ],
@@ -519,7 +663,12 @@ class _WeddingInfoRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: AppTextStyles.labelMd.copyWith(color: AppColors.onSurfaceVariant)),
+              Text(
+                label,
+                style: AppTextStyles.labelMd.copyWith(
+                  color: AppColors.onSurfaceVariant,
+                ),
+              ),
               Text(value, style: AppTextStyles.bodyLg),
             ],
           ),

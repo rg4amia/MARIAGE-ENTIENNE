@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 import 'micro_interactions.dart';
 
-/// Premium gradient header with violet gradient.
+/// En-tête terracotta issu de la palette Celestial Romance.
 class WeddingHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onBackPressed;
@@ -24,8 +25,8 @@ class WeddingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = gradientColors ?? const [
-      Color(0xFF7A00CC),
-      Color(0xFF9D00FF),
+      AppColors.primaryDark,
+      AppColors.primaryContainer,
     ];
 
     return Container(

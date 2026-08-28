@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage>
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFF5C0099), Color(0xFF9D00FF)],
+                colors: [AppColors.primaryDarker, AppColors.primaryContainer],
               ),
             ),
           ),
