@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../core/theme/app_colors.dart';
@@ -51,7 +52,6 @@ extension WaveformStyleExtension on WaveformStyle {
   List<double> generateBars(int count, Random random) {
     switch (this) {
       case WaveformStyle.linear:
-        // Linear progression: small to tall to small
         return List.generate(
           count,
           (i) {
@@ -62,7 +62,6 @@ extension WaveformStyleExtension on WaveformStyle {
         );
 
       case WaveformStyle.rounded:
-        // Rounded: high in center, low on edges with smooth curve
         return List.generate(
           count,
           (i) {
@@ -74,14 +73,12 @@ extension WaveformStyleExtension on WaveformStyle {
         );
 
       case WaveformStyle.random:
-        // Completely random bars
         return List.generate(
           count,
           (_) => 0.1 + random.nextDouble() * 0.9,
         );
 
       case WaveformStyle.sine:
-        // Sine wave pattern
         return List.generate(
           count,
           (i) {
@@ -91,7 +88,6 @@ extension WaveformStyleExtension on WaveformStyle {
         );
 
       case WaveformStyle.pulse:
-        // Pulse: alternating high and low
         return List.generate(
           count,
           (i) {
@@ -175,6 +171,41 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       _waveformStyle = style;
       _generateBars();
     });
+  }
+
+  void _openFullscreenWaveform() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            )),
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FullscreenWaveformPage(
+            guest: widget.guest,
+            audioPlayer: _audioPlayer,
+            isPlaying: _isPlaying,
+            position: _position,
+            duration: _duration,
+            waveformBars: _waveformBars,
+            waveformStyle: _waveformStyle,
+            onTogglePlayPause: _togglePlayPause,
+            onSeek: _seek,
+            onStyleChanged: _changeWaveformStyle,
+          );
+        },
+        fullscreenDialog: true,
+      ),
+    );
   }
 
   Future<void> _loadMedia() async {
@@ -476,16 +507,51 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       children: [
         // Waveform style selector
         _buildWaveformStyleSelector(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
-        // Animated waveform
-        _AudioWaveform(
-          bars: _waveformBars,
-          isPlaying: _isPlaying,
-          barCount: _barCount,
-          style: _waveformStyle,
+        // Waveform with fullscreen button
+        GestureDetector(
+          onTap: _openFullscreenWaveform,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _AudioWaveform(
+                bars: _waveformBars,
+                isPlaying: _isPlaying,
+                barCount: _barCount,
+                style: _waveformStyle,
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: AppColors.dark.withValues(alpha: 0.7),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.fullscreen,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            'Appuyez pour le mode plein écran',
+            style: AppTextStyles.labelMd.copyWith(
+              color: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+              fontSize: 11,
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
 
         // Guest info
         Text(
@@ -633,7 +699,6 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Rewind 10s
               _ControlButton(
                 icon: Icons.replay_10,
                 onTap: () {
@@ -642,7 +707,6 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                 },
               ),
               const SizedBox(width: 24),
-              // Play/Pause
               GestureDetector(
                 onTap: _togglePlayPause,
                 child: Container(
@@ -667,7 +731,6 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                 ),
               ),
               const SizedBox(width: 24),
-              // Forward 10s
               _ControlButton(
                 icon: Icons.forward_10,
                 onTap: () {
@@ -707,7 +770,6 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
-                    // Navigate to unlock card
                   },
                   icon: const Icon(Icons.credit_card, size: 18),
                   label: const Text('Débloquer carte'),
@@ -724,6 +786,488 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Fullscreen waveform visualization page
+class FullscreenWaveformPage extends StatefulWidget {
+  final Guest guest;
+  final AudioPlayer? audioPlayer;
+  final bool isPlaying;
+  final Duration position;
+  final Duration duration;
+  final List<double> waveformBars;
+  final WaveformStyle waveformStyle;
+  final VoidCallback onTogglePlayPause;
+  final void Function(Duration) onSeek;
+  final void Function(WaveformStyle) onStyleChanged;
+
+  const FullscreenWaveformPage({
+    super.key,
+    required this.guest,
+    required this.audioPlayer,
+    required this.isPlaying,
+    required this.position,
+    required this.duration,
+    required this.waveformBars,
+    required this.waveformStyle,
+    required this.onTogglePlayPause,
+    required this.onSeek,
+    required this.onStyleChanged,
+  });
+
+  @override
+  State<FullscreenWaveformPage> createState() => _FullscreenWaveformPageState();
+}
+
+class _FullscreenWaveformPageState extends State<FullscreenWaveformPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+  WaveformStyle? _selectedStyle;
+  late final Random _random;
+  final int _barCount = 60;
+  late List<double> _bars;
+
+  @override
+  void initState() {
+    super.initState();
+    _random = Random();
+    _selectedStyle = widget.waveformStyle;
+    _bars = List.from(widget.waveformBars);
+
+    // Enter immersive mode
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
+    if (widget.isPlaying) {
+      _pulseController.repeat(reverse: true);
+      _startBarAnimation();
+    }
+  }
+
+  void _startBarAnimation() {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (!mounted || !widget.isPlaying) return;
+      setState(() {
+        _bars = (_selectedStyle ?? widget.waveformStyle)
+            .generateBars(_barCount, _random);
+      });
+      _startBarAnimation();
+    });
+  }
+
+  @override
+  void didUpdateWidget(FullscreenWaveformPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isPlaying && !_pulseController.isAnimating) {
+      _pulseController.repeat(reverse: true);
+      _startBarAnimation();
+    } else if (!widget.isPlaying && _pulseController.isAnimating) {
+      _pulseController.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    // Restore normal mode
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    super.dispose();
+  }
+
+  void _changeStyle(WaveformStyle style) {
+    setState(() {
+      _selectedStyle = style;
+      _bars = style.generateBars(_barCount, _random);
+    });
+    widget.onStyleChanged(style);
+  }
+
+  String _formatDuration(Duration duration) {
+    final minutes = duration.inMinutes.toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.dark,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Top bar with close and guest info
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.guest.fullName,
+                          style: AppTextStyles.titleLg.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Message audio',
+                          style: AppTextStyles.bodyMd.copyWith(
+                            color: Colors.white.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Style indicator
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _selectedStyle?.icon ?? widget.waveformStyle.icon,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          _selectedStyle?.label ?? widget.waveformStyle.label,
+                          style: AppTextStyles.labelMd.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Style selector
+            SizedBox(
+              height: 44,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                itemCount: WaveformStyle.values.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final style = WaveformStyle.values[index];
+                  final isSelected = _selectedStyle == style;
+
+                  return GestureDetector(
+                    onTap: () => _changeStyle(style),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppColors.primary
+                            : Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppColors.primary
+                              : Colors.white.withValues(alpha: 0.2),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            style.icon,
+                            size: 16,
+                            color: isSelected ? Colors.white : Colors.white70,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            style.label,
+                            style: AppTextStyles.labelMd.copyWith(
+                              color: isSelected ? Colors.white : Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 32),
+
+            // Main waveform visualization
+            Expanded(
+              child: Center(
+                child: AnimatedBuilder(
+                  animation: _pulseAnimation,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: widget.isPlaying ? _pulseAnimation.value : 1.0,
+                      child: _buildLargeWaveform(),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            // Playback controls
+            Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  // Progress bar
+                  SliderTheme(
+                    data: SliderThemeData(
+                      activeTrackColor: AppColors.primary,
+                      inactiveTrackColor: Colors.white.withValues(alpha: 0.2),
+                      thumbColor: AppColors.primary,
+                      thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                      trackHeight: 4,
+                      overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
+                    ),
+                    child: Slider(
+                      value: widget.position.inSeconds.toDouble().clamp(
+                            0,
+                            widget.duration.inSeconds.toDouble(),
+                          ),
+                      max: widget.duration.inSeconds.toDouble().clamp(1, double.infinity),
+                      onChanged: (value) {
+                        widget.onSeek(Duration(seconds: value.toInt()));
+                      },
+                    ),
+                  ),
+                  // Time labels
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _formatDuration(widget.position),
+                          style: AppTextStyles.labelMd.copyWith(
+                            color: Colors.white70,
+                          ),
+                        ),
+                        Text(
+                          _formatDuration(widget.duration),
+                          style: AppTextStyles.labelMd.copyWith(
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Control buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _FullscreenControlButton(
+                        icon: Icons.replay_10,
+                        onTap: () {
+                          final newPos = widget.position - const Duration(seconds: 10);
+                          widget.onSeek(newPos.isNegative ? Duration.zero : newPos);
+                        },
+                      ),
+                      const SizedBox(width: 32),
+                      GestureDetector(
+                        onTap: widget.onTogglePlayPause,
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.4),
+                                blurRadius: 24,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            widget.isPlaying ? Icons.pause : Icons.play_arrow,
+                            color: Colors.white,
+                            size: 48,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 32),
+                      _FullscreenControlButton(
+                        icon: Icons.forward_10,
+                        onTap: () {
+                          final newPos = widget.position + const Duration(seconds: 10);
+                          if (newPos > widget.duration) {
+                            widget.onSeek(widget.duration);
+                          } else {
+                            widget.onSeek(newPos);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLargeWaveform() {
+    return Container(
+      width: double.infinity,
+      height: 200,
+      margin: const EdgeInsets.symmetric(horizontal: 32),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.2),
+          width: 2,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: List.generate(
+          _barCount,
+          (index) {
+            final baseHeight = widget.isPlaying
+                ? _bars[index % _bars.length] * 140
+                : 30.0 + (sin(index * 0.3) * 20);
+
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              width: _getBarWidth(),
+              height: baseHeight,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primary.withValues(alpha: 0.5),
+                    AppColors.primary,
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+                borderRadius: _getBarRadius(),
+                boxShadow: widget.isPlaying
+                    ? [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.4),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                    : null,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  double _getBarWidth() {
+    switch (_selectedStyle) {
+      case WaveformStyle.linear:
+        return 5;
+      case WaveformStyle.rounded:
+        return 6;
+      case WaveformStyle.random:
+        return 4;
+      case WaveformStyle.sine:
+        return 5;
+      case WaveformStyle.pulse:
+        return 7;
+      default:
+        return 5;
+    }
+  }
+
+  BorderRadius _getBarRadius() {
+    switch (_selectedStyle) {
+      case WaveformStyle.rounded:
+        return BorderRadius.circular(4);
+      case WaveformStyle.pulse:
+        return BorderRadius.circular(5);
+      default:
+        return BorderRadius.circular(3);
+    }
+  }
+}
+
+class _FullscreenControlButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _FullscreenControlButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 28,
+        ),
       ),
     );
   }
