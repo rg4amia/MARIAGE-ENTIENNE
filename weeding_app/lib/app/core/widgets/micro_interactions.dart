@@ -102,6 +102,7 @@ class _HoverCardState extends State<HoverCard>
 class TapScale extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final double pressedScale;
   final Duration duration;
 
@@ -109,6 +110,7 @@ class TapScale extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
+    this.onLongPress,
     this.pressedScale = 0.95,
     this.duration = const Duration(milliseconds: 120),
   });
@@ -147,6 +149,7 @@ class _TapScaleState extends State<TapScale>
         widget.onTap?.call();
       },
       onTapCancel: () => _ctrl.reverse(),
+      onLongPress: widget.onLongPress,
       child: ScaleTransition(scale: _anim, child: widget.child),
     );
   }

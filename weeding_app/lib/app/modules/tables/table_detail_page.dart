@@ -256,6 +256,35 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
     }
   }
 
+  void _confirmDeleteChair(Chair chair) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Supprimer la chaise N°${chair.chairNumber} ?'),
+        content: const Text(
+          'Cette place sera retirée de la table et la capacité sera réduite d\'une unité.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await widget.controller.deleteChair(chair.id);
+              _refresh();
+            },
+            child: const Text(
+              'Supprimer',
+              style: TextStyle(color: AppColors.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildInfoCard(int assigned, double occupancy) {
     final table = widget.table;
     return Container(
@@ -487,6 +516,9 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
           .map((chair) => _ChairTile(
                 chair: chair,
                 onTap: () => _handleChairTap(chair),
+                onLongPress: chair.isAssigned
+                    ? null
+                    : () => _confirmDeleteChair(chair),
               ))
           .toList(),
     );
@@ -500,12 +532,24 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.dark, width: 1.2),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
         children: [
-          _legendItem(Colors.white, 'Libre'),
-          const SizedBox(width: 24),
-          _legendItem(AppColors.dark.withValues(alpha: 0.12), 'Occupée'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _legendItem(Colors.white, 'Libre'),
+              const SizedBox(width: 24),
+              _legendItem(AppColors.dark.withValues(alpha: 0.12), 'Occupée'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Astuce : appui long sur une chaise libre pour la supprimer',
+            textAlign: TextAlign.center,
+            style: AppTextStyles.labelMd.copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
+          ),
         ],
       ),
     );
@@ -538,13 +582,19 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
 class _ChairTile extends StatelessWidget {
   final Chair chair;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
-  const _ChairTile({required this.chair, required this.onTap});
+  const _ChairTile({
+    required this.chair,
+    required this.onTap,
+    this.onLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TapScale(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         width: 64,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),

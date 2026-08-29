@@ -65,27 +65,18 @@ class TableRepository {
     return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 
-  /// Creates any chair rows missing for [tableId] up to [capacity].
+  /// Creates any chair rows missing for [tableId] up to its capacity.
   /// Safe to call repeatedly: only inserts the numbers that don't exist yet.
-  Future<void> ensureChairsForTable({
-    required String tableId,
-    required int capacity,
-  }) async {
-    final existing = await _client
-        .from('chairs')
-        .select('chair_number')
-        .eq('table_id', tableId);
-    final existingNumbers = (existing as List)
-        .map((json) => json['chair_number'] as int)
-        .toSet();
-    final missingNumbers = [
-      for (var n = 1; n <= capacity; n++)
-        if (!existingNumbers.contains(n)) n,
-    ];
-    if (missingNumbers.isEmpty) return;
-    await _client.from('chairs').insert([
-      for (final n in missingNumbers) {'table_id': tableId, 'chair_number': n},
-    ]);
+  Future<void> ensureChairsForTable({required String tableId}) async {
+    await _client.rpc(
+      'ensure_chairs_for_table',
+      params: {'p_table_id': tableId},
+    );
+  }
+
+  /// Deletes a single unoccupied chair and shrinks the table's capacity by one.
+  Future<void> deleteChair(String chairId) async {
+    await _client.rpc('delete_chair', params: {'p_chair_id': chairId});
   }
 
   Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {

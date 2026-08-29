@@ -49,14 +49,7 @@ class TablesController extends GetxController {
     required int capacity,
   }) async {
     try {
-      final table = await _tableRepository.createTable(
-        label: label,
-        capacity: capacity,
-      );
-      await _tableRepository.ensureChairsForTable(
-        tableId: table.id,
-        capacity: capacity,
-      );
+      await _tableRepository.createTable(label: label, capacity: capacity);
       await loadTables();
       Get.snackbar('Succès', 'Table créée avec succès');
     } catch (e) {
@@ -90,10 +83,7 @@ class TablesController extends GetxController {
       if (chairs.isEmpty) {
         final table = await _tableRepository.getTableById(tableId);
         if (table != null && table.capacity > 0) {
-          await _tableRepository.ensureChairsForTable(
-            tableId: tableId,
-            capacity: table.capacity,
-          );
+          await _tableRepository.ensureChairsForTable(tableId: tableId);
           chairs = await _tableRepository.getChairsByTableId(tableId);
         }
       }
@@ -101,6 +91,16 @@ class TablesController extends GetxController {
     } catch (e, st) {
       debugPrint('getChairsForTable($tableId) failed: $e\n$st');
       rethrow;
+    }
+  }
+
+  Future<void> deleteChair(String chairId) async {
+    try {
+      await _tableRepository.deleteChair(chairId);
+      await loadTables();
+      Get.snackbar('Succès', 'Chaise supprimée');
+    } catch (e) {
+      Get.snackbar('Erreur', 'Impossible de supprimer cette chaise');
     }
   }
 
