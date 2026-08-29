@@ -136,7 +136,7 @@ class GuestRepository {
     final response = await _client
         .from('chairs')
         .select(
-          'id, guest_id, table_id, chair_number, created_at, seating_tables(label)',
+          'id, guest_id, table_id, chair_number, created_at, seating_tables!chairs_table_id_fkey(label)',
         )
         .eq('guest_id', guestId)
         .maybeSingle();
