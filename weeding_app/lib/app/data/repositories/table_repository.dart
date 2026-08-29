@@ -59,20 +59,53 @@ class TableRepository {
   Future<List<Chair>> getChairsByTableId(String tableId) async {
     final response = await _client
         .from('chairs')
-        .select('*, guests(full_name)')
+        .select('*, guests!chairs_guest_id_fkey(full_name)')
         .eq('table_id', tableId)
         .order('chair_number');
     return (response as List).map((json) => Chair.fromJson(json)).toList();
   }
 
+  /// Creates any chair rows missing for [tableId] up to [capacity].
+  /// Safe to call repeatedly: only inserts the numbers that don't exist yet.
+  Future<void> ensureChairsForTable({
+    required String tableId,
+    required int capacity,
+  }) async {
+    final existing = await _client
+        .from('chairs')
+        .select('chair_number')
+        .eq('table_id', tableId);
+    final existingNumbers = (existing as List)
+        .map((json) => json['chair_number'] as int)
+        .toSet();
+    final missingNumbers = [
+      for (var n = 1; n <= capacity; n++)
+        if (!existingNumbers.contains(n)) n,
+    ];
+    if (missingNumbers.isEmpty) return;
+    await _client.from('chairs').insert([
+      for (final n in missingNumbers) {'table_id': tableId, 'chair_number': n},
+    ]);
+  }
+
   Future<List<Chair>> getAvailableChairsByTableId(String tableId) async {
     final response = await _client
         .from('chairs')
-        .select('*, guests(full_name)')
+        .select('*, guests!chairs_guest_id_fkey(full_name)')
         .eq('table_id', tableId)
         .isFilter('guest_id', null)
         .order('chair_number');
     return (response as List).map((json) => Chair.fromJson(json)).toList();
+  }
+
+  Future<Set<String>> getAssignedGuestIds() async {
+    final response = await _client
+        .from('chairs')
+        .select('guest_id')
+        .not('guest_id', 'is', null);
+    return (response as List)
+        .map((json) => json['guest_id'] as String)
+        .toSet();
   }
 
   Future<Map<String, int>> getTableStats() async {
