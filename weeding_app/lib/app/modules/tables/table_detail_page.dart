@@ -91,8 +91,9 @@ class TableDetailPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     _buildSectionHeader(assigned, chairs.length),
                     const SizedBox(height: 12),
-                    if (chairs.isEmpty &&
-                        snapshot.connectionState != ConnectionState.waiting)
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                      _buildLoadingChairs()
+                    else if (chairs.isEmpty)
                       _buildEmptyChairs()
                     else
                       _buildChairsGrid(chairs),
@@ -248,6 +249,30 @@ class TableDetailPage extends StatelessWidget {
     );
   }
 
+  Widget _buildLoadingChairs() {
+    return Container(
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.dark, width: 1.2),
+      ),
+      child: const Center(
+        child: Column(
+          children: [
+            SizedBox(height: 24),
+            CircularProgressIndicator(strokeWidth: 2),
+            SizedBox(height: 12),
+            Text(
+              'Chargement des chaises…',
+              style: TextStyle(color: AppColors.onSurfaceVariant),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildEmptyChairs() {
     return Container(
       padding: const EdgeInsets.all(32),
@@ -266,7 +291,7 @@ class TableDetailPage extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Chargement...',
+              'Aucune chaise pour cette table',
               style: TextStyle(color: AppColors.onSurfaceVariant),
             ),
           ],

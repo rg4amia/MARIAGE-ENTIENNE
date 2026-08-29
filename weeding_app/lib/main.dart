@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/core/theme/app_theme.dart';
@@ -11,6 +12,15 @@ import 'app/bindings/app_binding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
+
+  if (!SupabaseConfig.isConfigured) {
+    throw StateError(
+      'Supabase credentials missing. Copy .env.example to .env and fill in '
+      'SUPABASE_URL and SUPABASE_ANON_KEY.',
+    );
+  }
 
   await Supabase.initialize(
     url: SupabaseConfig.url,

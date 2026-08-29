@@ -1,8 +1,19 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class SupabaseConfig {
-  static const String url = 'https://sckvfrsjmbwkuqdfsgki.supabase.co';
-  static const String anonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNja3ZmcnNqbWJ3a3VxZGZzZ2tpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0Mjk3NjksImV4cCI6MjA5MTAwNTc2OX0.COR213RZwFlG1UZ2wtCJgSTaMvsqGQ7cbOvB9Xs5woY';
+  /// Supabase project URL
+  static String get url => dotenv.env['SUPABASE_URL'] ?? '';
+
+  /// Supabase anonymous (public) key
+  static String get anonKey => dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+
+  /// Default wedding event ID (single-tenant bootstrap)
   static const String eventId = '00000000-0000-0000-0000-000000000001';
-  static const String guestPortalUrl =
-      'https://rg4amia.github.io/MARIAGE-ENTIENNE/';
+
+  /// Public guest portal base URL
+  static String get guestPortalUrl =>
+      dotenv.env['GUEST_PORTAL_URL'] ?? 'https://rg4amia.github.io/MARIAGE-ENTIENNE/';
+
+  /// Returns true when both URL and key are populated.
+  static bool get isConfigured => url.isNotEmpty && anonKey.isNotEmpty;
 }
