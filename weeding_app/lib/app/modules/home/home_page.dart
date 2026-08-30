@@ -92,10 +92,10 @@ class HomePage extends StatelessWidget {
               children: [
                 UserAvatar(
                   initials: initials,
-                  radius: 24,
+                  radius: 20,
                   backgroundColor: Colors.white,
                 ),
-                const SizedBox(width: 14),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,30 +114,35 @@ class HomePage extends StatelessWidget {
               ],
             );
           }),
-          const SizedBox(height: 28),
+          const SizedBox(height: 16),
           Text(
-            'Comment organiser\nvotre mariage ?',
+            'Comment organiser votre mariage ?',
             style: AppTextStyles.displayMd.copyWith(
               color: AppColors.dark,
-              fontSize: 38,
+              fontSize: 26,
+              height: 1.15,
             ),
           ),
-          const SizedBox(height: 22),
+          const SizedBox(height: 14),
           TapScale(
             onTap: () => Get.find<MainNavigationController>().selectTab(
               MainNavigationController.guestsTab,
             ),
             child: Container(
-              height: 58,
-              padding: const EdgeInsets.symmetric(horizontal: 18),
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.search_rounded, color: AppColors.dark),
-                  const SizedBox(width: 12),
+                  const Icon(
+                    Icons.search_rounded,
+                    color: AppColors.dark,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 10),
                   Text(
                     'Rechercher un invité, une table…',
                     style: AppTextStyles.bodyMdOnVariant,
