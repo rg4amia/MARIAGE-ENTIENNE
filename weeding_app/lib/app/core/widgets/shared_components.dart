@@ -130,7 +130,7 @@ class StatusBadge extends StatelessWidget {
             Container(
               width: 6,
               height: 6,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.dark,
                 shape: BoxShape.circle,
               ),

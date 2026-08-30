@@ -209,7 +209,7 @@ class _GradientButtonState extends State<GradientButton>
   Widget build(BuildContext context) {
     final grad =
         widget.gradient ??
-        const LinearGradient(
+        LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [AppColors.dark, AppColors.dark],

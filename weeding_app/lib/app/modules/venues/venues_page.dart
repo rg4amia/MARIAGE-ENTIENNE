@@ -22,7 +22,7 @@ class VenuesPage extends StatelessWidget {
             trailing: IconButton(
               tooltip: 'Actualiser',
               onPressed: controller.loadVenues,
-              icon: const Icon(Icons.refresh_rounded, color: AppColors.dark),
+              icon: Icon(Icons.refresh_rounded, color: AppColors.dark),
             ),
           ),
           Expanded(
@@ -107,7 +107,7 @@ class VenuesPage extends StatelessWidget {
             maxChildSize: 0.96,
             expand: false,
             builder: (sheetContext, scrollController) => Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
@@ -477,7 +477,7 @@ class _EmptyVenues extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.map_outlined, size: 68, color: AppColors.outline),
+            Icon(Icons.map_outlined, size: 68, color: AppColors.outline),
             const SizedBox(height: 18),
             Text('Aucun lieu configuré', style: AppTextStyles.headlineMd),
             const SizedBox(height: 8),

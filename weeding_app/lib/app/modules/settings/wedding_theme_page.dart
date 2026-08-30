@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/theme/wedding_palette.dart';
@@ -120,22 +121,33 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
     _backgroundController.text = WeddingPalette.colorToHex(_draft.background);
   }
 
+  /// Les palettes proposées ne portent que sur les couleurs : les polices déjà
+  /// choisies par les mariés sont conservées.
   void _selectPalette(WeddingPalette palette) {
     setState(() {
-      _draft = palette;
+      _draft = palette.copyWith(
+        displayFont: _draft.displayFont,
+        bodyFont: _draft.bodyFont,
+      );
       _syncControllers();
     });
   }
+
+  bool _matchesColors(WeddingPalette preset) =>
+      preset.primary == _draft.primary &&
+      preset.secondary == _draft.secondary &&
+      preset.accent == _draft.accent &&
+      preset.background == _draft.background;
 
   void _updateColor(_ColorSlot slot, String value) {
     if (!WeddingPalette.isValidHex(value)) return;
     final color = WeddingPalette.colorFromHex(value);
     setState(() {
-      _draft = WeddingPalette(
-        primary: slot == _ColorSlot.primary ? color : _draft.primary,
-        secondary: slot == _ColorSlot.secondary ? color : _draft.secondary,
-        accent: slot == _ColorSlot.accent ? color : _draft.accent,
-        background: slot == _ColorSlot.background ? color : _draft.background,
+      _draft = _draft.copyWith(
+        primary: slot == _ColorSlot.primary ? color : null,
+        secondary: slot == _ColorSlot.secondary ? color : null,
+        accent: slot == _ColorSlot.accent ? color : null,
+        background: slot == _ColorSlot.background ? color : null,
       );
     });
   }
@@ -149,6 +161,8 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
       secondary: WeddingPalette.colorFromHex(_secondaryController.text),
       accent: WeddingPalette.colorFromHex(_accentController.text),
       background: WeddingPalette.colorFromHex(_backgroundController.text),
+      displayFont: _draft.displayFont,
+      bodyFont: _draft.bodyFont,
     );
 
     try {
@@ -213,7 +227,7 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
                             padding: const EdgeInsets.only(bottom: 10),
                             child: _PresetTile(
                               preset: preset,
-                              selected: preset.palette == _draft,
+                              selected: _matchesColors(preset.palette),
                               onTap: () => _selectPalette(preset.palette),
                             ),
                           ),
@@ -261,6 +275,42 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
                           color: _draft.background,
                           onChanged: (value) =>
                               _updateColor(_ColorSlot.background, value),
+                        ),
+                        const SizedBox(height: 28),
+                        Text(
+                          'Polices du mariage',
+                          style: AppTextStyles.headlineMd,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'La police de titres habille les prénoms et la carte '
+                          'd’invitation. La police de texte reste lisible '
+                          'partout dans l’application.',
+                          style: AppTextStyles.bodyMd.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _FontPicker(
+                          label: 'Police de titres',
+                          fonts: WeddingFonts.display,
+                          selected: _draft.displayFont,
+                          sampleText: 'Aïcha & Karim',
+                          sampleSize: 24,
+                          onSelected: (font) => setState(
+                            () => _draft = _draft.copyWith(displayFont: font),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        _FontPicker(
+                          label: 'Police de texte',
+                          fonts: WeddingFonts.body,
+                          selected: _draft.bodyFont,
+                          sampleText: 'Nous célébrons notre mariage',
+                          sampleSize: 15,
+                          onSelected: (font) => setState(
+                            () => _draft = _draft.copyWith(bodyFont: font),
+                          ),
                         ),
                       ],
                     ),
@@ -316,6 +366,32 @@ class _ThemePreview extends StatelessWidget {
 
   const _ThemePreview({required this.palette});
 
+  /// L'aperçu doit montrer les polices du brouillon, pas celles déjà
+  /// appliquées : on ne peut donc pas passer par [AppTextStyles].
+  static TextStyle _font(
+    String family,
+    double size,
+    Color color,
+    FontWeight weight,
+  ) {
+    try {
+      return GoogleFonts.getFont(
+        family,
+        fontSize: size,
+        height: 1.25,
+        color: color,
+        fontWeight: weight,
+      );
+    } catch (_) {
+      return GoogleFonts.plusJakartaSans(
+        fontSize: size,
+        height: 1.25,
+        color: color,
+        fontWeight: weight,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final onPrimary = palette.primary.computeLuminance() > 0.48
@@ -327,7 +403,7 @@ class _ThemePreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: palette.background,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.dark, width: 1.4),
+        border: Border.all(color: AppColors.inkFor(palette), width: 1.4),
       ),
       child: Column(
         children: [
@@ -337,7 +413,7 @@ class _ThemePreview extends StatelessWidget {
             decoration: BoxDecoration(color: palette.primary),
             child: Text(
               'Aïcha & Karim',
-              style: AppTextStyles.headlineMd.copyWith(color: onPrimary),
+              style: _font(palette.displayFont, 24, onPrimary, FontWeight.w800),
               textAlign: TextAlign.center,
             ),
           ),
@@ -349,7 +425,12 @@ class _ThemePreview extends StatelessWidget {
                 children: [
                   Text(
                     'Nous célébrons notre mariage',
-                    style: AppTextStyles.bodyLg,
+                    style: _font(
+                      palette.bodyFont,
+                      16,
+                      AppColors.inkFor(palette),
+                      FontWeight.w400,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 14),
@@ -361,15 +442,17 @@ class _ThemePreview extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: palette.accent,
                       borderRadius: BorderRadius.circular(99),
-                      border: Border.all(color: AppColors.dark),
+                      border: Border.all(color: AppColors.inkFor(palette)),
                     ),
                     child: Text(
                       'Voir l’invitation',
-                      style: AppTextStyles.labelMd.copyWith(
-                        color: palette.accent.computeLuminance() > 0.48
+                      style: _font(
+                        palette.bodyFont,
+                        12,
+                        palette.accent.computeLuminance() > 0.48
                             ? Colors.black
                             : Colors.white,
-                        fontWeight: FontWeight.w700,
+                        FontWeight.w700,
                       ),
                     ),
                   ),
@@ -380,6 +463,118 @@ class _ThemePreview extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Sélecteur de police affichant chaque option dans sa propre typographie.
+class _FontPicker extends StatelessWidget {
+  final String label;
+  final List<String> fonts;
+  final String selected;
+  final String sampleText;
+  final double sampleSize;
+  final ValueChanged<String> onSelected;
+
+  const _FontPicker({
+    required this.label,
+    required this.fonts,
+    required this.selected,
+    required this.sampleText,
+    required this.sampleSize,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelMd.copyWith(
+            color: scheme.onSurfaceVariant,
+            letterSpacing: 0.4,
+          ),
+        ),
+        const SizedBox(height: 8),
+        ...fonts.map((font) {
+          final isSelected = font == selected;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Material(
+              color: scheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              child: InkWell(
+                onTap: () => onSelected(font),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.dark
+                          : AppColors.outlineVariant,
+                      width: isSelected ? 1.6 : 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              sampleText,
+                              style: _sample(font),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              font,
+                              style: AppTextStyles.labelMd.copyWith(
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        isSelected
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: isSelected
+                            ? AppColors.dark
+                            : AppColors.outlineVariant,
+                        size: 22,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  TextStyle _sample(String font) {
+    try {
+      return GoogleFonts.getFont(
+        font,
+        fontSize: sampleSize,
+        height: 1.25,
+        color: AppColors.onBackground,
+      );
+    } catch (_) {
+      return AppTextStyles.bodyLg.copyWith(fontSize: sampleSize);
+    }
   }
 }
 

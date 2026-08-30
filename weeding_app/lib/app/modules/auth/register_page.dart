@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage>
           // Mint green gradient header
           Container(
             height: 180,
-            decoration: const BoxDecoration(color: AppColors.primary),
+            decoration: BoxDecoration(color: AppColors.primary),
           ),
 
           // Back button
@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage>
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back_ios_new_rounded,
                   color: AppColors.dark,
                   size: 20,
@@ -116,7 +116,7 @@ class _RegisterPageState extends State<RegisterPage>
                                     ),
                                   ],
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.favorite_rounded,
                                   color: AppColors.dark,
                                   size: 28,
@@ -315,7 +315,7 @@ class _RegisterPageState extends State<RegisterPage>
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

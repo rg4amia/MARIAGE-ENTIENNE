@@ -85,7 +85,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
                   color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.refresh_rounded,
                   color: AppColors.dark,
                   size: 22,
@@ -95,7 +95,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
           ),
           Expanded(
             child: _isLoading
-                ? const Center(
+                ? Center(
                     child: CircularProgressIndicator(color: AppColors.dark),
                   )
                 : RefreshIndicator(
@@ -606,7 +606,7 @@ class _GuestStatusCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const Icon(
+              Icon(
                 Icons.chevron_right,
                 color: AppColors.onSurfaceVariant,
               ),
@@ -679,7 +679,7 @@ class _StatusStep extends StatelessWidget {
                 ),
               ),
               child: isCompleted
-                  ? const Icon(Icons.check, size: 14, color: AppColors.dark)
+                  ? Icon(Icons.check, size: 14, color: AppColors.dark)
                   : isCurrent
                   ? Container(
                       margin: const EdgeInsets.all(6),

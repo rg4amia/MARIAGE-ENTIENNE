@@ -148,7 +148,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
               width: 160,
               child: LinearProgressIndicator(
                 backgroundColor: AppColors.surfaceContainerHigh,
-                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.dark),
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.dark),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -273,7 +273,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                       width: 2,
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.waving_hand_rounded,
                     size: 48,
                     color: AppColors.dark,
@@ -368,7 +368,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
             children: [
               const Spacer(flex: 1),
               ScaleIn(
-                child: const Icon(
+                child: Icon(
                   Icons.mic_rounded,
                   size: 48,
                   color: AppColors.dark,
@@ -539,7 +539,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                       width: 2,
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check_rounded,
                     size: 44,
                     color: AppColors.dark,

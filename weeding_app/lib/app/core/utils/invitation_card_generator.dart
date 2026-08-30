@@ -79,9 +79,7 @@ class InvitationCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = Theme.of(context).colorScheme;
-    final onPrimary = palette.primary.computeLuminance() > 0.48
-        ? AppColors.dark
-        : Colors.white;
+    final onPrimary = AppColors.onColorFor(palette.primary);
 
     return RepaintBoundary(
       child: Container(
@@ -112,9 +110,7 @@ class InvitationCardWidget extends StatelessWidget {
               child: Text(
                 'VOUS ÊTES INVITÉ(E)',
                 style: AppTextStyles.labelMd.copyWith(
-                  color: palette.secondary.computeLuminance() > 0.48
-                      ? AppColors.dark
-                      : Colors.white,
+                  color: AppColors.onColorFor(palette.secondary),
                   letterSpacing: 1.6,
                   fontWeight: FontWeight.w800,
                 ),
@@ -145,7 +141,9 @@ class InvitationCardWidget extends StatelessWidget {
                     label: 'TABLE',
                     value: tableName,
                   ),
-                  Container(width: 1, height: 50, color: AppColors.dark),
+                  // Troisième couleur du mariage : sans elle la carte n'utilise
+                  // que le principal et le secondaire.
+                  Container(width: 2, height: 50, color: palette.tertiary),
                   _CardInfo(
                     icon: Icons.event_seat_rounded,
                     label: 'PLACE',
@@ -168,11 +166,11 @@ class InvitationCardWidget extends StatelessWidget {
                   version: QrVersions.auto,
                   size: 120,
                   backgroundColor: Colors.white,
-                  eyeStyle: const QrEyeStyle(
+                  eyeStyle: QrEyeStyle(
                     eyeShape: QrEyeShape.circle,
                     color: AppColors.dark,
                   ),
-                  dataModuleStyle: const QrDataModuleStyle(
+                  dataModuleStyle: QrDataModuleStyle(
                     dataModuleShape: QrDataModuleShape.circle,
                     color: AppColors.dark,
                   ),

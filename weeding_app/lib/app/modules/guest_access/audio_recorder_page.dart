@@ -148,7 +148,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.close, color: AppColors.onSurface),
+          icon: Icon(Icons.close, color: AppColors.onSurface),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -287,7 +287,7 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.surfaceContainer,
                         ),

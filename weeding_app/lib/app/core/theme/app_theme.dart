@@ -65,7 +65,7 @@ class AppTheme {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: AppColors.dark, width: 1.35),
+          side: BorderSide(color: AppColors.dark, width: 1.35),
         ),
         margin: EdgeInsets.zero,
       ),
@@ -87,7 +87,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.dark,
           minimumSize: const Size(double.infinity, 52),
-          side: const BorderSide(color: AppColors.dark, width: 1.35),
+          side: BorderSide(color: AppColors.dark, width: 1.35),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
@@ -117,7 +117,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
+          borderSide: BorderSide(color: AppColors.dark, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -155,7 +155,7 @@ class AppTheme {
       dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: AppColors.dark, width: 1.25),
+          side: BorderSide(color: AppColors.dark, width: 1.25),
         ),
         backgroundColor: Colors.white,
         elevation: 8,
@@ -205,7 +205,6 @@ class AppTheme {
     );
   }
 
-  static Color _foregroundFor(Color background) {
-    return background.computeLuminance() > 0.48 ? Colors.black : Colors.white;
-  }
+  static Color _foregroundFor(Color background) =>
+      AppColors.onColorFor(background);
 }

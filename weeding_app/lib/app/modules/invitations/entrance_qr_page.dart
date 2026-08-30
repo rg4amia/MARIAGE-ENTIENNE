@@ -100,7 +100,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
     return Scaffold(
       backgroundColor: AppColors.background,
       body: _isLoading && qr == null
-          ? const Center(
+          ? Center(
               child: CircularProgressIndicator(color: AppColors.dark),
             )
           : qr == null
@@ -119,7 +119,7 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                           color: AppColors.dark.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.refresh_rounded,
                           color: AppColors.dark,
                           size: 22,
@@ -309,11 +309,11 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             data: qr.url,
             size: 220,
             backgroundColor: Colors.white,
-            eyeStyle: const QrEyeStyle(
+            eyeStyle: QrEyeStyle(
               eyeShape: QrEyeShape.circle,
               color: AppColors.dark,
             ),
-            dataModuleStyle: const QrDataModuleStyle(
+            dataModuleStyle: QrDataModuleStyle(
               dataModuleShape: QrDataModuleShape.circle,
               color: AppColors.dark,
             ),

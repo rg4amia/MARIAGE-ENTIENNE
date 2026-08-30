@@ -57,7 +57,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: AppColors.dark.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person_outline_rounded,
                 color: AppColors.dark,
                 size: 22,
@@ -226,7 +226,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           icon: Icons.storage_rounded,
                           iconColor: AppColors.dark,
                           title: 'Stockage utilisé',
-                          trailing: const Icon(
+                          trailing: Icon(
                             Icons.chevron_right_rounded,
                             color: AppColors.outlineVariant,
                             size: 20,
@@ -399,7 +399,7 @@ class _SettingsPageState extends State<SettingsPage> {
             maxChildSize: 0.96,
             expand: false,
             builder: (ctx, scrollController) => DecoratedBox(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
@@ -492,7 +492,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.calendar_today_rounded,
                                     size: 20,
                                     color: AppColors.onSurfaceVariant,

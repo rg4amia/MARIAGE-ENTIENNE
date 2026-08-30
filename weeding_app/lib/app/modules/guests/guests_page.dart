@@ -32,7 +32,7 @@ class GuestsPage extends StatelessWidget {
                 color: AppColors.dark.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.filter_list_rounded,
                 color: AppColors.dark,
                 size: 22,
@@ -55,7 +55,7 @@ class GuestsPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
-                return const Center(
+                return Center(
                   child: CircularProgressIndicator(color: AppColors.dark),
                 );
               }
@@ -134,7 +134,7 @@ class GuestsPage extends StatelessWidget {
           onPressed: () => _showAddGuestDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          child: const Icon(
+          child: Icon(
             Icons.add_rounded,
             color: AppColors.onPrimary,
             size: 28,
@@ -177,7 +177,7 @@ class _SearchBar extends StatelessWidget {
           hintStyle: AppTextStyles.bodyMd.copyWith(
             color: AppColors.onSurfaceVariant.withValues(alpha: 0.5),
           ),
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.search_rounded,
             color: AppColors.onSurfaceVariant,
             size: 22,
@@ -522,7 +522,7 @@ class _AddGuestSheet extends StatelessWidget {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppColors.dark, width: 1.5),
+        borderSide: BorderSide(color: AppColors.dark, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

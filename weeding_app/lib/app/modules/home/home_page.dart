@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
           color: Colors.white.withValues(alpha: 0.82),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Icon(Icons.tune_rounded, color: AppColors.dark, size: 21),
+        child: Icon(Icons.tune_rounded, color: AppColors.dark, size: 21),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,7 +137,7 @@ class HomePage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.search_rounded,
                     color: AppColors.dark,
                     size: 20,

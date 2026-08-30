@@ -298,7 +298,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
           ),
           Expanded(
             child: _isLoading
-                ? const Center(
+                ? Center(
                     child: CircularProgressIndicator(color: AppColors.dark),
                   )
                 : _error != null
@@ -317,7 +317,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 64,
               color: AppColors.statusPending,
@@ -445,7 +445,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
 
   Widget _buildVideoPlayer() {
     if (_videoController == null || !_videoController!.value.isInitialized) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
@@ -624,7 +624,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: const Border(
+        border: Border(
           top: BorderSide(color: AppColors.dark, width: 1.3),
         ),
         boxShadow: [
@@ -743,7 +743,7 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
                   label: const Text('Partager'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.dark,
-                    side: const BorderSide(color: AppColors.outlineVariant),
+                    side: BorderSide(color: AppColors.outlineVariant),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

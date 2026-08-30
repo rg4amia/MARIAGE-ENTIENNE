@@ -66,7 +66,7 @@ class QrCodePage extends StatelessWidget {
                         // Dark accent top
                         Container(
                           height: 4,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(20),
                             ),
@@ -111,10 +111,10 @@ class QrCodePage extends StatelessWidget {
                                       size: 200,
                                       backgroundColor:
                                           AppColors.surfaceContainerLow,
-                                      eyeStyle: const QrEyeStyle(
+                                      eyeStyle: QrEyeStyle(
                                         color: AppColors.dark,
                                       ),
-                                      dataModuleStyle: const QrDataModuleStyle(
+                                      dataModuleStyle: QrDataModuleStyle(
                                         color: AppColors.dark,
                                       ),
                                     );
@@ -166,7 +166,7 @@ class QrCodePage extends StatelessWidget {
                                       label: const Text('Partager'),
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: AppColors.dark,
-                                        side: const BorderSide(
+                                        side: BorderSide(
                                           color: AppColors.dark,
                                           width: 1.3,
                                         ),

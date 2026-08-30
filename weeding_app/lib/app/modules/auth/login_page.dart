@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             builder: (context, _) {
               return Container(
                 height: size.height * 0.55,
-                decoration: const BoxDecoration(color: AppColors.primary),
+                decoration: BoxDecoration(color: AppColors.primary),
               );
             },
           ),
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.favorite_rounded,
                             size: 40,
                             color: AppColors.dark,
@@ -321,7 +321,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -357,7 +357,7 @@ class _PasswordFieldState extends State<_PasswordField> {
       style: AppTextStyles.bodyLg,
       decoration: InputDecoration(
         hintText: '••••••••',
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           Icons.lock_outline_rounded,
           color: AppColors.onSurfaceVariant,
           size: 20,
@@ -384,7 +384,7 @@ class _PasswordFieldState extends State<_PasswordField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

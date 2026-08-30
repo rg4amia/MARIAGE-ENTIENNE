@@ -28,11 +28,11 @@ class WorkspaceOnboardingPage extends StatelessWidget {
                       Container(
                         width: 52,
                         height: 52,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: AppColors.primary,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.favorite_rounded,
                           color: AppColors.dark,
                         ),
@@ -151,7 +151,7 @@ class WorkspaceOnboardingPage extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.workspace_premium_rounded,
                           color: AppColors.dark,
                         ),

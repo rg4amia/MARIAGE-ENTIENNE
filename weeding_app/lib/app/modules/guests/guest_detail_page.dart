@@ -95,7 +95,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                   color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.delete_outline_rounded,
                   color: AppColors.dark,
                   size: 20,
@@ -141,7 +141,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.mail,
                                   size: 16,
                                   color: AppColors.onSurfaceVariant,
@@ -335,7 +335,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.link,
                                       size: 16,
                                       color: AppColors.dark,

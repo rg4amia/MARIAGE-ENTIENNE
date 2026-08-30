@@ -45,7 +45,7 @@ class TableDetailPage extends StatelessWidget {
                       color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.edit_rounded,
                       color: AppColors.dark,
                       size: 20,
@@ -62,7 +62,7 @@ class TableDetailPage extends StatelessWidget {
                       color: AppColors.dark.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.delete_outline_rounded,
                       color: AppColors.dark,
                       size: 20,
@@ -355,7 +355,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
                 ),
                 child: Text(
                   '$assigned/${table.capacity}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: AppColors.dark,
@@ -400,7 +400,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
   Widget _buildSectionHeader(int assigned, int total) {
     return Row(
       children: [
-        const Icon(Icons.chair_rounded, size: 20, color: AppColors.dark),
+        Icon(Icons.chair_rounded, size: 20, color: AppColors.dark),
         const SizedBox(width: 8),
         Text(
           'Chaises',
@@ -415,7 +415,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
           ),
           child: Text(
             '$assigned/$total occupée${total != 1 ? 's' : ''}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: AppColors.dark,
@@ -434,7 +434,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.dark, width: 1.2),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           children: [
             SizedBox(height: 24),
@@ -458,7 +458,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.dark, width: 1.2),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           children: [
             Icon(
@@ -490,7 +490,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
           children: [
             const Icon(Icons.error_outline, size: 40, color: Colors.red),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Erreur de chargement des chaises',
               style: TextStyle(color: AppColors.onSurfaceVariant),
             ),
@@ -646,7 +646,7 @@ class _ChairTile extends StatelessWidget {
                   color: AppColors.dark.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.person_rounded,
                   size: 10,
                   color: AppColors.dark,
@@ -786,7 +786,7 @@ class _AssignGuestSheetState extends State<_AssignGuestSheet> {
                               ),
                               child: Text(
                                 guest.initials,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.dark,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -799,7 +799,7 @@ class _AssignGuestSheetState extends State<_AssignGuestSheet> {
                                 style: AppTextStyles.bodyLg,
                               ),
                             ),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right_rounded,
                               color: AppColors.outlineVariant,
                             ),
@@ -951,7 +951,7 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
                   color: AppColors.dark.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Icon(Icons.person_rounded, color: AppColors.dark),
+                child: Icon(Icons.person_rounded, color: AppColors.dark),
               ),
               const SizedBox(width: 16),
               Expanded(

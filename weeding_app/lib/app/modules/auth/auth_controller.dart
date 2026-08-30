@@ -6,6 +6,10 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/models/profile.dart';
 import '../../routes/app_routes.dart';
 import '../../core/theme/wedding_theme_controller.dart';
+import '../home/home_controller.dart';
+import '../tables/tables_controller.dart';
+import '../guests/guests_controller.dart';
+import '../invitations/invitations_controller.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository = AuthRepository();
@@ -54,6 +58,7 @@ class AuthController extends GetxController {
         if (Get.isRegistered<WeddingThemeController>()) {
           Get.find<WeddingThemeController>().reset();
         }
+        _clearFeatureControllers();
       }
     });
 
@@ -196,6 +201,17 @@ class AuthController extends GetxController {
       );
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Drop cached feature controllers so no data from the previous account
+  /// lingers in memory (they're `fenix: true` and get recreated on demand).
+  void _clearFeatureControllers() {
+    if (Get.isRegistered<HomeController>()) Get.delete<HomeController>();
+    if (Get.isRegistered<TablesController>()) Get.delete<TablesController>();
+    if (Get.isRegistered<GuestsController>()) Get.delete<GuestsController>();
+    if (Get.isRegistered<InvitationsController>()) {
+      Get.delete<InvitationsController>();
     }
   }
 

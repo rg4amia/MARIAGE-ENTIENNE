@@ -173,7 +173,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                   ),
                 )
               else if (_isProcessing)
-                const Column(
+                Column(
                   children: [
                     CircularProgressIndicator(color: AppColors.primary),
                     SizedBox(height: 16),
@@ -196,7 +196,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.check_circle,
                         size: 48,
                         color: AppColors.statusCardUnlocked,
@@ -221,7 +221,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     color: AppColors.primary,
                     border: Border.all(color: AppColors.dark, width: 4),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.videocam_off,
                     size: 48,
                     color: AppColors.dark,
@@ -283,7 +283,7 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     onPressed: _launchCamera,
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.primary,
-                      side: const BorderSide(color: AppColors.primary),
+                      side: BorderSide(color: AppColors.primary),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
