@@ -334,6 +334,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       --radius: 24px;
       --shadow: 0 12px 36px rgba(255, 122, 61, 0.15);
       --bg-gradient: linear-gradient(135deg, #FFF7ED 0%, #FFD6B3 100%);
+      --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cg fill='none' stroke='%23D4AF37' stroke-width='1.2' opacity='0.16' stroke-linecap='round'%3E%3Cpath d='M20 130 C10 110 30 95 20 75 C10 55 30 40 20 20'/%3E%3Cpath d='M20 115 C35 110 40 98 55 95'/%3E%3Cpath d='M20 95 C5 90 0 78 -5 70'/%3E%3Cpath d='M20 70 C35 65 42 52 55 48'/%3E%3Cpath d='M20 45 C8 40 4 28 0 20'/%3E%3Ccircle cx='120' cy='30' r='3'/%3E%3Ccircle cx='108' cy='45' r='2'/%3E%3Ccircle cx='132' cy='50' r='2'/%3E%3Ccircle cx='115' cy='115' r='2.5'/%3E%3Ccircle cx='135' cy='125' r='1.8'/%3E%3C/g%3E%3C/svg%3E");
       --timer-bg: #FFEAD9;
       --step-bg: #FFEAD9;
       --input-border: #FFD6B3;
@@ -348,7 +349,11 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     html, body {
       min-height: 100%;
       font-family: 'Georgia', serif;
-      background: var(--bg-gradient);
+      background-color: #FFD6B3;
+      background-image: var(--bg-pattern), var(--bg-gradient);
+      background-repeat: repeat, no-repeat;
+      background-size: 150px 150px, cover;
+      background-attachment: fixed, fixed;
       color: var(--text);
       transition: background 0.6s ease, color 0.3s ease;
     }
@@ -371,6 +376,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     /* ── Card ── */
     .card {
       background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       border-radius: var(--radius);
       padding: 28px 24px;
       box-shadow: var(--shadow);
@@ -381,7 +387,19 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       text-align: center;
       padding: 20px 0 4px;
     }
-    .header .rings { font-size: 40px; margin-bottom: 8px; }
+    .header .rings {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      background: radial-gradient(circle at 32% 30%, #ffffff, var(--ivory) 75%);
+      border: 2px solid var(--peach);
+      border-radius: 50%;
+      box-shadow: 0 10px 26px rgba(255, 122, 61, 0.2);
+    }
     .header h1 {
       font-size: 26px;
       color: var(--orange);
@@ -389,6 +407,14 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       letter-spacing: 1px;
     }
     .header p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .header::after {
+      content: '';
+      display: block;
+      width: 56px;
+      height: 2px;
+      margin: 12px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
 
     /* ── Guest info ── */
     .guest-name {
@@ -845,7 +871,7 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       <div style="font-size:32px;">💍</div>
       <div class="couple" id="card-couple"></div>
       <hr class="divider" />
-      <div style="font-size:13px;color:rgba(255,255,255,.5);letter-spacing:2px;">INVITE</div>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:2px;">INVITE</div>
       <div class="inv-name" id="card-name"></div>
       <hr class="divider" />
       <div class="inv-detail" id="card-table"></div>
