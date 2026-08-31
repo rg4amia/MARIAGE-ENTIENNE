@@ -15,6 +15,10 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
+  final _formKey = GlobalKey<FormState>();
+  final _phoneFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
 
   @override
   void initState() {
@@ -28,13 +32,22 @@ class _RegisterPageState extends State<RegisterPage>
   @override
   void dispose() {
     _ctrl.dispose();
+    _phoneFocus.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
+  }
+
+  void _submit(AuthController controller) {
+    if (controller.isLoading.value) return;
+    if (_formKey.currentState!.validate()) {
+      controller.register();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<AuthController>();
-    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -49,14 +62,20 @@ class _RegisterPageState extends State<RegisterPage>
           // Back button
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: AppColors.dark,
-                  size: 20,
+              padding: const EdgeInsets.all(12),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.18),
+                  shape: BoxShape.circle,
                 ),
-                onPressed: () => Get.back(),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: AppColors.onPrimary,
+                    size: 20,
+                  ),
+                  onPressed: () => Get.back(),
+                ),
               ),
             ),
           ),
@@ -95,178 +114,187 @@ class _RegisterPageState extends State<RegisterPage>
                         ],
                       ),
                       child: Form(
-                        key: formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Center(
-                              child: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.primary,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: AppColors.primary.withValues(
-                                        alpha: 0.2,
-                                      ),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: Icon(
-                                  Icons.favorite_rounded,
-                                  color: AppColors.dark,
-                                  size: 28,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Center(
-                              child: Text(
-                                'Créer un compte',
-                                style: AppTextStyles.headlineMd,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Center(
-                              child: Text(
-                                'Rejoignez l\'espace mariage',
-                                style: AppTextStyles.bodyMdOnVariant,
-                              ),
-                            ),
-                            const SizedBox(height: 28),
-
-                            _buildField(
-                              label: 'Nom complet',
-                              child: TextFormField(
-                                controller: controller.fullNameController,
-                                validator: (v) =>
-                                    Validators.required(v, 'Le nom'),
-                                style: AppTextStyles.bodyLg,
-                                decoration: _inputDecoration(
-                                  'Jean Dupont',
-                                  Icons.person_outline_rounded,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            _buildField(
-                              label: 'Téléphone',
-                              child: TextFormField(
-                                controller: controller.phoneController,
-                                keyboardType: TextInputType.phone,
-                                validator: Validators.phone,
-                                style: AppTextStyles.bodyLg,
-                                decoration: _inputDecoration(
-                                  '+225 07 00 00 00 00',
-                                  Icons.phone_outlined,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            _buildField(
-                              label: 'Email',
-                              child: TextFormField(
-                                controller: controller.emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: Validators.email,
-                                style: AppTextStyles.bodyLg,
-                                decoration: _inputDecoration(
-                                  'exemple@mail.com',
-                                  Icons.mail_outline_rounded,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-
-                            _buildField(
-                              label: 'Mot de passe',
-                              child: TextFormField(
-                                controller: controller.passwordController,
-                                obscureText: true,
-                                validator: Validators.password,
-                                style: AppTextStyles.bodyLg,
-                                decoration: _inputDecoration(
-                                  '••••••••',
-                                  Icons.lock_outline_rounded,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 28),
-
-                            // Register button
-                            Obx(
-                              () => SizedBox(
-                                width: double.infinity,
-                                height: 54,
-                                child: ElevatedButton(
-                                  onPressed: controller.isLoading.value
-                                      ? null
-                                      : () {
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            controller.register();
-                                          }
-                                        },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.dark,
-                                    foregroundColor: Colors.white,
-                                    disabledBackgroundColor: AppColors.dark
-                                        .withValues(alpha: 0.45),
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                  child: controller.isLoading.value
-                                      ? const SizedBox(
-                                          height: 22,
-                                          width: 22,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2.5,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Créer mon compte',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                        key: _formKey,
+                        child: AutofillGroup(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.primary,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.2,
                                         ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            Center(
-                              child: GestureDetector(
-                                onTap: () => Get.back(),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Déjà un compte ? ',
-                                    style: AppTextStyles.bodyMd.copyWith(
-                                      color: AppColors.onSurfaceVariant,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: 'Se connecter',
-                                        style: AppTextStyles.bodyMd.copyWith(
-                                          color: AppColors.dark,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                        blurRadius: 12,
+                                        offset: const Offset(0, 4),
                                       ),
                                     ],
                                   ),
+                                  child: Icon(
+                                    Icons.favorite_rounded,
+                                    color: AppColors.onPrimary,
+                                    size: 28,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 20),
+                              Center(
+                                child: Text(
+                                  'Créer un compte',
+                                  style: AppTextStyles.headlineMd,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Center(
+                                child: Text(
+                                  'Rejoignez l\'espace mariage',
+                                  style: AppTextStyles.bodyMdOnVariant,
+                                ),
+                              ),
+                              const SizedBox(height: 28),
+
+                              _buildField(
+                                label: 'Nom complet',
+                                child: TextFormField(
+                                  controller: controller.fullNameController,
+                                  validator: (v) =>
+                                      Validators.required(v, 'Le nom'),
+                                  style: AppTextStyles.bodyLg,
+                                  textInputAction: TextInputAction.next,
+                                  textCapitalization: TextCapitalization.words,
+                                  autofillHints: const [AutofillHints.name],
+                                  onFieldSubmitted: (_) =>
+                                      _phoneFocus.requestFocus(),
+                                  decoration: _inputDecoration(
+                                    'Jean Dupont',
+                                    Icons.person_outline_rounded,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              _buildField(
+                                label: 'Téléphone (optionnel)',
+                                child: TextFormField(
+                                  controller: controller.phoneController,
+                                  focusNode: _phoneFocus,
+                                  keyboardType: TextInputType.phone,
+                                  validator: Validators.phone,
+                                  style: AppTextStyles.bodyLg,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [
+                                    AutofillHints.telephoneNumber,
+                                  ],
+                                  onFieldSubmitted: (_) =>
+                                      _emailFocus.requestFocus(),
+                                  decoration: _inputDecoration(
+                                    '+225 07 00 00 00 00',
+                                    Icons.phone_outlined,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              _buildField(
+                                label: 'Email',
+                                child: TextFormField(
+                                  controller: controller.emailController,
+                                  focusNode: _emailFocus,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: Validators.email,
+                                  style: AppTextStyles.bodyLg,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [AutofillHints.email],
+                                  onFieldSubmitted: (_) =>
+                                      _passwordFocus.requestFocus(),
+                                  decoration: _inputDecoration(
+                                    'exemple@mail.com',
+                                    Icons.mail_outline_rounded,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              _buildField(
+                                label: 'Mot de passe',
+                                child: _PasswordField(
+                                  controller: controller.passwordController,
+                                  focusNode: _passwordFocus,
+                                  onFieldSubmitted: () => _submit(controller),
+                                ),
+                              ),
+                              const SizedBox(height: 28),
+
+                              // Register button
+                              Obx(
+                                () => SizedBox(
+                                  width: double.infinity,
+                                  height: 54,
+                                  child: ElevatedButton(
+                                    onPressed: controller.isLoading.value
+                                        ? null
+                                        : () => _submit(controller),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.dark,
+                                      foregroundColor: Colors.white,
+                                      disabledBackgroundColor: AppColors.dark
+                                          .withValues(alpha: 0.45),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                    ),
+                                    child: controller.isLoading.value
+                                        ? const SizedBox(
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.5,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : const Text(
+                                            'Créer mon compte',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () => Get.back(),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'Déjà un compte ? ',
+                                      style: AppTextStyles.bodyMd.copyWith(
+                                        color: AppColors.onSurfaceVariant,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Se connecter',
+                                          style: AppTextStyles.bodyMd.copyWith(
+                                            color: AppColors.dark,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -298,30 +326,87 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   InputDecoration _inputDecoration(String hint, IconData icon) {
-    return InputDecoration(
-      hintText: hint,
-      prefixIcon: Icon(icon, color: AppColors.onSurfaceVariant, size: 20),
-      filled: true,
-      fillColor: AppColors.surfaceContainerLow,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide.none,
+    return _registerInputDecoration(hint, icon: icon);
+  }
+}
+
+InputDecoration _registerInputDecoration(
+  String hint, {
+  IconData? icon,
+  Widget? suffixIcon,
+}) {
+  return InputDecoration(
+    hintText: hint,
+    prefixIcon: icon == null
+        ? null
+        : Icon(icon, color: AppColors.onSurfaceVariant, size: 20),
+    suffixIcon: suffixIcon,
+    filled: true,
+    fillColor: AppColors.surfaceContainerLow,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide.none,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(
+        color: AppColors.outlineVariant.withValues(alpha: 0.5),
       ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(
-          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(16),
+      borderSide: const BorderSide(color: AppColors.error),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  );
+}
+
+// ── Password field with visibility toggle ──
+class _PasswordField extends StatefulWidget {
+  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final VoidCallback? onFieldSubmitted;
+
+  const _PasswordField({
+    required this.controller,
+    this.focusNode,
+    this.onFieldSubmitted,
+  });
+
+  @override
+  State<_PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<_PasswordField> {
+  bool _obscure = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      obscureText: _obscure,
+      validator: Validators.password,
+      style: AppTextStyles.bodyLg,
+      textInputAction: TextInputAction.done,
+      autofillHints: const [AutofillHints.newPassword],
+      onFieldSubmitted: (_) => widget.onFieldSubmitted?.call(),
+      decoration: _registerInputDecoration(
+        '••••••••',
+        icon: Icons.lock_outline_rounded,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+            color: AppColors.onSurfaceVariant,
+            size: 20,
+          ),
+          onPressed: () => setState(() => _obscure = !_obscure),
         ),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppColors.error),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 }
