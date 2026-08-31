@@ -9,8 +9,9 @@ agence depuis la préparation jusqu'au contrôle d'accès le jour du mariage.
 
 - organisations clientes et collaborateurs ;
 - plusieurs mariages et sélection du mariage actif ;
-- forfaits Découverte, Pro et Agence ;
-- essai Pro de 14 jours à l'onboarding ;
+- packs mariage à paiement unique et abonnements professionnels
+  (voir `OFFRE_COMMERCIALE.md`) ;
+- inscription sur le pack gratuit, sans essai masqué ;
 - lieux Mairie, Église et Réception avec coordonnées Maps ;
 - identité visuelle par mariage : palettes prédéfinies, couleurs HEX et aperçu ;
 - modèles de cartes personnalisables ;
@@ -36,10 +37,14 @@ agence depuis la préparation jusqu'au contrôle d'accès le jour du mariage.
 
 ## Phase 4 — Monétisation et supervision
 
+Grille tarifaire et état d'avancement : voir `OFFRE_COMMERCIALE.md`.
+
 - paiements Mobile Money et carte ;
 - factures et renouvellements ;
-- quotas applicatifs imposés côté base ;
-- console SaaS pour support, suspension et audit ;
+- ~~quotas applicatifs imposés côté base~~ (fait : invités, envois,
+  collaborateurs et forfait inactif) ;
+- ~~console SaaS pour support, suspension et audit~~ (fait : voir
+  `EXPLOITATION.md`) ;
 - métriques de conversion, activation et rétention.
 
 ## Critères de passage en production de la phase 1

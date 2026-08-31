@@ -35,6 +35,9 @@ class GuestAccessController extends GetxController {
   final RxString errorMessage = ''.obs;
   final RxBool isProcessing = false.obs;
 
+  /// Filigrane du forfait gratuit, décidé par la base et non par l'app.
+  final RxBool showWatermark = false.obs;
+
   // Recording state
   final RxInt recordingDuration = 0.obs;
   final RxBool isRecording = false.obs;
@@ -237,6 +240,22 @@ class GuestAccessController extends GetxController {
       guestSeat.value = await _guestRepo.getGuestSeat(guestId);
     } catch (e) {
       debugPrint('Error loading invitation: $e');
+    }
+    await _loadBranding(guestId);
+  }
+
+  /// Le portail est consulté sans compte : seule cette fonction expose le
+  /// forfait du couple, et uniquement ce qui touche à l'apparence.
+  Future<void> _loadBranding(String guestId) async {
+    try {
+      final response = await _client.rpc(
+        'guest_portal_branding',
+        params: {'p_guest_id': guestId},
+      );
+      final branding = response as Map?;
+      showWatermark.value = branding?['watermark'] == true;
+    } catch (e) {
+      debugPrint('Error loading branding: $e');
     }
   }
 }

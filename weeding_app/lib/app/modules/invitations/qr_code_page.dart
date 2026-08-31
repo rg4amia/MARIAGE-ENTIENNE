@@ -8,7 +8,10 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../../data/models/guest.dart';
 import '../../data/repositories/guest_link_repository.dart';
+import '../../data/repositories/invitation_repository.dart';
 import '../../core/constants/supabase_config.dart';
+import '../../core/utils/quota_error.dart';
+import '../subscription/subscription_controller.dart';
 import 'invitations_controller.dart';
 
 class QrCodePage extends StatelessWidget {
@@ -28,6 +31,36 @@ class QrCodePage extends StatelessWidget {
     } catch (error) {
       debugPrint('Impossible de générer le lien QR: $error');
       return null;
+    }
+  }
+
+  /// Décompte l'envoi avant de partager : c'est la base qui autorise ou
+  /// refuse, l'écran se contente de proposer le pack supérieur en cas de refus.
+  Future<void> _share(Guest guest, InvitationsController controller) async {
+    final url = await _getPublicUrl(guest, controller);
+    if (url == null) return;
+
+    final invitation = await controller.getInvitationForGuest(guest.id);
+    if (invitation == null) {
+      Get.snackbar(
+        'Place à attribuer',
+        'Placez ${guest.fullName.split(' ').first} à une table avant '
+            'd\'envoyer son invitation.',
+      );
+      return;
+    }
+
+    final sent = await runWithQuotaGuard(() async {
+      await InvitationRepository().recordDelivery(
+        invitationId: invitation.id,
+        destination: guest.phone,
+      );
+    });
+    if (!sent) return;
+
+    await Share.share(url);
+    if (Get.isRegistered<SubscriptionController>()) {
+      await Get.find<SubscriptionController>().load();
     }
   }
 
@@ -155,13 +188,7 @@ class QrCodePage extends StatelessWidget {
                                 children: [
                                   Expanded(
                                     child: OutlinedButton.icon(
-                                      onPressed: () async {
-                                        final url = await _getPublicUrl(
-                                          guest,
-                                          controller,
-                                        );
-                                        if (url != null) await Share.share(url);
-                                      },
+                                      onPressed: () => _share(guest, controller),
                                       icon: const Icon(Icons.share),
                                       label: const Text('Partager'),
                                       style: OutlinedButton.styleFrom(

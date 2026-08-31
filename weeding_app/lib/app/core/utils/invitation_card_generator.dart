@@ -67,6 +67,10 @@ class InvitationCardWidget extends StatelessWidget {
   final String? qrToken;
   final bool showQrCode;
 
+  /// Signature du forfait gratuit : c'est elle qui fait connaître le produit
+  /// aux invités, et qui disparaît dès qu'un pack est acheté.
+  final bool showWatermark;
+
   const InvitationCardWidget({
     super.key,
     required this.guestName,
@@ -74,6 +78,7 @@ class InvitationCardWidget extends StatelessWidget {
     required this.seatNumber,
     this.qrToken,
     this.showQrCode = true,
+    this.showWatermark = false,
   });
 
   @override
@@ -185,6 +190,17 @@ class InvitationCardWidget extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            if (showWatermark) ...[
+              const SizedBox(height: 14),
+              Text(
+                'Créé avec Mon Mariage',
+                style: AppTextStyles.labelMd.copyWith(
+                  color: onPrimary.withValues(alpha: 0.62),
+                  letterSpacing: 0.8,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ],
         ),
       ),

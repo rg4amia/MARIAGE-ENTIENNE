@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
+import '../admin/admin_controller.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../../data/repositories/wedding_settings_repository.dart';
 import '../auth/auth_controller.dart';
@@ -259,6 +260,31 @@ class _SettingsPageState extends State<SettingsPage> {
                       ],
                     ),
                   ),
+
+                  // Visible des seuls exploitants du service : les couples
+                  // n'ont pas à soupçonner qu'une console existe.
+                  Obx(() {
+                    if (!Get.find<AdminController>().isPlatformAdmin.value) {
+                      return const SizedBox.shrink();
+                    }
+                    return FadeInSlide(
+                      delay: const Duration(milliseconds: 450),
+                      child: _SettingsSection(
+                        title: 'EXPLOITATION',
+                        items: [
+                          _SettingsTile(
+                            icon: Icons.admin_panel_settings_outlined,
+                            iconColor: AppColors.primary,
+                            title: 'Console exploitant',
+                            onTap: () {
+                              Get.find<AdminController>().loadAll();
+                              Get.toNamed(AppRoutes.admin);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
 
                   const SizedBox(height: 40),
                   Center(

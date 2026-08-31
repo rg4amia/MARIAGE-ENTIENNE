@@ -95,11 +95,13 @@ END;
 $$;
 
 -- ── Policies guest_links ─────────────────────────────────────
+DROP POLICY IF EXISTS "guest_links_admin_all" ON public.guest_links;
 CREATE POLICY "guest_links_admin_all" ON public.guest_links
   FOR ALL TO authenticated
   USING    (public.is_admin())
   WITH CHECK (public.is_admin());
 
+DROP POLICY IF EXISTS "guest_links_public_read" ON public.guest_links;
 CREATE POLICY "guest_links_public_read" ON public.guest_links
   FOR SELECT TO anon USING (is_active = true);
 
@@ -115,11 +117,13 @@ DROP POLICY IF EXISTS "admins_manage_profiles"  ON public.profiles;
 DROP POLICY IF EXISTS "profiles_admin_all"       ON public.profiles;
 DROP POLICY IF EXISTS "profiles_own_read"        ON public.profiles;
 
+DROP POLICY IF EXISTS "profiles_admin_all" ON public.profiles;
 CREATE POLICY "profiles_admin_all" ON public.profiles
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
   WITH CHECK (public.is_admin() AND event_id = public.current_event_id());
 
+DROP POLICY IF EXISTS "profiles_own_read" ON public.profiles;
 CREATE POLICY "profiles_own_read" ON public.profiles
   FOR SELECT TO authenticated
   USING (id = (SELECT auth.uid()));
@@ -128,11 +132,13 @@ CREATE POLICY "profiles_own_read" ON public.profiles
 DROP POLICY IF EXISTS "admins_manage_guests" ON public.guests;
 DROP POLICY IF EXISTS "guests_admin_all"     ON public.guests;
 
+DROP POLICY IF EXISTS "guests_admin_all" ON public.guests;
 CREATE POLICY "guests_admin_all" ON public.guests
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
   WITH CHECK (public.is_admin() AND event_id = public.current_event_id());
 
+DROP POLICY IF EXISTS "guests_public_read" ON public.guests;
 DROP POLICY IF EXISTS "guests_public_read" ON public.guests;
 CREATE POLICY "guests_public_read" ON public.guests
   FOR SELECT TO anon USING (true);
@@ -141,11 +147,13 @@ CREATE POLICY "guests_public_read" ON public.guests
 DROP POLICY IF EXISTS "admins_manage_tables"       ON public.seating_tables;
 DROP POLICY IF EXISTS "seating_tables_admin_all"   ON public.seating_tables;
 
+DROP POLICY IF EXISTS "seating_tables_admin_all" ON public.seating_tables;
 CREATE POLICY "seating_tables_admin_all" ON public.seating_tables
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
   WITH CHECK (public.is_admin() AND event_id = public.current_event_id());
 
+DROP POLICY IF EXISTS "seating_tables_public_read" ON public.seating_tables;
 DROP POLICY IF EXISTS "seating_tables_public_read" ON public.seating_tables;
 CREATE POLICY "seating_tables_public_read" ON public.seating_tables
   FOR SELECT TO anon USING (true);
@@ -154,11 +162,13 @@ CREATE POLICY "seating_tables_public_read" ON public.seating_tables
 DROP POLICY IF EXISTS "admins_manage_chairs" ON public.chairs;
 DROP POLICY IF EXISTS "chairs_admin_all"     ON public.chairs;
 
+DROP POLICY IF EXISTS "chairs_admin_all" ON public.chairs;
 CREATE POLICY "chairs_admin_all" ON public.chairs
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
   WITH CHECK (public.is_admin() AND event_id = public.current_event_id());
 
+DROP POLICY IF EXISTS "chairs_public_read" ON public.chairs;
 DROP POLICY IF EXISTS "chairs_public_read" ON public.chairs;
 CREATE POLICY "chairs_public_read" ON public.chairs
   FOR SELECT TO anon USING (true);
@@ -167,6 +177,7 @@ CREATE POLICY "chairs_public_read" ON public.chairs
 DROP POLICY IF EXISTS "admins_manage_invitations" ON public.invitations;
 DROP POLICY IF EXISTS "invitations_admin_all"     ON public.invitations;
 
+DROP POLICY IF EXISTS "invitations_admin_all" ON public.invitations;
 CREATE POLICY "invitations_admin_all" ON public.invitations
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
@@ -176,6 +187,7 @@ CREATE POLICY "invitations_admin_all" ON public.invitations
 DROP POLICY IF EXISTS "admins_manage_media"    ON public.guest_media_submissions;
 DROP POLICY IF EXISTS "guest_media_admin_all"  ON public.guest_media_submissions;
 
+DROP POLICY IF EXISTS "guest_media_admin_all" ON public.guest_media_submissions;
 CREATE POLICY "guest_media_admin_all" ON public.guest_media_submissions
   FOR ALL TO authenticated
   USING    (public.is_admin() AND event_id = public.current_event_id())
@@ -186,21 +198,25 @@ DROP POLICY IF EXISTS "admins_access_guest_media_bucket" ON storage.objects;
 DROP POLICY IF EXISTS "admins_access_png_bucket"         ON storage.objects;
 DROP POLICY IF EXISTS "admins_access_pdf_bucket"         ON storage.objects;
 
+DROP POLICY IF EXISTS "storage_admin_guest_media" ON storage.objects;
 CREATE POLICY "storage_admin_guest_media" ON storage.objects
   FOR ALL TO authenticated
   USING    (bucket_id = 'guest-media'            AND public.is_admin())
   WITH CHECK (bucket_id = 'guest-media'          AND public.is_admin());
 
+DROP POLICY IF EXISTS "storage_admin_cards_png" ON storage.objects;
 CREATE POLICY "storage_admin_cards_png" ON storage.objects
   FOR ALL TO authenticated
   USING    (bucket_id = 'invitation-cards-png'   AND public.is_admin())
   WITH CHECK (bucket_id = 'invitation-cards-png' AND public.is_admin());
 
+DROP POLICY IF EXISTS "storage_admin_cards_pdf" ON storage.objects;
 CREATE POLICY "storage_admin_cards_pdf" ON storage.objects
   FOR ALL TO authenticated
   USING    (bucket_id = 'invitation-cards-pdf'   AND public.is_admin())
   WITH CHECK (bucket_id = 'invitation-cards-pdf' AND public.is_admin());
 
+DROP POLICY IF EXISTS "storage_anon_upload_guest_media" ON storage.objects;
 CREATE POLICY "storage_anon_upload_guest_media" ON storage.objects
   FOR INSERT TO anon
   WITH CHECK (bucket_id = 'guest-media');

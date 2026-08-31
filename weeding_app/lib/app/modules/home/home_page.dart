@@ -11,6 +11,7 @@ import '../../routes/app_routes.dart';
 import 'home_controller.dart';
 import '../auth/auth_controller.dart';
 import '../navigation/main_navigation_controller.dart';
+import '../subscription/subscription_banner.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -37,6 +38,8 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
+                    // ── Rappel de forfait (silencieux tant que tout va bien) ──
+                    const SubscriptionBanner(),
                     // ── KPI Grid ──
                     Obx(() => _buildKpiGrid(controller)),
                     const SizedBox(height: 20),

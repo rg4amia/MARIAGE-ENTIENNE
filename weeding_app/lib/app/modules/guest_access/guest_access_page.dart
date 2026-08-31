@@ -580,6 +580,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                       controller.guestSeat.value?.tableId ?? 'Non assigné',
                   seatNumber: controller.guestSeat.value?.chairId ?? '-',
                   qrToken: g?.qrToken,
+                  showWatermark: controller.showWatermark.value,
                 ),
               ),
               const SizedBox(height: 24),

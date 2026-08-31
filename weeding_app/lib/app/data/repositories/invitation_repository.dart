@@ -34,6 +34,25 @@ class InvitationRepository {
     }
   }
 
+  /// Enregistre un envoi côté base. C'est cet appel — et non le partage
+  /// système — qui consomme le quota du forfait : la base refuse elle-même
+  /// l'envoi de trop avec une erreur `QUOTA_*`.
+  Future<Map<String, dynamic>> recordDelivery({
+    required String invitationId,
+    String channel = 'whatsapp',
+    String? destination,
+  }) async {
+    final response = await _client.rpc(
+      'record_invitation_delivery',
+      params: {
+        'p_invitation_id': invitationId,
+        'p_channel': channel,
+        'p_destination': destination,
+      },
+    );
+    return Map<String, dynamic>.from(response as Map);
+  }
+
   Future<int> getInvitationCount() async {
     final response = await _client.from('invitations').select('id');
     return (response as List).length;

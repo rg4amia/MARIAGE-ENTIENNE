@@ -6,10 +6,12 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/models/profile.dart';
 import '../../routes/app_routes.dart';
 import '../../core/theme/wedding_theme_controller.dart';
+import '../admin/admin_controller.dart';
 import '../home/home_controller.dart';
 import '../tables/tables_controller.dart';
 import '../guests/guests_controller.dart';
 import '../invitations/invitations_controller.dart';
+import '../subscription/subscription_controller.dart';
 
 class AuthController extends GetxController {
   final AuthRepository _authRepository = AuthRepository();
@@ -98,6 +100,12 @@ class AuthController extends GetxController {
       profile.value = await _authRepository.getProfile();
       if (profile.value != null && Get.isRegistered<WeddingThemeController>()) {
         await Get.find<WeddingThemeController>().loadForCurrentWedding();
+      }
+      if (profile.value != null && Get.isRegistered<SubscriptionController>()) {
+        await Get.find<SubscriptionController>().load();
+      }
+      if (Get.isRegistered<AdminController>()) {
+        await Get.find<AdminController>().resolveAccess();
       }
     } catch (e) {
       debugPrint('Erreur chargement profil: $e');
@@ -213,11 +221,15 @@ class AuthController extends GetxController {
     if (Get.isRegistered<InvitationsController>()) {
       Get.delete<InvitationsController>();
     }
+    // Permanent, donc jamais recréé : on le vide au lieu de le supprimer.
+    if (Get.isRegistered<SubscriptionController>()) {
+      Get.find<SubscriptionController>().clear();
+    }
   }
 
   Future<void> logout() async {
     await _authRepository.signOut();
-    Get.offAllNamed(AppRoutes.login);
+    Get.offAllNamed(AppRoutes.welcome);
   }
 
   void _clearControllers() {

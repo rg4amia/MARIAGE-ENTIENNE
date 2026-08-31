@@ -11,8 +11,11 @@ import '../../data/models/guest_link.dart';
 import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
 import '../../data/repositories/guest_link_repository.dart';
+import '../../data/repositories/invitation_repository.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../core/utils/quota_error.dart';
 import '../../core/widgets/wedding_header.dart';
+import '../subscription/subscription_controller.dart';
 import 'guests_controller.dart';
 
 class GuestDetailPage extends StatefulWidget {
@@ -534,19 +537,49 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     }
   }
 
-  void _shareViaWhatsApp(Guest guest) {
+  Future<void> _shareViaWhatsApp(Guest guest) async {
     final url = _getInviteUrl();
     if (url.isEmpty) {
       Get.snackbar('Erreur', 'Aucun lien d\'invitation disponible');
       return;
     }
+
+    // L'invitation n'existe en base qu'une fois la place attribuée : sans
+    // elle, l'envoi ne peut être ni décompté ni retrouvé à l'entrée.
+    final invitation = await InvitationRepository().getInvitationByGuestId(
+      guest.id,
+    );
+    if (invitation == null) {
+      Get.snackbar(
+        'Place à attribuer',
+        'Placez ${guest.fullName.split(' ').first} à une table avant '
+            'd\'envoyer son invitation.',
+      );
+      return;
+    }
+
+    final sent = await runWithQuotaGuard(() async {
+      await InvitationRepository().recordDelivery(
+        invitationId: invitation.id,
+        destination: guest.phone,
+      );
+    });
+    if (!sent) return;
+
     final name = guest.fullName.split(' ').first;
     final message =
         'Bonjour $name ! 🎉\n\n'
         'Tu es invité(e) au mariage ! 🥂\n'
         'Clique sur le lien ci-dessous pour accéder à ton invitation :\n\n'
         '$url';
-    Share.share(message);
+    await Share.share(message);
+    await _refreshSubscription();
+  }
+
+  Future<void> _refreshSubscription() async {
+    if (Get.isRegistered<SubscriptionController>()) {
+      await Get.find<SubscriptionController>().load();
+    }
   }
 }
 

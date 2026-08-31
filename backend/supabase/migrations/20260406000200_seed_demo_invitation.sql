@@ -1,3 +1,38 @@
+-- Prerequis du jeu de demonstration.
+-- Le mariage et l'invitee etaient supposes deja presents, ce qui rendait
+-- cette migration rejouable seulement sur une base deja peuplee. Les
+-- creer ici la rend autoportante ; sur une base existante, les
+-- `on conflict do nothing` n'ont aucun effet.
+insert into public.wedding_events (
+  id,
+  slug,
+  title,
+  bride_name,
+  groom_name
+)
+values (
+  '00000000-0000-0000-0000-000000000001',
+  'mariage-entienne-demo',
+  'Mariage Entienne',
+  'Stephanie',
+  'Etienne'
+)
+on conflict (id) do nothing;
+
+insert into public.guests (
+  id,
+  event_id,
+  full_name,
+  qr_token
+)
+values (
+  '00000000-0000-0000-0000-000000000101',
+  '00000000-0000-0000-0000-000000000001',
+  'Stephanie K.',
+  'stephanie-k-001'
+)
+on conflict (id) do nothing;
+
 insert into public.seating_tables (
   id,
   event_id,
