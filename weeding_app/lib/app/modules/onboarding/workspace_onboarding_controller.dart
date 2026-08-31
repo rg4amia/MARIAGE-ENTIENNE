@@ -76,7 +76,7 @@ class WorkspaceOnboardingController extends GetxController {
       Get.offAllNamed(AppRoutes.home);
       Get.snackbar(
         'Votre espace est prêt',
-        'Votre essai Pro de 14 jours vient de commencer.',
+        'Bienvenue sur Mon Mariage !',
         snackPosition: SnackPosition.BOTTOM,
       );
     } catch (error) {
@@ -95,6 +95,20 @@ class WorkspaceOnboardingController extends GetxController {
     if (message.contains('already belongs to an organization')) {
       return 'Ce compte appartient déjà à une organisation.';
     }
-    return 'Vérifiez les informations puis réessayez.';
+    if (message.contains('Authentication required')) {
+      return 'Session expirée. Reconnectez-vous.';
+    }
+    if (message.contains('Organization name is required')) {
+      return 'Le nom de l\'organisation est requis.';
+    }
+    if (message.contains('Wedding title and couple names are required')) {
+      return 'Le titre et les noms des mariés sont requis.';
+    }
+    if (message.contains('Default SaaS plan is unavailable')) {
+      return 'Erreur de configuration : forfait par défaut introuvable.';
+    }
+    // Exposer le message brut pour faciliter le débogage
+    debugPrint('[WorkspaceOnboarding] createWorkspace error: $error');
+    return message.length > 120 ? '${message.substring(0, 120)}…' : message;
   }
 }

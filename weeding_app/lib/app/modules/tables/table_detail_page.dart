@@ -200,14 +200,18 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
       builder: (context, snapshot) {
         final chairs = snapshot.data ?? [];
         final assigned = chairs.where((c) => c.isAssigned).length;
-        final occupancy = chairs.isNotEmpty ? assigned / chairs.length : 0.0;
+        final isLoading = snapshot.connectionState == ConnectionState.waiting;
+        // Use the table's capacity as the denominator while still loading
+        // so the header doesn't flash "0/0" before chairs arrive.
+        final totalForHeader = isLoading ? widget.table.capacity : chairs.length;
+        final occupancy = totalForHeader > 0 ? assigned / totalForHeader : 0.0;
 
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
           children: [
             _buildInfoCard(assigned, occupancy),
             const SizedBox(height: 16),
-            _buildSectionHeader(assigned, chairs.length),
+            _buildSectionHeader(assigned, totalForHeader),
             const SizedBox(height: 12),
             if (snapshot.connectionState == ConnectionState.waiting)
               _buildLoadingChairs()

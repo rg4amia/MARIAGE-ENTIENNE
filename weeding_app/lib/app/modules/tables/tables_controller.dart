@@ -79,12 +79,23 @@ class TablesController extends GetxController {
 
   Future<List<Chair>> getChairsForTable(String tableId) async {
     try {
+      // Step 1: try fetching existing chairs
       var chairs = await _tableRepository.getChairsByTableId(tableId);
+
+      // Step 2: if none exist yet, try to auto-create them via RPC
       if (chairs.isEmpty) {
-        final table = await _tableRepository.getTableById(tableId);
-        if (table != null && table.capacity > 0) {
-          await _tableRepository.ensureChairsForTable(tableId: tableId);
-          chairs = await _tableRepository.getChairsByTableId(tableId);
+        try {
+          final table = await _tableRepository.getTableById(tableId);
+          if (table != null && table.capacity > 0) {
+            await _tableRepository
+                .ensureChairsForTable(tableId: tableId)
+                .timeout(const Duration(seconds: 5));
+            chairs = await _tableRepository.getChairsByTableId(tableId);
+          }
+        } catch (rpcError) {
+          // RPC may fail if user isn't admin or current_event_id is missing.
+          // Log and fall through — UI will show an empty state with retry.
+          debugPrint('ensureChairsForTable RPC failed: $rpcError');
         }
       }
       return chairs;
