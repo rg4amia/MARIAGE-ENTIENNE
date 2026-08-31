@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
+import '../../core/widgets/wedding_rings_icon.dart';
 import 'auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -126,10 +127,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          child: Icon(
-                            Icons.favorite_rounded,
-                            size: 40,
+                          child: WeddingRingsIcon(
                             color: AppColors.dark,
+                            size: 40,
                           ),
                         ),
                       ),

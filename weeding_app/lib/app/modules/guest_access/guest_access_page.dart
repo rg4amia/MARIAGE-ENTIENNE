@@ -6,6 +6,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/invitation_card_generator.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
+import '../../core/widgets/wedding_rings_icon.dart';
 import 'guest_access_controller.dart';
 import 'audio_recorder_page.dart';
 import 'video_recorder_page.dart';
@@ -129,11 +130,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.favorite_rounded,
-                  color: Colors.white,
-                  size: 36,
-                ),
+                child: WeddingRingsIcon(color: Colors.white, size: 36),
               ),
             ),
             const SizedBox(height: 24),
@@ -368,11 +365,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
             children: [
               const Spacer(flex: 1),
               ScaleIn(
-                child: Icon(
-                  Icons.mic_rounded,
-                  size: 48,
-                  color: AppColors.dark,
-                ),
+                child: Icon(Icons.mic_rounded, size: 48, color: AppColors.dark),
               ),
               const SizedBox(height: 20),
               Text(

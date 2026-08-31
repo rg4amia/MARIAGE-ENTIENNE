@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/widgets/wedding_rings_icon.dart';
 import '../../routes/app_routes.dart';
 import '../auth/auth_controller.dart';
 
@@ -62,11 +63,7 @@ class _SplashPageState extends State<SplashPage> {
                 color: AppColors.surface,
                 border: Border.all(color: AppColors.dark, width: 1.3),
               ),
-              child: Icon(
-                Icons.favorite_rounded,
-                size: 44,
-                color: AppColors.dark,
-              ),
+              child: WeddingRingsIcon(color: AppColors.dark, size: 44),
             ),
             const SizedBox(height: 22),
             Text(

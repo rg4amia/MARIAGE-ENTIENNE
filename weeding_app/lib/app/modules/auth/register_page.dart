@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
+import '../../core/widgets/wedding_rings_icon.dart';
 import 'auth_controller.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -136,8 +137,7 @@ class _RegisterPageState extends State<RegisterPage>
                                       ),
                                     ],
                                   ),
-                                  child: Icon(
-                                    Icons.favorite_rounded,
+                                  child: WeddingRingsIcon(
                                     color: AppColors.onPrimary,
                                     size: 28,
                                   ),

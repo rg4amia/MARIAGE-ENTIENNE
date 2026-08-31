@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/animated_widgets.dart';
+import '../../core/widgets/wedding_rings_icon.dart';
 import '../../routes/app_routes.dart';
 
 /// Page de garde du SaaS : première chose que voit un visiteur sans compte.
@@ -34,11 +35,7 @@ class WelcomePage extends StatelessWidget {
                         color: AppColors.surface,
                         border: Border.all(color: AppColors.dark, width: 1.3),
                       ),
-                      child: Icon(
-                        Icons.favorite_rounded,
-                        size: 38,
-                        color: AppColors.dark,
-                      ),
+                      child: WeddingRingsIcon(color: AppColors.dark, size: 38),
                     ),
                     const SizedBox(height: 16),
                     Text(
