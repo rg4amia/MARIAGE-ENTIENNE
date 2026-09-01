@@ -14,6 +14,8 @@ import '../../data/repositories/guest_link_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/utils/quota_error.dart';
+import '../../core/utils/whatsapp_helper.dart';
+import '../../data/repositories/wedding_settings_repository.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../subscription/subscription_controller.dart';
 import 'guests_controller.dart';
@@ -271,7 +273,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                               ),
                             ),
                             label: const Text(
-                              'WhatsApp',
+                              'Partager',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -279,6 +281,33 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                         ),
                     ],
                   ),
+                  const SizedBox(height: 12),
+
+                  // WhatsApp Direct Invitation Button
+                  if (guest.phone != null && guest.status != 'cancelled')
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () => _sendInvitationWhatsApp(context, guest),
+                        icon: const Icon(Icons.chat_bubble_rounded, size: 20),
+                        label: Text(
+                          'Envoyer l\'invitation WhatsApp à ${guest.fullName.split(' ').first}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF25D366),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          textStyle: AppTextStyles.bodyMd.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 24),
 
                   // Cancel or reactivate without deleting the guest history.
@@ -579,6 +608,33 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   Future<void> _refreshSubscription() async {
     if (Get.isRegistered<SubscriptionController>()) {
       await Get.find<SubscriptionController>().load();
+    }
+  }
+
+  Future<void> _sendInvitationWhatsApp(
+    BuildContext context,
+    Guest guest,
+  ) async {
+    final settings = await WeddingSettingsRepository().getSettings();
+    if (!context.mounted) return;
+
+    try {
+      final sent = await sendWeddingInvitationWhatsApp(
+        guest: guest,
+        settings: settings,
+      );
+      if (context.mounted) {
+        Get.snackbar(
+          sent ? '✅ Envoyé' : '⚠️ Annulé',
+          sent
+              ? 'Invitation envoyée via WhatsApp à ${guest.fullName}'
+              : 'L\'envoi a été annulé ou WhatsApp n\'est pas disponible',
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Get.snackbar('Erreur', 'Impossible d\'ouvrir WhatsApp');
+      }
     }
   }
 }

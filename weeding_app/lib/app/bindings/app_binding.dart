@@ -12,7 +12,7 @@ class AppBinding extends Bindings {
   @override
   void dependencies() {
     // Core controllers
-    Get.lazyPut<AuthController>(() => AuthController(), fenix: true);
+    Get.put<AuthController>(AuthController(), permanent: true);
     Get.put(MainNavigationController(), permanent: true);
 
     // Le forfait est consulté depuis la page de garde comme depuis le

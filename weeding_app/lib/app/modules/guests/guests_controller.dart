@@ -78,13 +78,13 @@ class GuestsController extends GetxController {
     }
   }
 
-  Future<void> createGuest({
+  Future<Guest?> createGuest({
     required String fullName,
     String? phone,
     String? email,
   }) async {
     try {
-      await _guestRepository.createGuest(
+      final guest = await _guestRepository.createGuest(
         fullName: fullName,
         phone: phone,
         email: email,
@@ -92,8 +92,10 @@ class GuestsController extends GetxController {
 
       await loadGuests();
       Get.snackbar('Succès', 'Invité ajouté avec succès');
+      return guest;
     } catch (e) {
       Get.snackbar('Erreur', 'Impossible d\'ajouter l\'invité');
+      return null;
     }
   }
 

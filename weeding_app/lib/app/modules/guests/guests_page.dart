@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
+import '../../core/utils/whatsapp_helper.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
 import '../../core/widgets/wedding_header.dart';
+import '../../data/repositories/wedding_settings_repository.dart';
 import '../../routes/app_routes.dart';
 import 'guests_controller.dart';
 
@@ -474,16 +476,21 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      final phone = _phoneController.text.trim().isEmpty
+                          ? null
+                          : _phoneController.text.trim();
                       Navigator.pop(context);
-                      await widget.controller.createGuest(
+                      final guest = await widget.controller.createGuest(
                         fullName: _nameController.text.trim(),
-                        phone: _phoneController.text.trim().isEmpty
-                            ? null
-                            : _phoneController.text.trim(),
+                        phone: phone,
                         email: _emailController.text.trim().isEmpty
                             ? null
                             : _emailController.text.trim(),
                       );
+                      // Propose l'envoi WhatsApp si le guest a un téléphone
+                      if (guest != null && phone != null && context.mounted) {
+                        _promptWhatsAppInvitation(context, guest);
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -549,6 +556,63 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
         borderSide: const BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    );
+  }
+
+  void _promptWhatsAppInvitation(BuildContext context, dynamic guest) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Text('📲 '),
+            Expanded(child: Text('Envoyer l\'invitation', style: AppTextStyles.headlineMd)),
+          ],
+        ),
+        content: Text(
+          'Voulez-vous envoyer l\'invitation WhatsApp à ${guest.fullName} ?\n\nUn message avec les détails du mariage et le lien d\'invitation sera envoyé sur ${guest.phone}.',
+          style: AppTextStyles.bodyMd,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Non merci', style: AppTextStyles.bodyMd),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              final settings = await WeddingSettingsRepository().getSettings();
+              if (!context.mounted) return;
+              try {
+                final sent = await sendWeddingInvitationWhatsApp(
+                  guest: guest,
+                  settings: settings,
+                );
+                if (context.mounted) {
+                  Get.snackbar(
+                    sent ? '✅ Envoyé' : '⚠️ Annulé',
+                    sent
+                        ? 'Invitation envoyée via WhatsApp à ${guest.fullName}'
+                        : 'L\'envoi a été annulé ou WhatsApp n\'est pas disponible',
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Get.snackbar('Erreur', 'Impossible d\'ouvrir WhatsApp');
+                }
+              }
+            },
+            child: Text(
+              'Envoyer',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
