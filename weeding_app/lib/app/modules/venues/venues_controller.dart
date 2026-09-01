@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../core/utils/venue_map_launcher.dart';
 import '../../data/models/event_venue.dart';
 import '../../data/repositories/event_venue_repository.dart';
 
@@ -112,32 +112,12 @@ class VenuesController extends GetxController {
   }
 
   Future<void> openMap(EventVenue venue) async {
-    final uri = _mapUri(venue);
-    if (uri == null ||
-        !await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    if (!await launchVenueMap(venue)) {
       Get.snackbar(
         'Itinéraire indisponible',
         'Ajoutez une adresse ou un lien Maps.',
       );
     }
-  }
-
-  Uri? _mapUri(EventVenue venue) {
-    final mapsUrl = venue.mapsUrl?.trim();
-    if (mapsUrl != null && mapsUrl.isNotEmpty) return Uri.tryParse(mapsUrl);
-
-    String? query;
-    if (venue.latitude != null && venue.longitude != null) {
-      query = '${venue.latitude},${venue.longitude}';
-    } else if (venue.addressLabel.isNotEmpty) {
-      query = venue.addressLabel;
-    }
-    if (query == null) return null;
-
-    return Uri.https('www.google.com', '/maps/search/', {
-      'api': '1',
-      'query': query,
-    });
   }
 
   double? _parseCoordinate(String? value) {

@@ -24,6 +24,20 @@ class EventVenueRepository {
         .toList();
   }
 
+  /// Lieux du mariage pour le portail invité public, scopés côté base par
+  /// guest_id déjà vérifié (aucun accès direct d'un compte anonyme à
+  /// event_venues).
+  Future<List<EventVenue>> getGuestPortalVenues(String guestId) async {
+    final response = await _client.rpc(
+      'guest_portal_venues',
+      params: {'p_guest_id': guestId},
+    );
+
+    return (response as List)
+        .map((json) => EventVenue.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<EventVenue> save({
     String? id,
     required String venueType,

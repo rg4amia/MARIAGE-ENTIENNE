@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/venue_presentation.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../../data/models/event_venue.dart';
 import 'venues_controller.dart';
@@ -368,12 +369,12 @@ class _VenueCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: _venueColor(venue.venueType),
+                  color: venueColor(venue.venueType),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(
-                  _venueIcon(venue.venueType),
-                  color: _venueColor(venue.venueType).computeLuminance() > 0.5
+                  venueIcon(venue.venueType),
+                  color: venueColor(venue.venueType).computeLuminance() > 0.5
                       ? AppColors.dark
                       : Colors.white,
                 ),
@@ -384,7 +385,7 @@ class _VenueCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _venueLabel(venue.venueType),
+                      venueLabel(venue.venueType),
                       style: AppTextStyles.labelMd,
                     ),
                     const SizedBox(height: 3),
@@ -499,29 +500,3 @@ class _EmptyVenues extends StatelessWidget {
   }
 }
 
-String _venueLabel(String type) {
-  return switch (type) {
-    'town_hall' => 'MAIRIE',
-    'church' => 'ÉGLISE / CULTE',
-    'reception' => 'RÉCEPTION',
-    _ => 'AUTRE LIEU',
-  };
-}
-
-IconData _venueIcon(String type) {
-  return switch (type) {
-    'town_hall' => Icons.account_balance_rounded,
-    'church' => Icons.church_rounded,
-    'reception' => Icons.celebration_rounded,
-    _ => Icons.place_rounded,
-  };
-}
-
-Color _venueColor(String type) {
-  return switch (type) {
-    'town_hall' => AppColors.primary,
-    'church' => AppColors.tertiary,
-    'reception' => AppColors.secondary,
-    _ => AppColors.dark,
-  };
-}

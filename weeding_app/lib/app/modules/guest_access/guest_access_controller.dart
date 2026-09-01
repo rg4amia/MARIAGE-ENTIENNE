@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../core/utils/venue_map_launcher.dart';
+import '../../data/models/event_venue.dart';
 import '../../data/models/guest.dart';
 import '../../data/models/invitation.dart';
 import '../../data/models/guest_seat.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../data/repositories/event_venue_repository.dart';
 import '../../data/repositories/guest_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
 import '../../data/repositories/media_repository.dart';
@@ -26,6 +29,7 @@ class GuestAccessController extends GetxController {
   final GuestRepository _guestRepo = GuestRepository();
   final InvitationRepository _invitationRepo = InvitationRepository();
   final MediaRepository _mediaRepo = MediaRepository();
+  final EventVenueRepository _venueRepo = EventVenueRepository();
   final _client = Supabase.instance.client;
 
   final Rx<GuestAccessStep> currentStep = GuestAccessStep.loading.obs;
@@ -34,6 +38,7 @@ class GuestAccessController extends GetxController {
   final Rx<GuestSeat?> guestSeat = Rx<GuestSeat?>(null);
   final RxString errorMessage = ''.obs;
   final RxBool isProcessing = false.obs;
+  final RxList<EventVenue> venues = <EventVenue>[].obs;
 
   /// Filigrane du forfait gratuit, décidé par la base et non par l'app.
   final RxBool showWatermark = false.obs;
@@ -87,6 +92,7 @@ class GuestAccessController extends GetxController {
       }
 
       guest.value = foundGuest;
+      unawaited(_loadVenues(foundGuest.id));
 
       // Check if guest already unlocked their card
       if (foundGuest.status == 'card_unlocked') {
@@ -242,6 +248,27 @@ class GuestAccessController extends GetxController {
       debugPrint('Error loading invitation: $e');
     }
     await _loadBranding(guestId);
+  }
+
+  /// Charge les lieux du mariage pour que l'invité puisse s'orienter, sans
+  /// bloquer le reste du parcours si ça échoue.
+  Future<void> _loadVenues(String guestId) async {
+    try {
+      venues.assignAll(await _venueRepo.getGuestPortalVenues(guestId));
+    } catch (e) {
+      debugPrint('Error loading venues: $e');
+    }
+  }
+
+  /// Ouvre l'itinéraire du lieu dans l'application de cartes du téléphone.
+  Future<void> openVenueMap(EventVenue venue) async {
+    if (!await launchVenueMap(venue)) {
+      Get.snackbar(
+        'Itinéraire indisponible',
+        'Aucune adresse n\'est renseignée pour ce lieu.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   /// Le portail est consulté sans compte : seule cette fonction expose le

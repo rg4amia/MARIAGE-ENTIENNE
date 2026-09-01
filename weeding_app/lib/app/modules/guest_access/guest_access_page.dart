@@ -8,6 +8,7 @@ import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/wedding_rings_icon.dart';
 import 'guest_access_controller.dart';
+import 'guest_venues_sheet.dart';
 import 'audio_recorder_page.dart';
 import 'video_recorder_page.dart';
 import 'recorder_factory.dart'
@@ -346,6 +347,8 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              _VenuesLinkButton(controller: controller),
               const Spacer(flex: 2),
             ],
           ),
@@ -622,6 +625,8 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   ),
                 ],
               ),
+              const SizedBox(height: 16),
+              _VenuesLinkButton(controller: controller),
               const SizedBox(height: 24),
             ],
           ),
@@ -757,5 +762,28 @@ class _MediaOptionCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// ── Lien vers les lieux du mariage ──
+class _VenuesLinkButton extends StatelessWidget {
+  final GuestAccessController controller;
+
+  const _VenuesLinkButton({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (controller.venues.isEmpty) return const SizedBox.shrink();
+      return TextButton.icon(
+        onPressed: () => showGuestVenuesSheet(context, controller),
+        style: TextButton.styleFrom(foregroundColor: AppColors.dark),
+        icon: const Icon(Icons.map_outlined, size: 20),
+        label: const Text(
+          'Voir les lieux et l\'itinéraire',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+      );
+    });
   }
 }
