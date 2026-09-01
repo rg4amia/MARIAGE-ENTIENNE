@@ -6,13 +6,18 @@ import '../../core/theme/app_text_styles.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
-import '../../core/widgets/wedding_header.dart';
 import '../../routes/app_routes.dart';
 import 'home_controller.dart';
 import '../auth/auth_controller.dart';
 import '../navigation/main_navigation_controller.dart';
 import '../subscription/subscription_banner.dart';
 
+/// Tableau de bord tenant entièrement dans un écran.
+///
+/// Tout est visible d'un coup d'œil : les compteurs sont sur une seule ligne,
+/// le donut partage sa carte avec sa légende et les actions rapides tiennent en
+/// bas de page. Le geste de tirer pour rafraîchir reste disponible même si le
+/// contenu ne défile jamais.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -20,335 +25,416 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
     final authController = Get.find<AuthController>();
+    final tight = MediaQuery.sizeOf(context).height < 780;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          // ── Gradient Header with greeting ──
-          _buildWeddingHeader(authController),
-          // ── Scrollable Content ──
+          _buildWeddingHeader(authController, tight),
           Expanded(
             child: RefreshIndicator(
               onRefresh: controller.loadStats,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    // ── Rappel de forfait (silencieux tant que tout va bien) ──
-                    const SubscriptionBanner(),
-                    // ── KPI Grid ──
-                    Obx(() => _buildKpiGrid(controller)),
-                    const SizedBox(height: 20),
-                    // ── Invitation Status ──
-                    Obx(
-                      () => FadeInSlide(
-                        delay: const Duration(milliseconds: 300),
-                        child: _buildInvitationStatus(controller),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      // Hauteur figée sur le viewport : le contenu s'ajuste au
+                      // lieu de déborder, la liste ne défile donc jamais.
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                        maxHeight: constraints.maxHeight,
+                      ),
+                      child: _buildBody(controller, tight),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBody(HomeController controller, bool tight) {
+    final gap = tight ? 8.0 : 12.0;
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(16, gap, 16, gap),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SubscriptionBanner(compact: true),
+          Obx(() => _buildKpiRow(controller, tight)),
+          SizedBox(height: gap),
+          Expanded(
+            child: Obx(
+              () => FadeInSlide(
+                delay: const Duration(milliseconds: 250),
+                child: _buildInvitationStatus(controller, tight),
+              ),
+            ),
+          ),
+          SizedBox(height: gap),
+          FadeInSlide(
+            delay: const Duration(milliseconds: 400),
+            child: _buildQuickActions(tight),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── En-tête : identité, question du jour et recherche ──
+  Widget _buildWeddingHeader(AuthController authController, bool tight) {
+    return Builder(
+      builder: (context) => Container(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          MediaQuery.of(context).padding.top + 10,
+          20,
+          tight ? 14 : 18,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(34)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Obx(() {
+              final name =
+                  authController.profile.value?.fullName ?? 'Organisateur';
+              final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
+              final initials = parts.length >= 2
+                  ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
+                  : name.substring(0, math.min(2, name.length)).toUpperCase();
+              return Row(
+                children: [
+                  UserAvatar(
+                    initials: initials,
+                    radius: 18,
+                    backgroundColor: Colors.white,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.titleLg.copyWith(fontSize: 17),
+                        ),
+                        Text(
+                          '${DateTime.now().day.toString().padLeft(2, '0')}.${DateTime.now().month.toString().padLeft(2, '0')}.${DateTime.now().year}',
+                          style: AppTextStyles.bodyMdOnVariant.copyWith(
+                            fontSize: 12,
+                            color: AppColors.dark.withValues(alpha: 0.58),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  TapScale(
+                    onTap: () => Get.find<MainNavigationController>().selectTab(
+                      MainNavigationController.settingsTab,
+                    ),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.82),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Icon(
+                        Icons.tune_rounded,
+                        color: AppColors.dark,
+                        size: 20,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    // ── Quick Actions ──
-                    FadeInSlide(
-                      delay: const Duration(milliseconds: 450),
-                      child: _buildQuickActions(),
+                  ),
+                ],
+              );
+            }),
+            SizedBox(height: tight ? 10 : 14),
+            Text(
+              'Comment organiser votre mariage ?',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.displayMd.copyWith(
+                color: AppColors.dark,
+                fontSize: tight ? 19 : 22,
+                letterSpacing: -0.6,
+                height: 1.12,
+              ),
+            ),
+            SizedBox(height: tight ? 10 : 12),
+            TapScale(
+              onTap: () => Get.find<MainNavigationController>().selectTab(
+                MainNavigationController.guestsTab,
+              ),
+              child: Container(
+                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.search_rounded,
+                      color: AppColors.dark,
+                      size: 19,
                     ),
-                    const SizedBox(height: 100),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(
+                        'Rechercher un invité, une table…',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyles.bodyMdOnVariant.copyWith(
+                          fontSize: 13.5,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  // ── Wedding Header with Greeting + Avatar ──
-  Widget _buildWeddingHeader(AuthController authController) {
-    return WeddingHeader(
-      title: '',
-      showBack: false,
-      trailing: Container(
-        width: 46,
-        height: 46,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.82),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Icon(Icons.tune_rounded, color: AppColors.dark, size: 21),
+  // ── Compteurs : quatre tuiles sur une seule ligne ──
+  Widget _buildKpiRow(HomeController controller, bool tight) {
+    final tiles = [
+      _KpiTile(
+        icon: Icons.group_rounded,
+        color: AppColors.dark,
+        label: 'Invités',
+        value: controller.totalGuests.value,
+        delay: 0,
+        tight: tight,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      _KpiTile(
+        icon: Icons.table_restaurant_rounded,
+        color: Colors.white,
+        label: 'Tables',
+        value: controller.totalTables.value,
+        delay: 80,
+        tight: tight,
+      ),
+      _KpiTile(
+        icon: Icons.event_seat_rounded,
+        color: AppColors.secondary,
+        label: 'Chaises',
+        value: controller.totalChairs.value,
+        delay: 160,
+        tight: tight,
+      ),
+      _KpiTile(
+        icon: Icons.perm_media_rounded,
+        color: AppColors.primary,
+        label: 'Médias',
+        value: controller.totalMedia.value,
+        delay: 240,
+        tight: tight,
+      ),
+    ];
+
+    return SizedBox(
+      height: tight ? 78 : 88,
+      child: Row(
         children: [
-          Obx(() {
-            final name =
-                authController.profile.value?.fullName ?? 'Organisateur';
-            final parts = name.split(' ').where((e) => e.isNotEmpty).toList();
-            final initials = parts.length >= 2
-                ? '${parts[0][0]}${parts[1][0]}'.toUpperCase()
-                : name.substring(0, math.min(2, name.length)).toUpperCase();
-            return Row(
-              children: [
-                UserAvatar(
-                  initials: initials,
-                  radius: 20,
-                  backgroundColor: Colors.white,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name, style: AppTextStyles.titleLg),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${DateTime.now().day.toString().padLeft(2, '0')}.${DateTime.now().month.toString().padLeft(2, '0')}.${DateTime.now().year}',
-                        style: AppTextStyles.bodyMdOnVariant.copyWith(
-                          color: AppColors.dark.withValues(alpha: 0.58),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }),
-          const SizedBox(height: 16),
-          Text(
-            'Comment organiser votre mariage ?',
-            style: AppTextStyles.displayMd.copyWith(
-              color: AppColors.dark,
-              fontSize: 26,
-              height: 1.15,
-            ),
-          ),
-          const SizedBox(height: 14),
-          TapScale(
-            onTap: () => Get.find<MainNavigationController>().selectTab(
-              MainNavigationController.guestsTab,
-            ),
-            child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.search_rounded,
-                    color: AppColors.dark,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'Rechercher un invité, une table…',
-                    style: AppTextStyles.bodyMdOnVariant,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          for (var i = 0; i < tiles.length; i++) ...[
+            if (i > 0) const SizedBox(width: 9),
+            Expanded(child: tiles[i]),
+          ],
         ],
       ),
     );
   }
 
-  // ── KPI Grid — Dark cards matching design ──
-  Widget _buildKpiGrid(HomeController controller) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 12,
-      crossAxisSpacing: 12,
-      childAspectRatio: 1.15,
-      children: [
-        _KpiCard(
-          icon: Icons.group_rounded,
-          color: AppColors.dark,
-          label: 'Invités',
-          value: controller.totalGuests.value,
-          delay: 0,
-        ),
-        _KpiCard(
-          icon: Icons.table_restaurant_rounded,
-          color: Colors.white,
-          label: 'Tables',
-          value: controller.totalTables.value,
-          delay: 100,
-        ),
-        _KpiCard(
-          icon: Icons.event_seat_rounded,
-          color: AppColors.secondary,
-          label: 'Chaises',
-          value: controller.totalChairs.value,
-          delay: 200,
-        ),
-        _KpiCard(
-          icon: Icons.perm_media_rounded,
-          color: AppColors.primary,
-          label: 'Médias reçus',
-          value: controller.totalMedia.value,
-          delay: 300,
-        ),
-      ],
-    );
-  }
-
-  // ── Invitation Status ──
-  Widget _buildInvitationStatus(HomeController controller) {
+  // ── Statut des invitations : donut et légende côte à côte ──
+  Widget _buildInvitationStatus(HomeController controller, bool tight) {
     final total = controller.totalGuests.value;
     final pending = controller.pendingGuests.value;
     final mediaUploaded = controller.mediaUploaded.value;
     final cardUnlocked = controller.cardUnlocked.value;
 
     return GradientCard(
+      padding: EdgeInsets.all(tight ? 12 : 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Statut des invitations', style: AppTextStyles.titleLg),
+              Flexible(
+                child: Text(
+                  'Statut des invitations',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.titleLg.copyWith(fontSize: 16),
+                ),
+              ),
+              const SizedBox(width: 8),
               StatusBadge(label: '$total total', color: AppColors.dark),
             ],
           ),
-          const SizedBox(height: 24),
-          Center(
-            child: SizedBox(
-              width: 160,
-              height: 160,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: 160,
-                    height: 160,
-                    child: CustomPaint(
-                      painter: _DonutPainter(
-                        pending: pending,
-                        mediaUploaded: mediaUploaded,
-                        cardUnlocked: cardUnlocked,
-                        total: total,
+          SizedBox(height: tight ? 8 : 12),
+          Expanded(
+            child: Row(
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final diameter = math.max(
+                      86.0,
+                      math.min(constraints.maxHeight, 150.0),
+                    );
+                    return SizedBox(
+                      width: diameter,
+                      height: diameter,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CustomPaint(
+                            size: Size.square(diameter),
+                            painter: _DonutPainter(
+                              pending: pending,
+                              mediaUploaded: mediaUploaded,
+                              cardUnlocked: cardUnlocked,
+                              total: total,
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                total.toString(),
+                                style: AppTextStyles.displayMd.copyWith(
+                                  fontSize: diameter * 0.24,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.dark,
+                                ),
+                              ),
+                              Text(
+                                'Invités',
+                                style: AppTextStyles.labelMdOnVariant.copyWith(
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
+                    );
+                  },
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        total.toString(),
-                        style: AppTextStyles.displayMdPrimary.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.dark,
-                        ),
+                      _StatusLegend(
+                        color: AppColors.statusPending,
+                        label: 'En attente',
+                        count: pending,
                       ),
-                      Text('Invités', style: AppTextStyles.labelMdOnVariant),
+                      _StatusLegend(
+                        color: AppColors.statusMediaReceived,
+                        label: 'Média reçu',
+                        count: mediaUploaded,
+                      ),
+                      _StatusLegend(
+                        color: AppColors.statusCardUnlocked,
+                        label: 'Carte débloquée',
+                        count: cardUnlocked,
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-          _StatusLegend(
-            color: AppColors.statusPending,
-            label: 'En attente',
-            count: pending,
-          ),
-          const SizedBox(height: 10),
-          _StatusLegend(
-            color: AppColors.statusMediaReceived,
-            label: 'Média reçu',
-            count: mediaUploaded,
-          ),
-          const SizedBox(height: 10),
-          _StatusLegend(
-            color: AppColors.statusCardUnlocked,
-            label: 'Carte débloquée',
-            count: cardUnlocked,
           ),
         ],
       ),
     );
   }
 
-  // ── Quick Actions — 2x2 grid of service cards ──
-  Widget _buildQuickActions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Actions rapides', style: AppTextStyles.titleLg),
-        const SizedBox(height: 12),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.3,
-          children: [
-            _QuickActionCard(
-              icon: Icons.person_add_rounded,
-              color: AppColors.primary,
-              title: 'Ajouter\nun invité',
-              subtitle: 'Invités',
-              onTap: () => Get.find<MainNavigationController>().selectTab(
-                MainNavigationController.guestsTab,
-              ),
-            ),
-            _QuickActionCard(
-              icon: Icons.table_restaurant_rounded,
-              color: AppColors.dark,
-              title: 'Gérer\nles tables',
-              subtitle: 'Tables',
-              onTap: () => Get.find<MainNavigationController>().selectTab(
-                MainNavigationController.tablesTab,
-              ),
-            ),
-            _QuickActionCard(
-              icon: Icons.analytics_rounded,
-              color: AppColors.dark,
-              title: 'Suivi des\ninvitations',
-              subtitle: 'Suivi',
-              onTap: () => Get.find<MainNavigationController>().selectTab(
-                MainNavigationController.invitationsTab,
-              ),
-            ),
-            _QuickActionCard(
-              icon: Icons.qr_code_2_rounded,
-              color: AppColors.secondary,
-              title: 'QR entrée\nsalle',
-              subtitle: 'QR Code',
-              onTap: () => Get.toNamed(AppRoutes.entranceQr),
-            ),
-          ],
+  // ── Actions rapides : quatre raccourcis sur une ligne ──
+  Widget _buildQuickActions(bool tight) {
+    final actions = [
+      _QuickActionCard(
+        icon: Icons.person_add_rounded,
+        color: AppColors.primary,
+        title: 'Ajouter\nun invité',
+        onTap: () => Get.find<MainNavigationController>().selectTab(
+          MainNavigationController.guestsTab,
         ),
-      ],
+      ),
+      _QuickActionCard(
+        icon: Icons.table_restaurant_rounded,
+        color: AppColors.dark,
+        title: 'Gérer\nles tables',
+        onTap: () => Get.find<MainNavigationController>().selectTab(
+          MainNavigationController.tablesTab,
+        ),
+      ),
+      _QuickActionCard(
+        icon: Icons.analytics_rounded,
+        color: Colors.white,
+        title: 'Suivi des\ninvitations',
+        onTap: () => Get.find<MainNavigationController>().selectTab(
+          MainNavigationController.invitationsTab,
+        ),
+      ),
+      _QuickActionCard(
+        icon: Icons.qr_code_2_rounded,
+        color: AppColors.secondary,
+        title: 'QR entrée\nsalle',
+        onTap: () => Get.toNamed(AppRoutes.entranceQr),
+      ),
+    ];
+
+    return SizedBox(
+      height: tight ? 82 : 92,
+      child: Row(
+        children: [
+          for (var i = 0; i < actions.length; i++) ...[
+            if (i > 0) const SizedBox(width: 9),
+            Expanded(child: actions[i]),
+          ],
+        ],
+      ),
     );
   }
 }
 
-// ── KPI Card — Dark card matching design ──
-class _KpiCard extends StatelessWidget {
+// ── Tuile compteur compacte ──
+class _KpiTile extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String label;
   final int value;
   final int delay;
+  final bool tight;
 
-  const _KpiCard({
+  const _KpiTile({
     required this.icon,
     required this.color,
     required this.label,
     required this.value,
     required this.delay,
+    required this.tight,
   });
 
   @override
@@ -360,41 +446,55 @@ class _KpiCard extends StatelessWidget {
       duration: const Duration(milliseconds: 500),
       child: HoverCard(
         backgroundColor: color,
-        padding: const EdgeInsets.all(16),
-        borderRadius: 24,
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
+        borderRadius: 20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 36,
-              height: 36,
+              width: tight ? 24 : 27,
+              height: tight ? 24 : 27,
               decoration: BoxDecoration(
                 color: isDark
                     ? AppColors.primary
                     : AppColors.dark.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(9),
               ),
               child: Icon(
                 icon,
                 color: isDark ? AppColors.onPrimary : AppColors.dark,
-                size: 18,
+                size: tight ? 13 : 15,
               ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  value.toString(),
-                  style: AppTextStyles.headlineLg.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: contentColor,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    value.toString(),
+                    maxLines: 1,
+                    style: AppTextStyles.headlineLg.copyWith(
+                      fontSize: tight ? 19 : 22,
+                      height: 1.1,
+                      fontWeight: FontWeight.w800,
+                      color: contentColor,
+                    ),
                   ),
                 ),
-                Text(
-                  label,
-                  style: AppTextStyles.labelMd.copyWith(
-                    color: contentColor.withValues(alpha: 0.62),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: AppTextStyles.labelMd.copyWith(
+                      fontSize: 11,
+                      color: contentColor.withValues(alpha: 0.62),
+                    ),
                   ),
                 ),
               ],
@@ -406,7 +506,7 @@ class _KpiCard extends StatelessWidget {
   }
 }
 
-// ── Status Legend ──
+// ── Légende de statut ──
 class _StatusLegend extends StatelessWidget {
   final Color color;
   final String label;
@@ -423,14 +523,22 @@ class _StatusLegend extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 10,
-          height: 10,
+          width: 9,
+          height: 9,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: 12),
-        Expanded(child: Text(label, style: AppTextStyles.bodyMdOnVariant)),
+        const SizedBox(width: 9),
+        Expanded(
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyMdOnVariant.copyWith(fontSize: 12.5),
+          ),
+        ),
+        const SizedBox(width: 6),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 2),
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
@@ -438,6 +546,7 @@ class _StatusLegend extends StatelessWidget {
           child: Text(
             count.toString(),
             style: AppTextStyles.bodyLg.copyWith(
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: AppColors.onSurface,
             ),
@@ -448,19 +557,17 @@ class _StatusLegend extends StatelessWidget {
   }
 }
 
-// ── Quick Action Card — matching design style ──
+// ── Raccourci compact ──
 class _QuickActionCard extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String title;
-  final String subtitle;
   final VoidCallback onTap;
 
   const _QuickActionCard({
     required this.icon,
     required this.color,
     required this.title,
-    required this.subtitle,
     required this.onTap,
   });
 
@@ -471,16 +578,16 @@ class _QuickActionCard extends StatelessWidget {
     return TapScale(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: AppColors.dark, width: 1.25),
           boxShadow: [
             BoxShadow(
               color: AppColors.dark.withValues(alpha: 0.07),
               blurRadius: 8,
-              offset: const Offset(0, 5),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -488,45 +595,35 @@ class _QuickActionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (isDark)
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: AppColors.onPrimary, size: 18),
-              )
-            else
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(icon, color: AppColors.dark, size: 18),
+            Container(
+              width: 27,
+              height: 27,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.primary
+                    : Colors.white.withValues(alpha: 0.7),
+                borderRadius: BorderRadius.circular(9),
               ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+              child: Icon(
+                icon,
+                color: isDark ? AppColors.onPrimary : AppColors.dark,
+                size: 15,
+              ),
+            ),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
                   title,
                   style: AppTextStyles.bodyMd.copyWith(
+                    fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: contentColor,
-                    height: 1.2,
+                    height: 1.15,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.labelMd.copyWith(
-                    color: contentColor.withValues(alpha: 0.58),
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
@@ -535,7 +632,7 @@ class _QuickActionCard extends StatelessWidget {
   }
 }
 
-// ── Custom Donut Chart Painter ──
+// ── Donut du statut des invitations ──
 class _DonutPainter extends CustomPainter {
   final int pending;
   final int mediaUploaded;
@@ -552,8 +649,8 @@ class _DonutPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 10;
-    const strokeWidth = 20.0;
+    final strokeWidth = size.width * 0.13;
+    final radius = size.width / 2 - strokeWidth / 2 - 2;
 
     final paint = Paint()
       ..style = PaintingStyle.stroke

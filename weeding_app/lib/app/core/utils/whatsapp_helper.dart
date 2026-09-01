@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/supabase_config.dart';
@@ -25,14 +24,22 @@ Future<bool> sendWeddingInvitationWhatsApp({
   );
 
   try {
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-      return true;
-    }
+    // canLaunchUrl can be unreliable on some devices — try launching directly.
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+    return launched;
   } catch (e) {
     debugPrint('Erreur ouverture WhatsApp: $e');
+    // Fallback: try with wa:// scheme (some older WhatsApp versions)
+    try {
+      final fallback = Uri.parse('wa://send?phone=$phone&text=${Uri.encodeComponent(message)}');
+      return await launchUrl(fallback, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      return false;
+    }
   }
-  return false;
 }
 
 /// Normalizes an Ivory Coast phone number to the format WhatsApp expects

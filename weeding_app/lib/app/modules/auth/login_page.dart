@@ -91,190 +91,195 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
           // ── Content ──
           SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 40),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
 
-                // ── Branding / Logo ──
-                FadeTransition(
-                  opacity: CurvedAnimation(
-                    parent: _bgCtrl,
-                    curve: const Interval(0.0, 0.5),
-                  ),
-                  child: Column(
-                    children: [
-                      ScaleTransition(
-                        scale: Tween<double>(begin: 0.5, end: 1.0).animate(
-                          CurvedAnimation(
-                            parent: _heartCtrl,
-                            curve: Curves.elasticOut,
+                  // ── Branding / Logo ──
+                  FadeTransition(
+                    opacity: CurvedAnimation(
+                      parent: _bgCtrl,
+                      curve: const Interval(0.0, 0.5),
+                    ),
+                    child: Column(
+                      children: [
+                        ScaleTransition(
+                          scale: Tween<double>(begin: 0.5, end: 1.0).animate(
+                            CurvedAnimation(
+                              parent: _heartCtrl,
+                              curve: Curves.elasticOut,
+                            ),
+                          ),
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                color: AppColors.dark,
+                                width: 1.3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.1),
+                                  blurRadius: 20,
+                                ),
+                              ],
+                            ),
+                            child: WeddingRingsIcon(
+                              color: AppColors.dark,
+                              size: 40,
+                            ),
                           ),
                         ),
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            border: Border.all(
-                              color: AppColors.dark,
-                              width: 1.3,
+                        const SizedBox(height: 20),
+                        Text(
+                          'Mon Mariage',
+                          style: AppTextStyles.headlineLg.copyWith(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.01,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Gérez votre mariage en toute élégance',
+                          style: AppTextStyles.bodyMd.copyWith(
+                            color: AppColors.dark.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // ── Login Form Card ──
+                  SlideTransition(
+                    position:
+                        Tween<Offset>(
+                          begin: const Offset(0, 0.3),
+                          end: Offset.zero,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: _formCtrl,
+                            curve: Curves.easeOutCubic,
+                          ),
+                        ),
+                    child: FadeTransition(
+                      opacity: _formCtrl,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.all(28),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          border: Border.all(color: AppColors.dark, width: 1.3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.06),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                blurRadius: 20,
+                          ],
+                        ),
+                        child: Form(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Connexion', style: AppTextStyles.headlineMd),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Accédez à votre espace',
+                                style: AppTextStyles.bodyMdOnVariant,
+                              ),
+                              const SizedBox(height: 28),
+
+                              // Email
+                              _buildLabel('Email'),
+                              const SizedBox(height: 8),
+                              _buildInput(
+                                controller: controller.emailController,
+                                hint: 'exemple@mail.com',
+                                icon: Icons.mail_outline_rounded,
+                                keyboardType: TextInputType.emailAddress,
+                                validator: Validators.email,
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Password
+                              _buildLabel('Mot de passe'),
+                              const SizedBox(height: 8),
+                              _PasswordField(
+                                controller: controller.passwordController,
+                              ),
+                              const SizedBox(height: 12),
+
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () => Get.snackbar(
+                                    'Info',
+                                    'Fonctionnalité à venir',
+                                  ),
+                                  child: Text(
+                                    'Mot de passe oublié ?',
+                                    style: AppTextStyles.bodyMd.copyWith(
+                                      color: AppColors.dark,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+
+                              // Login button
+                              Obx(
+                                () => _LoginButton(
+                                  isLoading: controller.isLoading.value,
+                                  onPressed: controller.login,
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Register link
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () => Get.toNamed('/register'),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'Pas encore de compte ? ',
+                                      style: AppTextStyles.bodyMd.copyWith(
+                                        color: AppColors.onSurfaceVariant,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Créer un compte',
+                                          style: AppTextStyles.bodyMd.copyWith(
+                                            color: AppColors.dark,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          child: WeddingRingsIcon(
-                            color: AppColors.dark,
-                            size: 40,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        'Mon Mariage',
-                        style: AppTextStyles.headlineLg.copyWith(
-                          color: AppColors.dark,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.01,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Gérez votre mariage en toute élégance',
-                        style: AppTextStyles.bodyMd.copyWith(
-                          color: AppColors.dark.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const Spacer(),
-
-                // ── Login Form Card ──
-                SlideTransition(
-                  position:
-                      Tween<Offset>(
-                        begin: const Offset(0, 0.3),
-                        end: Offset.zero,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: _formCtrl,
-                          curve: Curves.easeOutCubic,
-                        ),
-                      ),
-                  child: FadeTransition(
-                    opacity: _formCtrl,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      padding: const EdgeInsets.all(28),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
-                        border: Border.all(color: AppColors.dark, width: 1.3),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.06),
-                            blurRadius: 30,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Form(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Connexion', style: AppTextStyles.headlineMd),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Accédez à votre espace',
-                              style: AppTextStyles.bodyMdOnVariant,
-                            ),
-                            const SizedBox(height: 28),
-
-                            // Email
-                            _buildLabel('Email'),
-                            const SizedBox(height: 8),
-                            _buildInput(
-                              controller: controller.emailController,
-                              hint: 'exemple@mail.com',
-                              icon: Icons.mail_outline_rounded,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: Validators.email,
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Password
-                            _buildLabel('Mot de passe'),
-                            const SizedBox(height: 8),
-                            _PasswordField(
-                              controller: controller.passwordController,
-                            ),
-                            const SizedBox(height: 12),
-
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () => Get.snackbar(
-                                  'Info',
-                                  'Fonctionnalité à venir',
-                                ),
-                                child: Text(
-                                  'Mot de passe oublié ?',
-                                  style: AppTextStyles.bodyMd.copyWith(
-                                    color: AppColors.dark,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            // Login button
-                            Obx(
-                              () => _LoginButton(
-                                isLoading: controller.isLoading.value,
-                                onPressed: controller.login,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Register link
-                            Center(
-                              child: GestureDetector(
-                                onTap: () => Get.toNamed('/register'),
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: 'Pas encore de compte ? ',
-                                    style: AppTextStyles.bodyMd.copyWith(
-                                      color: AppColors.onSurfaceVariant,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: 'Créer un compte',
-                                        style: AppTextStyles.bodyMd.copyWith(
-                                          color: AppColors.dark,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 40),
-              ],
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           ),
         ],

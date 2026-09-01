@@ -357,89 +357,90 @@ class _MediaPlayerPageState extends State<MediaPlayerPage>
   }
 
   Widget _buildPlayerView() {
-    return Column(
-      children: [
-        // Media info header
-        Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.dark, width: 1.3),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  widget.media.mediaType == 'video'
-                      ? Icons.videocam
-                      : Icons.mic,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.guest.fullName,
-                      style: AppTextStyles.titleLg.copyWith(
-                        color: AppColors.dark,
-                      ),
-                    ),
-                    Text(
-                      '${widget.media.mediaType == "video" ? "Vidéo" : "Audio"} • ${widget.media.durationFormatted}',
-                      style: AppTextStyles.bodyMd.copyWith(
-                        color: AppColors.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: widget.media.isValid
-                      ? AppColors.statusCardUnlocked.withValues(alpha: 0.1)
-                      : AppColors.statusPending.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  widget.media.isValid ? 'Validé' : 'En attente',
-                  style: AppTextStyles.labelMd.copyWith(
-                    color: widget.media.isValid
-                        ? AppColors.statusCardUnlocked
-                        : AppColors.statusPending,
-                    fontWeight: FontWeight.w600,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Media info header
+          Container(
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.dark, width: 1.3),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    widget.media.mediaType == 'video'
+                        ? Icons.videocam
+                        : Icons.mic,
+                    color: AppColors.primary,
+                    size: 24,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.guest.fullName,
+                        style: AppTextStyles.titleLg.copyWith(
+                          color: AppColors.dark,
+                        ),
+                      ),
+                      Text(
+                        '${widget.media.mediaType == "video" ? "Vidéo" : "Audio"} • ${widget.media.durationFormatted}',
+                        style: AppTextStyles.bodyMd.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: widget.media.isValid
+                        ? AppColors.statusCardUnlocked.withValues(alpha: 0.1)
+                        : AppColors.statusPending.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    widget.media.isValid ? 'Validé' : 'En attente',
+                    style: AppTextStyles.labelMd.copyWith(
+                      color: widget.media.isValid
+                          ? AppColors.statusCardUnlocked
+                          : AppColors.statusPending,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
 
-        // Video player or audio visualizer
-        Expanded(
-          child: widget.media.mediaType == 'video'
+          // Video player or audio visualizer
+          widget.media.mediaType == 'video'
               ? _buildVideoPlayer()
               : _buildAudioPlayer(),
-        ),
 
-        // Controls
-        _buildControls(),
-      ],
+          // Controls
+          _buildControls(),
+        ],
+      ),
     );
   }
 

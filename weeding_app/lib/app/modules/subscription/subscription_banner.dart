@@ -12,7 +12,10 @@ import 'subscription_controller.dart';
 /// atteint, essai qui se termine, abonnement suspendu. Un bandeau permanent
 /// finit par ne plus être lu.
 class SubscriptionBanner extends StatelessWidget {
-  const SubscriptionBanner({super.key});
+  /// Version d'une seule ligne, pour les écrans qui ne défilent pas.
+  final bool compact;
+
+  const SubscriptionBanner({super.key, this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,10 @@ class SubscriptionBanner extends StatelessWidget {
 
       final message = _messageFor(overview);
       final isUrgent = overview.isBlocked || overview.invitationsLeft == 0;
+
+      if (compact) {
+        return _CompactBanner(message: message, isUrgent: isUrgent);
+      }
 
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
@@ -128,5 +135,60 @@ class SubscriptionBanner extends StatelessWidget {
 
     return 'Il ne reste que $left invitation${left > 1 ? 's' : ''} à envoyer '
         'sur ce forfait.';
+  }
+}
+
+/// Rappel d'une seule ligne : l'essentiel du message, le reste sur la page des
+/// packs. Il tient dans un tableau de bord sans défilement.
+class _CompactBanner extends StatelessWidget {
+  final String message;
+  final bool isUrgent;
+
+  const _CompactBanner({required this.message, required this.isUrgent});
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = isUrgent ? AppColors.error : AppColors.primary;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: GestureDetector(
+        onTap: () => Get.toNamed(AppRoutes.plans),
+        behavior: HitTestBehavior.opaque,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+          decoration: BoxDecoration(
+            color: isUrgent ? AppColors.errorContainer : AppColors.primaryLight,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: accent, width: 1.2),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                isUrgent
+                    ? Icons.lock_outline_rounded
+                    : Icons.auto_awesome_rounded,
+                size: 17,
+                color: accent,
+              ),
+              const SizedBox(width: 9),
+              Expanded(
+                child: Text(
+                  message,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.bodyMd.copyWith(
+                    fontSize: 12.5,
+                    color: AppColors.dark,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Icon(Icons.chevron_right_rounded, size: 18, color: accent),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
