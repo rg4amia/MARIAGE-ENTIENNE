@@ -312,6 +312,21 @@ class _WeddingThemePageState extends State<WeddingThemePage> {
                             () => _draft = _draft.copyWith(bodyFont: font),
                           ),
                         ),
+                        const SizedBox(height: 32),
+                        Text(
+                          'Aperçu de la carte d\'invitation',
+                          style: AppTextStyles.headlineMd,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Voici à quoi ressemblera la carte de vos invités '
+                          'avec les polices et couleurs choisies.',
+                          style: AppTextStyles.bodyMd.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _CardPreview(palette: _draft),
                       ],
                     ),
                   ),
@@ -711,6 +726,221 @@ class _HexColorField extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Invitation card preview using draft palette fonts (not applied ones).
+class _CardPreview extends StatelessWidget {
+  final WeddingPalette palette;
+
+  const _CardPreview({required this.palette});
+
+  static TextStyle _font(
+    String family,
+    double size,
+    Color color,
+    FontWeight weight, {
+    double? height,
+    double? letterSpacing,
+    FontStyle? fontStyle,
+  }) {
+    try {
+      return GoogleFonts.getFont(
+        family,
+        fontSize: size,
+        height: height ?? 1.25,
+        color: color,
+        fontWeight: weight,
+        letterSpacing: letterSpacing,
+        fontStyle: fontStyle,
+      );
+    } catch (_) {
+      return GoogleFonts.plusJakartaSans(
+        fontSize: size,
+        height: height ?? 1.25,
+        color: color,
+        fontWeight: weight,
+        letterSpacing: letterSpacing,
+        fontStyle: fontStyle,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final onPrimary = AppColors.onColorFor(palette.primary);
+    final onSecondary = AppColors.onColorFor(palette.secondary);
+
+    return Center(
+      child: Container(
+        width: 340,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: palette.primary,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.dark, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.dark.withValues(alpha: 0.12),
+              blurRadius: 0,
+              offset: const Offset(6, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Badge "VOUS ÊTES INVITÉ(E)"
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              decoration: BoxDecoration(
+                color: palette.secondary,
+                borderRadius: BorderRadius.circular(99),
+                border: Border.all(color: AppColors.dark, width: 1.2),
+              ),
+              child: Text(
+                'VOUS ÊTES INVITÉ(E)',
+                style: _font(
+                  palette.bodyFont,
+                  10,
+                  onSecondary,
+                  FontWeight.w800,
+                  letterSpacing: 1.6,
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Guest name (display font)
+            Text(
+              'Aïcha & Karim',
+              style: _font(
+                palette.displayFont,
+                26,
+                onPrimary,
+                FontWeight.w800,
+                height: 1.15,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            // Table + Seat info
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.dark, width: 1.4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _CardInfoColumn(
+                    icon: Icons.table_restaurant_rounded,
+                    label: 'TABLE',
+                    value: 'Famille',
+                    bodyFont: palette.bodyFont,
+                  ),
+                  Container(
+                    width: 2,
+                    height: 40,
+                    color: palette.accent,
+                  ),
+                  _CardInfoColumn(
+                    icon: Icons.event_seat_rounded,
+                    label: 'PLACE',
+                    value: '3',
+                    bodyFont: palette.bodyFont,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Footer text
+            Text(
+              '💍 Montrer ce badge à l\'entrée 💍',
+              style: _font(
+                palette.bodyFont,
+                11,
+                onPrimary,
+                FontWeight.w700,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardInfoColumn extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final String bodyFont;
+
+  const _CardInfoColumn({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.bodyFont,
+  });
+
+  static TextStyle _font(
+    String family,
+    double size,
+    Color color,
+    FontWeight weight, {
+    double? letterSpacing,
+  }) {
+    try {
+      return GoogleFonts.getFont(
+        family,
+        fontSize: size,
+        height: 1.25,
+        color: color,
+        fontWeight: weight,
+        letterSpacing: letterSpacing,
+      );
+    } catch (_) {
+      return GoogleFonts.plusJakartaSans(
+        fontSize: size,
+        height: 1.25,
+        color: color,
+        fontWeight: weight,
+        letterSpacing: letterSpacing,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: AppColors.dark, size: 24),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: _font(
+            bodyFont,
+            9,
+            AppColors.onSurfaceVariant,
+            FontWeight.w600,
+            letterSpacing: 2,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          value,
+          style: _font(
+            bodyFont,
+            16,
+            AppColors.dark,
+            FontWeight.w800,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -501,9 +501,9 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Ajouter l\'invité',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: AppTextStyles.titleLg,
                   ),
                 ),
               ),
@@ -605,10 +605,7 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
             },
             child: Text(
               'Envoyer',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w700,
-              ),
+              style: AppTextStyles.titleLgPrimary,
             ),
           ),
         ],

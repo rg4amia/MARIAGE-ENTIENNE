@@ -123,10 +123,8 @@ class HeaderInfoBanner extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
+              style: AppTextStyles.labelMd.copyWith(
                 color: AppColors.dark,
-                fontSize: 13,
-                height: 1.3,
                 fontWeight: FontWeight.w500,
               ),
             ),

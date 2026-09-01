@@ -502,10 +502,9 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             onPressed: () {
               Navigator.pop(ctx);
               controller.deleteGuest(guest.id);
-            },
-            child: const Text(
+            },              child: Text(
               'Supprimer',
-              style: TextStyle(color: AppColors.error),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -543,7 +542,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             },
             child: Text(
               isCancelled ? 'Réactiver' : 'Annuler',
-              style: TextStyle(
+              style: AppTextStyles.bodyMd.copyWith(
                 color: isCancelled ? AppColors.dark : AppColors.error,
               ),
             ),

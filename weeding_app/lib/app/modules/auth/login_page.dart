@@ -438,13 +438,9 @@ class _LoginButton extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : const Text(
+            : Text(
                 'Se connecter',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.3,
-                ),
+                style: AppTextStyles.titleLg,
               ),
       ),
     );

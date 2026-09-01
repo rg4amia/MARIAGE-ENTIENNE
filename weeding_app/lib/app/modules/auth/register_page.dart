@@ -259,11 +259,10 @@ class _RegisterPageState extends State<RegisterPage>
                                               color: Colors.white,
                                             ),
                                           )
-                                        : const Text(
+                                        : Text(
                                             'Créer mon compte',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
+                                            style: AppTextStyles.titleLg.copyWith(
+                                              color: Colors.white,
                                             ),
                                           ),
                                   ),

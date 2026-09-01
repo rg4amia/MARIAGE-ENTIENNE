@@ -321,7 +321,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   ),
                   child: Column(
                     children: [
-                      Text('📸', style: const TextStyle(fontSize: 36)),
+                      Text('📸', style: AppTextStyles.headlineMd),
                       const SizedBox(height: 16),
                       Text(
                         'Enregistrez votre message',
@@ -597,9 +597,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                         ),
                       ),
                       icon: const Icon(Icons.download_rounded, size: 20),
-                      label: const Text(
+                      label: Text(
                         'Télécharger',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: AppTextStyles.titleLg.copyWith(
+                          color: AppColors.dark,
+                        ),
                       ),
                     ),
                   ),
@@ -617,9 +619,9 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                         elevation: 0,
                       ),
                       icon: const Icon(Icons.share_rounded, size: 20),
-                      label: const Text(
+                      label: Text(
                         'Partager',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: AppTextStyles.titleLg,
                       ),
                     ),
                   ),
@@ -779,9 +781,11 @@ class _VenuesLinkButton extends StatelessWidget {
         onPressed: () => showGuestVenuesSheet(context, controller),
         style: TextButton.styleFrom(foregroundColor: AppColors.dark),
         icon: const Icon(Icons.map_outlined, size: 20),
-        label: const Text(
+        label: Text(
           'Voir les lieux et l\'itinéraire',
-          style: TextStyle(fontWeight: FontWeight.w600),
+          style: AppTextStyles.titleLg.copyWith(
+            color: AppColors.dark,
+          ),
         ),
       );
     });

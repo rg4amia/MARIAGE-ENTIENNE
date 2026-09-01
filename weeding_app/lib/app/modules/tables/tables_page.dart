@@ -414,9 +414,9 @@ class _CreateTableSheetState extends State<_CreateTableSheet> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Créer la table',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    style: AppTextStyles.titleLg,
                   ),
                 ),
               ),

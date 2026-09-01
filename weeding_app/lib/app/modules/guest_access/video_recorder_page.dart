@@ -160,14 +160,14 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                     color: AppColors.error.withValues(alpha: 0.15),
                     border: Border.all(color: AppColors.error, width: 4),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.videocam, size: 48, color: AppColors.error),
-                      SizedBox(height: 8),
+                      const Icon(Icons.videocam, size: 48, color: AppColors.error),
+                      const SizedBox(height: 8),
                       Text(
                         'Caméra ouverte...',
-                        style: TextStyle(color: AppColors.error),
+                        style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
                       ),
                     ],
                   ),
@@ -267,11 +267,10 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Envoyer la vidéo',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                      style: AppTextStyles.titleLg.copyWith(
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -289,9 +288,11 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Recommencer',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTextStyles.titleLg.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
                 ),
@@ -308,12 +309,9 @@ class _VideoRecorderPageState extends State<VideoRecorderPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Ouvrir la caméra',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: AppTextStyles.titleLg,
                     ),
                   ),
                 ),

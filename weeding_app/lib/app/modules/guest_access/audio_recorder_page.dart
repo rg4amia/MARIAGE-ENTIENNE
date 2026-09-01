@@ -342,11 +342,10 @@ class _AudioRecorderPageState extends State<AudioRecorderPage>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Envoyer l\'enregistrement',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                      style: AppTextStyles.titleLg.copyWith(
+                        color: Colors.white,
                       ),
                     ),
                   ),

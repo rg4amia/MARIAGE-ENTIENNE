@@ -199,16 +199,15 @@ class _EntranceQrPageState extends State<EntranceQrPage>
                 color: AppColors.dark,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
-                  SizedBox(width: 8),
+                  const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
                   Text(
                     'Réessayer',
-                    style: TextStyle(
+                    style: AppTextStyles.titleLg.copyWith(
                       color: Colors.white,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -406,10 +405,8 @@ class _EntranceQrPageState extends State<EntranceQrPage>
           const SizedBox(width: 8),
           Text(
             label,
-            style: TextStyle(
+            style: AppTextStyles.titleLg.copyWith(
               color: isPrimary ? Colors.white : AppColors.dark,
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -514,10 +511,8 @@ class _EntranceQrPageState extends State<EntranceQrPage>
             const SizedBox(width: 10),
             Text(
               'Générer un nouveau QR',
-              style: TextStyle(
+              style: AppTextStyles.titleLg.copyWith(
                 color: AppColors.error,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ],

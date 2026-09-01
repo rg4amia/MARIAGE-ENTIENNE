@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/validators.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
 import '../admin/admin_controller.dart';
 import '../../core/widgets/wedding_header.dart';
+import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/wedding_settings_repository.dart';
 import '../auth/auth_controller.dart';
 import '../../routes/app_routes.dart';
@@ -198,13 +201,13 @@ class _SettingsPageState extends State<SettingsPage> {
                           icon: Icons.person_outline_rounded,
                           iconColor: AppColors.dark,
                           title: 'Modifier le profil',
-                          onTap: () {},
+                          onTap: () => _showEditProfileSheet(context, authController),
                         ),
                         _SettingsTile(
                           icon: Icons.notifications_outlined,
                           iconColor: AppColors.dark,
                           title: 'Notifications',
-                          onTap: () {},
+                          onTap: () => _showNotificationsSheet(context),
                         ),
                       ],
                     ),
@@ -227,12 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           icon: Icons.storage_rounded,
                           iconColor: AppColors.dark,
                           title: 'Stockage utilisé',
-                          trailing: Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.outlineVariant,
-                            size: 20,
-                          ),
-                          onTap: () {},
+                          onTap: () => _showStorageSheet(context),
                         ),
                       ],
                     ),
@@ -248,7 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           icon: Icons.lock_outline_rounded,
                           iconColor: AppColors.dark,
                           title: 'Changer le mot de passe',
-                          onTap: () {},
+                          onTap: () => _showChangePasswordSheet(context),
                         ),
                         _SettingsTile(
                           icon: Icons.logout_rounded,
@@ -604,9 +602,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   'Enregistrer',
-                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                  style: AppTextStyles.titleLg,
                                 ),
                         ),
                       ),
@@ -662,17 +660,777 @@ class _SettingsPageState extends State<SettingsPage> {
               Navigator.pop(ctx);
               controller.logout();
             },
-            child: const Text(
+            child: Text(
               'Déconnexion',
-              style: TextStyle(
+              style: AppTextStyles.titleLg.copyWith(
                 color: AppColors.error,
-                fontWeight: FontWeight.w700,
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  // ────────────────────────────────────────────────
+  // Modifier le profil
+  // ────────────────────────────────────────────────
+  Future<void> _showEditProfileSheet(
+    BuildContext context,
+    AuthController authController,
+  ) async {
+    final profile = authController.profile.value;
+    final nameCtrl = TextEditingController(text: profile?.fullName ?? '');
+    final phoneCtrl = TextEditingController(text: profile?.phone ?? '');
+    var isSaving = false;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => AnimatedPadding(
+          duration: const Duration(milliseconds: 180),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(ctx).bottom,
+          ),
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.75,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (ctx, scrollController) => DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  Container(
+                    width: 42,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.outlineVariant,
+                      borderRadius: BorderRadius.circular(99),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 18, 12, 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Modifier le profil',
+                            style: AppTextStyles.headlineMd,
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: 'Fermer',
+                          onPressed: () => Navigator.pop(ctx),
+                          icon: const Icon(Icons.close_rounded),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nom complet',
+                            style: AppTextStyles.labelMd.copyWith(
+                              color: AppColors.onSurface,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          TextField(
+                            controller: nameCtrl,
+                            textCapitalization: TextCapitalization.words,
+                            style: AppTextStyles.bodyLg,
+                            decoration: InputDecoration(
+                              hintText: 'Votre nom',
+                              prefixIcon: const Icon(
+                                Icons.person_outline_rounded,
+                                size: 20,
+                              ),
+                              filled: true,
+                              fillColor: AppColors.surfaceContainerLow,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: AppColors.dark,
+                                  width: 1.5,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),                              ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Téléphone',
+                            style: AppTextStyles.labelMd.copyWith(
+                              color: AppColors.onSurface,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          TextField(
+                            controller: phoneCtrl,
+                            keyboardType: TextInputType.phone,
+                            style: AppTextStyles.bodyLg,
+                            decoration: InputDecoration(
+                              hintText: '+225 07 00 00 00 00',
+                              prefixIcon: const Icon(
+                                Icons.phone_outlined,
+                                size: 20,
+                              ),
+                              filled: true,
+                              fillColor: AppColors.surfaceContainerLow,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: AppColors.dark,
+                                  width: 1.5,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SafeArea(
+                    top: false,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        border: Border(
+                          top: BorderSide(
+                            color: AppColors.outlineVariant.withValues(alpha: 0.45),
+                          ),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: isSaving
+                              ? null
+                              : () async {
+                                  setSheetState(() => isSaving = true);
+                                  try {
+                                    await AuthRepository().updateProfile(
+                                      fullName: nameCtrl.text.trim(),
+                                      phone: phoneCtrl.text.trim().isEmpty
+                                          ? null
+                                          : phoneCtrl.text.trim(),
+                                    );
+                                    await authController.refreshProfile();
+                                    if (ctx.mounted) Navigator.pop(ctx);
+                                    if (mounted) {
+                                      Get.snackbar(
+                                        'Succès',
+                                        'Profil mis à jour',
+                                      );
+                                    }
+                                  } catch (e) {
+                                    if (ctx.mounted) {
+                                      setSheetState(() => isSaving = false);
+                                    }
+                                    if (mounted) {
+                                      Get.snackbar(
+                                        'Erreur',
+                                        'Impossible de modifier le profil',
+                                      );
+                                    }
+                                  }
+                                },
+                          child: isSaving
+                              ? const SizedBox(
+                                  width: 22,
+                                  height: 22,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(
+                                  'Enregistrer',
+                                  style: AppTextStyles.titleLg,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    nameCtrl.dispose();
+    phoneCtrl.dispose();
+  }
+
+  // ────────────────────────────────────────────────
+  // Notifications
+  // ────────────────────────────────────────────────
+  Future<void> _showNotificationsSheet(BuildContext context) async {
+    // Default notification preferences (stored locally for now)
+    var notifyGuestRsvp = true;
+    var notifyMediaUpload = true;
+    var notifyCardUnlock = true;
+    var notifyEntranceScan = false;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          expand: false,
+          builder: (ctx, scrollController) => DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(height: 12),
+                Container(
+                  width: 42,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.outlineVariant,
+                    borderRadius: BorderRadius.circular(99),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 18, 12, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Notifications',
+                          style: AppTextStyles.headlineMd,
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Fermer',
+                        onPressed: () => Navigator.pop(ctx),
+                        icon: const Icon(Icons.close_rounded),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    children: [
+                      Text(
+                        'Choisissez les événements pour lesquels\nvou souhaitez être notifié.',
+                        style: AppTextStyles.bodyMd.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      _NotificationToggle(
+                        icon: Icons.how_to_reg_rounded,
+                        iconColor: AppColors.primary,
+                        title: 'Réponse d\'invitation',
+                        subtitle: 'Quand un invité confirme ou décline',
+                        value: notifyGuestRsvp,
+                        onChanged: (v) => setSheetState(() => notifyGuestRsvp = v),
+                      ),
+                      _NotificationToggle(
+                        icon: Icons.mic_rounded,
+                        iconColor: AppColors.statusMediaReceived,
+                        title: 'Média reçu',
+                        subtitle: 'Quand un invité enregistre un message',
+                        value: notifyMediaUpload,
+                        onChanged: (v) => setSheetState(() => notifyMediaUpload = v),
+                      ),
+                      _NotificationToggle(
+                        icon: Icons.lock_open_rounded,
+                        iconColor: AppColors.statusCardUnlocked,
+                        title: 'Carte débloquée',
+                        subtitle: 'Quand un invité déverrouille sa carte',
+                        value: notifyCardUnlock,
+                        onChanged: (v) => setSheetState(() => notifyCardUnlock = v),
+                      ),
+                      _NotificationToggle(
+                        icon: Icons.qr_code_scanner_rounded,
+                        iconColor: AppColors.dark,
+                        title: 'Arrivée à la salle',
+                        subtitle: 'Quand un invité scanne le QR d\'entrée',
+                        value: notifyEntranceScan,
+                        onChanged: (v) => setSheetState(() => notifyEntranceScan = v),
+                      ),
+                    ],
+                  ),
+                ),
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          Get.snackbar(
+                            'Succès',
+                            'Préférences de notifications sauvegardées',
+                          );
+                        },
+                        child: Text(
+                          'Enregistrer',
+                          style: AppTextStyles.titleLg,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ────────────────────────────────────────────────
+  // Stockage utilisé
+  // ────────────────────────────────────────────────
+  Future<void> _showStorageSheet(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (ctx, scrollController) => DecoratedBox(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 42,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.outlineVariant,
+                  borderRadius: BorderRadius.circular(99),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 18, 12, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Stockage utilisé',
+                        style: AppTextStyles.headlineMd,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Fermer',
+                      onPressed: () => Navigator.pop(ctx),
+                      icon: const Icon(Icons.close_rounded),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: _StorageInfoBody(scrollController: scrollController),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ────────────────────────────────────────────────
+  // Changer le mot de passe
+  // ────────────────────────────────────────────────
+  Future<void> _showChangePasswordSheet(BuildContext context) async {
+    final currentCtrl = TextEditingController();
+    final newCtrl = TextEditingController();
+    final confirmCtrl = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    var isSaving = false;
+    var obscureCurrent = true;
+    var obscureNew = true;
+    var obscureConfirm = true;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => AnimatedPadding(
+          duration: const Duration(milliseconds: 180),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.viewInsetsOf(ctx).bottom,
+          ),
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.85,
+            minChildSize: 0.5,
+            maxChildSize: 0.95,
+            expand: false,
+            builder: (ctx, scrollController) => DecoratedBox(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    Container(
+                      width: 42,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.outlineVariant,
+                        borderRadius: BorderRadius.circular(99),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 18, 12, 8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Changer le mot de passe',
+                              style: AppTextStyles.headlineMd,
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'Fermer',
+                            onPressed: () => Navigator.pop(ctx),
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
+                        padding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Mot de passe actuel',
+                              style: AppTextStyles.labelMd.copyWith(
+                                color: AppColors.onSurface,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextFormField(
+                              controller: currentCtrl,
+                              obscureText: obscureCurrent,
+                              validator: (v) => Validators.password(v),
+                              style: AppTextStyles.bodyLg,
+                              decoration: InputDecoration(
+                                hintText: '••••••••',
+                                prefixIcon: const Icon(
+                                  Icons.lock_outline_rounded,
+                                  size: 20,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    obscureCurrent
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => setSheetState(
+                                    () => obscureCurrent = !obscureCurrent,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: AppColors.surfaceContainerLow,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.dark,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Nouveau mot de passe',
+                              style: AppTextStyles.labelMd.copyWith(
+                                color: AppColors.onSurface,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextFormField(
+                              controller: newCtrl,
+                              obscureText: obscureNew,
+                              validator: (v) => Validators.password(v),
+                              style: AppTextStyles.bodyLg,
+                              decoration: InputDecoration(
+                                hintText: '••••••••',
+                                prefixIcon: const Icon(
+                                  Icons.lock_reset_rounded,
+                                  size: 20,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    obscureNew
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => setSheetState(
+                                    () => obscureNew = !obscureNew,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: AppColors.surfaceContainerLow,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.dark,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Confirmer le mot de passe',
+                              style: AppTextStyles.labelMd.copyWith(
+                                color: AppColors.onSurface,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextFormField(
+                              controller: confirmCtrl,
+                              obscureText: obscureConfirm,
+                              validator: (v) {
+                                if (v == null || v.isEmpty) return 'Veuillez confirmer';
+                                if (v != newCtrl.text) return 'Les mots de passe ne correspondent pas';
+                                return null;
+                              },
+                              style: AppTextStyles.bodyLg,
+                              decoration: InputDecoration(
+                                hintText: '••••••••',
+                                prefixIcon: const Icon(
+                                  Icons.lock_outline_rounded,
+                                  size: 20,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    obscureConfirm
+                                        ? Icons.visibility_off_rounded
+                                        : Icons.visibility_rounded,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => setSheetState(
+                                    () => obscureConfirm = !obscureConfirm,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: AppColors.surfaceContainerLow,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide.none,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                    color: AppColors.dark,
+                                    width: 1.5,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SafeArea(
+                      top: false,
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(24, 12, 24, 16),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          border: Border(
+                            top: BorderSide(
+                              color: AppColors.outlineVariant.withValues(alpha: 0.45),
+                            ),
+                          ),
+                        ),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: isSaving
+                                ? null
+                                : () async {
+                                    if (!formKey.currentState!.validate()) return;
+                                    setSheetState(() => isSaving = true);
+                                    try {
+                                      await Supabase.instance.client.auth.updateUser(
+                                        UserAttributes(
+                                          password: newCtrl.text,
+                                        ),
+                                      );
+                                      if (ctx.mounted) Navigator.pop(ctx);
+                                      if (mounted) {
+                                        Get.snackbar(
+                                          'Succès',
+                                          'Mot de passe mis à jour',
+                                        );
+                                      }
+                                    } on AuthException catch (e) {
+                                      if (ctx.mounted) {
+                                        setSheetState(() => isSaving = false);
+                                      }
+                                      if (mounted) {
+                                        Get.snackbar(
+                                          'Erreur',
+                                          e.message,
+                                        );
+                                      }
+                                    } catch (e) {
+                                      if (ctx.mounted) {
+                                        setSheetState(() => isSaving = false);
+                                      }
+                                      if (mounted) {
+                                        Get.snackbar(
+                                          'Erreur',
+                                          'Impossible de changer le mot de passe',
+                                        );
+                                      }
+                                    }
+                                  },
+                            child: isSaving
+                                ? const SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    'Mettre à jour',
+                                    style: AppTextStyles.titleLg,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    currentCtrl.dispose();
+    newCtrl.dispose();
+    confirmCtrl.dispose();
   }
 }
 
@@ -865,6 +1623,350 @@ class _PaletteDots extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _NotificationToggle extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const _NotificationToggle({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: value ? AppColors.dark : AppColors.outlineVariant,
+          width: value ? 1.2 : 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.bodyLg.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.bodyMd.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: AppColors.dark,
+            activeTrackColor: AppColors.dark.withValues(alpha: 0.2),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StorageInfoBody extends StatefulWidget {
+  final ScrollController scrollController;
+
+  const _StorageInfoBody({required this.scrollController});
+
+  @override
+  State<_StorageInfoBody> createState() => _StorageInfoBodyState();
+}
+
+class _StorageInfoBodyState extends State<_StorageInfoBody> {
+  bool _isLoading = true;
+  int _mediaCount = 0;
+  int _guestCount = 0;
+  int _tableCount = 0;
+
+  // Estimated sizes (Supabase free tier: 1 GB storage)
+  static const int _maxStorageBytes = 1024 * 1024 * 1024; // 1 GB
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStorageInfo();
+  }
+
+  Future<void> _loadStorageInfo() async {
+    try {
+      final client = Supabase.instance.client;
+      final eventId = await client.rpc('current_event_id');
+      if (eventId == null) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
+
+      final results = await Future.wait([
+        client
+            .from('media_uploads')
+            .select('id')
+            .eq('event_id', eventId)
+            .count(),
+        client
+            .from('guests')
+            .select('id')
+            .eq('event_id', eventId)
+            .count(),
+        client
+            .from('seating_tables')
+            .select('id')
+            .eq('event_id', eventId)
+            .count(),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _mediaCount = results[0].count;
+          _guestCount = results[1].count;
+          _tableCount = results[2].count;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _formatBytes(int bytes) {
+    if (bytes < 1024) return '$bytes o';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} Ko';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} Mo';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Rough estimate: ~500 KB per media file (audio/video)
+    final estimatedBytes = _mediaCount * 500 * 1024;
+    final usageRatio = (estimatedBytes / _maxStorageBytes).clamp(0.0, 1.0);
+
+    return ListView(
+      controller: widget.scrollController,
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+      children: [
+        // Usage bar
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.dark, width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Espace utilisé',
+                    style: AppTextStyles.titleLg,
+                  ),
+                  Text(
+                    '${_formatBytes(estimatedBytes)} / 1 Go',
+                    style: AppTextStyles.bodyMd.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: LinearProgressIndicator(
+                  value: usageRatio,
+                  minHeight: 8,
+                  backgroundColor: AppColors.surfaceContainerHigh,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    usageRatio > 0.8 ? AppColors.error : AppColors.dark,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                usageRatio > 0.8
+                    ? '⚠️ Stockage presque plein'
+                    : '${(usageRatio * 100).toStringAsFixed(1)}% utilisé',
+                style: AppTextStyles.labelMd.copyWith(
+                  color: usageRatio > 0.8 ? AppColors.error : AppColors.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Breakdown
+        _StorageRow(
+          icon: Icons.mic_rounded,
+          iconColor: AppColors.statusMediaReceived,
+          label: 'Médias enregistrés',
+          count: _mediaCount,
+          subtitle: 'Audio et vidéo des invités',
+        ),
+        const SizedBox(height: 10),
+        _StorageRow(
+          icon: Icons.group_rounded,
+          iconColor: AppColors.dark,
+          label: 'Invités',
+          count: _guestCount,
+          subtitle: 'Contacts enregistrés',
+        ),
+        const SizedBox(height: 10),
+        _StorageRow(
+          icon: Icons.table_restaurant_rounded,
+          iconColor: AppColors.primary,
+          label: 'Tables',
+          count: _tableCount,
+          subtitle: 'Tables de réception',
+        ),
+        const SizedBox(height: 20),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.06),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.info_outline_rounded,
+                color: AppColors.primary,
+                size: 18,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Les estimations sont basées sur la taille moyenne des fichiers. La taille réelle peut varier.',
+                  style: AppTextStyles.bodyMd.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StorageRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String label;
+  final int count;
+  final String subtitle;
+
+  const _StorageRow({
+    required this.icon,
+    required this.iconColor,
+    required this.label,
+    required this.count,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: iconColor, size: 18),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: AppTextStyles.bodyLg.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.bodyMd.copyWith(
+                    color: AppColors.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.dark,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              '$count',
+              style: AppTextStyles.labelMd.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

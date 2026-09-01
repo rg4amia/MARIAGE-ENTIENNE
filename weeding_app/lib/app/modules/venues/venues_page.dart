@@ -324,9 +324,9 @@ class VenuesPage extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text(
+            child: Text(
               'Supprimer',
-              style: TextStyle(color: AppColors.error),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_text_styles.dart';
 
 class HoverCard extends StatefulWidget {
   final Widget child;
@@ -267,11 +268,8 @@ class _GradientButtonState extends State<GradientButton>
                           ],
                           Text(
                             widget.label,
-                            style: TextStyle(
+                            style: AppTextStyles.titleLg.copyWith(
                               color: widget.foregroundColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.3,
                             ),
                           ),
                         ],

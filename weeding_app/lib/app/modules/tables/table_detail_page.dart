@@ -153,10 +153,9 @@ class TableDetailPage extends StatelessWidget {
             child: const Text('Annuler'),
           ),
           TextButton(
-            onPressed: () => controller.deleteTable(table.id),
-            child: const Text(
+            onPressed: () => controller.deleteTable(table.id),              child: Text(
               'Supprimer',
-              style: TextStyle(color: AppColors.error),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -278,10 +277,9 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
               Navigator.pop(ctx);
               await widget.controller.deleteChair(chair.id);
               _refresh();
-            },
-            child: const Text(
+            },              child: Text(
               'Supprimer',
-              style: TextStyle(color: AppColors.error),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -359,10 +357,9 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
                 ),
                 child: Text(
                   '$assigned/${table.capacity}',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                  style: AppTextStyles.labelMd.copyWith(
                     color: AppColors.dark,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -419,9 +416,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
           ),
           child: Text(
             '$assigned/$total occupée${total != 1 ? 's' : ''}',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: AppTextStyles.labelMd.copyWith(
               color: AppColors.dark,
             ),
           ),
@@ -446,7 +441,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
             SizedBox(height: 12),
             Text(
               'Chargement des chaises…',
-              style: TextStyle(color: AppColors.onSurfaceVariant),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
             ),
           ],
         ),
@@ -473,7 +468,7 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
             SizedBox(height: 8),
             Text(
               'Aucune chaise pour cette table',
-              style: TextStyle(color: AppColors.onSurfaceVariant),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
             ),
           ],
         ),
@@ -496,13 +491,13 @@ class _TableChairsSectionState extends State<_TableChairsSection> {
             const SizedBox(height: 8),
             Text(
               'Erreur de chargement des chaises',
-              style: TextStyle(color: AppColors.onSurfaceVariant),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.onSurfaceVariant),
             ),
             const SizedBox(height: 4),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
+              style: AppTextStyles.labelMd.copyWith(color: AppColors.error),
             ),
             const SizedBox(height: 12),
             TextButton(onPressed: _refresh, child: const Text('Réessayer')),
@@ -790,7 +785,7 @@ class _AssignGuestSheetState extends State<_AssignGuestSheet> {
                               ),
                               child: Text(
                                 guest.initials,
-                                style: TextStyle(
+                                style: AppTextStyles.labelMd.copyWith(
                                   color: AppColors.dark,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -923,9 +918,9 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
                 widget.onChanged();
               }
             },
-            child: const Text(
+            child: Text(
               'Libérer',
-              style: TextStyle(color: AppColors.error),
+              style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -983,7 +978,7 @@ class _GuestDetailSheetState extends State<_GuestDetailSheet> {
           if (_isLoading)
             const Center(child: CircularProgressIndicator())
           else if (_error != null)
-            Text(_error!, style: const TextStyle(color: AppColors.error))
+            Text(_error!, style: AppTextStyles.bodyMd.copyWith(color: AppColors.error))
           else if (_guest != null) ...[
             _buildDetailRow(
               Icons.phone_outlined,
