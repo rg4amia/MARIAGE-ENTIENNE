@@ -127,11 +127,7 @@ class TablesPage extends StatelessWidget {
           onPressed: () => _showCreateTableDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          child: Icon(
-            Icons.add_rounded,
-            color: AppColors.onPrimary,
-            size: 28,
-          ),
+          child: Icon(Icons.add_rounded, color: AppColors.onPrimary, size: 28),
         ),
       ),
     );
@@ -307,16 +303,38 @@ class _TableCard extends StatelessWidget {
 }
 
 // ── Create Table Bottom Sheet ──
-class _CreateTableSheet extends StatelessWidget {
+class _CreateTableSheet extends StatefulWidget {
   final TablesController controller;
   const _CreateTableSheet({required this.controller});
 
   @override
-  Widget build(BuildContext context) {
-    final labelController = TextEditingController();
-    final capacityController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
+  State<_CreateTableSheet> createState() => _CreateTableSheetState();
+}
 
+class _CreateTableSheetState extends State<_CreateTableSheet> {
+  // Les contrôleurs sont créés dans initState pour éviter qu'un rebuild
+  // (déclenché par le changement de viewInsets quand le clavier s'ouvre)
+  // ne les recrée et ne ferme le clavier.
+  late final TextEditingController _labelController;
+  late final TextEditingController _capacityController;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _labelController = TextEditingController();
+    _capacityController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _labelController.dispose();
+    _capacityController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -330,7 +348,7 @@ class _CreateTableSheet extends StatelessWidget {
           MediaQuery.of(context).viewInsets.bottom + 24,
         ),
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,7 +370,7 @@ class _CreateTableSheet extends StatelessWidget {
               _buildField(
                 'Nom de la table',
                 TextFormField(
-                  controller: labelController,
+                  controller: _labelController,
                   validator: (v) => Validators.required(v, 'Le nom'),
                   style: AppTextStyles.bodyLg,
                   decoration: _inputDecoration(
@@ -366,7 +384,7 @@ class _CreateTableSheet extends StatelessWidget {
               _buildField(
                 'Nombre de chaises',
                 TextFormField(
-                  controller: capacityController,
+                  controller: _capacityController,
                   keyboardType: TextInputType.number,
                   validator: Validators.positiveNumber,
                   style: AppTextStyles.bodyLg,
@@ -380,11 +398,11 @@ class _CreateTableSheet extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate()) {
                       Navigator.pop(context);
-                      await controller.createTable(
-                        label: labelController.text.trim(),
-                        capacity: int.parse(capacityController.text),
+                      await widget.controller.createTable(
+                        label: _labelController.text.trim(),
+                        capacity: int.parse(_capacityController.text),
                       );
                     }
                   },

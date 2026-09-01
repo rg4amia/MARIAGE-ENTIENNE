@@ -134,11 +134,7 @@ class GuestsPage extends StatelessWidget {
           onPressed: () => _showAddGuestDialog(context, controller),
           backgroundColor: Colors.transparent,
           elevation: 0,
-          child: Icon(
-            Icons.add_rounded,
-            color: AppColors.onPrimary,
-            size: 28,
-          ),
+          child: Icon(Icons.add_rounded, color: AppColors.onPrimary, size: 28),
         ),
       ),
     );
@@ -360,17 +356,41 @@ class _GuestCard extends StatelessWidget {
 }
 
 // ── Add Guest Bottom Sheet ──
-class _AddGuestSheet extends StatelessWidget {
+class _AddGuestSheet extends StatefulWidget {
   final GuestsController controller;
   const _AddGuestSheet({required this.controller});
 
   @override
-  Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final phoneController = TextEditingController();
-    final emailController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
+  State<_AddGuestSheet> createState() => _AddGuestSheetState();
+}
 
+class _AddGuestSheetState extends State<_AddGuestSheet> {
+  // Les contrôleurs sont créés dans initState pour éviter qu'un rebuild
+  // (déclenché par le changement de viewInsets quand le clavier s'ouvre)
+  // ne les recrée et ne ferme le clavier.
+  late final TextEditingController _nameController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _emailController;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _phoneController = TextEditingController();
+    _emailController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -384,7 +404,7 @@ class _AddGuestSheet extends StatelessWidget {
           MediaQuery.of(context).viewInsets.bottom + 24,
         ),
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,7 +427,7 @@ class _AddGuestSheet extends StatelessWidget {
               _buildField(
                 'Nom complet *',
                 TextFormField(
-                  controller: nameController,
+                  controller: _nameController,
                   validator: (v) => Validators.required(v, 'Le nom'),
                   style: AppTextStyles.bodyLg,
                   decoration: _inputDecoration(
@@ -421,7 +441,7 @@ class _AddGuestSheet extends StatelessWidget {
               _buildField(
                 'Téléphone',
                 TextFormField(
-                  controller: phoneController,
+                  controller: _phoneController,
                   keyboardType: TextInputType.phone,
                   validator: Validators.phone,
                   style: AppTextStyles.bodyLg,
@@ -436,7 +456,7 @@ class _AddGuestSheet extends StatelessWidget {
               _buildField(
                 'Email',
                 TextFormField(
-                  controller: emailController,
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   validator: Validators.email,
                   style: AppTextStyles.bodyLg,
@@ -453,16 +473,16 @@ class _AddGuestSheet extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate()) {
                       Navigator.pop(context);
-                      await controller.createGuest(
-                        fullName: nameController.text.trim(),
-                        phone: phoneController.text.trim().isEmpty
+                      await widget.controller.createGuest(
+                        fullName: _nameController.text.trim(),
+                        phone: _phoneController.text.trim().isEmpty
                             ? null
-                            : phoneController.text.trim(),
-                        email: emailController.text.trim().isEmpty
+                            : _phoneController.text.trim(),
+                        email: _emailController.text.trim().isEmpty
                             ? null
-                            : emailController.text.trim(),
+                            : _emailController.text.trim(),
                       );
                     }
                   },
