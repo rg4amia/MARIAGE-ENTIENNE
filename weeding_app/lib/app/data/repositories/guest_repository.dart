@@ -67,20 +67,35 @@ class GuestRepository {
     return Guest.fromJson(response);
   }
 
-  Future<void> updateGuest({
+  /// Met à jour un invité et renvoie la ligne rafraîchie. Les coordonnées
+  /// peuvent être vidées (`clearPhone` / `clearEmail`) : null veut dire « ne
+  /// pas toucher », c'est le drapeau qui force la valeur à NULL en base.
+  Future<Guest?> updateGuest({
     required String id,
     String? fullName,
     String? phone,
     String? email,
     String? status,
+    bool clearPhone = false,
+    bool clearEmail = false,
   }) async {
     final updates = <String, dynamic>{};
     if (fullName != null) updates['full_name'] = fullName;
     if (phone != null) updates['phone'] = phone;
+    if (clearPhone) updates['phone'] = null;
     if (email != null) updates['email'] = email;
+    if (clearEmail) updates['email'] = null;
     if (status != null) updates['status'] = status;
+    if (updates.isEmpty) return null;
 
-    await _client.from('guests').update(updates).eq('id', id);
+    final response = await _client
+        .from('guests')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+    return Guest.fromJson(response);
   }
 
   Future<void> deleteGuest(String id) async {

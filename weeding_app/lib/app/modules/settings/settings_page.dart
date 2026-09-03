@@ -201,7 +201,8 @@ class _SettingsPageState extends State<SettingsPage> {
                           icon: Icons.person_outline_rounded,
                           iconColor: AppColors.dark,
                           title: 'Modifier le profil',
-                          onTap: () => _showEditProfileSheet(context, authController),
+                          onTap: () =>
+                              _showEditProfileSheet(context, authController),
                         ),
                         _SettingsTile(
                           icon: Icons.notifications_outlined,
@@ -559,12 +560,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                   onTap: () async {
                                     final picked = await showDatePicker(
                                       context: ctx,
-                                      initialDate: rsvpDeadline ?? DateTime.now(),
+                                      initialDate:
+                                          rsvpDeadline ?? DateTime.now(),
                                       firstDate: DateTime(2024),
                                       lastDate: DateTime(2035),
                                     );
                                     if (picked != null) {
-                                      setSheetState(() => rsvpDeadline = picked);
+                                      setSheetState(
+                                        () => rsvpDeadline = picked,
+                                      );
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(16),
@@ -594,11 +598,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                             rsvpDeadline != null
                                                 ? 'Répondre avant le ${DateFormat('d MMMM yyyy', 'fr_FR').format(rsvpDeadline!)}'
                                                 : 'Date limite pour répondre (optionnel)',
-                                            style: AppTextStyles.bodyMd.copyWith(
-                                              color: rsvpDeadline != null
-                                                  ? AppColors.onSurface
-                                                  : AppColors.onSurfaceVariant,
-                                            ),
+                                            style: AppTextStyles.bodyMd
+                                                .copyWith(
+                                                  color: rsvpDeadline != null
+                                                      ? AppColors.onSurface
+                                                      : AppColors
+                                                            .onSurfaceVariant,
+                                                ),
                                           ),
                                         ),
                                       ],
@@ -747,9 +753,7 @@ class _SettingsPageState extends State<SettingsPage> {
             },
             child: Text(
               'Déconnexion',
-              style: AppTextStyles.titleLg.copyWith(
-                color: AppColors.error,
-              ),
+              style: AppTextStyles.titleLg.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -777,9 +781,7 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSheetState) => AnimatedPadding(
           duration: const Duration(milliseconds: 180),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.viewInsetsOf(ctx).bottom,
-          ),
+          padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom),
           child: DraggableScrollableSheet(
             initialChildSize: 0.75,
             minChildSize: 0.5,
@@ -855,7 +857,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide(
-                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  color: AppColors.outlineVariant.withValues(
+                                    alpha: 0.5,
+                                  ),
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -868,7 +872,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 16,
-                              ),                              ),
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -898,7 +903,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: BorderSide(
-                                  color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                  color: AppColors.outlineVariant.withValues(
+                                    alpha: 0.5,
+                                  ),
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -926,7 +933,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         color: AppColors.surface,
                         border: Border(
                           top: BorderSide(
-                            color: AppColors.outlineVariant.withValues(alpha: 0.45),
+                            color: AppColors.outlineVariant.withValues(
+                              alpha: 0.45,
+                            ),
                           ),
                         ),
                       ),
@@ -1066,7 +1075,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: 'Réponse d\'invitation',
                         subtitle: 'Quand un invité confirme ou décline',
                         value: notifyGuestRsvp,
-                        onChanged: (v) => setSheetState(() => notifyGuestRsvp = v),
+                        onChanged: (v) =>
+                            setSheetState(() => notifyGuestRsvp = v),
                       ),
                       _NotificationToggle(
                         icon: Icons.mic_rounded,
@@ -1074,7 +1084,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: 'Média reçu',
                         subtitle: 'Quand un invité enregistre un message',
                         value: notifyMediaUpload,
-                        onChanged: (v) => setSheetState(() => notifyMediaUpload = v),
+                        onChanged: (v) =>
+                            setSheetState(() => notifyMediaUpload = v),
                       ),
                       _NotificationToggle(
                         icon: Icons.lock_open_rounded,
@@ -1082,7 +1093,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: 'Carte débloquée',
                         subtitle: 'Quand un invité déverrouille sa carte',
                         value: notifyCardUnlock,
-                        onChanged: (v) => setSheetState(() => notifyCardUnlock = v),
+                        onChanged: (v) =>
+                            setSheetState(() => notifyCardUnlock = v),
                       ),
                       _NotificationToggle(
                         icon: Icons.qr_code_scanner_rounded,
@@ -1090,7 +1102,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: 'Arrivée à la salle',
                         subtitle: 'Quand un invité scanne le QR d\'entrée',
                         value: notifyEntranceScan,
-                        onChanged: (v) => setSheetState(() => notifyEntranceScan = v),
+                        onChanged: (v) =>
+                            setSheetState(() => notifyEntranceScan = v),
                       ),
                     ],
                   ),
@@ -1204,9 +1217,7 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSheetState) => AnimatedPadding(
           duration: const Duration(milliseconds: 180),
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.viewInsetsOf(ctx).bottom,
-          ),
+          padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(ctx).bottom),
           child: DraggableScrollableSheet(
             initialChildSize: 0.85,
             minChildSize: 0.5,
@@ -1296,7 +1307,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide(
-                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                    color: AppColors.outlineVariant.withValues(
+                                      alpha: 0.5,
+                                    ),
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
@@ -1352,7 +1365,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide(
-                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                    color: AppColors.outlineVariant.withValues(
+                                      alpha: 0.5,
+                                    ),
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
@@ -1381,8 +1396,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               controller: confirmCtrl,
                               obscureText: obscureConfirm,
                               validator: (v) {
-                                if (v == null || v.isEmpty) return 'Veuillez confirmer';
-                                if (v != newCtrl.text) return 'Les mots de passe ne correspondent pas';
+                                if (v == null || v.isEmpty) {
+                                  return 'Veuillez confirmer';
+                                }
+                                if (v != newCtrl.text) {
+                                  return 'Les mots de passe ne correspondent pas';
+                                }
                                 return null;
                               },
                               style: AppTextStyles.bodyLg,
@@ -1412,7 +1431,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide(
-                                    color: AppColors.outlineVariant.withValues(alpha: 0.5),
+                                    color: AppColors.outlineVariant.withValues(
+                                      alpha: 0.5,
+                                    ),
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
@@ -1440,7 +1461,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           color: AppColors.surface,
                           border: Border(
                             top: BorderSide(
-                              color: AppColors.outlineVariant.withValues(alpha: 0.45),
+                              color: AppColors.outlineVariant.withValues(
+                                alpha: 0.45,
+                              ),
                             ),
                           ),
                         ),
@@ -1450,14 +1473,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             onPressed: isSaving
                                 ? null
                                 : () async {
-                                    if (!formKey.currentState!.validate()) return;
+                                    if (!formKey.currentState!.validate()) {
+                                      return;
+                                    }
                                     setSheetState(() => isSaving = true);
                                     try {
-                                      await Supabase.instance.client.auth.updateUser(
-                                        UserAttributes(
-                                          password: newCtrl.text,
-                                        ),
-                                      );
+                                      await Supabase.instance.client.auth
+                                          .updateUser(
+                                            UserAttributes(
+                                              password: newCtrl.text,
+                                            ),
+                                          );
                                       if (ctx.mounted) Navigator.pop(ctx);
                                       if (mounted) {
                                         Get.snackbar(
@@ -1470,10 +1496,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         setSheetState(() => isSaving = false);
                                       }
                                       if (mounted) {
-                                        Get.snackbar(
-                                          'Erreur',
-                                          e.message,
-                                        );
+                                        Get.snackbar('Erreur', e.message);
                                       }
                                     } catch (e) {
                                       if (ctx.mounted) {
@@ -1827,11 +1850,7 @@ class _StorageInfoBodyState extends State<_StorageInfoBody> {
             .select('id')
             .eq('event_id', eventId)
             .count(),
-        client
-            .from('guests')
-            .select('id')
-            .eq('event_id', eventId)
-            .count(),
+        client.from('guests').select('id').eq('event_id', eventId).count(),
         client
             .from('seating_tables')
             .select('id')
@@ -1886,10 +1905,7 @@ class _StorageInfoBodyState extends State<_StorageInfoBody> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Espace utilisé',
-                    style: AppTextStyles.titleLg,
-                  ),
+                  Text('Espace utilisé', style: AppTextStyles.titleLg),
                   Text(
                     '${_formatBytes(estimatedBytes)} / 1 Go',
                     style: AppTextStyles.bodyMd.copyWith(
@@ -1916,7 +1932,9 @@ class _StorageInfoBodyState extends State<_StorageInfoBody> {
                     ? '⚠️ Stockage presque plein'
                     : '${(usageRatio * 100).toStringAsFixed(1)}% utilisé',
                 style: AppTextStyles.labelMd.copyWith(
-                  color: usageRatio > 0.8 ? AppColors.error : AppColors.onSurfaceVariant,
+                  color: usageRatio > 0.8
+                      ? AppColors.error
+                      : AppColors.onSurfaceVariant,
                 ),
               ),
             ],

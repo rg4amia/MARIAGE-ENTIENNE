@@ -13,9 +13,9 @@ import '../../data/models/chair.dart';
 import '../../data/repositories/guest_link_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
 import 'package:share_plus/share_plus.dart';
+import '../../core/utils/invitation_sender.dart';
 import '../../core/utils/quota_error.dart';
-import '../../core/utils/whatsapp_helper.dart';
-import '../../data/repositories/wedding_settings_repository.dart';
+import '../../core/utils/validators.dart';
 import '../../core/widgets/wedding_header.dart';
 import '../subscription/subscription_controller.dart';
 import 'guests_controller.dart';
@@ -28,17 +28,23 @@ class GuestDetailPage extends StatefulWidget {
 }
 
 class _GuestDetailPageState extends State<GuestDetailPage> {
+  Guest? _guest;
   GuestLink? _guestLink;
   bool _isLoadingLink = true;
 
   @override
   void initState() {
     super.initState();
+    final args = Get.arguments;
+    if (args is Guest) {
+      _guest = args;
+    }
     _loadOrCreateLink();
   }
 
   Future<void> _loadOrCreateLink() async {
-    if (Get.arguments == null) {
+    final guestId = _guest?.id;
+    if (guestId == null) {
       if (mounted) {
         setState(() {
           _isLoadingLink = false;
@@ -46,13 +52,12 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       }
       return;
     }
-    final guest = Get.arguments as Guest;
     final linkRepo = GuestLinkRepository();
 
     GuestLink? link;
     try {
-      link = await linkRepo.getLinkByGuestId(guest.id);
-      link ??= await linkRepo.createGuestLink(guest.id);
+      link = await linkRepo.getLinkByGuestId(guestId);
+      link ??= await linkRepo.createGuestLink(guestId);
     } catch (error) {
       debugPrint('Impossible de charger le lien invité: $error');
     }
@@ -74,7 +79,8 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.arguments == null) {
+    final guest = _guest;
+    if (guest == null) {
       return Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(title: const Text('Erreur')),
@@ -83,7 +89,6 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     }
 
     final controller = Get.find<GuestsController>();
-    final guest = Get.arguments as Guest;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -91,21 +96,44 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
         children: [
           WeddingHeader(
             title: 'Détails invité',
-            trailing: GestureDetector(
-              onTap: () => _confirmDelete(context, controller, guest),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.dark.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Modifier les coordonnées de l'invité.
+                GestureDetector(
+                  onTap: () => _showEditGuestSheet(context, controller, guest),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.dark.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.dark,
+                      size: 20,
+                    ),
+                  ),
                 ),
-                child: Icon(
-                  Icons.delete_outline_rounded,
-                  color: AppColors.dark,
-                  size: 20,
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () => _confirmDelete(context, controller, guest),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: AppColors.dark.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.dark,
+                      size: 20,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           Expanded(
@@ -200,57 +228,57 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           // Réponse à l'invitation : la place n'est attribuée
                           // qu'après confirmation de présence.
                           if (guest.status != 'cancelled') ...[
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: _rsvpColor(guest.rsvpStatus).withValues(
-                                alpha: 0.10,
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: _rsvpColor(guest.rsvpStatus),
-                              ),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  guest.rsvpStatus == 'confirmed'
-                                      ? Icons.check_circle_rounded
-                                      : guest.rsvpStatus == 'declined'
-                                      ? Icons.cancel_outlined
-                                      : Icons.schedule_rounded,
-                                  size: 20,
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: _rsvpColor(
+                                  guest.rsvpStatus,
+                                ).withValues(alpha: 0.10),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
                                   color: _rsvpColor(guest.rsvpStatus),
                                 ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        guest.rsvpStatusLabel,
-                                        style: AppTextStyles.bodyMd.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.dark,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        _rsvpMessage(guest),
-                                        style: AppTextStyles.labelMd.copyWith(
-                                          color: AppColors.onSurfaceVariant,
-                                        ),
-                                      ),
-                                    ],
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    guest.rsvpStatus == 'confirmed'
+                                        ? Icons.check_circle_rounded
+                                        : guest.rsvpStatus == 'declined'
+                                        ? Icons.cancel_outlined
+                                        : Icons.schedule_rounded,
+                                    size: 20,
+                                    color: _rsvpColor(guest.rsvpStatus),
                                   ),
-                                ),
-                              ],
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          guest.rsvpStatusLabel,
+                                          style: AppTextStyles.bodyMd.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.dark,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          _rsvpMessage(guest),
+                                          style: AppTextStyles.labelMd.copyWith(
+                                            color: AppColors.onSurfaceVariant,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
+                            const SizedBox(height: 16),
                           ],
 
                           FutureBuilder(
@@ -339,20 +367,24 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                   ),
                   const SizedBox(height: 12),
 
-                  // WhatsApp Direct Invitation Button
-                  if (guest.phone != null && guest.status != 'cancelled')
+                  // Envoi de l'invitation : le canal dépend des coordonnées
+                  // (WhatsApp, e-mail, partage système ou copie du lien).
+                  if (guest.status != 'cancelled')
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () => _sendInvitationWhatsApp(context, guest),
-                        icon: const Icon(Icons.chat_bubble_rounded, size: 20),
+                        onPressed: () => showInvitationSendSheet(
+                          context: context,
+                          guest: guest,
+                        ),
+                        icon: const Icon(Icons.send_rounded, size: 20),
                         label: Text(
-                          'Envoyer l\'invitation WhatsApp à ${guest.fullName.split(' ').first}',
+                          'Envoyer l\'invitation à ${guest.fullName.split(' ').first}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF25D366),
+                          backgroundColor: AppColors.dark,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -558,7 +590,8 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
             onPressed: () {
               Navigator.pop(ctx);
               controller.deleteGuest(guest.id);
-            },              child: Text(
+            },
+            child: Text(
               'Supprimer',
               style: AppTextStyles.bodyMd.copyWith(color: AppColors.error),
             ),
@@ -688,30 +721,21 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     }
   }
 
-  Future<void> _sendInvitationWhatsApp(
+  Future<void> _showEditGuestSheet(
     BuildContext context,
+    GuestsController controller,
     Guest guest,
   ) async {
-    final settings = await WeddingSettingsRepository().getSettings();
-    if (!context.mounted) return;
-
-    try {
-      final sent = await sendWeddingInvitationWhatsApp(
-        guest: guest,
-        settings: settings,
-      );
-      if (context.mounted) {
-        Get.snackbar(
-          sent ? '✅ Envoyé' : '⚠️ Annulé',
-          sent
-              ? 'Invitation envoyée via WhatsApp à ${guest.fullName}'
-              : 'L\'envoi a été annulé ou WhatsApp n\'est pas disponible',
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        Get.snackbar('Erreur', 'Impossible d\'ouvrir WhatsApp');
-      }
+    final updated = await showModalBottomSheet<Guest>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _EditGuestSheet(guest: guest, controller: controller),
+    );
+    if (updated != null && mounted) {
+      setState(() => _guest = updated);
+      Get.snackbar('Succès', 'Invité modifié');
     }
   }
 }
@@ -737,6 +761,226 @@ class _InfoRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Modifier un invité (nom, téléphone, e-mail) ──
+class _EditGuestSheet extends StatefulWidget {
+  final Guest guest;
+  final GuestsController controller;
+
+  const _EditGuestSheet({required this.guest, required this.controller});
+
+  @override
+  State<_EditGuestSheet> createState() => _EditGuestSheetState();
+}
+
+class _EditGuestSheetState extends State<_EditGuestSheet> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _emailController;
+  final _formKey = GlobalKey<FormState>();
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.guest.fullName);
+    _phoneController = TextEditingController(text: widget.guest.phone ?? '');
+    _emailController = TextEditingController(text: widget.guest.email ?? '');
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _isSaving = true);
+
+    final phoneText = _phoneController.text.trim();
+    final emailText = _emailController.text.trim();
+    final updated = await widget.controller.updateGuest(
+      id: widget.guest.id,
+      fullName: _nameController.text.trim(),
+      phone: phoneText.isEmpty ? null : phoneText,
+      email: emailText.isEmpty ? null : emailText,
+      clearPhone: (widget.guest.phone ?? '').isNotEmpty && phoneText.isEmpty,
+      clearEmail: (widget.guest.email ?? '').isNotEmpty && emailText.isEmpty,
+    );
+
+    if (!mounted) return;
+    if (updated != null) {
+      Navigator.pop(context, updated);
+    } else {
+      setState(() => _isSaving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          24,
+          12,
+          24,
+          MediaQuery.of(context).viewInsets.bottom + 24,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('Modifier l\'invité', style: AppTextStyles.headlineMd),
+              const SizedBox(height: 4),
+              Text(
+                'Le numéro de téléphone sert à l\'invitation WhatsApp ; '
+                'l\'e-mail est facultatif.',
+                style: AppTextStyles.bodyMdOnVariant,
+              ),
+              const SizedBox(height: 20),
+
+              _field(
+                'Nom complet *',
+                TextFormField(
+                  controller: _nameController,
+                  validator: (v) => Validators.required(v, 'Le nom'),
+                  style: AppTextStyles.bodyLg,
+                  decoration: _decoration(
+                    'Jean Dupont',
+                    Icons.person_outline_rounded,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              _field(
+                'Téléphone',
+                TextFormField(
+                  controller: _phoneController,
+                  keyboardType: TextInputType.phone,
+                  validator: Validators.phone,
+                  style: AppTextStyles.bodyLg,
+                  decoration: _decoration(
+                    '+225 07 00 00 00 00',
+                    Icons.phone_outlined,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              _field(
+                'Email (optionnel)',
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: Validators.emailOptional,
+                  style: AppTextStyles.bodyLg,
+                  decoration: _decoration(
+                    'jean@mail.com',
+                    Icons.mail_outline_rounded,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton(
+                  onPressed: _isSaving ? null : _save,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.dark,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: _isSaving
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Text('Enregistrer', style: AppTextStyles.titleLg),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _field(String label, Widget child) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelMd.copyWith(
+            color: AppColors.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: 6),
+        child,
+      ],
+    );
+  }
+
+  InputDecoration _decoration(String hint, IconData icon) {
+    return InputDecoration(
+      hintText: hint,
+      prefixIcon: Icon(icon, color: AppColors.onSurfaceVariant, size: 20),
+      filled: true,
+      fillColor: AppColors.surfaceContainerLow,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(
+          color: AppColors.outlineVariant.withValues(alpha: 0.5),
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: AppColors.dark, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.error),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     );
   }
 }

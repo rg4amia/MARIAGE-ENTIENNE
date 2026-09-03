@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/utils/invitation_sender.dart';
 import '../../core/utils/validators.dart';
-import '../../core/utils/whatsapp_helper.dart';
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/micro_interactions.dart';
 import '../../core/widgets/shared_components.dart';
 import '../../core/widgets/wedding_header.dart';
-import '../../data/repositories/wedding_settings_repository.dart';
 import '../../routes/app_routes.dart';
 import 'guests_controller.dart';
 
@@ -50,6 +49,40 @@ class GuestsPage extends StatelessWidget {
                 _SearchBar(controller: controller),
                 const SizedBox(height: 12),
                 Obx(() => _buildFilterChips(controller)),
+                // Envoi en masse aux invités qui n'ont pas encore répondu.
+                Obx(() {
+                  final awaiting = controller.guestsAwaitingRsvp;
+                  if (awaiting.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () => showBulkInvitationSheet(
+                          context: context,
+                          guests: awaiting,
+                        ),
+                        icon: const Icon(Icons.send_rounded, size: 18),
+                        label: Text(
+                          'Envoyer en masse (${awaiting.length})',
+                          style: AppTextStyles.bodyMd.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.dark,
+                          side: BorderSide(
+                            color: AppColors.dark.withValues(alpha: 0.4),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -298,10 +331,7 @@ class _GuestCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               if (guest.status == 'cancelled')
-                StatusBadge(
-                  label: 'Annulé',
-                  color: AppColors.error,
-                )
+                StatusBadge(label: 'Annulé', color: AppColors.error)
               else
                 StatusBadge(
                   label: _rsvpLabel(guest.rsvpStatus),
@@ -475,20 +505,26 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      final name = _nameController.text.trim();
                       final phone = _phoneController.text.trim().isEmpty
                           ? null
                           : _phoneController.text.trim();
+                      final email = _emailController.text.trim().isEmpty
+                          ? null
+                          : _emailController.text.trim();
                       Navigator.pop(context);
                       final guest = await widget.controller.createGuest(
-                        fullName: _nameController.text.trim(),
+                        fullName: name,
                         phone: phone,
-                        email: _emailController.text.trim().isEmpty
-                            ? null
-                            : _emailController.text.trim(),
+                        email: email,
                       );
-                      // Propose l'envoi WhatsApp si le guest a un téléphone
-                      if (guest != null && phone != null && context.mounted) {
-                        _promptWhatsAppInvitation(context, guest);
+                      // Propose l'envoi dès qu'un canal de contact existe
+                      // (téléphone ou e-mail).
+                      if (guest != null &&
+                          context.mounted &&
+                          ((phone?.isNotEmpty ?? false) ||
+                              (email?.isNotEmpty ?? false))) {
+                        showInvitationSendSheet(context: context, guest: guest);
                       }
                     }
                   },
@@ -555,60 +591,6 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
         borderSide: const BorderSide(color: AppColors.error),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-    );
-  }
-
-  void _promptWhatsAppInvitation(BuildContext context, dynamic guest) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            const Text('📲 '),
-            Expanded(child: Text('Envoyer l\'invitation', style: AppTextStyles.headlineMd)),
-          ],
-        ),
-        content: Text(
-          'Voulez-vous envoyer l\'invitation WhatsApp à ${guest.fullName} ?\n\nUn message avec les détails du mariage et le lien d\'invitation sera envoyé sur ${guest.phone}.',
-          style: AppTextStyles.bodyMd,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text('Non merci', style: AppTextStyles.bodyMd),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(ctx);
-              final settings = await WeddingSettingsRepository().getSettings();
-              if (!context.mounted) return;
-              try {
-                final sent = await sendWeddingInvitationWhatsApp(
-                  guest: guest,
-                  settings: settings,
-                );
-                if (context.mounted) {
-                  Get.snackbar(
-                    sent ? '✅ Envoyé' : '⚠️ Annulé',
-                    sent
-                        ? 'Invitation envoyée via WhatsApp à ${guest.fullName}'
-                        : 'L\'envoi a été annulé ou WhatsApp n\'est pas disponible',
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  Get.snackbar('Erreur', 'Impossible d\'ouvrir WhatsApp');
-                }
-              }
-            },
-            child: Text(
-              'Envoyer',
-              style: AppTextStyles.titleLgPrimary,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

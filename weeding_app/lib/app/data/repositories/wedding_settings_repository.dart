@@ -75,16 +75,17 @@ class WeddingSettingsRepository {
     if (brideName != null) updates['bride_name'] = brideName;
     if (groomName != null) updates['groom_name'] = groomName;
     if (location != null) updates['location'] = location;
-    if (eventDate != null) updates['event_date'] = eventDate.toUtc().toIso8601String();
+    if (eventDate != null) {
+      updates['event_date'] = eventDate.toUtc().toIso8601String();
+    }
     if (rsvpDeadline != null) {
       updates['rsvp_deadline'] = rsvpDeadline.toUtc().toIso8601String();
     }
-    if (clearRsvpDeadline) updates['rsvp_deadline'] = null;
+    if (clearRsvpDeadline) {
+      updates['rsvp_deadline'] = null;
+    }
     updates['updated_at'] = DateTime.now().toUtc().toIso8601String();
 
-    await _client
-        .from('wedding_events')
-        .update(updates)
-        .eq('id', eventId);
+    await _client.from('wedding_events').update(updates).eq('id', eventId);
   }
 }

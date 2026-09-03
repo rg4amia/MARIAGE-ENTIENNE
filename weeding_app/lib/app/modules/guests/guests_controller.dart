@@ -40,21 +40,15 @@ class GuestsController extends GetxController {
     switch (filterStatus.value) {
       case 'pending':
         result = result
-            .where(
-              (g) => g.status != 'cancelled' && g.rsvpStatus == 'pending',
-            )
+            .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'pending')
             .toList();
       case 'confirmed':
         result = result
-            .where(
-              (g) => g.status != 'cancelled' && g.isRsvpConfirmed,
-            )
+            .where((g) => g.status != 'cancelled' && g.isRsvpConfirmed)
             .toList();
       case 'declined':
         result = result
-            .where(
-              (g) => g.status != 'cancelled' && g.rsvpStatus == 'declined',
-            )
+            .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'declined')
             .toList();
       case 'cancelled':
         result = result.where((g) => g.status == 'cancelled').toList();
@@ -120,22 +114,29 @@ class GuestsController extends GetxController {
     }
   }
 
-  Future<void> updateGuest({
+  Future<Guest?> updateGuest({
     required String id,
     String? fullName,
     String? phone,
     String? email,
+    bool clearPhone = false,
+    bool clearEmail = false,
   }) async {
     try {
-      await _guestRepository.updateGuest(
+      final guest = await _guestRepository.updateGuest(
         id: id,
         fullName: fullName,
         phone: phone,
         email: email,
+        clearPhone: clearPhone,
+        clearEmail: clearEmail,
       );
       await loadGuests();
+      return guest;
     } catch (e) {
+      debugPrint('Erreur modification invité: $e');
       Get.snackbar('Erreur', 'Impossible de modifier l\'invité');
+      return null;
     }
   }
 
@@ -213,17 +214,18 @@ class GuestsController extends GetxController {
     return await _tableRepository.getAvailableChairsByTableId(tableId);
   }
 
-  int get pendingCount => guests
+  /// Invités qui n'ont pas encore répondu à l'invitation (annulés exclus).
+  List<Guest> get guestsAwaitingRsvp => guests
       .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'pending')
-      .length;
-  int get confirmedCount => guests
-      .where((g) => g.status != 'cancelled' && g.isRsvpConfirmed)
-      .length;
+      .toList();
+
+  int get pendingCount => guestsAwaitingRsvp.length;
+  int get confirmedCount =>
+      guests.where((g) => g.status != 'cancelled' && g.isRsvpConfirmed).length;
   int get declinedCount => guests
       .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'declined')
       .length;
-  int get cancelledCount =>
-      guests.where((g) => g.status == 'cancelled').length;
+  int get cancelledCount => guests.where((g) => g.status == 'cancelled').length;
 
   void onSearchChanged(String query) {
     searchQuery.value = query;

@@ -25,21 +25,44 @@ Future<bool> sendWeddingInvitationWhatsApp({
 
   try {
     // canLaunchUrl can be unreliable on some devices — try launching directly.
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     return launched;
   } catch (e) {
     debugPrint('Erreur ouverture WhatsApp: $e');
     // Fallback: try with wa:// scheme (some older WhatsApp versions)
     try {
-      final fallback = Uri.parse('wa://send?phone=$phone&text=${Uri.encodeComponent(message)}');
+      final fallback = Uri.parse(
+        'wa://send?phone=$phone&text=${Uri.encodeComponent(message)}',
+      );
       return await launchUrl(fallback, mode: LaunchMode.externalApplication);
     } catch (_) {
       return false;
     }
   }
+}
+
+/// Lien public de l'invitation (portail + token de l'invité). Utilisé par le
+/// message WhatsApp, l'e-mail, le partage et le bouton « copier le lien ».
+String invitationLinkForGuest(Guest guest) {
+  return '${SupabaseConfig.guestPortalUrl}?token=${guest.qrToken}';
+}
+
+/// Texte d'invitation complet (mise en gras WhatsApp `*...*`).
+String invitationMessageForGuest({
+  required Guest guest,
+  WeddingSettings? settings,
+}) {
+  return _buildInvitationMessage(guest: guest, settings: settings);
+}
+
+/// Sujet court utilisé pour un envoi par e-mail.
+String invitationEmailSubject(WeddingSettings? settings) {
+  final bride = settings?.brideName ?? '';
+  final groom = settings?.groomName ?? '';
+  final couple = (bride.isNotEmpty && groom.isNotEmpty)
+      ? '$bride & $groom'
+      : (settings?.title ?? 'Notre mariage');
+  return 'Invitation — $couple';
 }
 
 /// Normalizes an Ivory Coast phone number to the format WhatsApp expects
@@ -76,8 +99,7 @@ String _buildInvitationMessage({
   final location = settings?.location ?? '';
   final rsvpDeadline = settings?.rsvpDeadline;
 
-  final portalUrl = SupabaseConfig.guestPortalUrl;
-  final inviteUrl = '$portalUrl?token=${guest.qrToken}';
+  final inviteUrl = invitationLinkForGuest(guest);
 
   final buffer = StringBuffer();
 
@@ -92,9 +114,7 @@ String _buildInvitationMessage({
   // Personal greeting
   buffer.writeln('Cher(e) *${guest.fullName}*,');
   buffer.writeln();
-  buffer.writeln(
-    'Nous avons le plaisir de vous inviter à notre mariage ! 🎉',
-  );
+  buffer.writeln('Nous avons le plaisir de vous inviter à notre mariage ! 🎉');
   buffer.writeln();
 
   // Event details — volontairement limitées : le numéro de table et la place
@@ -135,8 +155,19 @@ String _buildInvitationMessage({
 /// Formate une date en français, ex. « 12 septembre 2026 ».
 String _formatFrDate(DateTime date) {
   const months = [
-    '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+    '',
+    'janvier',
+    'février',
+    'mars',
+    'avril',
+    'mai',
+    'juin',
+    'juillet',
+    'août',
+    'septembre',
+    'octobre',
+    'novembre',
+    'décembre',
   ];
   return '${date.day} ${months[date.month]} ${date.year}';
 }
