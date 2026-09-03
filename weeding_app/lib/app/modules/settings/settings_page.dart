@@ -322,6 +322,10 @@ class _SettingsPageState extends State<SettingsPage> {
     final dateStr = date != null
         ? DateFormat('d MMMM yyyy', 'fr_FR').format(date)
         : 'Non définie';
+    final rsvpDeadline = s?.rsvpDeadline;
+    final rsvpDeadlineStr = rsvpDeadline != null
+        ? DateFormat('d MMMM yyyy', 'fr_FR').format(rsvpDeadline)
+        : 'Non définie';
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -366,6 +370,13 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 12),
           _WeddingInfoRow(
+            icon: Icons.event_available_rounded,
+            iconColor: AppColors.dark,
+            label: 'Date limite de réponse',
+            value: rsvpDeadlineStr,
+          ),
+          const SizedBox(height: 12),
+          _WeddingInfoRow(
             icon: Icons.location_on_outlined,
             iconColor: AppColors.dark,
             label: 'Lieu',
@@ -404,6 +415,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final groomCtrl = TextEditingController(text: s?.groomName ?? '');
     final locationCtrl = TextEditingController(text: s?.location ?? '');
     DateTime? selectedDate = s?.eventDate;
+    DateTime? rsvpDeadline = s?.rsvpDeadline;
     var isSaving = false;
 
     await showModalBottomSheet<void>(
@@ -539,6 +551,75 @@ class _SettingsPageState extends State<SettingsPage> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final picked = await showDatePicker(
+                                      context: ctx,
+                                      initialDate: rsvpDeadline ?? DateTime.now(),
+                                      firstDate: DateTime(2024),
+                                      lastDate: DateTime(2035),
+                                    );
+                                    if (picked != null) {
+                                      setSheetState(() => rsvpDeadline = picked);
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 17,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.surfaceContainerLow,
+                                      border: Border.all(
+                                        color: AppColors.outlineVariant,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.event_available_rounded,
+                                          size: 20,
+                                          color: AppColors.onSurfaceVariant,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            rsvpDeadline != null
+                                                ? 'Répondre avant le ${DateFormat('d MMMM yyyy', 'fr_FR').format(rsvpDeadline!)}'
+                                                : 'Date limite pour répondre (optionnel)',
+                                            style: AppTextStyles.bodyMd.copyWith(
+                                              color: rsvpDeadline != null
+                                                  ? AppColors.onSurface
+                                                  : AppColors.onSurfaceVariant,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (rsvpDeadline != null) ...[
+                                const SizedBox(width: 4),
+                                IconButton(
+                                  tooltip: 'Retirer la date limite',
+                                  onPressed: () =>
+                                      setSheetState(() => rsvpDeadline = null),
+                                  icon: const Icon(
+                                    Icons.close_rounded,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -572,6 +653,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                           groomName: groomCtrl.text.trim(),
                                           location: locationCtrl.text.trim(),
                                           eventDate: selectedDate,
+                                          rsvpDeadline: rsvpDeadline,
+                                          clearRsvpDeadline:
+                                              s?.rsvpDeadline != null &&
+                                              rsvpDeadline == null,
                                         );
                                     if (ctx.mounted) Navigator.pop(ctx);
                                     await _loadWeddingSettings();

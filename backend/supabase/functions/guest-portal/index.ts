@@ -201,6 +201,26 @@ Deno.serve(async (req) => {
     return apiJson(data);
   }
 
+  // POST /guest-portal/api/rsvp  { token, status: 'confirmed' | 'declined' }
+  if (req.method === 'POST' && path.endsWith('/api/rsvp')) {
+    const body = await req.json();
+    const token = String(body.token ?? '').trim();
+    const status = String(body.status ?? '').trim();
+    if (!token || !['confirmed', 'declined'].includes(status)) {
+      return apiError('Informations manquantes', 400);
+    }
+
+    const guest = await findGuestByToken(token);
+    if (!guest) return apiError('Invité introuvable', 404);
+
+    const { data, error } = await admin.rpc('set_guest_rsvp_by_token', {
+      p_token: token,
+      p_status: status,
+    });
+    if (error || !data) return apiError('Impossible d\'enregistrer votre réponse', 500);
+    return apiJson(data);
+  }
+
   // GET /guest-portal/api/shell?token=xxx&entrance=xxx
   // Supabase's *.supabase.co gateway deliberately serves HTML responses as
   // text/plain. The public static host loads the shell through this JSON route,
@@ -438,6 +458,21 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       font-size: 13px;
       font-weight: 600;
       letter-spacing: .5px;
+    }
+
+    /* ── RSVP — réponse de présence ── */
+    .rsvp-actions { display: flex; flex-direction: column; gap: 10px; }
+    .rsvp-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      border-radius: 50px; padding: 6px 14px;
+      font-size: 13px; font-weight: 600;
+    }
+    .rsvp-badge.confirmed {
+      background: rgba(39,174,96,.15); border: 1px solid rgba(39,174,96,.4);
+      color: #2ecc71;
+    }
+    .rsvp-badge.declined {
+      background: #fdf0f0; border: 1px solid #f5c6c6; color: var(--danger);
     }
 
     /* ── Steps ── */
@@ -728,6 +763,25 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
     <div class="card">
       <div class="guest-name" id="welcome-name"></div>
       <div class="guest-meta" id="welcome-meta"></div>
+    </div>
+
+    <div class="card" id="rsvp-card">
+      <div class="section-title">📩 Réservez votre place</div>
+      <div class="section-sub" id="rsvp-deadline"></div>
+      <div id="alert-rsvp" class="alert error"></div>
+      <div id="rsvp-actions" class="rsvp-actions">
+        <button class="btn btn-primary" onclick="App.answerRsvp('confirmed')">✅ Je serai présent(e)</button>
+        <button class="btn btn-outline" onclick="App.answerRsvp('declined')">Je ne pourrai pas venir</button>
+      </div>
+      <div id="rsvp-answered" style="display:none;text-align:center;">
+        <div class="rsvp-badge confirmed" id="rsvp-answered-badge"></div>
+        <div class="section-sub" style="margin-top:10px;margin-bottom:0;">
+          Merci pour votre réponse, vous pouvez la modifier à tout moment.
+        </div>
+        <button class="btn btn-outline" style="margin-top:14px;" onclick="App.changeRsvp()">
+          Modifier ma réponse
+        </button>
+      </div>
     </div>
 
     <div class="card">
@@ -1104,6 +1158,8 @@ function renderWelcome() {
 
   document.getElementById('welcome-locked').style.display   = inv.is_unlocked ? 'none'  : 'block';
   document.getElementById('welcome-unlocked').style.display = inv.is_unlocked ? 'block' : 'none';
+
+  renderRsvp();
 }
 
 function updateSteps(current) {
@@ -1116,6 +1172,53 @@ function updateSteps(current) {
     const ln = document.getElementById('line' + i);
     if (ln) ln.className = 'step-line' + (i < current ? ' done' : '');
   }
+}
+
+// ═══════════════════════════════════════════════════════
+// RSVP — réponse de présence
+// ═══════════════════════════════════════════════════════
+function renderRsvp() {
+  const inv = State.invitation ?? {};
+  const ev  = inv.event ?? {};
+  const deadline = ev.rsvp_deadline_label || '';
+
+  document.getElementById('rsvp-deadline').textContent = deadline
+    ? 'Merci de confirmer votre présence avant le ' + deadline + '.'
+    : 'Merci de confirmer votre présence (présent ou absent).';
+
+  const status = inv.rsvp_status;
+  const answered = status === 'confirmed' || status === 'declined';
+  document.getElementById('rsvp-actions').style.display = answered ? 'none' : 'block';
+  document.getElementById('rsvp-answered').style.display = answered ? 'block' : 'none';
+
+  const badge = document.getElementById('rsvp-answered-badge');
+  badge.className = 'rsvp-badge ' + (status === 'confirmed' ? 'confirmed' : 'declined');
+  badge.textContent = status === 'confirmed' ? '✅ Présence confirmée' : 'Absence signalée';
+}
+
+async function answerRsvp(status) {
+  clearAlert('rsvp');
+  const actions = document.getElementById('rsvp-actions');
+  const buttons = actions.querySelectorAll('button');
+  buttons.forEach(b => { b.disabled = true; b.style.opacity = '.6'; });
+
+  try {
+    const result = await apiFetch('/api/rsvp', {
+      method: 'POST',
+      body: JSON.stringify({ token: State.token, status }),
+    });
+    State.invitation = result;
+    renderRsvp();
+  } catch (e) {
+    showAlert('rsvp', e.message);
+    buttons.forEach(b => { b.disabled = false; b.style.opacity = ''; });
+  }
+}
+
+function changeRsvp() {
+  document.getElementById('rsvp-answered').style.display = 'none';
+  document.getElementById('rsvp-actions').style.display = 'block';
+  document.getElementById('rsvp-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1493,6 +1596,8 @@ const App = {
   useAnotherInvitation,
   downloadCard,
   shareCard,
+  answerRsvp,
+  changeRsvp,
 };
 
 // ═══════════════════════════════════════════════════════

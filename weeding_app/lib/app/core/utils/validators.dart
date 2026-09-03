@@ -1,8 +1,20 @@
 class Validators {
+  /// Email obligatoire (connexion, inscription…).
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'L\'email est requis';
     }
+    return _emailFormat(value);
+  }
+
+  /// Email facultatif : accepté vide (invité sans adresse), mais formaté
+  /// quand une adresse est saisie.
+  static String? emailOptional(String? value) {
+    if (value == null || value.isEmpty) return null;
+    return _emailFormat(value);
+  }
+
+  static String? _emailFormat(String value) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
       return 'Email invalide';

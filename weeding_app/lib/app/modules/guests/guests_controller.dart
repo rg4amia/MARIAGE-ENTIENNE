@@ -35,8 +35,29 @@ class GuestsController extends GetxController {
           .toList();
     }
 
-    if (filterStatus.value != 'all') {
-      result = result.where((g) => g.status == filterStatus.value).toList();
+    // Les filtres portent sur la réponse de présence (RSVP) : c'est ce qui
+    // guide le placement à table après confirmation.
+    switch (filterStatus.value) {
+      case 'pending':
+        result = result
+            .where(
+              (g) => g.status != 'cancelled' && g.rsvpStatus == 'pending',
+            )
+            .toList();
+      case 'confirmed':
+        result = result
+            .where(
+              (g) => g.status != 'cancelled' && g.isRsvpConfirmed,
+            )
+            .toList();
+      case 'declined':
+        result = result
+            .where(
+              (g) => g.status != 'cancelled' && g.rsvpStatus == 'declined',
+            )
+            .toList();
+      case 'cancelled':
+        result = result.where((g) => g.status == 'cancelled').toList();
     }
 
     return result;
@@ -192,8 +213,17 @@ class GuestsController extends GetxController {
     return await _tableRepository.getAvailableChairsByTableId(tableId);
   }
 
-  int get pendingCount => guests.where((g) => g.status == 'pending').length;
-  int get confirmedCount => guests.where((g) => g.status != 'pending').length;
+  int get pendingCount => guests
+      .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'pending')
+      .length;
+  int get confirmedCount => guests
+      .where((g) => g.status != 'cancelled' && g.isRsvpConfirmed)
+      .length;
+  int get declinedCount => guests
+      .where((g) => g.status != 'cancelled' && g.rsvpStatus == 'declined')
+      .length;
+  int get cancelledCount =>
+      guests.where((g) => g.status == 'cancelled').length;
 
   void onSearchChanged(String query) {
     searchQuery.value = query;

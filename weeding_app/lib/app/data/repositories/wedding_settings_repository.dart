@@ -7,12 +7,16 @@ class WeddingSettings {
   final String? location;
   final DateTime? eventDate;
 
+  /// Date limite pour que les invités confirment leur présence.
+  final DateTime? rsvpDeadline;
+
   WeddingSettings({
     required this.title,
     required this.brideName,
     required this.groomName,
     this.location,
     this.eventDate,
+    this.rsvpDeadline,
   });
 
   factory WeddingSettings.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,9 @@ class WeddingSettings {
       location: json['location'] as String?,
       eventDate: json['event_date'] != null
           ? DateTime.parse(json['event_date'] as String)
+          : null,
+      rsvpDeadline: json['rsvp_deadline'] != null
+          ? DateTime.parse(json['rsvp_deadline'] as String)
           : null,
     );
   }
@@ -57,6 +64,8 @@ class WeddingSettingsRepository {
     String? groomName,
     String? location,
     DateTime? eventDate,
+    DateTime? rsvpDeadline,
+    bool clearRsvpDeadline = false,
   }) async {
     final eventId = await _client.rpc('current_event_id');
     if (eventId == null) throw Exception('Event not found');
@@ -67,6 +76,10 @@ class WeddingSettingsRepository {
     if (groomName != null) updates['groom_name'] = groomName;
     if (location != null) updates['location'] = location;
     if (eventDate != null) updates['event_date'] = eventDate.toUtc().toIso8601String();
+    if (rsvpDeadline != null) {
+      updates['rsvp_deadline'] = rsvpDeadline.toUtc().toIso8601String();
+    }
+    if (clearRsvpDeadline) updates['rsvp_deadline'] = null;
     updates['updated_at'] = DateTime.now().toUtc().toIso8601String();
 
     await _client

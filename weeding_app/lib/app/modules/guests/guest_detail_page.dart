@@ -197,6 +197,62 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                           ),
                           const SizedBox(height: 16),
 
+                          // Réponse à l'invitation : la place n'est attribuée
+                          // qu'après confirmation de présence.
+                          if (guest.status != 'cancelled') ...[
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: _rsvpColor(guest.rsvpStatus).withValues(
+                                alpha: 0.10,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: _rsvpColor(guest.rsvpStatus),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  guest.rsvpStatus == 'confirmed'
+                                      ? Icons.check_circle_rounded
+                                      : guest.rsvpStatus == 'declined'
+                                      ? Icons.cancel_outlined
+                                      : Icons.schedule_rounded,
+                                  size: 20,
+                                  color: _rsvpColor(guest.rsvpStatus),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        guest.rsvpStatusLabel,
+                                        style: AppTextStyles.bodyMd.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.dark,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        _rsvpMessage(guest),
+                                        style: AppTextStyles.labelMd.copyWith(
+                                          color: AppColors.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ],
+
                           FutureBuilder(
                             future: controller.getGuestSeat(guest.id),
                             builder: (context, snapshot) {
@@ -562,6 +618,28 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
         return AppColors.statusCardUnlocked;
       default:
         return AppColors.statusPending;
+    }
+  }
+
+  Color _rsvpColor(String rsvpStatus) {
+    switch (rsvpStatus) {
+      case 'confirmed':
+        return AppColors.statusMediaReceived;
+      case 'declined':
+        return AppColors.error;
+      default:
+        return AppColors.statusPending;
+    }
+  }
+
+  String _rsvpMessage(Guest guest) {
+    switch (guest.rsvpStatus) {
+      case 'confirmed':
+        return 'Présence confirmée — vous pouvez lui attribuer une table et une place.';
+      case 'declined':
+        return 'A décliné l\'invitation : aucune place à prévoir.';
+      default:
+        return 'En attente de réponse à l\'invitation.';
     }
   }
 

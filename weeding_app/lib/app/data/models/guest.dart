@@ -5,6 +5,12 @@ class Guest {
   final String? email;
   final String qrToken;
   final String status;
+
+  /// Réponse de l'invité à l'invitation : 'pending', 'confirmed' ou 'declined'.
+  /// La réponse est enregistrée depuis le portail, avant l'attribution d'une
+  /// table : le couple place ensuite les invités ayant confirmé.
+  final String rsvpStatus;
+  final DateTime? rsvpRespondedAt;
   final DateTime createdAt;
 
   Guest({
@@ -14,6 +20,8 @@ class Guest {
     this.email,
     required this.qrToken,
     this.status = 'draft',
+    this.rsvpStatus = 'pending',
+    this.rsvpRespondedAt,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -25,6 +33,10 @@ class Guest {
       email: json['email'] as String?,
       qrToken: json['qr_token'] as String,
       status: json['status'] as String? ?? 'draft',
+      rsvpStatus: json['rsvp_status'] as String? ?? 'pending',
+      rsvpRespondedAt: json['rsvp_responded_at'] != null
+          ? DateTime.parse(json['rsvp_responded_at'] as String)
+          : null,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'] as String)
           : DateTime.now(),
@@ -39,6 +51,8 @@ class Guest {
       'email': email,
       'qr_token': qrToken,
       'status': status,
+      'rsvp_status': rsvpStatus,
+      'rsvp_responded_at': rsvpRespondedAt?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -49,6 +63,8 @@ class Guest {
     String? email,
     String? status,
     String? qrToken,
+    String? rsvpStatus,
+    DateTime? rsvpRespondedAt,
   }) {
     return Guest(
       id: id,
@@ -57,8 +73,26 @@ class Guest {
       email: email ?? this.email,
       qrToken: qrToken ?? this.qrToken,
       status: status ?? this.status,
+      rsvpStatus: rsvpStatus ?? this.rsvpStatus,
+      rsvpRespondedAt: rsvpRespondedAt ?? this.rsvpRespondedAt,
       createdAt: createdAt,
     );
+  }
+
+  bool get hasRsvpResponded =>
+      rsvpStatus == 'confirmed' || rsvpStatus == 'declined';
+
+  bool get isRsvpConfirmed => rsvpStatus == 'confirmed';
+
+  String get rsvpStatusLabel {
+    switch (rsvpStatus) {
+      case 'confirmed':
+        return 'Présence confirmée';
+      case 'declined':
+        return 'Absence signalée';
+      default:
+        return 'En attente de réponse';
+    }
   }
 
   String get initials {

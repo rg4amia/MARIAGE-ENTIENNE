@@ -200,13 +200,10 @@ class _SearchBar extends StatelessWidget {
 Widget _buildFilterChips(GuestsController controller) {
   final filters = [
     ('Tous', 'all', controller.guests.length),
-    ('En attente', 'pending', controller.pendingCount),
+    ('À confirmer', 'pending', controller.pendingCount),
     ('Confirmés', 'confirmed', controller.confirmedCount),
-    (
-      'Annulés',
-      'cancelled',
-      controller.guests.where((g) => g.status == 'cancelled').length,
-    ),
+    ('Absents', 'declined', controller.declinedCount),
+    ('Annulés', 'cancelled', controller.cancelledCount),
   ];
 
   return SizedBox(
@@ -300,10 +297,16 @@ class _GuestCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              StatusBadge(
-                label: _statusLabel(guest.status),
-                color: _statusColor(guest.status),
-              ),
+              if (guest.status == 'cancelled')
+                StatusBadge(
+                  label: 'Annulé',
+                  color: AppColors.error,
+                )
+              else
+                StatusBadge(
+                  label: _rsvpLabel(guest.rsvpStatus),
+                  color: _rsvpColor(guest.rsvpStatus),
+                ),
               const SizedBox(width: 6),
               Icon(
                 Icons.chevron_right_rounded,
@@ -330,27 +333,23 @@ class _GuestCard extends StatelessWidget {
     }
   }
 
-  Color _statusColor(String status) {
-    switch (status) {
-      case 'cancelled':
-        return AppColors.error;
-      case 'card_unlocked':
-        return AppColors.statusCardUnlocked;
-      case 'media_uploaded':
+  Color _rsvpColor(String rsvpStatus) {
+    switch (rsvpStatus) {
+      case 'confirmed':
         return AppColors.statusMediaReceived;
+      case 'declined':
+        return AppColors.error;
       default:
         return AppColors.statusPending;
     }
   }
 
-  String _statusLabel(String status) {
-    switch (status) {
-      case 'cancelled':
-        return 'Annulé';
-      case 'card_unlocked':
-        return 'Débloquée';
-      case 'media_uploaded':
-        return 'Média';
+  String _rsvpLabel(String rsvpStatus) {
+    switch (rsvpStatus) {
+      case 'confirmed':
+        return 'Présent(e)';
+      case 'declined':
+        return 'Absent(e)';
       default:
         return 'En attente';
     }
@@ -456,11 +455,11 @@ class _AddGuestSheetState extends State<_AddGuestSheet> {
               const SizedBox(height: 14),
 
               _buildField(
-                'Email',
+                'Email (optionnel)',
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  validator: Validators.email,
+                  validator: Validators.emailOptional,
                   style: AppTextStyles.bodyLg,
                   decoration: _inputDecoration(
                     'jean@mail.com',

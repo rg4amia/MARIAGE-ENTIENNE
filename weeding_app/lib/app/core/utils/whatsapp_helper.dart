@@ -74,6 +74,7 @@ String _buildInvitationMessage({
   final title = settings?.title ?? 'Notre mariage';
   final date = settings?.eventDate;
   final location = settings?.location ?? '';
+  final rsvpDeadline = settings?.rsvpDeadline;
 
   final portalUrl = SupabaseConfig.guestPortalUrl;
   final inviteUrl = '$portalUrl?token=${guest.qrToken}';
@@ -92,20 +93,14 @@ String _buildInvitationMessage({
   buffer.writeln('Cher(e) *${guest.fullName}*,');
   buffer.writeln();
   buffer.writeln(
-    'Nous avons le plaisir de vous inviter à célébrer notre mariage ! 🎉',
+    'Nous avons le plaisir de vous inviter à notre mariage ! 🎉',
   );
   buffer.writeln();
 
-  // Event details
+  // Event details — volontairement limitées : le numéro de table et la place
+  // ne sont communiqués qu'après confirmation de présence.
   if (date != null) {
-    final months = [
-      '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-      'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
-    ];
-    final day = date.day;
-    final month = months[date.month];
-    final year = date.year;
-    buffer.writeln('📅 *Le $day $month $year*');
+    buffer.writeln('📅 Le *${_formatFrDate(date)}*');
   }
 
   if (location.isNotEmpty) {
@@ -114,8 +109,20 @@ String _buildInvitationMessage({
 
   buffer.writeln();
 
-  // Invitation link
-  buffer.writeln('📲 Consultez votre carte d\'invitation ici :');
+  // Confirmation de présence demandée, avec une date limite si elle est fixée.
+  if (rsvpDeadline != null) {
+    buffer.writeln(
+      '📩 Merci de confirmer votre présence (présent ou absent) '
+      'avant le *${_formatFrDate(rsvpDeadline)}* :',
+    );
+  } else {
+    buffer.writeln(
+      '📩 Merci de confirmer votre présence (présent ou absent) :',
+    );
+  }
+
+  buffer.writeln();
+  buffer.writeln('🔗 *Votre lien d\'invitation :*');
   buffer.writeln(inviteUrl);
   buffer.writeln();
 
@@ -123,4 +130,13 @@ String _buildInvitationMessage({
   buffer.writeln('Au plaisir de célébrer avec vous ! 🥂');
 
   return buffer.toString();
+}
+
+/// Formate une date en français, ex. « 12 septembre 2026 ».
+String _formatFrDate(DateTime date) {
+  const months = [
+    '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
+  ];
+  return '${date.day} ${months[date.month]} ${date.year}';
 }
