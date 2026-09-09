@@ -40,23 +40,19 @@ class QrCodePage extends StatelessWidget {
     final url = await _getPublicUrl(guest, controller);
     if (url == null) return;
 
+    // Le décompte du forfait est aligné sur l'envoi guidé : on l'enregistre
+    // quand l'invitation existe, sans bloquer le partage sinon — le lien du
+    // portail est déjà actif avant toute assignation de place.
     final invitation = await controller.getInvitationForGuest(guest.id);
-    if (invitation == null) {
-      Get.snackbar(
-        'Place à attribuer',
-        'Placez ${guest.fullName.split(' ').first} à une table avant '
-            'd\'envoyer son invitation.',
-      );
-      return;
+    if (invitation != null) {
+      final sent = await runWithQuotaGuard(() async {
+        await InvitationRepository().recordDelivery(
+          invitationId: invitation.id,
+          destination: guest.phone,
+        );
+      });
+      if (!sent) return;
     }
-
-    final sent = await runWithQuotaGuard(() async {
-      await InvitationRepository().recordDelivery(
-        invitationId: invitation.id,
-        destination: guest.phone,
-      );
-    });
-    if (!sent) return;
 
     await Share.share(url);
     if (Get.isRegistered<SubscriptionController>()) {

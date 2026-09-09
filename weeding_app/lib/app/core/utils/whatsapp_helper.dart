@@ -65,24 +65,27 @@ String invitationEmailSubject(WeddingSettings? settings) {
   return 'Invitation — $couple';
 }
 
-/// Normalizes an Ivory Coast phone number to the format WhatsApp expects
-/// (digits only, starting with country code, no '+' or spaces).
+/// Normalizes an Ivorian phone number to the format WhatsApp expects
+/// (digits only, starting with the country code 225).
+///
+/// En Côte d'Ivoire le numéro national comporte 10 chiffres et commence par 0
+/// (01/05/07…). `wa.me` attend l'indicatif 225 suivi du numéro national
+/// COMPLET, 0 inclus : `0757400462` → `2250757400462`. Retirer ce 0 produit
+/// un numéro invalide refusé par WhatsApp (« not a valid phone number »).
 String _normalizePhone(String raw) {
   // Remove all non-digit characters
   var digits = raw.replaceAll(RegExp(r'[^\d]'), '');
 
-  // Ivory Coast: +225 → strip leading 00 if present
+  // Strip international dialing prefixes (00225… ou 225…).
   if (digits.startsWith('00225')) {
-    digits = digits.substring(2); // → 225...
+    digits = digits.substring(5);
+  } else if (digits.startsWith('225') && digits.length > 10) {
+    digits = digits.substring(3);
   }
 
-  // Already starts with 225 but no leading +
-  // If it starts with 0 after 225, remove the 0
-  // e.g. 2250700000000 → already correct
-
-  // If local number without country code (starts with 0 and ≤10 digits)
-  if (digits.length <= 10 && digits.startsWith('0')) {
-    digits = '225${digits.substring(1)}';
+  // Numéro local (≤ 10 chiffres) : coller l'indicatif sans retirer le 0.
+  if (digits.length <= 10 && !digits.startsWith('225')) {
+    digits = '225$digits';
   }
 
   return digits;
@@ -96,16 +99,16 @@ String _buildInvitationMessage({
   final groom = settings?.groomName ?? '';
   final title = settings?.title ?? 'Notre mariage';
   final date = settings?.eventDate;
-  final location = settings?.location ?? '';
   final rsvpDeadline = settings?.rsvpDeadline;
 
   final inviteUrl = invitationLinkForGuest(guest);
 
   final buffer = StringBuffer();
 
-  // Opening with couple names
+  // En-tête « Wedding » suivi des deux mariés (marié en premier), comme
+  // demandé ; retombe sur le titre de l'espace si un nom manque.
   if (bride.isNotEmpty && groom.isNotEmpty) {
-    buffer.writeln('💍 *$bride & $groom*');
+    buffer.writeln('💍 *Wedding $groom ET $bride*');
   } else {
     buffer.writeln('💍 *$title*');
   }
@@ -114,36 +117,38 @@ String _buildInvitationMessage({
   // Personal greeting
   buffer.writeln('Cher(e) *${guest.fullName}*,');
   buffer.writeln();
-  buffer.writeln('Nous avons le plaisir de vous inviter à notre mariage ! 🎉');
+  buffer.writeln("Nous avons l'honneur de vous inviter à notre mariage. 🎉");
   buffer.writeln();
 
-  // Event details — volontairement limitées : le numéro de table et la place
-  // ne sont communiqués qu'après confirmation de présence.
+  // Premier contact volontairement léger : la date seule (si renseignée),
+  // sans lieu ni table — la place est communiquée après confirmation.
   if (date != null) {
     buffer.writeln('📅 Le *${_formatFrDate(date)}*');
+    buffer.writeln();
   }
 
-  if (location.isNotEmpty) {
-    buffer.writeln('📍 *$location*');
-  }
-
-  buffer.writeln();
-
-  // Confirmation de présence demandée, avec une date limite si elle est fixée.
+  // Délai laissé à l'invité pour répondre et confirmer sa présence.
   if (rsvpDeadline != null) {
     buffer.writeln(
-      '📩 Merci de confirmer votre présence (présent ou absent) '
+      '📩 Merci de nous confirmer votre présence (présent ou absent) '
       'avant le *${_formatFrDate(rsvpDeadline)}* :',
     );
   } else {
     buffer.writeln(
-      '📩 Merci de confirmer votre présence (présent ou absent) :',
+      '📩 Merci de nous confirmer votre présence (présent ou absent) :',
     );
   }
 
   buffer.writeln();
-  buffer.writeln('🔗 *Votre lien d\'invitation :*');
+  buffer.writeln('🔗 *Votre invitation :*');
   buffer.writeln(inviteUrl);
+  buffer.writeln();
+
+  // La table et la place ne sont attribuées qu'après confirmation.
+  buffer.writeln(
+    'Votre table et votre place vous seront communiquées après '
+    'confirmation de votre présence.',
+  );
   buffer.writeln();
 
   // Closing

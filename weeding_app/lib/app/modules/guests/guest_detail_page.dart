@@ -683,27 +683,21 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       return;
     }
 
-    // L'invitation n'existe en base qu'une fois la place attribuée : sans
-    // elle, l'envoi ne peut être ni décompté ni retrouvé à l'entrée.
+    // Le décompte du forfait est aligné sur l'envoi guidé : la consommation
+    // est enregistrée en base sans bloquer si l'invitation n'existe pas
+    // encore (le lien du portail est déjà actif avant toute assignation).
     final invitation = await InvitationRepository().getInvitationByGuestId(
       guest.id,
     );
-    if (invitation == null) {
-      Get.snackbar(
-        'Place à attribuer',
-        'Placez ${guest.fullName.split(' ').first} à une table avant '
-            'd\'envoyer son invitation.',
-      );
-      return;
+    if (invitation != null) {
+      final sent = await runWithQuotaGuard(() async {
+        await InvitationRepository().recordDelivery(
+          invitationId: invitation.id,
+          destination: guest.phone,
+        );
+      });
+      if (!sent) return;
     }
-
-    final sent = await runWithQuotaGuard(() async {
-      await InvitationRepository().recordDelivery(
-        invitationId: invitation.id,
-        destination: guest.phone,
-      );
-    });
-    if (!sent) return;
 
     final name = guest.fullName.split(' ').first;
     final message =
