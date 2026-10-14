@@ -573,9 +573,11 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                   key: _cardKey,
                   guestName: g?.fullName ?? 'Invité',
                   tableName:
-                      controller.guestSeat.value?.tableId ?? 'Non assigné',
-                  seatNumber: controller.guestSeat.value?.chairId ?? '-',
-                  qrToken: g?.qrToken,
+                      controller.guestSeat.value?.tableLabel ?? 'Non assigné',
+                  seatNumber: controller.guestSeat.value != null
+                      ? '${controller.guestSeat.value!.chairNumber}'
+                      : '-',
+                  qrToken: controller.invitation.value?.qrPayload ?? g?.qrToken,
                   showWatermark: controller.showWatermark.value,
                 ),
               ),
@@ -619,10 +621,7 @@ class _GuestAccessPageState extends State<GuestAccessPage>
                         elevation: 0,
                       ),
                       icon: const Icon(Icons.share_rounded, size: 20),
-                      label: Text(
-                        'Partager',
-                        style: AppTextStyles.titleLg,
-                      ),
+                      label: Text('Partager', style: AppTextStyles.titleLg),
                     ),
                   ),
                 ],
@@ -783,9 +782,7 @@ class _VenuesLinkButton extends StatelessWidget {
         icon: const Icon(Icons.map_outlined, size: 20),
         label: Text(
           'Voir les lieux et l\'itinéraire',
-          style: AppTextStyles.titleLg.copyWith(
-            color: AppColors.dark,
-          ),
+          style: AppTextStyles.titleLg.copyWith(color: AppColors.dark),
         ),
       );
     });

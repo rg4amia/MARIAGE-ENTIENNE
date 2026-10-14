@@ -523,7 +523,11 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                               padding: const EdgeInsets.all(12),
                               child: Center(
                                 child: _guestLink == null
-                                    ? const Icon(Icons.lock_outline, size: 60)
+                                    ? const Text(
+                                        'QR non disponible.\nAssignez d\'abord une place.',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 13),
+                                      )
                                     : QrImageView(data: _getInviteUrl()),
                               ),
                             ),
@@ -565,7 +569,10 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
         tables: tables,
         controller: controller,
         guest: guest,
-        onAssigned: _loadOrCreateLink,
+        onAssigned: () async {
+          await _loadOrCreateLink();
+          if (mounted) setState(() {});
+        },
       ),
     );
   }

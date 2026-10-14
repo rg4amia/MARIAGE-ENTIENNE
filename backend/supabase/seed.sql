@@ -9,10 +9,10 @@ insert into public.wedding_events (
 )
 values (
   '00000000-0000-0000-0000-000000000001',
-  'mariage-entienne',
-  'Mariage Entienne',
-  'Aimee',
-  'Entienne',
+  'mariage-kodjo-marie-ange',
+  'Mariage Kodjo et Marie Ange',
+  'Tiemele Marie Ange',
+  'Mawule Kodjo',
   'Abidjan',
   timezone('utc', now()) + interval '120 days'
 )
