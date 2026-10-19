@@ -1,0 +1,9 @@
+{
+  "verdict": "APPROVED",
+  "findings": [
+    "FutureBuilder not resubmitted after setState — guest_detail_page.dart calls setState() after _loadOrCreateLink(), but the FutureBuilder rendering the seat row uses an inline future expression. If getGuestSeat returns a memoised Future the seat row will not refresh. Hoist the future into a _seatFuture field replaced explicitly in setState, or verify getGuestSeat always returns a fresh Future.",
+    "QR fallback still encodes bare token — when controller.invitation.value is null the card falls back to g?.qrToken (a raw hex string, not a URL). A scanner in that state gets an unresolvable token. The fallback should construct the full URL locally (SupabaseConfig.guestPortalUrl + '?token=' + token) or suppress the QR widget until the invitation is loaded.",
+    "tableLabel empty-string fallback silent — GuestSeat.fromJson resolves tableLabel to '' when neither table_label nor seating_tables.label is present in the RPC response. guest_access_page.dart only null-coalesces to 'Non assigné' on a null guestSeat, not on an empty tableLabel. Confirm the RPC always returns one of those fields, or add a .isNotEmpty guard before the null-coalesce."
+  ],
+  "reviewDoc": "/Users/stephaneamia/Documents/PROJET PERSO/MARIAGE ENTIENNE/.agents/tasks/review.md"
+}

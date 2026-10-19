@@ -12,8 +12,10 @@ import '../../data/models/wedding_table.dart';
 import '../../data/models/chair.dart';
 import '../../data/repositories/guest_link_repository.dart';
 import '../../data/repositories/invitation_repository.dart';
+import '../../data/repositories/wedding_settings_repository.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../core/utils/invitation_sender.dart';
+import '../../core/utils/whatsapp_helper.dart';
 import '../../core/utils/quota_error.dart';
 import '../../core/utils/validators.dart';
 import '../../core/widgets/wedding_header.dart';
@@ -706,12 +708,18 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
       if (!sent) return;
     }
 
-    final name = guest.fullName.split(' ').first;
-    final message =
-        'Bonjour $name ! 🎉\n\n'
-        'Tu es invité(e) au mariage ! 🥂\n'
-        'Clique sur le lien ci-dessous pour accéder à ton invitation :\n\n'
-        '$url';
+    // Même texte que l'envoi d'invitation (feuille « Envoyer » et envoi
+    // groupé) : un invité ne doit recevoir qu'un seul message d'invitation.
+    WeddingSettings? settings;
+    try {
+      settings = await WeddingSettingsRepository().getSettings();
+    } catch (_) {
+      settings = null;
+    }
+    final message = invitationMessageForGuest(
+      guest: guest,
+      settings: settings,
+    ).replaceAll('*', '');
     await Share.share(message);
     await _refreshSubscription();
   }

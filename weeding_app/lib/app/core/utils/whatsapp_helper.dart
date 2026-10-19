@@ -91,6 +91,24 @@ String _normalizePhone(String raw) {
   return digits;
 }
 
+// ── Détails de la cérémonie ──────────────────────────────────────────────
+// Lieux et horaires absents de `wedding_events` : ils sont figés ici et
+// reprennent le texte de l'invitation. À adapter si le lieu ou l'horaire
+// change (les réglages de l'application restent prioritaires pour les noms,
+// la date et le délai RSVP).
+const String _ceremonyVenue = 'Quasi-Paroisse Sacré-Cœur d\'Akandjé';
+const String _ceremonyTime = '16 heures';
+const String _receptionVenue = 'Espace JML Jouse';
+const String _receptionTime = '18 heures';
+
+// Replis sur les dates annoncées de l'invitation si elles ne sont pas
+// renseignées dans l'application.
+final DateTime _fallbackCeremonyDate = DateTime(2026, 11, 14);
+final DateTime _fallbackRsvpDeadline = DateTime(2026, 11, 1);
+
+// Repli si aucun nom de marié n'est enregistré dans l'espace.
+const String _fallbackCouple = 'Kodjo & Marie Ange';
+
 String _buildInvitationMessage({
   required Guest guest,
   WeddingSettings? settings,
@@ -98,8 +116,14 @@ String _buildInvitationMessage({
   final bride = settings?.brideName ?? '';
   final groom = settings?.groomName ?? '';
   final title = settings?.title ?? 'Notre mariage';
-  final date = settings?.eventDate;
-  final rsvpDeadline = settings?.rsvpDeadline;
+  final ceremonyDate = settings?.eventDate ?? _fallbackCeremonyDate;
+  final rsvpDeadline = settings?.rsvpDeadline ?? _fallbackRsvpDeadline;
+
+  // Couple affiché dans le corps et la signature : noms des mariés tels que
+  // renseignés dans les réglages, avec repli sur le couple de l'invitation.
+  final couple = (bride.isNotEmpty && groom.isNotEmpty)
+      ? '$groom & $bride'
+      : _fallbackCouple;
 
   final inviteUrl = invitationLinkForGuest(guest);
 
@@ -114,65 +138,104 @@ String _buildInvitationMessage({
   }
   buffer.writeln();
 
-  // Personal greeting
+  // Versets de l'invitation.
+  buffer.writeln('Pour l\'époux');
+  buffer.writeln(
+    '« Maris, aimez vos femmes comme le Christ a aimé l\'Église et '
+    's\'est livré lui-même pour elle. »',
+  );
+  buffer.writeln('— Éphésiens 5, 25');
+  buffer.writeln();
+  buffer.writeln('Pour l\'épouse');
+  buffer.writeln(
+    '« Je suis à mon bien-aimé, et mon bien-aimé est à moi. »',
+  );
+  buffer.writeln('— Cantique des Cantiques 6, 3');
+  buffer.writeln();
+
+  // Formule personnelle à l'invité.
   buffer.writeln('Cher(e) *${guest.fullName}*,');
   buffer.writeln();
-  buffer.writeln("Nous avons l'honneur de vous inviter à notre mariage. 🎉");
+
+  // Cérémonie religieuse.
+  buffer.writeln(
+    'C\'est avec une immense joie que *$couple* vous convient à la '
+    'célébration de leur mariage religieux, le '
+    '*${_formatFrWeekDate(ceremonyDate)}* à *$_ceremonyTime*, '
+    'à la *$_ceremonyVenue*.',
+  );
   buffer.writeln();
 
-  // Premier contact volontairement léger : la date seule (si renseignée),
-  // sans lieu ni table — la place est communiquée après confirmation.
-  if (date != null) {
-    buffer.writeln('📅 Le *${_formatFrDate(date)}*');
-    buffer.writeln();
-  }
-
-  // Délai laissé à l'invité pour répondre et confirmer sa présence.
-  if (rsvpDeadline != null) {
-    buffer.writeln(
-      '📩 Merci de nous confirmer votre présence (présent ou absent) '
-      'avant le *${_formatFrDate(rsvpDeadline)}* :',
-    );
-  } else {
-    buffer.writeln(
-      '📩 Merci de nous confirmer votre présence (présent ou absent) :',
-    );
-  }
-
+  // Réception.
+  buffer.writeln(
+    'La cérémonie sera suivie d\'une réception à *$_receptionTime* '
+    'à l\'*$_receptionVenue*, pour célébrer ensemble l\'amour, la joie '
+    'et cette précieuse alliance.',
+  );
   buffer.writeln();
+
+  // Délai laissé à l'invité pour confirmer sa présence.
+  buffer.writeln(
+    '📩 *RSVP — Confirmation de présence souhaitée au plus tard le '
+    '${_formatFrOrdinalDate(rsvpDeadline)}.*',
+  );
+  buffer.writeln();
+
   buffer.writeln('🔗 *Votre invitation :*');
   buffer.writeln(inviteUrl);
   buffer.writeln();
 
-  // La table et la place ne sont attribuées qu'après confirmation.
   buffer.writeln(
-    'Votre table et votre place vous seront communiquées après '
-    'confirmation de votre présence.',
+    'Votre présence à nos côtés sera un honneur et une bénédiction '
+    'pour notre foyer.',
   );
   buffer.writeln();
-
-  // Closing
-  buffer.writeln('Au plaisir de célébrer avec vous ! 🥂');
+  buffer.writeln('Avec amour et gratitude,');
+  buffer.write('$couple 🥂');
 
   return buffer.toString();
 }
 
+const List<String> _frMonths = [
+  '',
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre',
+];
+
+const List<String> _frWeekdays = [
+  '',
+  'lundi',
+  'mardi',
+  'mercredi',
+  'jeudi',
+  'vendredi',
+  'samedi',
+  'dimanche',
+];
+
 /// Formate une date en français, ex. « 12 septembre 2026 ».
 String _formatFrDate(DateTime date) {
-  const months = [
-    '',
-    'janvier',
-    'février',
-    'mars',
-    'avril',
-    'mai',
-    'juin',
-    'juillet',
-    'août',
-    'septembre',
-    'octobre',
-    'novembre',
-    'décembre',
-  ];
-  return '${date.day} ${months[date.month]} ${date.year}';
+  return '${date.day} ${_frMonths[date.month]} ${date.year}';
+}
+
+/// Date complète avec jour de la semaine, ex. « samedi 14 novembre 2026 ».
+String _formatFrWeekDate(DateTime date) {
+  return '${_frWeekdays[date.weekday]} ${_formatFrDate(date)}';
+}
+
+/// Date avec « 1er » pour le premier jour du mois,
+/// ex. « 1er novembre 2026 ».
+String _formatFrOrdinalDate(DateTime date) {
+  final day = date.day == 1 ? '1er' : '${date.day}';
+  return '$day ${_frMonths[date.month]} ${date.year}';
 }
