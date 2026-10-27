@@ -71,6 +71,11 @@ class InvitationCardWidget extends StatelessWidget {
   /// aux invités, et qui disparaît dès qu'un pack est acheté.
   final bool showWatermark;
 
+  /// Ligne RSVP imprimée sur la carte (et donc sur le PNG/PDF partagé).
+  /// Sur calqué sur la formulation du message d'invitation ; la date sert de
+  /// repli faute de réglage accessible côté invité.
+  final String rsvpLabel;
+
   const InvitationCardWidget({
     super.key,
     required this.guestName,
@@ -79,6 +84,8 @@ class InvitationCardWidget extends StatelessWidget {
     this.qrToken,
     this.showQrCode = true,
     this.showWatermark = false,
+    this.rsvpLabel =
+        'RSVP — Confirmation de présence souhaitée au plus tard le 5 novembre 2026.',
   });
 
   @override
@@ -156,6 +163,16 @@ class InvitationCardWidget extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              rsvpLabel,
+              style: AppTextStyles.labelMd.copyWith(
+                color: onPrimary,
+                fontWeight: FontWeight.w700,
+                height: 1.35,
+              ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
             if (showQrCode && qrToken != null && qrToken!.isNotEmpty)

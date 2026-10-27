@@ -104,7 +104,7 @@ const String _receptionTime = '18 heures';
 // Replis sur les dates annoncées de l'invitation si elles ne sont pas
 // renseignées dans l'application.
 final DateTime _fallbackCeremonyDate = DateTime(2026, 11, 14);
-final DateTime _fallbackRsvpDeadline = DateTime(2026, 11, 1);
+final DateTime _fallbackRsvpDeadline = DateTime(2026, 11, 5);
 
 // Repli si aucun nom de marié n'est enregistré dans l'espace.
 const String _fallbackCouple = 'Kodjo & Marie Ange';

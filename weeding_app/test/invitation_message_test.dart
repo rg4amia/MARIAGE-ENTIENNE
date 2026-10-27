@@ -22,7 +22,7 @@ void main() {
         brideName: 'Tiemele Marie Ange',
         groomName: 'Mawule Kodjo',
         eventDate: DateTime(2026, 11, 14),
-        rsvpDeadline: DateTime(2026, 11, 1),
+        rsvpDeadline: DateTime(2026, 11, 5),
       );
 
       final message = invitationMessageForGuest(
@@ -55,7 +55,7 @@ void main() {
       // RSVP avec « 1er ».
       expect(
         message,
-        contains('Confirmation de présence souhaitée au plus tard le 1er novembre 2026.'),
+        contains('Confirmation de présence souhaitée au plus tard le 5 novembre 2026.'),
       );
       // Lien personnel de l'invité.
       expect(message, contains('token=token-abc'));
@@ -73,7 +73,7 @@ void main() {
       );
       expect(
         message,
-        contains('au plus tard le 1er novembre 2026.'),
+        contains('au plus tard le 5 novembre 2026.'),
       );
       expect(message, contains('*Kodjo & Marie Ange* vous convient'));
       expect(message, contains('Kodjo & Marie Ange 🥂'));
