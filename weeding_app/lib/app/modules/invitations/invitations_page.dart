@@ -61,7 +61,9 @@ class _InvitationsPageState extends State<InvitationsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final pending = _guests.where((g) => g.status == 'pending').length;
+    final pending = _guests
+        .where((g) => (g.status == 'draft' || g.status == 'pending_media'))
+        .length;
     final mediaUploaded = _guests
         .where((g) => g.status == 'media_uploaded')
         .length;
@@ -283,16 +285,22 @@ class _InvitationsPageState extends State<InvitationsPage> {
               _StatusStep(
                 title: 'Invitation créée',
                 isCompleted: true,
-                isCurrent: guest.status == 'pending',
+                isCurrent:
+                    (guest.status == 'draft' ||
+                    guest.status == 'pending_media'),
               ),
               _StatusStep(
                 title: 'Lien QR généré',
                 isCompleted: true,
-                isCurrent: guest.status == 'pending',
+                isCurrent:
+                    (guest.status == 'draft' ||
+                    guest.status == 'pending_media'),
               ),
               _StatusStep(
                 title: 'Média enregistré',
-                isCompleted: guest.status != 'pending',
+                isCompleted:
+                    !(guest.status == 'draft' ||
+                        guest.status == 'pending_media'),
                 isCurrent: guest.status == 'media_uploaded',
               ),
               _StatusStep(
@@ -606,10 +614,7 @@ class _GuestStatusCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(
-                Icons.chevron_right,
-                color: AppColors.onSurfaceVariant,
-              ),
+              Icon(Icons.chevron_right, color: AppColors.onSurfaceVariant),
             ],
           ),
         ),

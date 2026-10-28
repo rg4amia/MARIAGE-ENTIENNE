@@ -33,6 +33,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
   Guest? _guest;
   GuestLink? _guestLink;
   bool _isLoadingLink = true;
+  Worker? _guestsWorker;
 
   @override
   void initState() {
@@ -41,7 +42,24 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
     if (args is Guest) {
       _guest = args;
     }
+    // La liste est rafraîchie en temps réel (réponse RSVP depuis le portail) :
+    // on resynchronise la fiche pour ne pas afficher un statut périmé.
+    if (Get.isRegistered<GuestsController>()) {
+      _guestsWorker = ever<List<Guest>>(Get.find<GuestsController>().guests, (
+        list,
+      ) {
+        final id = _guest?.id;
+        final latest = list.firstWhereOrNull((g) => g.id == id);
+        if (mounted && latest != null) setState(() => _guest = latest);
+      });
+    }
     _loadOrCreateLink();
+  }
+
+  @override
+  void dispose() {
+    _guestsWorker?.dispose();
+    super.dispose();
   }
 
   Future<void> _loadOrCreateLink() async {
@@ -196,7 +214,7 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: AppColors.secondary,
+                              color: AppColors.surface,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(color: AppColors.dark),
                             ),
@@ -210,15 +228,14 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
                                     vertical: 4,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: _statusColor(
-                                      guest.status,
-                                    ).withAlpha(30),
+                                    color: _headlineStatusColor(guest),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
-                                    guest.statusLabel,
+                                    _headlineStatusLabel(guest),
                                     style: AppTextStyles.labelMd.copyWith(
-                                      color: _statusColor(guest.status),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -648,6 +665,20 @@ class _GuestDetailPageState extends State<GuestDetailPage> {
         ],
       ),
     );
+  }
+
+  // Le statut mis en avant suit la réponse de l'invité dès qu'elle existe ;
+  // sinon on retombe sur l'avancement du flux média / carte.
+  String _headlineStatusLabel(Guest guest) {
+    if (guest.status == 'cancelled') return guest.statusLabel;
+    return guest.hasRsvpResponded ? guest.rsvpStatusLabel : guest.statusLabel;
+  }
+
+  Color _headlineStatusColor(Guest guest) {
+    if (guest.status == 'cancelled') return AppColors.error;
+    return guest.hasRsvpResponded
+        ? _rsvpColor(guest.rsvpStatus)
+        : _statusColor(guest.status);
   }
 
   Color _statusColor(String status) {
