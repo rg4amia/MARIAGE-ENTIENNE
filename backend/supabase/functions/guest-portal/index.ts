@@ -62,7 +62,10 @@ Deno.serve(async (req) => {
     const data = await admin.rpc('get_invitation_by_token', { p_token: token });
     if (data.error || !data.data) return apiError('Invitation introuvable', 404);
 
-    return apiJson(data.data);
+    const { data: venues } = await admin.rpc('guest_portal_venues', {
+      p_guest_id: data.data.guest_id,
+    });
+    return apiJson({ ...data.data, venues: venues ?? [] });
   }
 
   // POST /guest-portal/api/upload-url  { token, media_type, file_name, mime_type }
@@ -765,6 +768,11 @@ function renderSPA(initialToken: string, initialEntranceCode: string, supabaseUr
       <div class="guest-meta" id="welcome-meta"></div>
     </div>
 
+    <div class="card" id="venues-card" style="display:none;">
+      <div class="section-title">📍 Lieux du mariage</div>
+      <div id="venues-list"></div>
+    </div>
+
     <div class="card" id="rsvp-card">
       <div class="section-title">📩 Réservez votre place</div>
       <div class="section-sub" id="rsvp-deadline"></div>
@@ -1159,6 +1167,7 @@ function renderWelcome() {
   document.getElementById('welcome-locked').style.display   = inv.is_unlocked ? 'none'  : 'block';
   document.getElementById('welcome-unlocked').style.display = inv.is_unlocked ? 'block' : 'none';
 
+  renderVenues();
   renderRsvp();
 }
 
@@ -1177,6 +1186,53 @@ function updateSteps(current) {
 // ═══════════════════════════════════════════════════════
 // RSVP — réponse de présence
 // ═══════════════════════════════════════════════════════
+const VENUE_LABELS = {
+  town_hall: '🏛️ Mairie',
+  church: '⛪ Église / Culte',
+  reception: '🎉 Réception',
+};
+
+function venueRouteUrl(v) {
+  if (v.maps_url && v.maps_url.toLowerCase().startsWith('http')) return v.maps_url;
+  if (v.latitude != null && v.longitude != null) {
+    return 'https://www.google.com/maps/dir/?api=1&destination=' + v.latitude + ',' + v.longitude;
+  }
+  const q = [v.name, v.address_line, v.city].filter(Boolean).join(' ');
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+}
+
+function renderVenues() {
+  const venues = State.invitation.venues ?? [];
+  const card = document.getElementById('venues-card');
+  const list = document.getElementById('venues-list');
+  list.replaceChildren();
+  card.style.display = venues.length ? 'block' : 'none';
+  venues.forEach(v => {
+    const item = document.createElement('div');
+    item.style.cssText = 'margin-top:14px;';
+    const add = (text, style) => {
+      if (!text) return;
+      const el = document.createElement('div');
+      el.style.cssText = style;
+      el.textContent = text;
+      item.appendChild(el);
+    };
+    add(VENUE_LABELS[v.venue_type] ?? '📍 Autre lieu', 'font-size:12px;opacity:.7;');
+    add(v.name, 'font-weight:700;font-size:16px;');
+    add([v.address_line, v.city].filter(Boolean).join(' - '), 'font-size:14px;opacity:.8;');
+    add(v.instructions, 'font-size:13px;opacity:.8;margin-top:6px;white-space:pre-line;');
+    const link = document.createElement('a');
+    link.className = 'btn btn-outline';
+    link.style.cssText = 'margin-top:10px;display:block;text-align:center;text-decoration:none;';
+    link.href = venueRouteUrl(v);
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = '🧭 Ouvrir l’itinéraire';
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+}
+
 function renderRsvp() {
   const inv = State.invitation ?? {};
   const ev  = inv.event ?? {};

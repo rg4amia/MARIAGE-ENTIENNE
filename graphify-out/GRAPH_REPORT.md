@@ -1,7 +1,7 @@
 # Graph Report - MARIAGE ENTIENNE  (2026-10-28)
 
 ## Corpus Check
-- 205 files · ~527,613 words
+- 205 files · ~527,801 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `974e0566`
+- Built from commit: `b17cd6d9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -64,7 +64,7 @@
 - chair.dart
 - Implementation Plan — Correction de 3 bugs (Mariage Kodjo & Marie Ange)
 - guest-portal-web/manifest.json
-- DateTime
+- guest_seat.dart
 - wedding_table.dart
 - wWinMain
 - table_repository.dart
@@ -73,7 +73,7 @@
 - register_page.dart
 - app_pages.dart
 - 6. Plan d'Implementation
-- profile.dart
+- DateTime
 - web/manifest.json
 - guest_link_repository.dart
 - Application Mariage Entienne
@@ -221,7 +221,7 @@ Nodes (37): ../../data/models/guest_media.dart, ../../data/repositories/media_re
 
 ### Community 10 - "micro_interactions.dart"
 Cohesion: 0.06
-Nodes (32): _anim, backgroundColor, borderRadius, boxShadow, build, child, createState, _ctrl (+24 more)
+Nodes (34): _anim, backgroundColor, borderRadius, boxShadow, build, child, createState, _ctrl (+26 more)
 
 ### Community 11 - "media-duration.ts"
 Cohesion: 0.11
@@ -265,7 +265,7 @@ Nodes (23): FlutterSoundRecorder, package:flutter_sound/flutter_sound.dart, Time
 
 ### Community 21 - "animated_widgets.dart"
 Cohesion: 0.07
-Nodes (30): Animation, Duration, Offset, TextStyle?, _anim, AnimatedCounter, _AnimatedCounterState, borderRadius (+22 more)
+Nodes (28): Animation, Duration, Offset, TextStyle?, _anim, borderRadius, build, child (+20 more)
 
 ### Community 22 - "web_audio_recorder.dart"
 Cohesion: 0.09
@@ -375,9 +375,9 @@ Nodes (25): Aucune migration de base de données nécessaire, Aucune migration d
 Cohesion: 0.17
 Nodes (11): background_color, description, display, icons, lang, name, orientation, scope (+3 more)
 
-### Community 49 - "DateTime"
-Cohesion: 0.17
-Nodes (11): DateTime, assignedAt, chairId, chairNumber, fromJson, guestId, GuestSeat, id (+3 more)
+### Community 49 - "guest_seat.dart"
+Cohesion: 0.18
+Nodes (10): assignedAt, chairId, chairNumber, fromJson, guestId, GuestSeat, id, tableId (+2 more)
 
 ### Community 50 - "wedding_table.dart"
 Cohesion: 0.17
@@ -411,9 +411,9 @@ Nodes (30): app_routes.dart, GetMiddleware, ../modules/admin/admin_console_page.
 Cohesion: 0.18
 Nodes (11): 6. Plan d'Implementation, Phase 10. Qualite et livraison, Phase 1. Cadrage et initialisation, Phase 2. Base de donnees Supabase, Phase 3. Authentification et espace maries, Phase 4. Gestion des tables et chaises, Phase 5. Gestion des invites, Phase 6. Generation des invitations (+3 more)
 
-### Community 58 - "profile.dart"
-Cohesion: 0.18
-Nodes (10): copyWith, createdAt, eventId, fromJson, fullName, id, phone, Profile (+2 more)
+### Community 58 - "DateTime"
+Cohesion: 0.17
+Nodes (11): DateTime, copyWith, createdAt, eventId, fromJson, fullName, id, phone (+3 more)
 
 ### Community 59 - "web/manifest.json"
 Cohesion: 0.18
@@ -633,7 +633,7 @@ Nodes (5): FlutterPluginRegistry, FlutterViewController, NSWindow, RegisterGener
 
 ### Community 126 - "State"
 Cohesion: 0.10
-Nodes (33): _PasswordField, SingleTickerProviderStateMixin, State, StatefulWidget, TickerProviderStateMixin, ScaleIn, _ScaleInState, GradientButton (+25 more)
+Nodes (33): _PasswordField, SingleTickerProviderStateMixin, State, StatefulWidget, TickerProviderStateMixin, AnimatedCounter, _AnimatedCounterState, ScaleIn (+25 more)
 
 ### Community 128 - "GuestsController"
 Cohesion: 0.40

@@ -208,7 +208,7 @@
       "file_type": "code",
       "norm_label": "apierror()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L292"
+      "source_location": "L295"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_apijson",
@@ -220,7 +220,7 @@
       "file_type": "code",
       "norm_label": "apijson()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L285"
+      "source_location": "L288"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_findguestbytoken",
@@ -244,7 +244,7 @@
       "file_type": "code",
       "norm_label": "inlinescriptvalue()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L299"
+      "source_location": "L302"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_rendericonsvg",
@@ -256,7 +256,7 @@
       "file_type": "code",
       "norm_label": "rendericonsvg()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1685"
+      "source_location": "L1741"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_renderserviceworker",
@@ -268,7 +268,7 @@
       "file_type": "code",
       "norm_label": "renderserviceworker()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1623"
+      "source_location": "L1679"
     },
     {
       "id": "backend_supabase_functions_guest_portal_index_renderspa",
@@ -280,7 +280,7 @@
       "file_type": "code",
       "norm_label": "renderspa()",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L318"
+      "source_location": "L321"
     },
     {
       "id": "backend_supabase_functions_shared_media_duration_ascii",
@@ -1905,6 +1905,28 @@
       "community_name": "micro_interactions.dart",
       "file_type": "code",
       "norm_label": "height",
+      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercard",
+      "label": "HoverCard",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "micro_interactions.dart",
+      "file_type": "code",
+      "norm_label": "hovercard",
+      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercardstate",
+      "label": "_HoverCardState",
+      "_origin": "ast",
+      "community": 10,
+      "community_name": "micro_interactions.dart",
+      "file_type": "code",
+      "norm_label": "_hovercardstate",
       "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
       "source_location": null
     },
@@ -7075,6 +7097,28 @@
       "source_location": null
     },
     {
+      "id": "weeding_app_lib_app_core_widgets_animated_widgets_animatedcounter",
+      "label": "AnimatedCounter",
+      "_origin": "ast",
+      "community": 126,
+      "community_name": "State",
+      "file_type": "code",
+      "norm_label": "animatedcounter",
+      "source_file": "weeding_app/lib/app/core/widgets/animated_widgets.dart",
+      "source_location": null
+    },
+    {
+      "id": "weeding_app_lib_app_core_widgets_animated_widgets_animatedcounterstate",
+      "label": "_AnimatedCounterState",
+      "_origin": "ast",
+      "community": 126,
+      "community_name": "State",
+      "file_type": "code",
+      "norm_label": "_animatedcounterstate",
+      "source_file": "weeding_app/lib/app/core/widgets/animated_widgets.dart",
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_core_widgets_animated_widgets_scalein",
       "label": "ScaleIn",
       "_origin": "ast",
@@ -7115,28 +7159,6 @@
       "community_name": "State",
       "file_type": "code",
       "norm_label": "_gradientbuttonstate",
-      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercard",
-      "label": "HoverCard",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "State",
-      "file_type": "code",
-      "norm_label": "hovercard",
-      "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_micro_interactions_hovercardstate",
-      "label": "_HoverCardState",
-      "_origin": "ast",
-      "community": 126,
-      "community_name": "State",
-      "file_type": "code",
-      "norm_label": "_hovercardstate",
       "source_file": "weeding_app/lib/app/core/widgets/micro_interactions.dart",
       "source_location": null
     },
@@ -10745,28 +10767,6 @@
       "community_name": "animated_widgets.dart",
       "file_type": "code",
       "norm_label": "_anim",
-      "source_file": "weeding_app/lib/app/core/widgets/animated_widgets.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_animated_widgets_animatedcounter",
-      "label": "AnimatedCounter",
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "animated_widgets.dart",
-      "file_type": "code",
-      "norm_label": "animatedcounter",
-      "source_file": "weeding_app/lib/app/core/widgets/animated_widgets.dart",
-      "source_location": null
-    },
-    {
-      "id": "weeding_app_lib_app_core_widgets_animated_widgets_animatedcounterstate",
-      "label": "_AnimatedCounterState",
-      "_origin": "ast",
-      "community": 21,
-      "community_name": "animated_widgets.dart",
-      "file_type": "code",
-      "norm_label": "_animatedcounterstate",
       "source_file": "weeding_app/lib/app/core/widgets/animated_widgets.dart",
       "source_location": null
     },
@@ -17754,22 +17754,11 @@
       "source_location": "L9"
     },
     {
-      "id": "datetime",
-      "label": "DateTime",
-      "_origin": "ast",
-      "community": 49,
-      "community_name": "DateTime",
-      "file_type": "code",
-      "norm_label": "datetime",
-      "source_file": null,
-      "source_location": null
-    },
-    {
       "id": "weeding_app_lib_app_data_models_guest_seat",
       "label": "guest_seat.dart",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "guest_seat.dart",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17780,7 +17769,7 @@
       "label": "assignedAt",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "assignedat",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17791,7 +17780,7 @@
       "label": "chairId",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "chairid",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17802,7 +17791,7 @@
       "label": "chairNumber",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "chairnumber",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17813,7 +17802,7 @@
       "label": "fromJson",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "fromjson",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17824,7 +17813,7 @@
       "label": "guestId",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "guestid",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17835,7 +17824,7 @@
       "label": "GuestSeat",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "guestseat",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17846,7 +17835,7 @@
       "label": "id",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "id",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17857,7 +17846,7 @@
       "label": "tableId",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "tableid",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17868,7 +17857,7 @@
       "label": "tableLabel",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "tablelabel",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -17879,7 +17868,7 @@
       "label": "toJson",
       "_origin": "ast",
       "community": 49,
-      "community_name": "DateTime",
+      "community_name": "guest_seat.dart",
       "file_type": "code",
       "norm_label": "tojson",
       "source_file": "weeding_app/lib/app/data/models/guest_seat.dart",
@@ -19602,11 +19591,22 @@
       "source_location": "L292"
     },
     {
+      "id": "datetime",
+      "label": "DateTime",
+      "_origin": "ast",
+      "community": 58,
+      "community_name": "DateTime",
+      "file_type": "code",
+      "norm_label": "datetime",
+      "source_file": null,
+      "source_location": null
+    },
+    {
       "id": "weeding_app_lib_app_data_models_profile",
       "label": "profile.dart",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "profile.dart",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19617,7 +19617,7 @@
       "label": "copyWith",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "copywith",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19628,7 +19628,7 @@
       "label": "createdAt",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "createdat",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19639,7 +19639,7 @@
       "label": "eventId",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "eventid",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19650,7 +19650,7 @@
       "label": "fromJson",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "fromjson",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19661,7 +19661,7 @@
       "label": "fullName",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "fullname",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19672,7 +19672,7 @@
       "label": "id",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "id",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19683,7 +19683,7 @@
       "label": "phone",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "phone",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19694,7 +19694,7 @@
       "label": "Profile",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "profile",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19705,7 +19705,7 @@
       "label": "role",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "role",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -19716,7 +19716,7 @@
       "label": "toJson",
       "_origin": "ast",
       "community": 58,
-      "community_name": "profile.dart",
+      "community_name": "DateTime",
       "file_type": "code",
       "norm_label": "tojson",
       "source_file": "weeding_app/lib/app/data/models/profile.dart",
@@ -26076,7 +26076,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L975",
+      "source_location": "L983",
       "weight": 1.0
     },
     {
@@ -32994,7 +32994,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1623",
+      "source_location": "L1679",
       "weight": 1.0
     },
     {
@@ -33005,7 +33005,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L1685",
+      "source_location": "L1741",
       "weight": 1.0
     },
     {
@@ -33016,7 +33016,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L285",
+      "source_location": "L288",
       "weight": 1.0
     },
     {
@@ -33027,7 +33027,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L292",
+      "source_location": "L295",
       "weight": 1.0
     },
     {
@@ -33038,7 +33038,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L299",
+      "source_location": "L302",
       "weight": 1.0
     },
     {
@@ -33049,7 +33049,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "backend/supabase/functions/guest-portal/index.ts",
-      "source_location": "L318",
+      "source_location": "L321",
       "weight": 1.0
     },
     {
@@ -61815,5 +61815,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "974e05668c8993283e720daac26519ffb2025df7"
+  "built_at_commit": "b17cd6d987295eb41a5f684c87bf5c3360d35aee"
 }
