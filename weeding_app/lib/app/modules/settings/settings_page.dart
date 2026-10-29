@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/validators.dart';
+import '../../core/utils/whatsapp_helper.dart' show formatEventTime;
 import '../../core/widgets/animated_widgets.dart';
 import '../../core/widgets/shared_components.dart';
 import '../admin/admin_controller.dart';
@@ -383,6 +384,20 @@ class _SettingsPageState extends State<SettingsPage> {
             label: 'Lieu',
             value: location,
           ),
+          const SizedBox(height: 12),
+          _WeddingInfoRow(
+            icon: Icons.church_outlined,
+            iconColor: AppColors.dark,
+            label: 'Cérémonie',
+            value: formatEventTime(s?.ceremonyTime ?? '15:00'),
+          ),
+          const SizedBox(height: 12),
+          _WeddingInfoRow(
+            icon: Icons.celebration_outlined,
+            iconColor: AppColors.dark,
+            label: 'Réception',
+            value: formatEventTime(s?.receptionTime ?? '19:00'),
+          ),
 
           const SizedBox(height: 16),
 
@@ -417,6 +432,14 @@ class _SettingsPageState extends State<SettingsPage> {
     final locationCtrl = TextEditingController(text: s?.location ?? '');
     DateTime? selectedDate = s?.eventDate;
     DateTime? rsvpDeadline = s?.rsvpDeadline;
+    final ceremonyVenueCtrl = TextEditingController(
+      text: s?.ceremonyVenue ?? '',
+    );
+    final receptionVenueCtrl = TextEditingController(
+      text: s?.receptionVenue ?? '',
+    );
+    var ceremonyTime = s?.ceremonyTime ?? '15:00';
+    var receptionTime = s?.receptionTime ?? '19:00';
     var isSaving = false;
 
     await showModalBottomSheet<void>(
@@ -626,6 +649,132 @@ class _SettingsPageState extends State<SettingsPage> {
                               ],
                             ],
                           ),
+                          const SizedBox(height: 12),
+                          InkWell(
+                            onTap: () async {
+                              final parts = ceremonyTime.split(':');
+                              final picked = await showTimePicker(
+                                context: ctx,
+                                initialTime: TimeOfDay(
+                                  hour: int.tryParse(parts[0]) ?? 15,
+                                  minute: int.tryParse(parts[1]) ?? 0,
+                                ),
+                                builder: (c, child) => MediaQuery(
+                                  data: MediaQuery.of(
+                                    c,
+                                  ).copyWith(alwaysUse24HourFormat: true),
+                                  child: child!,
+                                ),
+                              );
+                              if (picked != null) {
+                                setSheetState(
+                                  () => ceremonyTime =
+                                      '${picked.hour.toString().padLeft(2, '0')}:'
+                                      '${picked.minute.toString().padLeft(2, '0')}',
+                                );
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 17,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceContainerLow,
+                                border: Border.all(
+                                  color: AppColors.outlineVariant,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule_rounded,
+                                    size: 20,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Heure de la cérémonie : ${formatEventTime(ceremonyTime)}',
+                                    style: AppTextStyles.bodyMd,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: ceremonyVenueCtrl,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: const InputDecoration(
+                              hintText: 'Lieu de la cérémonie (optionnel)',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          InkWell(
+                            onTap: () async {
+                              final parts = receptionTime.split(':');
+                              final picked = await showTimePicker(
+                                context: ctx,
+                                initialTime: TimeOfDay(
+                                  hour: int.tryParse(parts[0]) ?? 15,
+                                  minute: int.tryParse(parts[1]) ?? 0,
+                                ),
+                                builder: (c, child) => MediaQuery(
+                                  data: MediaQuery.of(
+                                    c,
+                                  ).copyWith(alwaysUse24HourFormat: true),
+                                  child: child!,
+                                ),
+                              );
+                              if (picked != null) {
+                                setSheetState(
+                                  () => receptionTime =
+                                      '${picked.hour.toString().padLeft(2, '0')}:'
+                                      '${picked.minute.toString().padLeft(2, '0')}',
+                                );
+                              }
+                            },
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 17,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceContainerLow,
+                                border: Border.all(
+                                  color: AppColors.outlineVariant,
+                                ),
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule_rounded,
+                                    size: 20,
+                                    color: AppColors.onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    'Heure de la réception : ${formatEventTime(receptionTime)}',
+                                    style: AppTextStyles.bodyMd,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: receptionVenueCtrl,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: const InputDecoration(
+                              hintText: 'Lieu de la réception (optionnel)',
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -663,6 +812,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                           clearRsvpDeadline:
                                               s?.rsvpDeadline != null &&
                                               rsvpDeadline == null,
+                                          ceremonyTime: ceremonyTime,
+                                          ceremonyVenue: ceremonyVenueCtrl.text,
+                                          receptionTime: receptionTime,
+                                          receptionVenue:
+                                              receptionVenueCtrl.text,
                                         );
                                     if (ctx.mounted) Navigator.pop(ctx);
                                     await _loadWeddingSettings();

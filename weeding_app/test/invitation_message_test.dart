@@ -41,7 +41,7 @@ void main() {
       expect(
         message,
         contains(
-          'le *samedi 14 novembre 2026* à *16 heures*, '
+          'le *samedi 14 novembre 2026* à *15 heures*, '
           'à la *Quasi-Paroisse Sacré-Cœur d\'Akandjé*',
         ),
       );
@@ -49,7 +49,7 @@ void main() {
       expect(
         message,
         contains(
-          'suivie d\'une réception à *18 heures* à l\'*Espace JML Jouse*',
+          'suivie d\'une réception à *19 heures* à l\'*Espace JML Jouse*',
         ),
       );
       // RSVP avec « 1er ».
@@ -64,12 +64,30 @@ void main() {
       expect(message, contains('Mawule Kodjo & Tiemele Marie Ange 🥂'));
     });
 
+    test('uses the ceremony and reception times set in the settings', () {
+      final message = invitationMessageForGuest(
+        guest: guest,
+        settings: WeddingSettings(
+          title: 'Mariage',
+          brideName: 'A',
+          groomName: 'B',
+          ceremonyTime: '14:30',
+          ceremonyVenue: 'Cathédrale',
+          receptionTime: '20:00',
+          receptionVenue: 'Salle Etoile',
+        ),
+      );
+
+      expect(message, contains('à *14 h 30*, à la *Cathédrale*'));
+      expect(message, contains('réception à *20 heures* à l\'*Salle Etoile*'));
+    });
+
     test('falls back to the invitation dates and couple without settings', () {
       final message = invitationMessageForGuest(guest: guest);
 
       expect(
         message,
-        contains('le *samedi 14 novembre 2026* à *16 heures*'),
+        contains('le *samedi 14 novembre 2026* à *15 heures*'),
       );
       expect(
         message,

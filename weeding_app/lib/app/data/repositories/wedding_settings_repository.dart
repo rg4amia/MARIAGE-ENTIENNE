@@ -10,6 +10,12 @@ class WeddingSettings {
   /// Date limite pour que les invités confirment leur présence.
   final DateTime? rsvpDeadline;
 
+  /// Cérémonie religieuse et réception : lieu et heure (« HH:MM »).
+  final String? ceremonyVenue;
+  final String? ceremonyTime;
+  final String? receptionVenue;
+  final String? receptionTime;
+
   WeddingSettings({
     required this.title,
     required this.brideName,
@@ -17,6 +23,10 @@ class WeddingSettings {
     this.location,
     this.eventDate,
     this.rsvpDeadline,
+    this.ceremonyVenue,
+    this.ceremonyTime,
+    this.receptionVenue,
+    this.receptionTime,
   });
 
   factory WeddingSettings.fromJson(Map<String, dynamic> json) {
@@ -31,6 +41,10 @@ class WeddingSettings {
       rsvpDeadline: json['rsvp_deadline'] != null
           ? DateTime.parse(json['rsvp_deadline'] as String)
           : null,
+      ceremonyVenue: json['ceremony_venue'] as String?,
+      ceremonyTime: json['ceremony_time'] as String?,
+      receptionVenue: json['reception_venue'] as String?,
+      receptionTime: json['reception_time'] as String?,
     );
   }
 }
@@ -66,6 +80,10 @@ class WeddingSettingsRepository {
     DateTime? eventDate,
     DateTime? rsvpDeadline,
     bool clearRsvpDeadline = false,
+    String? ceremonyVenue,
+    String? ceremonyTime,
+    String? receptionVenue,
+    String? receptionTime,
   }) async {
     final eventId = await _client.rpc('current_event_id');
     if (eventId == null) throw Exception('Event not found');
@@ -83,6 +101,18 @@ class WeddingSettingsRepository {
     }
     if (clearRsvpDeadline) {
       updates['rsvp_deadline'] = null;
+    }
+    // Chaîne vide = retour aux valeurs par défaut (NULL en base).
+    String? orNull(String v) => v.trim().isEmpty ? null : v.trim();
+    if (ceremonyVenue != null) {
+      updates['ceremony_venue'] = orNull(ceremonyVenue);
+    }
+    if (ceremonyTime != null) updates['ceremony_time'] = orNull(ceremonyTime);
+    if (receptionVenue != null) {
+      updates['reception_venue'] = orNull(receptionVenue);
+    }
+    if (receptionTime != null) {
+      updates['reception_time'] = orNull(receptionTime);
     }
     updates['updated_at'] = DateTime.now().toUtc().toIso8601String();
 

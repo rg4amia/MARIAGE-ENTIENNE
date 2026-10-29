@@ -92,14 +92,23 @@ String _normalizePhone(String raw) {
 }
 
 // ── Détails de la cérémonie ──────────────────────────────────────────────
-// Lieux et horaires absents de `wedding_events` : ils sont figés ici et
-// reprennent le texte de l'invitation. À adapter si le lieu ou l'horaire
-// change (les réglages de l'application restent prioritaires pour les noms,
-// la date et le délai RSVP).
+// Lieux et horaires paramétrables dans les réglages (wedding_events). Ces
+// valeurs ne servent de repli que tant que rien n'a été renseigné.
 const String _ceremonyVenue = 'Quasi-Paroisse Sacré-Cœur d\'Akandjé';
-const String _ceremonyTime = '16 heures';
+const String _ceremonyTime = '15:00';
 const String _receptionVenue = 'Espace JML Jouse';
-const String _receptionTime = '18 heures';
+const String _receptionTime = '19:00';
+
+/// « 15:00 » → « 15 heures », « 15:30 » → « 15 h 30 ».
+String formatEventTime(String hhmm) {
+  final parts = hhmm.split(':');
+  final h = int.tryParse(parts[0]);
+  final m = parts.length > 1 ? int.tryParse(parts[1]) ?? 0 : 0;
+  if (h == null) return hhmm;
+  return m == 0
+      ? '$h ${h > 1 ? 'heures' : 'heure'}'
+      : '$h h ${m.toString().padLeft(2, '0')}';
+}
 
 // Replis sur les dates annoncées de l'invitation si elles ne sont pas
 // renseignées dans l'application.
@@ -118,6 +127,16 @@ String _buildInvitationMessage({
   final title = settings?.title ?? 'Notre mariage';
   final ceremonyDate = settings?.eventDate ?? _fallbackCeremonyDate;
   final rsvpDeadline = settings?.rsvpDeadline ?? _fallbackRsvpDeadline;
+  String pick(String? v, String fallback) =>
+      (v == null || v.trim().isEmpty) ? fallback : v.trim();
+  final ceremonyVenue = pick(settings?.ceremonyVenue, _ceremonyVenue);
+  final ceremonyTime = formatEventTime(
+    pick(settings?.ceremonyTime, _ceremonyTime),
+  );
+  final receptionVenue = pick(settings?.receptionVenue, _receptionVenue);
+  final receptionTime = formatEventTime(
+    pick(settings?.receptionTime, _receptionTime),
+  );
 
   // Couple affiché dans le corps et la signature : noms des mariés tels que
   // renseignés dans les réglages, avec repli sur le couple de l'invitation.
@@ -147,9 +166,7 @@ String _buildInvitationMessage({
   buffer.writeln('— Éphésiens 5, 25');
   buffer.writeln();
   buffer.writeln('Pour l\'épouse');
-  buffer.writeln(
-    '« Je suis à mon bien-aimé, et mon bien-aimé est à moi. »',
-  );
+  buffer.writeln('« Je suis à mon bien-aimé, et mon bien-aimé est à moi. »');
   buffer.writeln('— Cantique des Cantiques 6, 3');
   buffer.writeln();
 
@@ -161,15 +178,15 @@ String _buildInvitationMessage({
   buffer.writeln(
     'C\'est avec une immense joie que *$couple* vous convient à la '
     'célébration de leur mariage religieux, le '
-    '*${_formatFrWeekDate(ceremonyDate)}* à *$_ceremonyTime*, '
-    'à la *$_ceremonyVenue*.',
+    '*${_formatFrWeekDate(ceremonyDate)}* à *$ceremonyTime*, '
+    'à la *$ceremonyVenue*.',
   );
   buffer.writeln();
 
   // Réception.
   buffer.writeln(
-    'La cérémonie sera suivie d\'une réception à *$_receptionTime* '
-    'à l\'*$_receptionVenue*, pour célébrer ensemble l\'amour, la joie '
+    'La cérémonie sera suivie d\'une réception à *$receptionTime* '
+    'à l\'*$receptionVenue*, pour célébrer ensemble l\'amour, la joie '
     'et cette précieuse alliance.',
   );
   buffer.writeln();
